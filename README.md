@@ -2,6 +2,7 @@ megabar
 =======
 
 Go to a directory where you have other rails apps.. perhaps ~/websites/ if you want to start a new one.
+
 ```cd ~/websites```
 
 Clone (or fork) this repo
@@ -11,6 +12,7 @@ Clone (or fork) this repo
 Create a new app (you can also just add the gem to an existing app)
 
 ```rails new myapp ```
+
 ```cd myapp```
 
 Add MegaBar to your Gemfile so that it uses your local copy of the gem:
@@ -62,9 +64,11 @@ Some file changes that become a part of your app will also have to be copied ove
 Definitely consider creating a branch before making changes to the megabar gem repo and then submit a pull request.
 
 ```git checkout -b feature/my_new_feature```
+
 build feature
 
 ```git commit -am "built a feature ```
+
 ```git push --set-upstream origin feature/myfeature```
 
 Then go to the github page and submit a pull request from there.
