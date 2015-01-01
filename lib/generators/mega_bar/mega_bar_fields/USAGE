@@ -1,0 +1,8 @@
+Description:
+    This will create a migration for adding a field to a table
+
+Example:
+    rails generate mega_bar:mega_bar_fields tablename fieldname type
+
+    This will create a new migration.
+        

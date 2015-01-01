@@ -1,0 +1,62 @@
+<% pre_render %>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MEGA BAR yo</title>
+  <%= stylesheet_link_tag  "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<%= link_to 'Models', mega_bar.models_path %> | <%= link_to 'Fields', mega_bar.fields_path %> | <%= link_to 'Model Displays', mega_bar.model_displays_path %> | <%= link_to 'Field Displays', mega_bar.field_displays_path %> |  <%= link_to 'Record Formats', mega_bar.records_formats_path %> |<%= link_to 'Textboxes', mega_bar.textboxes_path %> | <%= link_to 'Text Reads', mega_bar.textreads_path %> | <%= link_to 'Selects', mega_bar.selects_path %> | <%= link_to 'Testers', mega_bar.testers_path %>  
+
+<% if flash[:notice] %>
+  <div id="notice"><%= flash[:notice] %></div>
+<% end %>
+<h1><%= @mega_bar[:model_display].header %></h1>
+
+
+<%= render partial: "hello" %>
+
+
+<%if ['index', 'show'].include? params[:action]%>
+  <%= render partial: "mega_bar_read" %>
+<%else %>
+  <%= render partial: "mega_bar_write" %>
+<% end%>
+
+
+
+<%= link_to 'New', link_path('new') %>
+
+
+
+<pre>
+
+DEBUG INFO:
+
+</pre>
+<hr>record_format.name:
+<%= @mega_bar[:record_format].name %>
+<BR> fields:
+<% @mega_bar[:fields].each do |field| %>
+  <br><%= field.field %>
+<% end %>
+
+<hR> field id:
+<% @mega_bar[:field_ids].each do |field| %>
+  <br><%= field %>
+<% end %>
+<hR> field disp:
+<% @mega_bar[:field_displays].each do |field| %>
+  <br><%= field.header %>
+<% end %>
+
+
+<hR> format:
+
+
+</body>
+</html>
+
+

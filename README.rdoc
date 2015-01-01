@@ -1,0 +1,31 @@
+= MegaBar
+
+install the db tables:
+bundle exec rake railties:install:migrations FROM=mega_bar
+This project rocks and uses MIT-LICENSE.
+
+
+
+Override use of automatic templating:
+
+If none of the prebuilt 'record formats' suit your needs, but you'd still like to have access to the mega_bar things like the model and field information, you may want to write your own template. In your controller, add a method like this: 
+
+    def index_view_template
+      @index_view_template ||=  'articles/my_index.html.erb'
+    end
+
+Helper files:
+
+If you'd like to provide values for virtual attributes on edit screens, or do anything like setting variables needed by the view, that needs to be done after the controller runs and before the view runs, create a helper file like this one that is in app/helpers/mega_bar/models_helper.rb:
+module MegaBar
+  module ModelsHelper
+    def pre_render
+      if params[:action] == 'edit' 
+        @index_model_display = ModelDisplay.by_model(@model.id).by_action('index').present? ? 'y':'' 
+        @show_model_display = ModelDisplay.by_model(@model.id).by_action('show').present? ? 'y':'' 
+        @new_model_display = ModelDisplay.by_model(@model.id).by_action('new').present? ? 'y':'' 
+        @edit_model_display = ModelDisplay.by_model(@model.id).by_action('edit').present? ? 'y':'' 
+      end
+    end
+  end
+end
