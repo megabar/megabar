@@ -1,6 +1,4 @@
 megabar
-
-here or .
 =======
 
 hi
