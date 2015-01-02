@@ -1,6 +1,10 @@
 megabar
 =======
 
+MegaBar is a enterprise scale website building tool. 
+
+Installation
+
 Go to a directory where you have other rails apps.. perhaps ~/websites/ if you want to start a new one.
 
 ```cd ~/websites```
