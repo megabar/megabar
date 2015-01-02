@@ -1,7 +1,7 @@
 megabar
 =======
 
-MegaBar is a enterprise scale website building tool. 
+MegaBar is a enterprise scale website and api building tool. 
 
 Installation
 
