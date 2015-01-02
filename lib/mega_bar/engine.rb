@@ -1,7 +1,7 @@
 module MegaBar
   class Engine < ::Rails::Engine
     isolate_namespace MegaBar
-
+    require 'seed_dump'
 
     config.generators do |g|
       g.test_framework :rspec
