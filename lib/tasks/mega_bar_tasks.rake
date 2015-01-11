@@ -14,8 +14,17 @@ namespace :mega_bar do
     puts "mounted the engine in the routes file."
   end
 
+  desc "Setup test database - drops, loads schema, migrates and seeds the test db"
+  task :test_db_setup => [:pre_reqs] do
+    Rails.env = ENV['RAILS_ENV'] = 'test'
+    Rake::Task['db:drop'].invoke
+    Rake::Task['db:create'].invoke
+    Rake::Task['megabar:data_load'].invoke
+    ActiveRecord::Base.establish_connection
+    Rake::Task['db:migrate'].invoke
+  end
 
-  desc 'data_load'
+  desc 'load data from the mega_bar.seeds.rb file into the local db, checking for and resolving conflicts along the way'
   task data_load: :environment do
     # this is the core function of allowing multiple repos contribute back to a single one.
     # It could be used within a single organization or to commit back to the real mega_bar gem.

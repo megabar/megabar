@@ -14,26 +14,30 @@ Gem::Specification.new do |s|
   s.description = "Description of MegaBar."
   s.license     = "MIT"
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
-  s.add_dependency "rails", "~> 4.1.8"
-  s.add_development_dependency "rspec-rails", "~> 3.0"
-  s.add_development_dependency "factory_girl_rails", "~> 4.0"
-  s.add_development_dependency "sqlite3"
-  s.add_development_dependency "bundler", "~> 1.7"
-  s.add_development_dependency "rake", "~> 10.0"
   # s.add_development_dependency "rspec", "~> 2.6"
+  #s.add_development_dependency 'rspec-rails'
+  s.add_dependency "rails", "~> 4.1.8"
+  s.add_dependency 'seed_dump'
+  s.add_dependency 'seedbank'
+  s.add_development_dependency "aruba"
+  s.add_development_dependency "bundler", "~> 1.7"
+  s.add_development_dependency 'capybara'
+  s.add_development_dependency 'combustion', '~> 0.5.2'
+  s.add_development_dependency "cucumber"
+  s.add_development_dependency "rake", "~> 10.0"
+  s.add_development_dependency 'rspec-core'
   s.add_development_dependency "simplecov", '~> 0.7.1'
+  s.add_development_dependency "sqlite3"
+  s.add_development_dependency 'factory_girl_rails'
+  s.add_development_dependency 'pry'
+  s.add_development_dependency 'pry-debugger'
+  s.add_development_dependency 'pry-doc'
+  s.add_development_dependency 'pry-rails'
+  s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'spork-rails'
   s.add_development_dependency 'webmock'
-  #s.add_development_dependency 'rspec-rails'
-  s.add_development_dependency 'pry'
-  s.add_development_dependency 'pry-doc'
-  s.add_development_dependency 'pry-debugger'
-  s.add_development_dependency 'pry-rails'
-  s.add_development_dependency "cucumber"
-  s.add_development_dependency "aruba"
-  s.add_dependency 'seedbank'
-  s.add_dependency 'seed_dump'
 
+  s.test_files = Dir["spec/**/*"]
 end
 
 
