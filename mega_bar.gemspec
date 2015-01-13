@@ -30,10 +30,11 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sqlite3"
   s.add_development_dependency 'factory_girl_rails'
   s.add_development_dependency 'pry'
-  s.add_development_dependency 'pry-debugger'
   s.add_development_dependency 'pry-doc'
   s.add_development_dependency 'pry-rails'
-  s.add_development_dependency 'rspec-rails'
+  s.add_development_dependency 'pry-stack_explorer'
+
+  # s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'spork-rails'
   s.add_development_dependency 'webmock'
 

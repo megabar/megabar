@@ -1,12 +1,19 @@
 ENV['RAILS_ENV'] ||= 'test'
-# require File.expand_path("../test_app/config/environment.rb",  __FILE__)
-require 'rspec/rails'
-require 'factory_girl_rails'
-require 'combustion'
-require 'capybara' # capybara/rspec? capybar/rails?
-Combustion.initialize! :all
 
 require 'pry'
+require 'rubygems'
+require 'bundler/setup'
+
+require 'combustion'
+require 'capybara/rspec'
+
+Combustion.initialize! :all
+
+
+require 'rspec/rails'
+require 'capybara/rails'
+require 'factory_girl_rails'
+
 Rails.backtrace_cleaner.remove_silencers!
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }

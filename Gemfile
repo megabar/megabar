@@ -1,13 +1,10 @@
 source "https://rubygems.org"
 
-gem 'sqlite3'
-
 
 group :test do
   gem 'activerecord'
   gem 'actionmailer'
   gem 'actionpack'
-  gem 'combustion', '~> 0.5.2'
   gem 'rspec-rails'
   gem 'factory_girl_rails', '~> 4.0'
 end
