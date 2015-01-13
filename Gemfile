@@ -1,5 +1,14 @@
 source "https://rubygems.org"
 
+
+group :test do
+  gem 'activerecord'
+  gem 'actionmailer'
+  gem 'actionpack'
+  gem 'rspec-rails'
+  gem 'factory_girl_rails', '~> 4.0'
+end
+
 # Declare your gem's dependencies in mega_bar.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
 # development dependencies will be added by default to the :development group.
