@@ -27,8 +27,9 @@ module MegaBar
       return if ENV['mega_bar_data_loading'] == 'yes'
      # generate 'active_record:model', [self.classname]
       logger.info("creating scaffold for " + self.classname + 'via: ' + 'rails g mega_bar:mega_bar ' + self.classname + ' ' + self.id.to_s)
-      system 'rails g mega_bar:mega_bar ' + self.classname + ' ' + self.id.to_s
+      system 'rails g mega_bar:mega_bar_models ' + self.classname + ' ' + self.id.to_s
       ActiveRecord::Migrator.migrate "db/migrate"
+
     end
   end
 end
