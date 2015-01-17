@@ -2,9 +2,6 @@
 module MegaBar
 class CheckboxesController < ApplicationController
     include MegaBarConcern
-    before_action ->{ myinit 9 },  only: [:index, :show, :edit, :new]
-
-
     private
       def _params
         permits = []

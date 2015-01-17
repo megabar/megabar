@@ -2,7 +2,6 @@ module MegaBar
   class ModelsController < ApplicationController
     include MegaBarConcern
     # attr_accessor :edit_model_display
-    before_action ->{ myinit 1 },  only: [:index, :show, :edit, :new]
     #before_action :app_init,  only: [:index, :show, :edit, :new]
     private
       # Never trust parameters from the scary internet, only allow the white list through.
