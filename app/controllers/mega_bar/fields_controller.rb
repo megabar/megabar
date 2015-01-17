@@ -1,7 +1,6 @@
 module MegaBar
   class FieldsController < ApplicationController
     include MegaBarConcern
-    before_action ->{ myinit 2 },  only: [:index, :show, :edit, :new]
     private
     # Never trust parameters from the scary internet, only allow the white list through.
     def _params
