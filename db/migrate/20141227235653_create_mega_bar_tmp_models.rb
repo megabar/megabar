@@ -1,4 +1,4 @@
-class CreateTmpModels < ActiveRecord::Migration
+class CreateMegaBarTmpModels < ActiveRecord::Migration
   def change
     create_table :mega_bar_tmp_models do |t|
       t.string :classname

@@ -1,7 +1,10 @@
 module MegaBar
   class FieldDisplay < ActiveRecord::Base
-  after_save  :make_data_display
+  after_save :make_data_display
   belongs_to :field
+  has_many :textboxes, dependent: :destroy
+  has_many :textreads, dependent: :destroy
+
   scope :by_fields, ->(fields) { where(field_id: fields) }
   scope :by_action, ->(action) { where(action: action) }
     def make_data_display 
