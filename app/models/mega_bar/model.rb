@@ -1,5 +1,7 @@
 module MegaBar
   class Model < ActiveRecord::Base
+    has_many :fields, dependent: :destroy
+    has_many :model_displays, dependent: :destroy
     self.table_name = "mega_bar_models"
     include MegaBar::MegaBarModelConcern
     after_create  :make_model_displays
@@ -31,6 +33,9 @@ module MegaBar
       ActiveRecord::Migrator.migrate "db/migrate"
 
     end
+    def update_conventional_data
+    end
+    
   end
 end
 #<Model id: 12, classname: nil, schema: "sqlite", tablename: "testers", name: "Tester", created_at: "2014-05-23 20:32:46", updated_at: "2014-05-23 20:32:46", default_sort_field: "id">
