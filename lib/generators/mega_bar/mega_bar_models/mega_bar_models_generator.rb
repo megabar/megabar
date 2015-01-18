@@ -30,8 +30,7 @@ module MegaBar
     def route
       line = '  ##### MEGABAR END'
       text = File.read('config/routes.rb')
-      byebug
-      new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, 'resources :' + the_route_name + ", defaults: {model_id: model_id}\n #{line}\n")
+      new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, ' resources :' + the_route_name + ", defaults: {model_id: " + model_id + "}\n #{line}\n")
       # To write changes to the file, use:
       File.open('config/routes.rb', "w") {|file| file.puts new_contents }
     end
