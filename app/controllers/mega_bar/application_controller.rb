@@ -25,5 +25,14 @@ module MegaBar
     def new_view_template
       @new_view_template ||= "mega_bar.html.erb"
     end
+
+    def _params
+        permits = []
+        controller_name.classify.constantize.attribute_names.each do |att|
+          permits << att unless ['id', 'created_at', 'updated_at'].include?(att)
+        end
+        params.require(controller_name.singularize).permit(permits)
+      end
+
   end
 end
