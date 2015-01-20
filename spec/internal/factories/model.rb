@@ -4,8 +4,14 @@ FactoryGirl.define do
   factory :model, class: MegaBar::Model do
     classname 'beep'
     schema  'deep'
-    tablename 'meep'
+    tablename 'meeps'
     name 'zeep'
-    default_sort_field 'tweep'  
+    default_sort_field 'id'  
+    factory :model_with_everything do
+      after(:create) do |model|
+        byebug
+       create(:model_display)
+      end
+    end
   end
 end

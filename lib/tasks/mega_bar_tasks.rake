@@ -25,7 +25,8 @@ namespace :mega_bar do
   end
 
   desc 'load data from the mega_bar.seeds.rb file into the local db, checking for and resolving conflicts along the way'
-  task data_load: :environment do
+  # task data_load: :environment do
+  task :data_load, [:file]  => :environment do |t, args|   
     # this is the core function of allowing multiple repos contribute back to a single one.
     # It could be used within a single organization or to commit back to the real mega_bar gem.
     # perm refers to the regular tables and objects.. like mega_bar_models
@@ -37,7 +38,11 @@ namespace :mega_bar do
     #   add it to the mega_bar_classes array
     #   and probably add a resolver function.
     puts "Loading Data..."
-    ENV['mega_bar_data_loading'] = 'yes'  # TODO: figure out how to really disable the before filters.
+    MegaBar::Field.skip_callback("create",:after,:make_field_displays)
+    MegaBar::Field.skip_callback("create",:after,:make_migration)
+    MegaBar::Model.skip_callback("create",:after,:make_all_files)
+    MegaBar::Model.skip_callback("create",:after,:make_model_displays)
+      
     mega_classes = get_mega_classes
     all_conflicts = [] 
     # display_classes = [[MegaBar::TmpTextbox, MegaBar::Textbox, 'TextBox'],[MegaBar::TmpTextread, MegaBar::Textread, 'TextRead']] 
@@ -47,8 +52,9 @@ namespace :mega_bar do
       mc[:tmp_class].delete_all # delete everything that is in the tmp_tables
       mega_ids << mc[:id]
     end
-    require Rails.root.join('db', 'mega_bar.seeds.rb') # load a bunch of new data into the tmp tables.
-
+    file = args[:file] || "../../db/mega_bar.seeds.rb"
+    require_relative file
+    
     # done resetting tmp tables.
     # start conflict detection
     mega_classes.each do |mc|
@@ -77,6 +83,7 @@ namespace :mega_bar do
     end
     # end of main function for loading data
     # important sub functions are below
+    puts "Loaded Data"
   end
 
   def prompt(conflict, callback)  

@@ -7,6 +7,8 @@ group :test do
   gem 'actionpack'
   gem 'rspec-rails'
   gem 'factory_girl_rails', '~> 4.0'
+  gem 'byebug'
+
 end
 
 # Declare your gem's dependencies in mega_bar.gemspec.

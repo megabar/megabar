@@ -10,7 +10,6 @@ module MegaBar
     #after_create :make_migration 
     scope :by_model, ->(model_id) { where(model_id: model_id) if model_id.present? }
     def make_field_displays 
-      return if ENV['mega_bar_data_loading'] == 'yes'
       actions = []
       actions << {:format=>'textread', :action=>'index', :field_id=>self.id, :header=>self.field.pluralize}  if (!FieldDisplay.by_fields(self.id).by_action('index').present? && @index_field_display == 'y')
       actions << {:format=>'textread', :action=>'show', :field_id=>self.id, :header=>self.field}  if (!FieldDisplay.by_fields(self.id).by_action('show').present? && @show_field_display == 'y')
@@ -21,7 +20,6 @@ module MegaBar
       end
     end
     def make_migration
-      return if ENV['mega_bar_data_loading'] == 'yes'
       return if Model.connection.column_exists?(self.tablename, self.field)
       system 'rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + 'string'
       ActiveRecord::Migrator.migrate "db/migrate"

@@ -6,5 +6,6 @@ FactoryGirl.define do
     format 'textread'
     action 'index'
     header 'Hi there, I am a field display'
+    association :field,  factory: :field
   end
 end
