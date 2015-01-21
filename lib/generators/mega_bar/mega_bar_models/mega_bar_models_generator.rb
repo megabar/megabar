@@ -1,5 +1,5 @@
 module MegaBar
-  class MegaBarGenerator < Rails::Generators::Base
+  class MegaBarModelsGenerator < Rails::Generators::Base
     source_root File.expand_path('../templates', __FILE__)
     argument :filename, type: :string
     argument :model_id, type: :string
@@ -11,7 +11,6 @@ module MegaBar
       if the_module_name
         # template "generic_controller.rb", "tmp_#{the_controller_file_name}.rb"
       end
-      
     end
      def create_model_file
        template "generic_model.rb", "#{the_model_file_name}"
@@ -29,10 +28,9 @@ module MegaBar
 
     end
     def route
- 
       line = '  ##### MEGABAR END'
       text = File.read('config/routes.rb')
-      new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, 'resource :' + the_route_name + "\n #{line}\n")
+      new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, ' resources :' + the_route_name + ", defaults: {model_id: " + model_id + "}\n #{line}\n")
       # To write changes to the file, use:
       File.open('config/routes.rb', "w") {|file| file.puts new_contents }
     end
