@@ -7,13 +7,13 @@ module MegaBar
     # in generators, all public methods are run. Weird, huh?
 
     def create_controller_file
-      template "generic_controller.rb", "#{the_controller_file_name}.rb"
+      template 'generic_controller.rb', "#{the_controller_file_name}.rb"
       if the_module_name
         # template "generic_controller.rb", "tmp_#{the_controller_file_name}.rb"
       end
     end
-     def create_model_file
-       template "generic_model.rb", "#{the_model_file_name}"
+    def create_model_file
+       template 'generic_model.rb', "#{the_model_file_name}"
        if the_module_name
         # template "generic_model.rb", "Tmp#{the_model_file_name}.rb"
       end
@@ -30,12 +30,28 @@ module MegaBar
     def route
       line = '  ##### MEGABAR END'
       text = File.read('config/routes.rb')
-      new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, ' resources :' + the_route_name + ", defaults: {model_id: " + model_id + "}\n #{line}\n")
+      new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, ' resources :' + the_route_name + ', defaults: {model_id: ' + model_id + "}\n #{line}\n")
       # To write changes to the file, use:
       File.open('config/routes.rb', "w") {|file| file.puts new_contents }
     end
 
     private
+
+    def the_model_file_name
+      if the_module_name
+        'app/models/' + the_module_name.underscore + '/' + the_file_name.to_s.singularize.underscore + '.rb'
+      else
+        'app/models/' + the_file_name.to_s.singularize.underscore + '.rb'
+      end
+    end
+    
+    def the_controller_file_name
+      if the_module_name
+        'app/controllers/' + the_module_name.underscore + '/' + the_file_name.pluralize.underscore + "_controller"
+      else
+        'app/controllers/' + the_file_name.pluralize.underscore + "_controller"
+      end
+    end
 
     def the_file_name
        if filename.include? '::' 
@@ -45,24 +61,9 @@ module MegaBar
       end
     end
 
-    def the_model_file_name
-      if the_module_name
-        'app/models/' + the_module_name.underscore + '/' + the_file_name.to_s.singularize.underscore + '.rb'
-      else
-        'app/models/' + the_file_name.to_s.singularize.underscore + '.rb'
-      end
-    end
 
     def the_model_name
       the_file_name.classify
-    end
-
-    def the_controller_file_name
-      if the_module_name
-        'app/controllers/' + the_module_name.underscore + '/' + the_file_name.pluralize.underscore + "_controller"
-      else
-        'app/controllers/' + the_file_name.pluralize.underscore + "_controller"
-      end
     end
 
     def the_controller_name

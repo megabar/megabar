@@ -35,7 +35,7 @@ Mount the mega_bar engine into your routes file:
 
 Copy over the mega_bar Migrations:
 
-```bundle exec rake railties:install:migrations FROM=mega_bar```
+```rake mega_bar:install:migrations```
 
 Migrate the db:
 

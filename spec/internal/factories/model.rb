@@ -9,8 +9,7 @@ FactoryGirl.define do
     default_sort_field 'id'  
     factory :model_with_everything do
       after(:create) do |model|
-        byebug
-       create(:model_display)
+       create(:model_display, model: model)
       end
     end
   end
