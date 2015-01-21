@@ -6,5 +6,6 @@ FactoryGirl.define do
     schema 'beep'
     tablename 'mega_bar_models'
     field 'steep'
+    association :model,  factory: :model
   end
 end

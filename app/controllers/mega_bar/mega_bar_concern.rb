@@ -12,6 +12,7 @@ module MegaBar
       # yep, this is the main brain that loads all the model, model display, field, field_display stuff. 
       # after this runs you'll see the 'create' and 'update' type methods above run.
       fields =  Field.by_model(model_id)
+      
       unless fields
         return redirect_to(:root, :notice => "There was no ModelDisplay for that action/format combo. Would you like to create one?")  
       end

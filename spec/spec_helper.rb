@@ -1,9 +1,9 @@
 ENV['RAILS_ENV'] ||= 'test'
 
-require 'pry'
+require 'byebug'
 require 'rubygems'
 require 'bundler/setup'
-
+require 'pry'
 require 'combustion'
 require 'capybara/rspec'
 
@@ -22,9 +22,14 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.infer_base_class_for_anonymous_controllers = false
   config.order = "random"
+  config.include FactoryGirl::Syntax::Methods
 end
 
-
+# binding.pry
+#require 'rake'
+#load File.expand_path("../../lib/tasks/mega_bar_tasks.rake", __FILE__)
+#Rake::Task.define_task(:environment)
+#Rake::Task['mega_bar:data_load'].invoke('../../db/mega_bar.seeds.rb')
 
 =begin
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")

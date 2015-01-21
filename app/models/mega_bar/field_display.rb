@@ -1,11 +1,10 @@
 module MegaBar
   class FieldDisplay < ActiveRecord::Base
-  after_save  :make_data_display
+  after_save :make_data_display
   belongs_to :field
   scope :by_fields, ->(fields) { where(field_id: fields) }
   scope :by_action, ->(action) { where(action: action) }
     def make_data_display 
-      return if ENV['mega_bar_data_loading'] == 'yes'
       data_display_class = ("MegaBar::" + self.format.to_s.classify).constantize
       data_display_obj = data_display_class.new
       model_id = data_display_obj.get_model_id

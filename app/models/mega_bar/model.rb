@@ -10,7 +10,6 @@ module MegaBar
     attr_writer :model_id
     scope :by_model, ->(model_id) { where(id: model_id) if model_id.present? }
     def make_model_displays 
-      return if ENV['mega_bar_data_loading'] == 'yes'
       actions = []
       actions << {:format=>2, :action=>'new', :header=>'Create ' + self.name}  if (!ModelDisplay.by_model(self.id).by_action('new').present? && @new_model_display == 'y')
       actions << {:format=>2, :action=>'edit', :header=>'Edit ' + self.name} if (!ModelDisplay.by_model(self.id).by_action('edit').present? && @edit_model_display == 'y')
@@ -24,8 +23,7 @@ module MegaBar
       logger.info 'Made model displays for:' + log_arr.join(', ')
     end
     def make_all_files
-      return if ENV['mega_bar_data_loading'] == 'yes'
-     # generate 'active_record:model', [self.classname]
+      # generate 'active_record:model', [self.classname]
       logger.info("creating scaffold for " + self.classname + 'via: ' + 'rails g mega_bar:mega_bar ' + self.classname + ' ' + self.id.to_s)
       system 'rails g mega_bar:mega_bar_models ' + self.classname + ' ' + self.id.to_s
       ActiveRecord::Migrator.migrate "db/migrate"
