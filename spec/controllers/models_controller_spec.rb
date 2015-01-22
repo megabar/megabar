@@ -27,7 +27,6 @@ module MegaBar
       Model.skip_callback("create",:after,:make_model_displays)
       Model.skip_callback("create",:after,:make_all_files)
       e = create(:model_with_everything)
-      byebug
       { classname: e[:classname], name: e[:name], default_sort_field: e[:default_sort_field] }
     }
 

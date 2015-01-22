@@ -1,9 +1,12 @@
 module MegaBar
   class FieldDisplay < ActiveRecord::Base
-  after_save :make_data_display
-  belongs_to :field
-  scope :by_fields, ->(fields) { where(field_id: fields) }
-  scope :by_action, ->(action) { where(action: action) }
+    after_save :make_data_display
+    belongs_to :fields
+    has_many :textboxes, dependent: :destroy
+    has_many :textreads, dependent: :destroy
+    scope :by_fields, ->(fields) { where(field_id: fields) }
+    scope :by_action, ->(action) { where(action: action) }
+    scope :by_model_display_id, ->(model_display_id) { where(model_display_id: model_display_id) }
     def make_data_display 
       data_display_class = ("MegaBar::" + self.format.to_s.classify).constantize
       data_display_obj = data_display_class.new

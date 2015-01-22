@@ -1,27 +1,25 @@
-<%= form_for(@model) do |f| %>
-  <%=@mega_bar[:app_format].app_wrapper.html_safe%>
-  <%=@mega_bar[:app_format].record_wrapper.html_safe%>
-  <% @mega_bar[:displayable_fields].each do | displayable_field | %>
-    <% if @mega_bar[:app_format].app_format == 'profile_table' %>
-      <tr><th><%=displayable_field[:field_display].header %></th>
-    <% end %>
-    <%= @mega_bar[:app_format].field_wrapper.html_safe%>
-    <%   
-      instance_value = instance_variable_get("@" + displayable_field[:field].field)
-      if instance_value.present? && (displayable_field[:field].field != 'field' and params[:action] == 'edit')
-          value = instance_value 
+<h1><%= @mega_bar[:model_display].header %></h1>
+
+<%=@mega_bar[:app_format].record_wrapper.html_safe%>
+<% @mega_bar[:displayable_fields].each do | displayable_field | %>
+  <% if @mega_bar[:app_format].app_format == 'profile_table' %>
+    <tr><th><%=displayable_field[:field_display].header %></th>
+  <% end %>
+  <%= @mega_bar[:app_format].field_wrapper.html_safe%>
+  <%   
+    instance_value = instance_variable_get("@" + displayable_field[:field].field)
+    if instance_value.present? && (displayable_field[:field].field != 'field' and params[:action] == 'edit')
+        value = instance_value 
+    else
+      if params[:action] == 'edit' 
+        value= @model.read_attribute(displayable_field[:field].field) 
       else
-        if params[:action] == 'edit' 
-          value= @model.read_attribute(displayable_field[:field].field) 
-        else
-          value = displayable_field[:field].default_value
-        end
+        value = displayable_field[:field].default_value
       end
-    %>
-    <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: @model, mega_bar: @mega_bar, value: value} %>
-    <%= @mega_bar[:app_format].field_wrapper_end.html_safe %>
-  <%end %>
-  <%= @mega_bar[:app_format].record_wrapper_end.html_safe%>
-  <tr><th>Save</th><td><%= submit_tag %></td><th></tr>
-  <%=@mega_bar[:app_format].app_wrapper_end.html_safe%>
-<% end %>
+    end
+  %>
+  <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: @model, mega_bar: @mega_bar, value: value} %>
+  <%= @mega_bar[:app_format].field_wrapper_end.html_safe %>
+<%end %>
+<%= @mega_bar[:app_format].record_wrapper_end.html_safe%>
+

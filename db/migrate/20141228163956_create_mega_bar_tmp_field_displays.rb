@@ -5,6 +5,7 @@ class CreateMegaBarTmpFieldDisplays < ActiveRecord::Migration
       t.string :format
       t.string :action
       t.string :header
+      t.integer :model_display_id
       t.timestamps
     end
   end
