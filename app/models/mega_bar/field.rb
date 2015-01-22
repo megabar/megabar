@@ -4,9 +4,8 @@ module MegaBar
     after_create  :make_field_displays #, :only => [:create] #add update.
     after_create  :make_migration #, :only => [:create] #add update.
     after_save :make_field_displays
-    has_many :field_displays
     attr_accessor :new_field_display, :edit_field_display, :index_field_display, :show_field_display
-    
+    after_destroy :delete_field_displays
     #after_create :make_migration 
     scope :by_model, ->(model_id) { where(model_id: model_id) if model_id.present? }
     def make_field_displays 
@@ -28,6 +27,9 @@ module MegaBar
       system 'rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + 'string'
       ActiveRecord::Migrator.migrate "db/migrate"
     end
-
+    def delete_field_displays
+      byebug
+      FieldDisplay.by_fields(self.id).destroy_all
+    end
   end
 end
