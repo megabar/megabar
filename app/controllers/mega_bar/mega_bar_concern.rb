@@ -15,7 +15,7 @@ module MegaBar
       @model_properties = Model.find(model_id)
       @mega_bar_model_displays = []
       ModelDisplay.by_model(model_id).by_action(params[:action]).each do | md |
-        field_displays = FieldDisplay.where(model_display_id: md.id, action: md.action)
+        field_displays = FieldDisplay.where(model_display_id: md.id)
         displayable_fields = []
         field_displays.each do |field_disp|
           field = Field.find(field_disp.field_id)

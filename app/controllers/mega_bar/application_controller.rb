@@ -30,7 +30,7 @@ module MegaBar
         permits = []
         tmp = params[:controller].include?('mega_bar') ? 'MegaBar::' + params[:controller][9..-1].classify : params[:controller].classify
         the_class = tmp.constantize
-        the_class.attribute_names.each do |att|
+        MegaBar::Field.by_model(params[:model_id]).pluck(:field).each do |att|
           permits << att unless ['id', 'created_at', 'updated_at'].include?(att)
         end
         params.require(controller_name.singularize).permit(permits)
