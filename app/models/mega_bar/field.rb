@@ -1,7 +1,7 @@
 module MegaBar
   class Field < ActiveRecord::Base
     belongs_to :model
-    has_many :field_display
+    has_many :field_display, dependent: :destroy
     after_create  :make_field_displays #, :only => [:create] #add update.
     after_create  :make_migration #, :only => [:create] #add update.
     after_save :make_field_displays

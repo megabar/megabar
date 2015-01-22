@@ -1,6 +1,8 @@
 module MegaBar
   class Model < ActiveRecord::Base
     self.table_name = "mega_bar_models"
+    has_many :fields, dependent: :destroy
+    has_many :model_displays, dependent: :destroy
     include MegaBar::MegaBarModelConcern
     after_create  :make_model_displays
     after_create :make_all_files

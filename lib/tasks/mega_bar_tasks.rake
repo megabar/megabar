@@ -282,5 +282,17 @@ namespace :mega_bar do
     puts "Loaded Data"
 
   end
+  task add_model_display_ids_to_field_displays: :environment do
+    MegaBar::FieldDisplay.all.each do | fd |
+      model_id = MegaBar::Field.where(id: fd.field_id,).pluck(:model_id).first  
+      MegaBar::ModelDisplay.where(model_id: model_id, action: fd.action).each do | md |
+        fd.model_display_id = md.id
+        fd.save
+      end
+    end  
+  end
+
+
+
 
 end
