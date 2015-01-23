@@ -21,6 +21,7 @@ module MegaBar
     def generate_migration
       if the_module_name
         generate 'migration create_' + the_module_name + '_' + the_table_name + ' created_at:datetime updated_at:datetime'
+        generate 'migration create_' + the_module_name + '_tmp_' + the_table_name + ' created_at:datetime updated_at:datetime'        
         # generate 'migration create_tmp_' + the_module_name + '_' + the_table_name + ' created_at:datetime updated_at:datetime'
       else 
         generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'

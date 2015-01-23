@@ -166,6 +166,8 @@ namespace :mega_bar do
     mega_classes << {id: 5, tmp_class: MegaBar::TmpRecordsFormat, perm_class: MegaBar::RecordsFormat, unique: [:name], resolver: 'fix_records_format', condition: 'tmp.name == perm.name'}
     mega_classes << {id: 6, tmp_class: MegaBar::TmpTextbox, perm_class: MegaBar::Textbox, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {id: 7, tmp_class: MegaBar::TmpTextread, perm_class: MegaBar::Textread, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'} 
+    mega_classes << {id: 14, tmp_class: MegaBar::TmpSelect, perm_class: MegaBar::Select, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'} 
+   
     return mega_classes
   end
 
@@ -209,7 +211,7 @@ namespace :mega_bar do
   end
 
   task :dump_seeds => :environment do
-    mega_bar_model_ids = [1,2,3,4,5,6,7,8,9,10,11,12,13]
+    mega_bar_model_ids = [1,2,3,4,5,6,7,14]
     mega_bar_classes = MegaBar::Model.where(id: mega_bar_model_ids).pluck(:classname)
     mega_bar_fields =  MegaBar::Field.where(model_id: mega_bar_model_ids).pluck(:id)
     mega_bar_field_disp =  MegaBar::FieldDisplay.where(field_id: mega_bar_fields).pluck(:id)
@@ -236,7 +238,6 @@ namespace :mega_bar do
 
 
   task :test_temps => :environment do
-    binding.pry
     MegaBar::Model.new  ([
       {id: 1, classname: "Model", schema: "sqlite", tablename: "models", name: "Model", default_sort_field: "id", created_at: "2014-05-05 17:27:28", updated_at: "2014-12-26 00:58:09"},
       {id: 2, classname: "Attribute", schema: "sqlite", tablename: "fields", name: "Fields", default_sort_field: "id", created_at: "2014-05-05 17:28:21", updated_at: "2014-05-21 22:21:20"},
@@ -253,7 +254,7 @@ namespace :mega_bar do
     # TODO - add prompt to be sure.
     ENV['mega_bar_data_loading'] = 'yes'
     # TODO: figure out how to really disable the before filters.
-    model_ids = [1,2,3,4,5,6,7]
+    model_ids = [1,2,3,4,5,6,7,14]
     fields =  MegaBar::Field.where(model_id: model_ids).pluck(:id)
     field_disp =  MegaBar::FieldDisplay.where(field_id: fields).pluck(:id)
     classes = MegaBar::Model.where(id: model_ids).pluck(:classname)

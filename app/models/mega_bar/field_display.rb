@@ -4,6 +4,8 @@ module MegaBar
     belongs_to :fields
     has_many :textboxes, dependent: :destroy
     has_many :textreads, dependent: :destroy
+    has_many :selects, dependent: :destroy
+    
     scope :by_fields, ->(fields) { where(field_id: fields) }
     scope :by_action, ->(action) { where(action: action) }
     scope :by_model_display_id, ->(model_display_id) { where(model_display_id: model_display_id) }

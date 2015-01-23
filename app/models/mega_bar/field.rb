@@ -28,7 +28,6 @@ module MegaBar
       ActiveRecord::Migrator.migrate "db/migrate"
     end
     def delete_field_displays
-      byebug
       FieldDisplay.by_fields(self.id).destroy_all
     end
   end
