@@ -11,9 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150102192268) do
+ActiveRecord::Schema.define(version: 20150123050911) do
 
-  create_table "mega_bar_checkboxes", force: true do |t|
+  create_table "frisbees", force: true do |t|
+    t.string   "name"
+    t.integer  "weight"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -23,6 +25,7 @@ ActiveRecord::Schema.define(version: 20150102192268) do
     t.string   "format"
     t.string   "action"
     t.string   "header"
+    t.integer  "model_display_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -54,11 +57,7 @@ ActiveRecord::Schema.define(version: 20150102192268) do
     t.string   "default_sort_field"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "mega_bar_radio_buttons", force: true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "steep"
   end
 
   create_table "mega_bar_records_formats", force: true do |t|
@@ -70,35 +69,9 @@ ActiveRecord::Schema.define(version: 20150102192268) do
   end
 
   create_table "mega_bar_selects", force: true do |t|
-    t.integer  "field_display_id"
-    t.integer  "model_id"
-    t.integer  "field_id"
-    t.string   "collection"
-    t.string   "value_method"
-    t.string   "text_method"
-    t.integer  "data_size"
-    t.string   "include_blank"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "mega_bar_testers", force: true do |t|
-    t.string   "one"
-    t.string   "two"
-    t.string   "three"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "mega_bar_tests", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "mega_bar_textareas", force: true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "field_display_id"
   end
 
   create_table "mega_bar_textboxes", force: true do |t|
@@ -122,6 +95,7 @@ ActiveRecord::Schema.define(version: 20150102192268) do
     t.string   "format"
     t.string   "action"
     t.string   "header"
+    t.integer  "model_display_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -153,6 +127,7 @@ ActiveRecord::Schema.define(version: 20150102192268) do
     t.string   "default_sort_field"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "steep"
   end
 
   create_table "mega_bar_tmp_records_formats", force: true do |t|
@@ -164,16 +139,9 @@ ActiveRecord::Schema.define(version: 20150102192268) do
   end
 
   create_table "mega_bar_tmp_selects", force: true do |t|
-    t.integer  "field_display_id"
-    t.integer  "model_id"
-    t.integer  "field_id"
-    t.string   "collection"
-    t.string   "value_method"
-    t.string   "text_method"
-    t.integer  "data_size"
-    t.string   "include_blank"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "field_display_id"
   end
 
   create_table "mega_bar_tmp_textboxes", force: true do |t|
@@ -190,6 +158,19 @@ ActiveRecord::Schema.define(version: 20150102192268) do
     t.text     "transformation"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "pigs", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "hair"
+    t.string   "name"
+  end
+
+  create_table "selects", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "field_display_id"
   end
 
 end
