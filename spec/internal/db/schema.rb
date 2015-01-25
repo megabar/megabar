@@ -13,13 +13,6 @@
 
 ActiveRecord::Schema.define(version: 20150123050911) do
 
-  create_table "frisbees", force: true do |t|
-    t.string   "name"
-    t.integer  "weight"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "mega_bar_field_displays", force: true do |t|
     t.integer  "field_id"
     t.string   "format"
@@ -158,13 +151,6 @@ ActiveRecord::Schema.define(version: 20150123050911) do
     t.text     "transformation"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "pigs", force: true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "hair"
-    t.string   "name"
   end
 
   create_table "selects", force: true do |t|
