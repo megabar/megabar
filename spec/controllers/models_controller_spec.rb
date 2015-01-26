@@ -23,11 +23,11 @@ module MegaBar
     # This should return the minimal set of attributes required to create a valid
     # Model. As you add validations to Model, be sure to
     # adjust the attributes here as well.
+    Field.skip_callback("create",:after,:make_migration)
+    Model.skip_callback("create",:after,:make_all_files)
     let(:valid_attributes) {
-      Model.skip_callback("create",:after,:make_model_displays)
-      Model.skip_callback("create",:after,:make_all_files)
-      e = create(:model_with_everything)
-      { classname: e[:classname], name: e[:name], default_sort_field: e[:default_sort_field] }
+      m = build(:model)
+      { classname: m[:classname], name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }
     }
 
     let(:invalid_attributes) {
@@ -38,73 +38,71 @@ module MegaBar
     # in order to pass any filters (e.g. authentication) defined in
     # ModelsController. Be sure to keep this updated too.
     let(:valid_session) { {} }
-
     describe "GET index" do
       it "assigns all models as @models", :focus => true do
         model = Model.create! valid_attributes
         get :index, {use_route: :mega_bar, model_id: 1}, valid_session
-        byebug
         expect(assigns(:models)).to eq([model])
       end
     end
 
     describe "GET show" do
-      it "assigns the requested model as @model" do
+      it "assigns the requested model as @model", :focus => true do
+
         model = Model.create! valid_attributes
-        get :show, {:id => model.to_param}, valid_session
+        get :show, {use_route: :mega_bar, model_id: 1, :id => model.to_param}, valid_session
         expect(assigns(:model)).to eq(model)
       end
     end
+    context 'with the model model' do 
+      describe "GET new" do
+        it "assigns a new model as @model", :focus => true do
+          
+          FactoryGirl.create(:model)
+          get :new, {use_route: :mega_bar, model_id: 1}, valid_session
+          Model.find(1).destroy
+          expect(assigns(:model)).to be_a_new(Model)
+        end
+      end
 
-    describe "GET new" do
-      it "assigns a new model as @model" do
-        get :new, {}, valid_session
-        expect(assigns(:model)).to be_a_new(Model)
+      describe "GET edit" do
+        it "assigns the requested model as @model", :focus => true do
+          model = Model.create! valid_attributes
+          get :edit, {use_route: :mega_bar, model_id: 1, :id => model.to_param}, valid_session
+          Model.find(1).destroy
+          expect(assigns(:model)).to eq(model)
+        end
       end
     end
-
-    describe "GET edit" do
-      it "assigns the requested model as @model" do
-        model = Model.create! valid_attributes
-        get :edit, {:id => model.to_param}, valid_session
-        byebug
-        expect(assigns(:model)).to eq(model)
-      end
-    end
-
-  context 'without callbacks ' do 
-      Model.skip_callback("create",:after,:make_model_displays)
-      Model.skip_callback("create",:after,:make_all_files)
-      describe "POST create" do
-        describe "with valid params" do
-          it "creates a new Model" do
-            expect {
-              post :create, {:model => valid_attributes}, valid_session
-            }.to change(Model, :count).by(1)
-          end
-
-          it "assigns a newly created model as @model" do
+    describe "POST create" do
+      describe "with valid params" do
+        it "creates a new Model" do
+          expect {
             post :create, {:model => valid_attributes}, valid_session
-            expect(assigns(:model)).to be_a(Model)
-            expect(assigns(:model)).to be_persisted
-          end
-
-          it "redirects to the created model" do
-            post :create, {:model => valid_attributes}, valid_session
-            expect(response).to redirect_to(Model.last)
-          end
+          }.to change(Model, :count).by(1)
         end
 
-        describe "with invalid params" do
-          it "assigns a newly created but unsaved model as @model" do
-            post :create, {:model => invalid_attributes}, valid_session
-            expect(assigns(:model)).to be_a_new(Model)
-          end
+        it "assigns a newly created model as @model" do
+          post :create, {:model => valid_attributes}, valid_session
+          expect(assigns(:model)).to be_a(Model)
+          expect(assigns(:model)).to be_persisted
+        end
 
-          it "re-renders the 'new' template" do
-            post :create, {:model => invalid_attributes}, valid_session
-            expect(response).to render_template("new")
-          end
+        it "redirects to the created model" do
+          post :create, {:model => valid_attributes}, valid_session
+          expect(response).to redirect_to(Model.last)
+        end
+      end
+
+      describe "with invalid params" do
+        it "assigns a newly created but unsaved model as @model" do
+          post :create, {:model => invalid_attributes}, valid_session
+          expect(assigns(:model)).to be_a_new(Model)
+        end
+
+        it "re-renders the 'new' template" do
+          post :create, {:model => invalid_attributes}, valid_session
+          expect(response).to render_template("new")
         end
       end
     end
