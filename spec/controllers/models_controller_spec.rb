@@ -66,9 +66,9 @@ module MegaBar
       end
 
       describe "GET edit" do
-        it "assigns the requested model as @model" do
+        it "assigns the requested model as @model", :focus => true do
           model = Model.create! valid_attributes
-          get :edit, {use_route: :mega_bar, :id => model.to_param}, valid_session
+          get :edit, {use_route: :mega_bar, model_id: 1, :id => model.to_param}, valid_session
           Model.find(1).destroy
           expect(assigns(:model)).to eq(model)
         end
