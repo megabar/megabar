@@ -23,11 +23,11 @@ module MegaBar
     # This should return the minimal set of attributes required to create a valid
     # Model. As you add validations to Model, be sure to
     # adjust the attributes here as well.
+    Field.skip_callback("create",:after,:make_migration)
+    Model.skip_callback("create",:after,:make_all_files)
     let(:valid_attributes) {
-      Model.skip_callback("create",:after,:make_model_displays)
-      Model.skip_callback("create",:after,:make_all_files)
-      e = create(:model_with_everything)
-      { classname: e[:classname], name: e[:name], default_sort_field: e[:default_sort_field] }
+      m = build(:model)
+      { classname: m[:classname], name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }
     }
 
     let(:invalid_attributes) {
@@ -38,134 +38,135 @@ module MegaBar
     # in order to pass any filters (e.g. authentication) defined in
     # ModelsController. Be sure to keep this updated too.
     let(:valid_session) { {} }
-
-    describe "GET index" do
-      it "assigns all models as @models", :focus => true do
-        model = Model.create! valid_attributes
-        get :index, {use_route: :mega_bar, model_id: 1}, valid_session
-        byebug
-        expect(assigns(:models)).to eq([model])
+    context 'with all basics' do 
+      describe "GET index" do
+        it "assigns all models as @models", :focus => true do
+          byebug
+          model = Model.create! valid_attributes
+          get :index, {use_route: :mega_bar, model_id: 1}, valid_session
+          byebug
+          expect(assigns(:models)).to eq([model])
+        end
       end
-    end
 
-    describe "GET show" do
-      it "assigns the requested model as @model" do
-        model = Model.create! valid_attributes
-        get :show, {:id => model.to_param}, valid_session
-        expect(assigns(:model)).to eq(model)
+      describe "GET show" do
+        it "assigns the requested model as @model" do
+          model = Model.create! valid_attributes
+          get :show, {:id => model.to_param}, valid_session
+          expect(assigns(:model)).to eq(model)
+        end
       end
-    end
 
-    describe "GET new" do
-      it "assigns a new model as @model" do
-        get :new, {}, valid_session
-        expect(assigns(:model)).to be_a_new(Model)
+      describe "GET new" do
+        it "assigns a new model as @model" do
+          get :new, {}, valid_session
+          expect(assigns(:model)).to be_a_new(Model)
+        end
       end
-    end
 
-    describe "GET edit" do
-      it "assigns the requested model as @model" do
-        model = Model.create! valid_attributes
-        get :edit, {:id => model.to_param}, valid_session
-        byebug
-        expect(assigns(:model)).to eq(model)
+      describe "GET edit" do
+        it "assigns the requested model as @model" do
+          model = Model.create! valid_attributes
+          get :edit, {:id => model.to_param}, valid_session
+          byebug
+          expect(assigns(:model)).to eq(model)
+        end
       end
-    end
 
-  context 'without callbacks ' do 
-      Model.skip_callback("create",:after,:make_model_displays)
-      Model.skip_callback("create",:after,:make_all_files)
-      describe "POST create" do
-        describe "with valid params" do
-          it "creates a new Model" do
-            expect {
+    context 'without callbacks ' do 
+        Model.skip_callback("create",:after,:make_model_displays)
+        Model.skip_callback("create",:after,:make_all_files)
+        describe "POST create" do
+          describe "with valid params" do
+            it "creates a new Model" do
+              expect {
+                post :create, {:model => valid_attributes}, valid_session
+              }.to change(Model, :count).by(1)
+            end
+
+            it "assigns a newly created model as @model" do
               post :create, {:model => valid_attributes}, valid_session
-            }.to change(Model, :count).by(1)
+              expect(assigns(:model)).to be_a(Model)
+              expect(assigns(:model)).to be_persisted
+            end
+
+            it "redirects to the created model" do
+              post :create, {:model => valid_attributes}, valid_session
+              expect(response).to redirect_to(Model.last)
+            end
           end
 
-          it "assigns a newly created model as @model" do
-            post :create, {:model => valid_attributes}, valid_session
-            expect(assigns(:model)).to be_a(Model)
-            expect(assigns(:model)).to be_persisted
+          describe "with invalid params" do
+            it "assigns a newly created but unsaved model as @model" do
+              post :create, {:model => invalid_attributes}, valid_session
+              expect(assigns(:model)).to be_a_new(Model)
+            end
+
+            it "re-renders the 'new' template" do
+              post :create, {:model => invalid_attributes}, valid_session
+              expect(response).to render_template("new")
+            end
+          end
+        end
+      end
+      describe "PUT update" do
+        describe "with valid params" do
+          let(:new_attributes) {
+            skip("Add a hash of attributes valid for your model")
+          }
+
+          it "updates the requested model" do
+            model = Model.create! valid_attributes
+            put :update, {:id => model.to_param, :model => new_attributes}, valid_session
+            model.reload
+            skip("Add assertions for updated state")
           end
 
-          it "redirects to the created model" do
-            post :create, {:model => valid_attributes}, valid_session
-            expect(response).to redirect_to(Model.last)
+          it "assigns the requested model as @model" do
+            model = Model.create! valid_attributes
+            put :update, {:id => model.to_param, :model => valid_attributes}, valid_session
+            expect(assigns(:model)).to eq(model)
+          end
+
+          it "redirects to the model" do
+            model = Model.create! valid_attributes
+            put :update, {:id => model.to_param, :model => valid_attributes}, valid_session
+            expect(response).to redirect_to(model)
           end
         end
 
         describe "with invalid params" do
-          it "assigns a newly created but unsaved model as @model" do
-            post :create, {:model => invalid_attributes}, valid_session
-            expect(assigns(:model)).to be_a_new(Model)
+          it "assigns the model as @model" do
+            model = Model.create! valid_attributes
+            put :update, {:id => model.to_param, :model => invalid_attributes}, valid_session
+            expect(assigns(:model)).to eq(model)
           end
 
-          it "re-renders the 'new' template" do
-            post :create, {:model => invalid_attributes}, valid_session
-            expect(response).to render_template("new")
+          it "re-renders the 'edit' template" do
+            model = Model.create! valid_attributes
+            put :update, {:id => model.to_param, :model => invalid_attributes}, valid_session
+            expect(response).to render_template("edit")
           end
         end
       end
-    end
-    describe "PUT update" do
-      describe "with valid params" do
-        let(:new_attributes) {
-          skip("Add a hash of attributes valid for your model")
-        }
 
-        it "updates the requested model" do
+      describe "DELETE destroy" do
+        it "destroys the requested model" do
           model = Model.create! valid_attributes
-          put :update, {:id => model.to_param, :model => new_attributes}, valid_session
-          model.reload
-          skip("Add assertions for updated state")
+          expect {
+            delete :destroy, {:id => model.to_param}, valid_session
+          }.to change(Model, :count).by(-1)
         end
 
-        it "assigns the requested model as @model" do
+        it "redirects to the models list" do
           model = Model.create! valid_attributes
-          put :update, {:id => model.to_param, :model => valid_attributes}, valid_session
-          expect(assigns(:model)).to eq(model)
-        end
-
-        it "redirects to the model" do
-          model = Model.create! valid_attributes
-          put :update, {:id => model.to_param, :model => valid_attributes}, valid_session
-          expect(response).to redirect_to(model)
-        end
-      end
-
-      describe "with invalid params" do
-        it "assigns the model as @model" do
-          model = Model.create! valid_attributes
-          put :update, {:id => model.to_param, :model => invalid_attributes}, valid_session
-          expect(assigns(:model)).to eq(model)
-        end
-
-        it "re-renders the 'edit' template" do
-          model = Model.create! valid_attributes
-          put :update, {:id => model.to_param, :model => invalid_attributes}, valid_session
-          expect(response).to render_template("edit")
-        end
-      end
-    end
-
-    describe "DELETE destroy" do
-      it "destroys the requested model" do
-        model = Model.create! valid_attributes
-        expect {
           delete :destroy, {:id => model.to_param}, valid_session
-        }.to change(Model, :count).by(-1)
-      end
+          binding.pry
+          puts ("MODELS URLL" + models_url.to_s)
 
-      it "redirects to the models list" do
-        model = Model.create! valid_attributes
-        delete :destroy, {:id => model.to_param}, valid_session
-        binding.pry
-        puts ("MODELS URLL" + models_url.to_s)
-
-        expect(response).to redirect_to(models_url)
+          expect(response).to redirect_to(models_url)
+        end
       end
     end
-
   end
 end

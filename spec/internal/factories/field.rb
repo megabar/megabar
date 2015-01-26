@@ -2,10 +2,12 @@
 
 FactoryGirl.define do
   factory :field, class: MegaBar::Field do
-    model_id  '1'
-    schema 'beep'
-    tablename 'mega_bar_models'
-    field 'steep'
-    association :model,  factory: :model
+   
+    factory :field_with_displays do
+      index_field_display 'y'
+      show_field_display 'y'
+      new_field_display 'y'
+      edit_field_display 'y'
+    end
   end
 end
