@@ -12,6 +12,7 @@ module MegaBar
       # yep, this is the main brain that loads all the model, model display, field, field_display stuff. 
       # after this runs you'll see the 'create' and 'update' type methods above run.
       #return redirect_to(new_model_display_path, :notice => "There was no ModelDisplay for that " + params[:action] +" action and " + model_id.to_s + "model_id combo. Would you like to create one?")    unless model_display
+     byebug
       @model_properties = Model.find(model_id)
       @mega_bar_model_displays = []
       ModelDisplay.by_model(model_id).by_action(params[:action]).each do | md |
