@@ -40,19 +40,19 @@ module MegaBar
     let(:valid_session) { {} }
     context 'with all basics' do 
       describe "GET index" do
-        it "assigns all models as @models", :focus => true do
+        it "assigns all models as @models" do
           byebug
           model = Model.create! valid_attributes
           get :index, {use_route: :mega_bar, model_id: 1}, valid_session
-          byebug
           expect(assigns(:models)).to eq([model])
         end
       end
 
       describe "GET show" do
-        it "assigns the requested model as @model" do
+        it "assigns the requested model as @model", :focus => true do
           model = Model.create! valid_attributes
-          get :show, {:id => model.to_param}, valid_session
+          byebug
+          get :show, {use_route: :mega_bar, model_id: 1, :id => model.to_param}, valid_session
           expect(assigns(:model)).to eq(model)
         end
       end
