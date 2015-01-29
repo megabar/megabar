@@ -9,5 +9,11 @@ FactoryGirl.define do
       new_field_display 'y'
       edit_field_display 'y'
     end
+    factory :field_for_model_model do
+      model_id '1'
+      tablename 'models'
+      field 'classname'
+    end
+
   end
 end
