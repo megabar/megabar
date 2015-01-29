@@ -133,6 +133,12 @@ namespace :mega_bar do
     MegaBar::TmpTextbox.where(field_display_id: c[:tmp].id).each do |tb|
       tb.update(field_display_id: new_obj.id)
     end
+    MegaBar::TmpTextread.where(field_display_id: c[:tmp].id).each do |tb|
+      tb.update(field_display_id: new_obj.id)
+    end
+    MegaBar::TmpSelect.where(field_display_id: c[:tmp].id).each do |tb|
+      tb.update(field_display_id: new_obj.id)
+    end
   end
 
 
@@ -162,7 +168,7 @@ namespace :mega_bar do
     mega_classes << {id: 1, tmp_class: MegaBar::TmpModel, perm_class: MegaBar::Model, unique: [:classname], resolver: 'fix_model', condition: 'tmp.classname == perm.classname'}
     mega_classes << {id: 2, tmp_class: MegaBar::TmpField, perm_class: MegaBar::Field, unique: [:model_id, :field], resolver: 'fix_fields', condition: 'tmp.model_id == perm.model_id && tmp.field == perm.field'}
     mega_classes << {id: 3, tmp_class: MegaBar::TmpModelDisplay, perm_class: MegaBar::ModelDisplay, unique: [:model_id, :action], resolver: 'fix_model_displays', condition: 'tmp.model_id == perm.model_id && tmp.action == perm.action'}
-    mega_classes << {id: 4, tmp_class: MegaBar::TmpFieldDisplay, perm_class: MegaBar::FieldDisplay, unique: [:field_id, :action], resolver: 'fix_field_displays', condition: 'tmp.field_id == perm.field_id && tmp.action == perm.action'} 
+    mega_classes << {id: 4, tmp_class: MegaBar::TmpFieldDisplay, perm_class: MegaBar::FieldDisplay, unique: [:model_display_id], resolver: 'fix_field_displays', condition: 'tmp.model_display_id == perm.model_display_id'} 
     mega_classes << {id: 5, tmp_class: MegaBar::TmpRecordsFormat, perm_class: MegaBar::RecordsFormat, unique: [:name], resolver: 'fix_records_format', condition: 'tmp.name == perm.name'}
     mega_classes << {id: 6, tmp_class: MegaBar::TmpTextbox, perm_class: MegaBar::Textbox, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {id: 7, tmp_class: MegaBar::TmpTextread, perm_class: MegaBar::Textread, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'} 
@@ -172,53 +178,16 @@ namespace :mega_bar do
   end
 
 
-
-
-  def associated_from_models(tmp, model_ids) 
-    field_class = tmp ? MegaBar::TmpField : MegaBar::Field
-    field_display_class = tmp ? MegaBar::TmpFieldDisplay : MegaBar::FieldDisplay
-    fields =  field_class.where(model_id: model_ids).pluck(:id)
-    field_disp =  field_display_class.where(field_id: fields).pluck(:id)
-    return {fields: fields, field_displays: field_disp}
-    #model_disp = MegaBar::
-  end
-
-
-  def keep_going
-     #deprecated
-    binding.pry
-    mega_bar_model_ids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
-
-
-    mega_bar_fields =  MegaBar::Field.where(model_id: mega_ids).pluck(:id)
-    mega_bar_field_disp =  MegaBar::FieldDisplay.where(field_id: mega_bar_fields).pluck(:id)
-    mega_bar_classes = MegaBar::Model.where(id: mega_ids).pluck(:classname)
-  
-    MegaBar::Model.where(id: mega_ids).delete_all
-    MegaBar::Field.where(id: mega_bar_fields).delete_all
-    MegaBar::ModelDisplay.where(model_id: mega_ids).delete_all
-    MegaBar::FieldDisplay.where(field_id: mega_bar_fields).delete_all
-    MegaBar::Textbox.where(field_display_id: mega_bar_field_disp).delete_all
-    MegaBar::Textread.where(field_display_id: mega_bar_field_disp).delete_all
-    MegaBar::RecordsFormat.delete_all
- 
-     
-    # MegaBar::Select.where(attributedisplayid: mega_bar_field_disp).delete_all
-    # MegaBar::Textarea.where(attibutedisplayid: mega_bar_field_disp).delete_all
-    
-    # run the load: 
-    puts "Loaded Data"
-  end
-
   task :dump_seeds => :environment do
     mega_bar_model_ids = [1,2,3,4,5,6,7,14]
     mega_bar_classes = MegaBar::Model.where(id: mega_bar_model_ids).pluck(:classname)
     mega_bar_fields =  MegaBar::Field.where(model_id: mega_bar_model_ids).pluck(:id)
+    mega_bar_model_displays = MegaBar::ModelDisplay.where(model_id: mega_bar_model_ids).pluck(:id)
     mega_bar_field_disp =  MegaBar::FieldDisplay.where(field_id: mega_bar_fields).pluck(:id)
     SeedDump.dump(MegaBar::Model.where(id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [])
     SeedDump.dump(MegaBar::ModelDisplay.where(model_id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Field.where(model_id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::FieldDisplay.where(field_id: mega_bar_fields), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::FieldDisplay.where(model_display_id: mega_bar_model_displays), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::RecordsFormat, file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     # SeedDump.dump(MegaBar::Select.where(field_display_id: mega_bar_field_disp), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Textbox.where(field_display_id: mega_bar_field_disp), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
@@ -242,58 +211,13 @@ namespace :mega_bar do
       {id: 1, classname: "Model", schema: "sqlite", tablename: "models", name: "Model", default_sort_field: "id", created_at: "2014-05-05 17:27:28", updated_at: "2014-12-26 00:58:09"},
       {id: 2, classname: "Attribute", schema: "sqlite", tablename: "fields", name: "Fields", default_sort_field: "id", created_at: "2014-05-05 17:28:21", updated_at: "2014-05-21 22:21:20"},
       {id: 3, classname: "ModelDisplay", schema: "sqlite", tablename: "model_displays", name: "Model Displayyyyy", default_sort_field: "model_id", created_at: "2014-05-05 18:12:24", updated_at: "2014-05-21 18:35:52"},
-      {id: 4, classname: "AttributeDisplay", schema: "sqlite", tablename: "field_displays", name: "Field Displays", default_sort_field: "id", created_at: "2014-05-05 19:20:12", updated_at: "2014-05-21 22:33:58"},
+      {id: 4, classname: "FieldDisplay", schema: "sqlite", tablename: "field_displays", name: "Field Displays", default_sort_field: "id", created_at: "2014-05-05 19:20:12", updated_at: "2014-05-21 22:33:58"},
       {id: 5, classname: "RecordsFormat", schema: "sqlite", tablename: "recordsformats", name: "Records Format", default_sort_field: "name", created_at: "2014-05-05 19:34:38", updated_at: "2014-12-24 07:19:00"},
       {id: 6, classname: "Textbox", schema: "another", tablename: "textboxes", name: "Text Boxes", default_sort_field: "id", created_at: "2014-05-12 17:43:13", updated_at: "2014-05-21 21:51:02"},
       {id: 7, classname: "Textread", schema: "oyyyy", tablename: "textreads", name: "Text Display", default_sort_field: "id", created_at: "2014-05-12 22:59:05", updated_at: "2014-05-23 16:30:59"},
       {id: 8, classname: "Select", schema: "odfdfd", tablename: "selects", name: "Select Menus", default_sort_field: "id", created_at: "2014-05-12 23:02:23", updated_at: "2014-05-23 16:31:23"}
     ])
   end
-
-  task simple_load: :environment do
-    # TODO - add prompt to be sure.
-    ENV['mega_bar_data_loading'] = 'yes'
-    # TODO: figure out how to really disable the before filters.
-    model_ids = [1,2,3,4,5,6,7,14]
-    fields =  MegaBar::Field.where(model_id: model_ids).pluck(:id)
-    field_disp =  MegaBar::FieldDisplay.where(field_id: fields).pluck(:id)
-    classes = MegaBar::Model.where(id: model_ids).pluck(:classname)
-  
-    # MegaBar::Model.where(id: model_ids).delete_all
-    # MegaBar::Field.where(id: fields).delete_all
-    # MegaBar::ModelDisplay.where(model_id: model_ids).delete_all
-    # MegaBar::FieldDisplay.where(field_id: fields).delete_all
-    # MegaBar::Textbox.where(field_display_id: field_disp).delete_all
-    # MegaBar::Textread.where(field_display_id: field_disp).delete_all
-    # MegaBar::RecordsFormat.delete_all
-
-    MegaBar::Model.delete_all
-    MegaBar::Field.delete_all
-    MegaBar::ModelDisplay.delete_all
-    MegaBar::FieldDisplay.delete_all
-    MegaBar::Textbox.delete_all
-    MegaBar::Textread.delete_all
-    MegaBar::RecordsFormat.delete_all
-   
-    # MegaBar::Select.where(attributedisplayid: mega_bar_field_disp).delete_all
-    # MegaBar::Textarea.where(attibutedisplayid: mega_bar_field_disp).delete_all
-    
-    # run the load: 
-    require Rails.root.join('db', 'mega_bar.seeds.rb')
-    puts "Loaded Data"
-
-  end
-  task add_model_display_ids_to_field_displays: :environment do
-    MegaBar::FieldDisplay.all.each do | fd |
-      model_id = MegaBar::Field.where(id: fd.field_id,).pluck(:model_id).first  
-      MegaBar::ModelDisplay.where(model_id: model_id, action: fd.action).each do | md |
-        fd.model_display_id = md.id
-        fd.save
-      end
-    end  
-  end
-
-
 
 
 end

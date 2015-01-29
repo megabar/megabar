@@ -6,7 +6,7 @@ MegaBar::TmpModel.create!([
   {id: 5, classname: "RecordsFormat", schema: "sqlite", tablename: "recordsformats", name: "Records Format", default_sort_field: "name", created_at: "2014-05-05 19:34:38", updated_at: "2014-12-24 07:19:00", steep: nil},
   {id: 6, classname: "Textbox", schema: "another", tablename: "textboxes", name: "Text Boxes", default_sort_field: "id", created_at: "2014-05-12 17:43:13", updated_at: "2014-05-21 21:51:02", steep: nil},
   {id: 7, classname: "Textread", schema: "oyyyy", tablename: "textreads", name: "Text Display", default_sort_field: "id", created_at: "2014-05-12 22:59:05", updated_at: "2014-05-23 16:30:59", steep: nil},
-  {id: 14, classname: "MegaBar::TmpSelects", schema: "sqlite", tablename: "mega_bar_selects", name: "Selects", default_sort_field: "id", created_at: "2015-01-23 03:41:20", updated_at: "2015-01-23 03:41:20", steep: nil}
+  {id: 14, classname: "MegaBar::TmpTmpSelects", schema: "sqlite", tablename: "mega_bar_selects", name: "Selects", default_sort_field: "id", created_at: "2015-01-23 03:41:20", updated_at: "2015-01-23 03:41:20", steep: nil}
 ])
 MegaBar::TmpModelDisplay.create!([
   {id: 1, model_id: 1, format: "1", action: "index", header: "Models Grid Via MVCGUI", created_at: "2014-05-05 19:13:32", updated_at: "2014-05-20 01:18:25"},
@@ -96,7 +96,7 @@ MegaBar::TmpFieldDisplay.create!([
   {id: 2, field_id: 5, format: "textread", action: "index", header: "The Model Name", model_display_id: 1, created_at: "2014-05-05 20:04:39", updated_at: "2015-01-21 18:57:05"},
   {id: 3, field_id: 4, format: "textbox", action: "edit", header: "The Table Name", model_display_id: 6, created_at: "2014-05-08 19:38:36", updated_at: "2015-01-21 18:57:05"},
   {id: 4, field_id: 1, format: "textread", action: "edit", header: "the id (readonly)", model_display_id: 6, created_at: "2014-05-08 19:52:46", updated_at: "2015-01-21 18:57:05"},
-  {id: 5, field_id: 5, format: "textbox", action: "edit", header: "edit the model name", model_display_id: 6, created_at: "2014-05-08 19:53:28", updated_at: "2015-01-21 18:57:05"},
+  {id: 5, field_id: 5, format: "textbox", action: "edit", header: "edit the model name", model_display_id: 51, created_at: "2014-05-08 19:53:28", updated_at: "2015-01-26 15:45:55"},
   {id: 7, field_id: 3, format: "textbox", action: "new", header: "skeema", model_display_id: 8, created_at: "2014-05-12 16:06:21", updated_at: "2015-01-21 18:57:05"},
   {id: 8, field_id: 4, format: "textbox", action: "new", header: "Nombre de Mesa", model_display_id: 8, created_at: "2014-05-12 16:06:58", updated_at: "2015-01-21 18:57:05"},
   {id: 9, field_id: 5, format: "textbox", action: "new", header: "Name the Model", model_display_id: 8, created_at: "2014-05-12 16:07:30", updated_at: "2015-01-21 18:57:05"},
@@ -214,7 +214,6 @@ MegaBar::TmpFieldDisplay.create!([
   {id: 152, field_id: 25, format: "textread", action: "index", header: "ids", model_display_id: 5, created_at: "2014-12-25 04:22:23", updated_at: "2015-01-21 18:57:06"},
   {id: 153, field_id: 25, format: "textread", action: "show", header: "id", model_display_id: 42, created_at: "2014-12-25 04:22:39", updated_at: "2015-01-21 18:57:06"},
   {id: 160, field_id: 56, format: "textread", action: "index", header: "ids", model_display_id: 49, created_at: "2014-12-25 18:39:34", updated_at: "2015-01-21 18:57:06"},
-  {id: 161, field_id: 56, format: "textread", action: "how", header: "id", model_display_id: nil, created_at: "2014-12-25 18:39:44", updated_at: "2014-12-25 18:39:44"},
   {id: 162, field_id: 56, format: "textbox", action: "new", header: "id", model_display_id: 47, created_at: "2014-12-25 18:39:49", updated_at: "2015-01-21 18:57:06"},
   {id: 163, field_id: 57, format: "textread", action: "index", header: "Model Display Id", model_display_id: 4, created_at: "2015-01-21 18:21:12", updated_at: "2015-01-21 18:57:06"},
   {id: 164, field_id: 57, format: "textread", action: "show", header: "Model Display Id", model_display_id: 32, created_at: "2015-01-21 18:21:31", updated_at: "2015-01-21 18:57:06"},
