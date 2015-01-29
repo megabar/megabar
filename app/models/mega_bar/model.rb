@@ -1,15 +1,17 @@
 module MegaBar
   class Model < ActiveRecord::Base
     self.table_name = "mega_bar_models"
+    include MegaBar::MegaBarModelConcern
+    validates_presence_of :classname
     has_many :fields, dependent: :destroy
     has_many :model_displays, dependent: :destroy
-    include MegaBar::MegaBarModelConcern
     after_create  :make_model_displays
     after_create :make_all_files
     after_save :make_model_displays
     #has_many :attributes #ack you can't do this!  http://reservedwords.herokuapp.com/words/attributes
     attr_accessor :model_id, :new_model_display, :edit_model_display, :index_model_display, :show_model_display
     attr_writer :model_id
+
     scope :by_model, ->(model_id) { where(id: model_id) if model_id.present? }
     def make_model_displays 
       actions = []

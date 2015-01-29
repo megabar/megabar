@@ -69,14 +69,13 @@ module MegaBar
     end
 
     def create
-
       @model = @the_class.new(_params)
       respond_to do |format|
         if @model.save
           format.html { redirect_to @model, notice: 'It was successfully created.' }
           format.json { render action: 'show', status: :created, location: @model }
         else
-          format.html { render action: 'new' }
+          format.html { render @new_view_template }
           format.json { render json: @model.errors, status: :unprocessable_entity }
         end
       end
@@ -92,7 +91,7 @@ module MegaBar
           format.json { head :no_content }
         else
           logger.info "FffFFFFFFFF"
-          format.html { render action: 'edit' }
+          format.html { render action: 'mega_bar.html.erb' }
           format.json { render json: @model.errors, status: :unprocessable_entity }
         end
       end
