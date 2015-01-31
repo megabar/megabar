@@ -2,10 +2,7 @@
 module <%=the_module_name%>
   <% end %>class <%= the_controller_name %> < ApplicationController
     include MegaBarConcern
-    before_action ->{ myinit <%= model_id %> },  only: [:index, :show, :edit, :new]
-
-
-
+    
     private
       # Never trust parameters from the scary internet, only allow the white list through.
       def _params
