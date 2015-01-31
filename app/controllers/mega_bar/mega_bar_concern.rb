@@ -6,7 +6,7 @@ module MegaBar
       # yep, this is the main brain that loads all the model, model display, field, field_display stuff. 
       # after this runs you'll see the 'create' and 'update' type methods above run.
       #return redirect_to(new_model_display_path, :notice => "There was no ModelDisplay for that " + params[:action] +" action and " + model_id.to_s + "model_id combo. Would you like to create one?")    unless model_display
-      @model_properties = Model.find(model_id)
+      @mega_bar_model_properties = Model.find(model_id)
       @mega_bar_model_displays = []
       ModelDisplay.by_model(model_id).by_action(params[:action]).each do | md |
         field_displays = FieldDisplay.where(model_display_id: md.id)
@@ -31,6 +31,7 @@ module MegaBar
         @mega_bar_model_displays << info
       end
       @controller = params[:controller].gsub('mega_bar/', '')
+      self.controller =  params[:controller].gsub('mega_bar/', '')
     end
     
         # GET /models
@@ -38,27 +39,27 @@ module MegaBar
     def index
       #seems like you have to have an instance variable for the specific model because if you don't it doesn't pay attention to using your 'layout'
       #so we set one but then for convenience in the layout, we set @models equal to that.
-      instance_variable_set("@" + @controller,  @the_class.order(sort_column + " " + sort_direction))
-      @models = instance_variable_get("@" + @controller);
+      instance_variable_set("@" + self.controller  @the_class.order(sort_column + " " + sort_direction))
+      @models = instance_variable_get("@" + self.controller);
       render @index_view_template
     end
 
     def show
-      instance_variable_set("@"  + @controller.singularize,  @the_class.find(params[:id]))
+      instance_variable_set("@"  + self.controller.singularize,  @the_class.find(params[:id]))
       @models = []
-      @models << instance_variable_get("@"  + @controller.singularize);  
+      @models << instance_variable_get("@"  + self.controller.singularize);  
       render @show_view_template
     end
 
     def new
-      instance_variable_set("@"  + @controller.singularize,  @the_class.new)
-      @model = instance_variable_get("@"  + @controller.singularize);  
+      instance_variable_set("@"  + self.controller.singularize,  @the_class.new)
+      @model = instance_variable_get("@"  + self.controller.singularize);  
       render @new_view_template
     end
 
     def edit
-      instance_variable_set("@"  + @controller.singularize,  @the_class.find(params[:id]))
-      @model = instance_variable_get("@"  + @controller.singularize)
+      instance_variable_set("@"  + self.controller.singularize,  @the_class.find(params[:id]))
+      @model = instance_variable_get("@"  + self.controller.singularize)
       render @edit_view_template
     end
 
@@ -131,7 +132,7 @@ module MegaBar
     end 
 
     def sort_column
-      @the_class.column_names.include?(params[:sort]) ? params[:sort] :  @model_properties[:default_sort_field]
+      @the_class.column_names.include?(params[:sort]) ? params[:sort] :  @mega_bar_model_properties[:default_sort_field]
     end
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
