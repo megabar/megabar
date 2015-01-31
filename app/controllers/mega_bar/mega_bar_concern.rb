@@ -3,9 +3,7 @@ module MegaBar
     extend ActiveSupport::Concern
 
     def app_init
-      #the crazyness starts right here.
-      tmp = params[:controller].include?('mega_bar') ? 'MegaBar::' + params[:controller][9..-1].classify : params[:controller].classify
-      @the_class = tmp.constantize
+      @the_class = constant_from_controller(params[:controller]).constantize
     end
 
     def myinit(model_id)
@@ -36,8 +34,7 @@ module MegaBar
         }
         @mega_bar_model_displays << info
       end
-      # @controller = params[:controller].split('/')[-1]
-      @controller = params[:controller].include?('mega_bar') ?  params[:controller][9..-1] :  params[:controller]
+      @controller = params[:controller].gsub('mega_bar/', '')
     end
     
         # GET /models
@@ -152,7 +149,12 @@ module MegaBar
         true
       end
     end
-
-
+    def constant_from_controller(str)
+      constant_string = ''
+      str.split('/').each_with_index do | seg, i |
+        constant_string +=  i < str.split('/').size - 1 ? seg.classify + '::' : seg.classify
+      end
+      constant_string
+    end
   end
 end

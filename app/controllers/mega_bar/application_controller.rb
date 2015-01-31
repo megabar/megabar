@@ -18,8 +18,10 @@ module MegaBar
 
     def _params
         permits = []
-        tmp = params[:controller].split('/')[-1].classify
-        the_class = tmp.constantize
+        # tmp = params[:controller].include?('mega_bar') ? 'MegaBar::' + params[:controller][9..-1].classify : params[:controller].classify
+        # the_class = tmp.constantize # old way, but doesnt seem needed here.
+        # the_class = constant_from_controller(params[:controller]) # new way
+      
         MegaBar::Field.by_model(params[:model_id]).pluck(:field).each do |att|
           permits << att unless ['id', 'created_at', 'updated_at'].include?(att)
         end
