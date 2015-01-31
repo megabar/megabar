@@ -31,7 +31,6 @@ module MegaBar
         @mega_bar_model_displays << info
       end
       @controller = params[:controller].gsub('mega_bar/', '')
-      self.controller =  params[:controller].gsub('mega_bar/', '')
     end
     
         # GET /models
@@ -39,27 +38,27 @@ module MegaBar
     def index
       #seems like you have to have an instance variable for the specific model because if you don't it doesn't pay attention to using your 'layout'
       #so we set one but then for convenience in the layout, we set @models equal to that.
-      instance_variable_set("@" + self.controller  @the_class.order(sort_column + " " + sort_direction))
-      @models = instance_variable_get("@" + self.controller);
+      instance_variable_set("@" + @controller,  @the_class.order(sort_column + " " + sort_direction))
+      @models = instance_variable_get("@" + @controller);
       render @index_view_template
     end
 
     def show
-      instance_variable_set("@"  + self.controller.singularize,  @the_class.find(params[:id]))
+      instance_variable_set("@"  + @controller.singularize,  @the_class.find(params[:id]))
       @models = []
-      @models << instance_variable_get("@"  + self.controller.singularize);  
+      @models << instance_variable_get("@"  + @controller.singularize);  
       render @show_view_template
     end
 
     def new
-      instance_variable_set("@"  + self.controller.singularize,  @the_class.new)
-      @model = instance_variable_get("@"  + self.controller.singularize);  
+      instance_variable_set("@"  + @controller.singularize,  @the_class.new)
+      @model = instance_variable_get("@"  + @controller.singularize);  
       render @new_view_template
     end
 
     def edit
-      instance_variable_set("@"  + self.controller.singularize,  @the_class.find(params[:id]))
-      @model = instance_variable_get("@"  + self.controller.singularize)
+      instance_variable_set("@"  + @controller.singularize,  @the_class.find(params[:id]))
+      @model = instance_variable_get("@"  + @controller.singularize)
       render @edit_view_template
     end
 
