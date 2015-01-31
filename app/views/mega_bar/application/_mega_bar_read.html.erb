@@ -4,7 +4,7 @@
   <% if @mega_bar[:app_format].separate_header_row %>
     <% @mega_bar[:displayable_fields].each do | displayable_field | %>
       <%= @mega_bar[:app_format].field_header_wrapper.html_safe%>
-      <%= sortable displayable_field[:field].field %>
+      <%= sortable(displayable_field[:field].field, displayable_field[:field_display].header) %>
       <%= @mega_bar[:app_format].field_header_wrapper_end.html_safe%>
     <% end %>
   <% end %>
