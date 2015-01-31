@@ -1,6 +1,7 @@
 module MegaBar
   class Field < ActiveRecord::Base
     belongs_to :model
+    validates_presence_of :model_id, :tablename, :field
     after_create  :make_field_displays #, :only => [:create] #add update.
     after_create  :make_migration #, :only => [:create] #add update.
     after_save :make_field_displays

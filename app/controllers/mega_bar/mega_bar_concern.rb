@@ -36,6 +36,7 @@ module MegaBar
         }
         @mega_bar_model_displays << info
       end
+      # @controller = params[:controller].split('/')[-1]
       @controller = params[:controller].include?('mega_bar') ?  params[:controller][9..-1] :  params[:controller]
     end
     
