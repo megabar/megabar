@@ -18,7 +18,7 @@ module MegaBar
   # Message expectations are only used when there is no simpler way to specify
   # that an instance is receiving a specific message.
 
-  RSpec.describe MegaBar::ModelsController, :type => :controller do
+  RSpec.describe MegaBar::FieldsController, :type => :controller do
 
     # This should return the minimal set of attributes required to create a valid
     # Model. As you add validations to Model, be sure to
@@ -26,61 +26,68 @@ module MegaBar
     Field.skip_callback("create",:after,:make_migration)
     Model.skip_callback("create",:after,:make_all_files)
     let(:valid_attributes) {
-      m = build(:model)
-      { classname: m[:classname], name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }
+      f = build(:tablename_field_for_field_model)
+      { tablename: f[:tablename], field: f[:field], model_id: f[:model_id], id: f[:id]  }
     }
 
     let(:invalid_attributes) {
-      m = build(:model)
-      { classname: nil, name: m[:name], default_sort_field: '', id: m[:id]  }
+      f = build(:field)
+      { tablename: nil, field: nil, model_id: nil, id: f[:id]  }
     }
-
+    
     # This should return the minimal set of values that should be in the session
     # in order to pass any filters (e.g. authentication) defined in
     # ModelsController. Be sure to keep this updated too.
     let(:valid_session) { {} }
     describe "GET index" do
-      it "assigns all models as @mega_instance" do
-        model = Model.create! valid_attributes
+      it "assigns all fields as @mega_instance" do
+        field = Field.create! valid_attributes
+        # create(:model)
+        create(:model_for_fields)
         get :index, {use_route: :mega_bar, model_id: 1}, valid_session
-        expect(assigns(:mega_instance)).to eq([model])
+        Model.delete([1])
+        expect(assigns(:mega_instance)).to eq([field])
       end
     end
 
     describe "GET show" do
-      it "assigns the requested model as @mega_instance" do
-        model = []
-        tmp = Model.create! valid_attributes
-        model << tmp 
-        get :show, {use_route: :mega_bar, model_id: 1, :id => model.to_param}, valid_session
-        expect(assigns(:mega_instance)).to eq(model)
+      it "assigns the requested field as @mega_instance" do
+        create(:model_for_fields)
+        field = Field.create! valid_attributes
+        get :show, {use_route: :mega_bar, model_id: 1, :id => field.to_param}, valid_session
+        expect(assigns(:mega_instance)).to eq([field])
       end
     end
     describe "GET new" do
-      it "assigns a new model as @mega_instance" do
-        FactoryGirl.create(:model)
+      it "assigns a new field as @mega_instance" do
+        create(:model_for_fields)
         get :new, {use_route: :mega_bar, model_id: 1}, valid_session
         Model.find(1).destroy
-        expect(assigns(:mega_instance)).to be_a_new(Model)
+        expect(assigns(:mega_instance)).to be_a_new(Field)
       end
     end
 
     describe "GET edit" do
-      it "assigns the requested model as @mega_instance" do
-        model = Model.create! valid_attributes
-        get :edit, {use_route: :mega_bar, model_id: 1, :id => model.to_param}, valid_session
+      it "assigns the requested field as @mega_instance" do
+        create(:model_for_fields)
+        field = Field.create! valid_attributes
+        get :edit, {use_route: :mega_bar, model_id: 1, :id => field.to_param}, valid_session
         Model.find(1).destroy
-        expect(assigns(:mega_instance)).to eq(model)
+        expect(assigns(:mega_instance)).to eq(field)
       end
     end
 
     describe "POST create" do
       describe "with valid params" do
-        it "creates a new Model" do
-          create(:field_for_model_model)
+        it "creates a new Field", focus: true do
+          create(:model_for_fields)
+          create(:tablename_field_for_field_model)
+          create(:model_id_field_for_field_model)
+          create(:field_field_for_field_model)
+          #  create(:field_for_field_model)
           expect {
-            post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
-          }.to change(Model, :count).by(1)
+            post :create, {use_route: :mega_bar, model_id: 1, :field=> valid_attributes}, valid_session
+          }.to change(Field, :count).by(1)
         end
 
         it "assigns a newly created model as @mega_instance" do

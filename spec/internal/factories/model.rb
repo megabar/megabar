@@ -18,5 +18,12 @@ FactoryGirl.define do
         create(:field_with_displays, model_id: 1, tablename: 'models', field: 'classname')
       end
     end
+    factory :model_for_fields do
+      id '1'
+      classname 'fields'
+      name 'Fields'
+      tablename 'fields'
+    end
+
   end
 end
