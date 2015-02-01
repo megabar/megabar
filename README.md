@@ -33,10 +33,6 @@ Mount the mega_bar engine into your routes file:
 
 ```bundle exec rake mega_bar:engine_init```
 
-Copy over the mega_bar Migrations:
-
-```rake mega_bar:install:migrations```
-
 Migrate the db:
 
 ```rake db:migrate```

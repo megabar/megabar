@@ -2,18 +2,12 @@ module MegaBar
   module MegaBarConcern
     extend ActiveSupport::Concern
 
-    def app_init
-      #the crazyness starts right here.
-      tmp = params[:controller].include?('mega_bar') ? 'MegaBar::' + params[:controller][9..-1].classify : params[:controller].classify
-      @the_class = tmp.constantize
-    end
-
-    def myinit(model_id)
+    def controller_init(model_id)
       # yep, this is the main brain that loads all the model, model display, field, field_display stuff. 
       # after this runs you'll see the 'create' and 'update' type methods above run.
       #return redirect_to(new_model_display_path, :notice => "There was no ModelDisplay for that " + params[:action] +" action and " + model_id.to_s + "model_id combo. Would you like to create one?")    unless model_display
-      @model_properties = Model.find(model_id)
-      @mega_bar_model_displays = []
+      @mega_model_properties = Model.find(model_id)
+      @mega_infos = []
       ModelDisplay.by_model(model_id).by_action(params[:action]).each do | md |
         field_displays = FieldDisplay.where(model_display_id: md.id)
         displayable_fields = []
@@ -22,7 +16,7 @@ module MegaBar
           if is_displayable?(field_disp.format)
             #lets figure out how to display it right here.
             display_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
-            displayable_fields << {:field_display=>field_disp, :field=>field, :display_format=>display_format, :obj=>@model}
+            displayable_fields << {:field_display=>field_disp, :field=>field, :display_format=>display_format, :obj=>@mega_instance}
           end
         end
         info = {
@@ -34,9 +28,9 @@ module MegaBar
           :model_display => md,
           :record_format => MegaBar::RecordsFormat.find(md.format)
         }
-        @mega_bar_model_displays << info
+        @mega_infos << info
       end
-      @controller = params[:controller].include?('mega_bar') ?  params[:controller][9..-1] :  params[:controller]
+      @mega_controller = params[:controller].split('/').last
     end
     
         # GET /models
@@ -44,36 +38,36 @@ module MegaBar
     def index
       #seems like you have to have an instance variable for the specific model because if you don't it doesn't pay attention to using your 'layout'
       #so we set one but then for convenience in the layout, we set @models equal to that.
-      instance_variable_set("@" + @controller,  @the_class.order(sort_column + " " + sort_direction))
-      @models = instance_variable_get("@" + @controller);
+      instance_variable_set("@" + @mega_controller,  @mega_class.order(sort_column + " " + sort_direction))
+      @mega_instance = instance_variable_get("@" + @mega_controller);
       render @index_view_template
     end
 
     def show
-      instance_variable_set("@"  + @controller.singularize,  @the_class.find(params[:id]))
-      @models = []
-      @models << instance_variable_get("@"  + @controller.singularize);  
+      instance_variable_set("@"  + @mega_controller.singularize,  @mega_class.find(params[:id]))
+      @mega_instance = []
+      @mega_instance << instance_variable_get("@"  + @mega_controller.singularize);  
       render @show_view_template
     end
 
     def new
-      instance_variable_set("@"  + @controller.singularize,  @the_class.new)
-      @model = instance_variable_get("@"  + @controller.singularize);  
+      instance_variable_set("@"  + @mega_controller.singularize,  @mega_class.new)
+      @mega_instance = instance_variable_get("@"  + @mega_controller.singularize);  
       render @new_view_template
     end
 
     def edit
-      instance_variable_set("@"  + @controller.singularize,  @the_class.find(params[:id]))
-      @model = instance_variable_get("@"  + @controller.singularize)
+      instance_variable_set("@"  + @mega_controller.singularize,  @mega_class.find(params[:id]))
+      @mega_instance = instance_variable_get("@"  + @mega_controller.singularize)
       render @edit_view_template
     end
 
     def create
-      @model = @the_class.new(_params)
+      @mega_instance = @mega_class.new(_params)
       respond_to do |format|
-        if @model.save
-          format.html { redirect_to @model, notice: 'It was successfully created.' }
-          format.json { render action: 'show', status: :created, location: @model }
+        if @mega_instance.save
+          format.html { redirect_to @mega_instance, notice: 'It was successfully created.' }
+          format.json { render action: 'show', status: :created, location: @mega_instance }
         else
           format.html { render @new_view_template }
           format.json { render json: @model.errors, status: :unprocessable_entity }
@@ -85,21 +79,19 @@ module MegaBar
     def update
       set_the_display
       respond_to do |format|
-        if @model.update(_params)
-          logger.info "UUUUUUUUUU"
-          format.html { redirect_to @model, notice: 'Thing was successfully updated.' }
+        if @mega_instance.update(_params)
+          format.html { redirect_to @mega_instance, notice: 'Thing was successfully updated.' }
           format.json { head :no_content }
         else
-          logger.info "FffFFFFFFFF"
           format.html { render action: 'mega_bar.html.erb' }
-          format.json { render json: @model.errors, status: :unprocessable_entity }
+          format.json { render json: @mega_instance.errors, status: :unprocessable_entity }
         end
       end
     end
     def destroy
-      instance_variable_set("@" + params[:controller][9..-1].classify.singularize,  @the_class.find(params[:id]))
-      @model = instance_variable_get("@" + params[:controller][9..-1].classify.singularize); 
-      @model.destroy
+      instance_variable_set("@" + params[:controller][9..-1].classify.singularize,  @mega_class.find(params[:id]))
+      @mega_instance = instance_variable_get("@" + params[:controller][9..-1].classify.singularize); 
+      @mega_instance.destroy
       respond_to do |format|
         format.html { redirect_to models_url }
         format.json { head :no_content }
@@ -107,15 +99,9 @@ module MegaBar
     end
 
     def set_the_display
-      instance_variable_set("@" + params[:controller][9..-1].classify,  @the_class.find(params[:id]))
-      @model = instance_variable_get("@" + params[:controller][9..-1].classify);
+      instance_variable_set("@" + params[:controller][9..-1].classify,  @mega_class.find(params[:id]))
+      @mega_instance = instance_variable_get("@" + params[:controller][9..-1].classify);
     end
-
-    def testing
-      logger.info 'tested it'
-      #abort('tested it i did')
-    end
-
 
     def form_path
       case params[:action]
@@ -137,21 +123,21 @@ module MegaBar
     end 
 
     def sort_column
-      @the_class.column_names.include?(params[:sort]) ? params[:sort] :  @model_properties[:default_sort_field]
+      @mega_class.column_names.include?(params[:sort]) ? params[:sort] :  @mega_model_properties[:default_sort_field]
     end
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
     end
 
     def is_displayable?(format)
-      if format == 'hidden' || format == 'off'
-        false
-      else
-        logger.info "is_displayable" + format
-        true
-      end
+      return  (format == 'hidden' || format == 'off') ? false : true
     end
-
-
+    def constant_from_controller(str)
+      constant_string = ''
+      str.split('/').each_with_index do | seg, i |
+        constant_string +=  i < str.split('/').size - 1 ? seg.classify + '::' : seg.classify
+      end
+      constant_string
+    end
   end
 end

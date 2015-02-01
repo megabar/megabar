@@ -40,36 +40,37 @@ module MegaBar
     # ModelsController. Be sure to keep this updated too.
     let(:valid_session) { {} }
     describe "GET index" do
-      it "assigns all models as @models" do
+      it "assigns all models as @mega_instance" do
         model = Model.create! valid_attributes
         get :index, {use_route: :mega_bar, model_id: 1}, valid_session
-        expect(assigns(:models)).to eq([model])
+        expect(assigns(:mega_instance)).to eq([model])
       end
     end
 
     describe "GET show" do
-      it "assigns the requested model as @model" do
-
-        model = Model.create! valid_attributes
+      it "assigns the requested model as @mega_instance" do
+        model = []
+        tmp = Model.create! valid_attributes
+        model << tmp 
         get :show, {use_route: :mega_bar, model_id: 1, :id => model.to_param}, valid_session
-        expect(assigns(:model)).to eq(model)
+        expect(assigns(:mega_instance)).to eq(model)
       end
     end
     describe "GET new" do
-      it "assigns a new model as @model" do
+      it "assigns a new model as @mega_instance" do
         FactoryGirl.create(:model)
         get :new, {use_route: :mega_bar, model_id: 1}, valid_session
         Model.find(1).destroy
-        expect(assigns(:model)).to be_a_new(Model)
+        expect(assigns(:mega_instance)).to be_a_new(Model)
       end
     end
 
     describe "GET edit" do
-      it "assigns the requested model as @model" do
+      it "assigns the requested model as @mega_instance" do
         model = Model.create! valid_attributes
         get :edit, {use_route: :mega_bar, model_id: 1, :id => model.to_param}, valid_session
         Model.find(1).destroy
-        expect(assigns(:model)).to eq(model)
+        expect(assigns(:mega_instance)).to eq(model)
       end
     end
 
@@ -82,11 +83,11 @@ module MegaBar
           }.to change(Model, :count).by(1)
         end
 
-        it "assigns a newly created model as @model" do
+        it "assigns a newly created model as @mega_instance" do
           FactoryGirl.create(:field_for_model_model)
           post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
-          expect(assigns(:model)).to be_a(Model)
-          expect(assigns(:model)).to be_persisted
+          expect(assigns(:mega_instance)).to be_a(Model)
+          expect(assigns(:mega_instance)).to be_persisted
         end
 
         it "redirects to the created model"  do
@@ -97,9 +98,9 @@ module MegaBar
       end
 
       describe "with invalid params" do
-        it "assigns a newly created but unsaved model as @model" do
+        it "assigns a newly created but unsaved model as @mega_instance" do
           post :create, {use_route: :mega_bar, model_id: 1, :model => invalid_attributes}, valid_session
-          expect(assigns(:model)).to be_a_new(Model)
+          expect(assigns(:mega_instance)).to be_a_new(Model)
         end
 
         it "re-renders the 'new' template", :focus => true  do
@@ -126,12 +127,12 @@ module MegaBar
           expect(model.attributes).to include( { 'classname' => 'testing' } )
         end
 
-        it "assigns the requested model as @model" do
+        it "assigns the requested model as @mega_instance" do
 
           model = Model.create! valid_attributes
           FactoryGirl.create(:field_for_model_model)
           put :update, {use_route: :mega_bar, :id => model.to_param, :model => valid_attributes}, valid_session
-          expect(assigns(:model)).to eq(model)
+          expect(assigns(:mega_instance)).to eq(model)
         end
 
         it "redirects to the model" do
@@ -143,11 +144,11 @@ module MegaBar
       end
 
       describe "with invalid params" do
-        it "assigns the model as @model" do
+        it "assigns the model as @mega_instance" do
           model = Model.create! valid_attributes
           FactoryGirl.create(:field_for_model_model)
           put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
-          expect(assigns(:model)).to eq(model)
+          expect(assigns(:mega_instance)).to eq(model)
         end
 
         it "re-renders the 'edit' template" do
