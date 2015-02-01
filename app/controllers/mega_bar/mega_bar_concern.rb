@@ -38,32 +38,32 @@ module MegaBar
     def index
       #seems like you have to have an instance variable for the specific model because if you don't it doesn't pay attention to using your 'layout'
       #so we set one but then for convenience in the layout, we set @models equal to that.
-      instance_variable_set("@" + @controller,  @the_class.order(sort_column + " " + sort_direction))
+      instance_variable_set("@" + @controller,  @mega_class.order(sort_column + " " + sort_direction))
       @mega_instance = instance_variable_get("@" + @controller);
       render @index_view_template
     end
 
     def show
-      instance_variable_set("@"  + @controller.singularize,  @the_class.find(params[:id]))
+      instance_variable_set("@"  + @controller.singularize,  @mega_class.find(params[:id]))
       @mega_instance = []
       @mega_instance << instance_variable_get("@"  + @controller.singularize);  
       render @show_view_template
     end
 
     def new
-      instance_variable_set("@"  + @controller.singularize,  @the_class.new)
+      instance_variable_set("@"  + @controller.singularize,  @mega_class.new)
       @mega_instance = instance_variable_get("@"  + @controller.singularize);  
       render @new_view_template
     end
 
     def edit
-      instance_variable_set("@"  + @controller.singularize,  @the_class.find(params[:id]))
+      instance_variable_set("@"  + @controller.singularize,  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@"  + @controller.singularize)
       render @edit_view_template
     end
 
     def create
-      @mega_instance = @the_class.new(_params)
+      @mega_instance = @mega_class.new(_params)
       respond_to do |format|
         if @mega_instance.save
           format.html { redirect_to @mega_instance, notice: 'It was successfully created.' }
@@ -91,7 +91,7 @@ module MegaBar
       end
     end
     def destroy
-      instance_variable_set("@" + params[:controller][9..-1].classify.singularize,  @the_class.find(params[:id]))
+      instance_variable_set("@" + params[:controller][9..-1].classify.singularize,  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + params[:controller][9..-1].classify.singularize); 
       @mega_instance.destroy
       respond_to do |format|
@@ -101,7 +101,7 @@ module MegaBar
     end
 
     def set_the_display
-      instance_variable_set("@" + params[:controller][9..-1].classify,  @the_class.find(params[:id]))
+      instance_variable_set("@" + params[:controller][9..-1].classify,  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + params[:controller][9..-1].classify);
     end
 
@@ -131,7 +131,7 @@ module MegaBar
     end 
 
     def sort_column
-      @the_class.column_names.include?(params[:sort]) ? params[:sort] :  @mega_bar_model_properties[:default_sort_field]
+      @mega_class.column_names.include?(params[:sort]) ? params[:sort] :  @mega_bar_model_properties[:default_sort_field]
     end
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
