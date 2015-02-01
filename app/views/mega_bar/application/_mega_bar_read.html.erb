@@ -1,3 +1,4 @@
+
 <h1><%= @mega_bar[:model_display].header %></h1>
 <%= form_tag @mega_bar[:form_path] do |f| %>
   <%=@mega_bar[:app_format].app_wrapper.html_safe%>
@@ -9,7 +10,7 @@
     <% end %>
   <% end %>
 
-  <% @models.each do |model| %>
+  <% @mega_instance.each do |mega_record| %>
     <%= @mega_bar[:app_format].record_wrapper.html_safe%>
     <% @mega_bar[:displayable_fields].each do | displayable_field | %>
       <% if @mega_bar[:app_format].app_format == 'profile_table' %>
@@ -17,18 +18,16 @@
       <% end %>
       <%= @mega_bar[:app_format].field_wrapper.html_safe%>
      
-      <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: model} %>
+      <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: mega_record} %>
       <%= @mega_bar[:app_format].field_wrapper_end.html_safe %>
       <% if @mega_bar[:app_format].app_format == 'profile_table' %>
         </td>
       <% end %>
     <% end %>
     <% if @mega_bar[:app_format].app_format == 'grid' %>
-    <%# abort(model.inspect) %>
-
-      <td><%= link_to 'Show', link_path('show', model.id) %></td>
-      <td><%= link_to 'Edit', link_path('edit', model.id) %></td>
-      <td><%= link_to 'Destroy', model, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <td><%= link_to 'Show', link_path('show', mega_record.id) %></td>
+      <td><%= link_to 'Edit', link_path('edit', mega_record.id) %></td>
+      <td><%= link_to 'Destroy', mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
     <% end %>
     <%= @mega_bar[:app_format].record_wrapper_end.html_safe%>
   <% end %>

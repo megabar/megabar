@@ -20,7 +20,7 @@
     <%= render partial: "mega_bar_read" %>
   <% end%>    
 <%else %>
-  <%= form_for(@model) do |f| %>
+  <%= form_for(@mega_instance) do |f| %>
     <% @mega_bar_model_displays.each do |mega_bar| %>
       <% @mega_bar = mega_bar %>  
       <%=@mega_bar[:app_format].app_wrapper.html_safe%>

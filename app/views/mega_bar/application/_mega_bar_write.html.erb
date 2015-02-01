@@ -12,13 +12,13 @@
         value = instance_value 
     else
       if params[:action] == 'edit' 
-        value= @model.read_attribute(displayable_field[:field].field) 
+        value= @mega_instance.read_attribute(displayable_field[:field].field) 
       else
         value = displayable_field[:field].default_value
       end
     end
   %>
-  <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: @model, mega_bar: @mega_bar, value: value} %>
+  <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: @mega_instance, mega_bar: @mega_bar, value: value} %>
   <%= @mega_bar[:app_format].field_wrapper_end.html_safe %>
 <%end %>
 <%= @mega_bar[:app_format].record_wrapper_end.html_safe%>
