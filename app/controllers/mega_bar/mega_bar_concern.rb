@@ -6,8 +6,8 @@ module MegaBar
       # yep, this is the main brain that loads all the model, model display, field, field_display stuff. 
       # after this runs you'll see the 'create' and 'update' type methods above run.
       #return redirect_to(new_model_display_path, :notice => "There was no ModelDisplay for that " + params[:action] +" action and " + model_id.to_s + "model_id combo. Would you like to create one?")    unless model_display
-      @mega_bar_model_properties = Model.find(model_id)
-      @mega_bar_model_displays = []
+      @mega_model_properties = Model.find(model_id)
+      @mega_infos = []
       ModelDisplay.by_model(model_id).by_action(params[:action]).each do | md |
         field_displays = FieldDisplay.where(model_display_id: md.id)
         displayable_fields = []
@@ -28,7 +28,7 @@ module MegaBar
           :model_display => md,
           :record_format => MegaBar::RecordsFormat.find(md.format)
         }
-        @mega_bar_model_displays << info
+        @mega_infos << info
       end
       @controller = params[:controller].gsub('mega_bar/', '')
     end
@@ -123,7 +123,7 @@ module MegaBar
     end 
 
     def sort_column
-      @mega_class.column_names.include?(params[:sort]) ? params[:sort] :  @mega_bar_model_properties[:default_sort_field]
+      @mega_class.column_names.include?(params[:sort]) ? params[:sort] :  @mega_model_properties[:default_sort_field]
     end
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
