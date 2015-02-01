@@ -30,7 +30,7 @@ module MegaBar
         }
         @mega_infos << info
       end
-      @controller = params[:controller].gsub('mega_bar/', '')
+      @mega_controller = params[:controller].gsub('mega_bar/', '')
     end
     
         # GET /models
@@ -38,27 +38,27 @@ module MegaBar
     def index
       #seems like you have to have an instance variable for the specific model because if you don't it doesn't pay attention to using your 'layout'
       #so we set one but then for convenience in the layout, we set @models equal to that.
-      instance_variable_set("@" + @controller,  @mega_class.order(sort_column + " " + sort_direction))
-      @mega_instance = instance_variable_get("@" + @controller);
+      instance_variable_set("@" + @mega_controller,  @mega_class.order(sort_column + " " + sort_direction))
+      @mega_instance = instance_variable_get("@" + @mega_controller);
       render @index_view_template
     end
 
     def show
-      instance_variable_set("@"  + @controller.singularize,  @mega_class.find(params[:id]))
+      instance_variable_set("@"  + @mega_controller.singularize,  @mega_class.find(params[:id]))
       @mega_instance = []
-      @mega_instance << instance_variable_get("@"  + @controller.singularize);  
+      @mega_instance << instance_variable_get("@"  + @mega_controller.singularize);  
       render @show_view_template
     end
 
     def new
-      instance_variable_set("@"  + @controller.singularize,  @mega_class.new)
-      @mega_instance = instance_variable_get("@"  + @controller.singularize);  
+      instance_variable_set("@"  + @mega_controller.singularize,  @mega_class.new)
+      @mega_instance = instance_variable_get("@"  + @mega_controller.singularize);  
       render @new_view_template
     end
 
     def edit
-      instance_variable_set("@"  + @controller.singularize,  @mega_class.find(params[:id]))
-      @mega_instance = instance_variable_get("@"  + @controller.singularize)
+      instance_variable_set("@"  + @mega_controller.singularize,  @mega_class.find(params[:id]))
+      @mega_instance = instance_variable_get("@"  + @mega_controller.singularize)
       render @edit_view_template
     end
 
