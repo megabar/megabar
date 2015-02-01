@@ -30,7 +30,7 @@ module MegaBar
         }
         @mega_infos << info
       end
-      @mega_controller = params[:controller].gsub('mega_bar/', '')
+      @mega_controller = params[:controller].split('/').last
     end
     
         # GET /models
