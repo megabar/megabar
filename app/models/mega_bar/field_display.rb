@@ -23,7 +23,6 @@ module MegaBar
       fields_defaults[:field_display_id] = self.id
       data_display_class.where(:field_display_id => self.id).first_or_create(fields_defaults)
       f = Field.where(id: self.field_id)
-      #logger.info 'make_data_display: made a ' + data_display_class + ' for field_display ' + self.id + ' (action: ' + self.action + ', table: ' + f[0][:tablename] + ', field: ' + f[0][:field] + ') with values: ' + fields_defaults.inspect
     end
   end
 end

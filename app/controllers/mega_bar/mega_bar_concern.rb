@@ -80,11 +80,9 @@ module MegaBar
       set_the_display
       respond_to do |format|
         if @mega_instance.update(_params)
-          logger.info "UUUUUUUUUU"
           format.html { redirect_to @mega_instance, notice: 'Thing was successfully updated.' }
           format.json { head :no_content }
         else
-          logger.info "FffFFFFFFFF"
           format.html { render action: 'mega_bar.html.erb' }
           format.json { render json: @mega_instance.errors, status: :unprocessable_entity }
         end
@@ -104,12 +102,6 @@ module MegaBar
       instance_variable_set("@" + params[:controller][9..-1].classify,  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + params[:controller][9..-1].classify);
     end
-
-    def testing
-      logger.info 'tested it'
-      #abort('tested it i did')
-    end
-
 
     def form_path
       case params[:action]
@@ -138,12 +130,7 @@ module MegaBar
     end
 
     def is_displayable?(format)
-      if format == 'hidden' || format == 'off'
-        false
-      else
-        logger.info "is_displayable" + format
-        true
-      end
+      return  (format == 'hidden' || format == 'off') ? false : true
     end
     def constant_from_controller(str)
       constant_string = ''

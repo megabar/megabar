@@ -122,7 +122,6 @@ module MegaBar
         it "updates the requested model" do
           model = Model.create! valid_attributes
           FactoryGirl.create(:field_for_model_model)
-          byebug
           put :update, {use_route: :mega_bar, :id => model.to_param, :model => new_attributes}, valid_session
           model.reload
           expect(model.attributes).to include( { 'classname' => 'testing' } )

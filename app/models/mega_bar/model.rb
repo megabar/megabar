@@ -25,7 +25,6 @@ module MegaBar
         ModelDisplay.create(:model_id=>self.id, :format=>action[:format], :action=>action[:action], :header=>action[:header])
         # log_arr  << 'format: ' + action[:format] + ', action: ' + action[:action]
       end
-      logger.info 'Made model displays for:' + log_arr.join(', ')
     end
     def make_all_files
       # generate 'active_record:model', [self.classname]
