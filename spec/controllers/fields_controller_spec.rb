@@ -79,39 +79,40 @@ module MegaBar
 
     describe "POST create" do
       describe "with valid params" do
-        it "creates a new Field", focus: true do
+        before(:each) do
           create(:model_for_fields)
           create(:tablename_field_for_field_model)
           create(:model_id_field_for_field_model)
           create(:field_field_for_field_model)
+        end
+        
+        it "creates a new Field", focus: true do
           #  create(:field_for_field_model)
           expect {
             post :create, {use_route: :mega_bar, model_id: 1, :field=> valid_attributes}, valid_session
           }.to change(Field, :count).by(1)
         end
 
-        it "assigns a newly created model as @mega_instance" do
-          FactoryGirl.create(:field_for_model_model)
-          post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
-          expect(assigns(:mega_instance)).to be_a(Model)
+        it "assigns a newly created field as @mega_instance" do
+          post :create, {use_route: :mega_bar, model_id: 1, :field => valid_attributes}, valid_session
+          expect(assigns(:mega_instance)).to be_a(Field)
           expect(assigns(:mega_instance)).to be_persisted
         end
 
-        it "redirects to the created model"  do
-          FactoryGirl.create(:field_for_model_model)
-          post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
-          expect(response).to redirect_to(Model.last)
+        it "redirects to the created field"  do
+          post :create, {use_route: :mega_bar, model_id: 1, :field => valid_attributes}, valid_session
+          expect(response).to redirect_to(Field.last)
         end
       end
 
       describe "with invalid params" do
-        it "assigns a newly created but unsaved model as @mega_instance" do
-          post :create, {use_route: :mega_bar, model_id: 1, :model => invalid_attributes}, valid_session
-          expect(assigns(:mega_instance)).to be_a_new(Model)
+        it "assigns a newly created but unsaved field as @mega_instance" do
+          post :create, {use_route: :mega_bar, model_id: 1, :field => invalid_attributes}, valid_session
+          expect(assigns(:mega_instance)).to be_a_new(Field)
         end
 
         it "re-renders the 'new' template"  do
-          post :create, {use_route: :mega_bar, model_id: 1, :model => invalid_attributes}, valid_session
+          post :create, {use_route: :mega_bar, model_id: 1, :field => invalid_attributes}, valid_session
           expect(response).to render_template('mega_bar.html.erb')
         end
       end
@@ -120,67 +121,73 @@ module MegaBar
 
 
     describe "PUT update" do
+      before(:each) do
+        create(:model_for_fields)
+        create(:tablename_field_for_field_model)
+        create(:model_id_field_for_field_model)
+        create(:field_field_for_field_model)
+      end
       describe "with valid params" do
         let(:new_attributes) {
-           m = build(:model)
-           { classname: 'testing', name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }
+          f = build(:tablename_field_for_field_model)
+          { tablename: 'testing', field: f[:field], model_id: f[:model_id], id: f[:id]  }
         }
 
-        it "updates the requested model" do
-          model = Model.create! valid_attributes
-          FactoryGirl.create(:field_for_model_model)
-          put :update, {use_route: :mega_bar, :id => model.to_param, :model => new_attributes}, valid_session
-          model.reload
-          expect(model.attributes).to include( { 'classname' => 'testing' } )
+        it "updates the requested field" do
+          field = Field.create! valid_attributes
+          put :update, {use_route: :mega_bar, :id => field.to_param, :field => new_attributes}, valid_session
+          field.reload
+          expect(field.attributes).to include( { 'tablename' => 'testing' } )
         end
 
-        it "assigns the requested model as @mega_instance" do
+        it "assigns the requested field as @mega_instance" do
 
-          model = Model.create! valid_attributes
-          FactoryGirl.create(:field_for_model_model)
-          put :update, {use_route: :mega_bar, :id => model.to_param, :model => valid_attributes}, valid_session
-          expect(assigns(:mega_instance)).to eq(model)
+          field = Field.create! valid_attributes
+          put :update, {use_route: :mega_bar, :id => field.to_param, :field => valid_attributes}, valid_session
+          expect(assigns(:mega_instance)).to eq(field)
         end
 
-        it "redirects to the model" do
-          model = Model.create! valid_attributes
-          FactoryGirl.create(:field_for_model_model) 
-          put :update, {use_route: :mega_bar, :id => model.to_param, :model => valid_attributes}, valid_session
-          expect(response).to redirect_to(model)
+        it "redirects to the field" do
+          field = Field.create! valid_attributes
+          put :update, {use_route: :mega_bar, :id => field.to_param, :field => valid_attributes}, valid_session
+          expect(response).to redirect_to(field)
         end
       end
 
       describe "with invalid params" do
-        it "assigns the model as @mega_instance" do
-          model = Model.create! valid_attributes
-          FactoryGirl.create(:field_for_model_model)
-          put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
-          expect(assigns(:mega_instance)).to eq(model)
+        it "assigns the field as @mega_instance" do
+          field = Field.create! valid_attributes
+          put :update, {use_route: :mega_bar, :id => field.to_param, :field => invalid_attributes}, valid_session
+          expect(assigns(:mega_instance)).to eq(field)
         end
 
         it "re-renders the 'edit' template" do
-          model = Model.create! valid_attributes
-          FactoryGirl.create(:field_for_model_model)
-          put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
+          field = Field.create! valid_attributes
+          put :update, {use_route: :mega_bar, :id => field.to_param, :field => invalid_attributes}, valid_session
           expect(response).to render_template("mega_bar.html.erb")
         end
       end
     end
 
     describe "DELETE destroy" do
-      it "destroys the requested model" do
-        model = Model.create! valid_attributes
-        FactoryGirl.create(:field_for_model_model)
+       before(:each) do
+        create(:model_for_fields)
+        create(:tablename_field_for_field_model)
+        create(:model_id_field_for_field_model)
+        create(:field_field_for_field_model)
+      end
+      it "destroys the requested field" do
+        field = Field.create! valid_attributes
         expect {
-          delete :destroy, {use_route: :mega_bar, :id => model.to_param}, valid_session
-        }.to change(Model, :count).by(-1)
+          delete :destroy, {use_route: :mega_bar, :id => field.to_param}, valid_session
+        }.to change(Field, :count).by(-1)
       end
 
-      it "redirects to the models list" do
-        model = Model.create! valid_attributes
-        delete :destroy, {use_route: :mega_bar, :id => model.to_param}, valid_session
-        puts "url_for('models')" + url_for('models').to_s
-        expect(response).to redirect_to("/mega-bar/" + url_for('models'))
+      it "redirects to the fields list" do
+        field = Field.create! valid_attributes
+        delete :destroy, {use_route: :mega_bar, :id => field.to_param}, valid_session
+        puts "url_for('fields')" + url_for('fields').to_s
+        expect(response).to redirect_to("/mega-bar/" + url_for('fields'))
       end
     end
 
