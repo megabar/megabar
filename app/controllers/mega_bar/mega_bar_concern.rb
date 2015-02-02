@@ -30,7 +30,7 @@ module MegaBar
         }
         @mega_infos << info
       end
-      @mega_controller = params[:controller].split('/').last
+      @mega_controller = params[:controller].split('/').last # this will not scale for other deeply nested controllers
     end
     
         # GET /models
@@ -93,7 +93,7 @@ module MegaBar
       @mega_instance = instance_variable_get("@" + params[:controller][9..-1].classify.singularize); 
       @mega_instance.destroy
       respond_to do |format|
-        format.html { redirect_to models_url }
+        format.html { redirect_to eval(params[:controller].split('/').last + '_url') }
         format.json { head :no_content }
       end
     end

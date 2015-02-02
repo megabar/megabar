@@ -76,8 +76,8 @@ module MegaBar
 
     describe "POST create" do
       describe "with valid params" do
-        it "creates a new Model", :focus => true do
-          FactoryGirl.create(:field_for_model_model)
+        it "creates a new Model" do
+          create(:field_for_model_model)
           expect {
             post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
           }.to change(Model, :count).by(1)
@@ -103,7 +103,7 @@ module MegaBar
           expect(assigns(:mega_instance)).to be_a_new(Model)
         end
 
-        it "re-renders the 'new' template", :focus => true  do
+        it "re-renders the 'new' template"  do
           post :create, {use_route: :mega_bar, model_id: 1, :model => invalid_attributes}, valid_session
           expect(response).to render_template('mega_bar.html.erb')
         end
