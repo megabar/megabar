@@ -2,10 +2,9 @@
 
 FactoryGirl.define do
   factory :field_display, class: MegaBar::FieldDisplay do
-    field_id 2
+    model_display_id 1
+    field_id 1
     format 'textread'
-    action 'index'
     header 'Hi there, I am a field display'
-    association :field,  factory: :field
   end
 end

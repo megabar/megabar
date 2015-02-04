@@ -39,6 +39,7 @@ module MegaBar
     # in order to pass any filters (e.g. authentication) defined in
     # ModelsController. Be sure to keep this updated too.
     let(:valid_session) { {} }
+
     describe "GET index" do
       it "assigns all models as @mega_instance" do
         model = Model.create! valid_attributes
@@ -49,16 +50,14 @@ module MegaBar
 
     describe "GET show" do
       it "assigns the requested model as @mega_instance" do
-        model = []
-        tmp = Model.create! valid_attributes
-        model << tmp 
+        model =  Model.create! valid_attributes
         get :show, {use_route: :mega_bar, model_id: 1, :id => model.to_param}, valid_session
-        expect(assigns(:mega_instance)).to eq(model)
+        expect(assigns(:mega_instance)).to eq([model])
       end
     end
     describe "GET new" do
       it "assigns a new model as @mega_instance" do
-        FactoryGirl.create(:model)
+        create(:model)
         get :new, {use_route: :mega_bar, model_id: 1}, valid_session
         Model.find(1).destroy
         expect(assigns(:mega_instance)).to be_a_new(Model)
@@ -69,101 +68,97 @@ module MegaBar
       it "assigns the requested model as @mega_instance" do
         model = Model.create! valid_attributes
         get :edit, {use_route: :mega_bar, model_id: 1, :id => model.to_param}, valid_session
-        Model.find(1).destroy
         expect(assigns(:mega_instance)).to eq(model)
       end
     end
+    context 'with field for model' do
+      before(:each) do
+        create(:field)
+      end
+      after(:each) do
+        Field.destroy_all
+      end     
+      describe "POST create" do
+        describe "with valid params" do
+          it "creates a new Model" do
+            expect {
+              post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
+            }.to change(Model, :count).by(1)
+          end
 
-    describe "POST create" do
-      describe "with valid params" do
-        it "creates a new Model" do
-          create(:field_for_model_model)
-          expect {
+          it "assigns a newly created model as @mega_instance" do
             post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
-          }.to change(Model, :count).by(1)
+            expect(assigns(:mega_instance)).to be_a(Model)
+            expect(assigns(:mega_instance)).to be_persisted
+          end
+
+          it "redirects to the created model"  do
+            post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
+            expect(response).to redirect_to(Model.last)
+          end
         end
 
-        it "assigns a newly created model as @mega_instance" do
-          FactoryGirl.create(:field_for_model_model)
-          post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
-          expect(assigns(:mega_instance)).to be_a(Model)
-          expect(assigns(:mega_instance)).to be_persisted
-        end
+        describe "with invalid params" do
+          it "assigns a newly created but unsaved model as @mega_instance" do
+            post :create, {use_route: :mega_bar, model_id: 1, :model => invalid_attributes}, valid_session
+            expect(assigns(:mega_instance)).to be_a_new(Model)
+          end
 
-        it "redirects to the created model"  do
-          FactoryGirl.create(:field_for_model_model)
-          post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
-          expect(response).to redirect_to(Model.last)
-        end
-      end
-
-      describe "with invalid params" do
-        it "assigns a newly created but unsaved model as @mega_instance" do
-          post :create, {use_route: :mega_bar, model_id: 1, :model => invalid_attributes}, valid_session
-          expect(assigns(:mega_instance)).to be_a_new(Model)
-        end
-
-        it "re-renders the 'new' template"  do
-          post :create, {use_route: :mega_bar, model_id: 1, :model => invalid_attributes}, valid_session
-          expect(response).to render_template('mega_bar.html.erb')
-        end
-      end
-    end
-
-
-
-    describe "PUT update" do
-      describe "with valid params" do
-        let(:new_attributes) {
-           m = build(:model)
-           { classname: 'testing', name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }
-        }
-
-        it "updates the requested model" do
-          model = Model.create! valid_attributes
-          FactoryGirl.create(:field_for_model_model)
-          put :update, {use_route: :mega_bar, :id => model.to_param, :model => new_attributes}, valid_session
-          model.reload
-          expect(model.attributes).to include( { 'classname' => 'testing' } )
-        end
-
-        it "assigns the requested model as @mega_instance" do
-
-          model = Model.create! valid_attributes
-          FactoryGirl.create(:field_for_model_model)
-          put :update, {use_route: :mega_bar, :id => model.to_param, :model => valid_attributes}, valid_session
-          expect(assigns(:mega_instance)).to eq(model)
-        end
-
-        it "redirects to the model" do
-          model = Model.create! valid_attributes
-          FactoryGirl.create(:field_for_model_model) 
-          put :update, {use_route: :mega_bar, :id => model.to_param, :model => valid_attributes}, valid_session
-          expect(response).to redirect_to(model)
+          it "re-renders the 'new' template"  do
+            post :create, {use_route: :mega_bar, model_id: 1, :model => invalid_attributes}, valid_session
+            expect(response).to render_template('mega_bar.html.erb')
+          end
         end
       end
 
-      describe "with invalid params" do
-        it "assigns the model as @mega_instance" do
-          model = Model.create! valid_attributes
-          FactoryGirl.create(:field_for_model_model)
-          put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
-          expect(assigns(:mega_instance)).to eq(model)
+
+
+      describe "PUT update" do
+        describe "with valid params" do
+          let(:new_attributes) {
+             m = build(:model)
+             { classname: 'testing', name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }
+          }
+
+          it "updates the requested model" do
+            model = Model.create! valid_attributes
+            put :update, {use_route: :mega_bar, :id => model.to_param, :model => new_attributes}, valid_session
+            model.reload
+            expect(model.attributes).to include( { 'classname' => 'testing' } )
+          end
+
+          it "assigns the requested model as @mega_instance" do
+
+            model = Model.create! valid_attributes
+            put :update, {use_route: :mega_bar, :id => model.to_param, :model => valid_attributes}, valid_session
+            expect(assigns(:mega_instance)).to eq(model)
+          end
+
+          it "redirects to the model" do
+            model = Model.create! valid_attributes
+            put :update, {use_route: :mega_bar, :id => model.to_param, :model => valid_attributes}, valid_session
+            expect(response).to redirect_to(model)
+          end
         end
 
-        it "re-renders the 'edit' template" do
-          model = Model.create! valid_attributes
-          FactoryGirl.create(:field_for_model_model)
-          put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
-          expect(response).to render_template("mega_bar.html.erb")
+        describe "with invalid params" do
+          it "assigns the model as @mega_instance" do
+            model = Model.create! valid_attributes
+            put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
+            expect(assigns(:mega_instance)).to eq(model)
+          end
+
+          it "re-renders the 'edit' template" do
+            model = Model.create! valid_attributes
+            put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
+            expect(response).to render_template("mega_bar.html.erb")
+          end
         end
       end
     end
-
     describe "DELETE destroy" do
       it "destroys the requested model" do
         model = Model.create! valid_attributes
-        FactoryGirl.create(:field_for_model_model)
         expect {
           delete :destroy, {use_route: :mega_bar, :id => model.to_param}, valid_session
         }.to change(Model, :count).by(-1)
