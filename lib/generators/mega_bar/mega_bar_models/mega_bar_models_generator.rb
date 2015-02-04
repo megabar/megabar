@@ -6,36 +6,42 @@ module MegaBar
     
     # in generators, all public methods are run. Weird, huh?
 
-    def create_controller_file
-      template 'generic_controller.rb', "#{the_controller_file_name}.rb"
+    #def create_controller_file
+    #  template 'generic_controller.rb', "#{the_controller_file_name}.rb"
+    #  if the_module_name
+    #    # template "generic_controller.rb", "tmp_#{the_controller_file_name}.rb"
+    #  end
+    #end
+    #def create_model_file
+    #   template 'generic_model.rb', "#{the_model_file_name}"
+    #   if the_module_name
+    #    # template "generic_model.rb", "Tmp#{the_model_file_name}.rb"
+    #  end
+    #end
+    #def generate_migration
+    #  if the_module_name
+    #    generate 'migration create_' + the_module_name + '_' + the_table_name + ' created_at:datetime updated_at:datetime'
+    #    generate 'migration create_' + the_module_name + '_tmp_' + the_table_name + ' created_at:datetime updated_at:datetime'        
+    #    # generate 'migration create_tmp_' + the_module_name + '_' + the_table_name + ' created_at:datetime updated_at:datetime'
+    #  else 
+    #    generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'
+    #  end
+#
+#    #end
+#    #def route
+#    #  line = '  ##### MEGABAR END'
+#    #  text = File.read('config/routes.rb')
+#    #  new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, ' resources :' + the_route_name + ', defaults: {model_id: ' + model_id + "}\n #{line}\n")
+#    #  # To write changes to the file, use:
+#    #  File.open('config/routes.rb', "w") {|file| file.puts new_contents }
+    #end
+
+    def create_controller_spec_file
+      template 'generic_controller_spec.rb', "#{the_controller_spec_file_name}.rb"
       if the_module_name
         # template "generic_controller.rb", "tmp_#{the_controller_file_name}.rb"
       end
     end
-    def create_model_file
-       template 'generic_model.rb', "#{the_model_file_name}"
-       if the_module_name
-        # template "generic_model.rb", "Tmp#{the_model_file_name}.rb"
-      end
-    end
-    def generate_migration
-      if the_module_name
-        generate 'migration create_' + the_module_name + '_' + the_table_name + ' created_at:datetime updated_at:datetime'
-        generate 'migration create_' + the_module_name + '_tmp_' + the_table_name + ' created_at:datetime updated_at:datetime'        
-        # generate 'migration create_tmp_' + the_module_name + '_' + the_table_name + ' created_at:datetime updated_at:datetime'
-      else 
-        generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'
-      end
-
-    end
-    def route
-      line = '  ##### MEGABAR END'
-      text = File.read('config/routes.rb')
-      new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, ' resources :' + the_route_name + ', defaults: {model_id: ' + model_id + "}\n #{line}\n")
-      # To write changes to the file, use:
-      File.open('config/routes.rb', "w") {|file| file.puts new_contents }
-    end
-
     private
 
     def the_model_file_name
@@ -54,6 +60,13 @@ module MegaBar
       end
     end
 
+    def the_controller_spec_file_name
+      if the_module_name
+        'spec/controllers/' + the_module_name.underscore + '/' + the_file_name.pluralize.underscore + "_controller_spec"
+      else
+        'spec/controllers/' + the_file_name.pluralize.underscore + "_controller_spec"
+      end
+    end
     def the_file_name
        if filename.include? '::' 
         return  filename[filename.index('::')+2..-1]
