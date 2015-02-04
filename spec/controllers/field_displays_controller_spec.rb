@@ -45,7 +45,7 @@ module MegaBar
     # in order to pass any filters (e.g. authentication) defined in
     # ModelsController. Be sure to keep this updated too.
     let(:valid_session) { {} }
-    context "with a model and records_format" do
+    context "with a model " do
       before(:each) do
         create(:model, classname: 'FieldDisplay', name: 'Field Display', tablename: 'field_displays')
       end

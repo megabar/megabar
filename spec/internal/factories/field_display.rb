@@ -2,6 +2,7 @@
 
 FactoryGirl.define do
   factory :field_display, class: MegaBar::FieldDisplay do
+    id 1
     model_display_id 1
     field_id 1
     format 'textread'
