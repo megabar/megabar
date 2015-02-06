@@ -20,7 +20,7 @@ module MegaBar
           end
         end
         info = {
-          :app_format => Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
+          :mega_format => Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
           :field_displays => field_displays,
           :displayable_fields => displayable_fields,
           :form_path => form_path,

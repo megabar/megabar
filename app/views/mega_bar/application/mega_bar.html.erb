@@ -22,9 +22,9 @@
   <%= form_for(@mega_instance) do |f| %>
     <% @mega_displays.each do |mega_display| %>
       <% @mega_display = mega_display %>  
-      <%=@mega_display[:app_format].app_wrapper.html_safe%>
+      <%=@mega_display[:mega_format].app_wrapper.html_safe%>
       <%= render partial: "mega_bar_write" %>
-      <%=@mega_display[:app_format].app_wrapper_end.html_safe%>
+      <%=@mega_display[:mega_format].app_wrapper_end.html_safe%>
     <% end %>
     <table><tr><th>Save</th><td><%= submit_tag %></td><th></tr></table>
   <% end%>
