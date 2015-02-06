@@ -7,8 +7,8 @@ module MegaBar
     before_action -> { @mega_class = constant_from_controller(params[:controller]).constantize }
     before_action -> {  @mega_model_properties = Model.find(params[:model_id]) },  only: [:index, :show, :edit, :new]
     before_action -> {  @mega_controller = params[:controller].split('/').last },  only: [:index, :show, :edit, :new]
-    before_action ->{ @mega_displays = @mega_displays = mega_displays_info params[:model_id]},  only: [:index, :show, :edit, :new] #not save or update..
-
+    before_action ->{ @mega_displays = @mega_displays = mega_displays_info(ModelDisplay.by_model(params[:model_id]).by_action(params[:action]))},  only: [:index, :show, :edit, :new] #not save or update..
+    
 
     before_filter :mega_template
    
