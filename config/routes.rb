@@ -8,4 +8,8 @@ MegaBar::Engine.routes.draw do
   resources :textboxes, defaults: {model_id: 6}
   resources :textreads, defaults: {model_id: 7}
   resources :selects, defaults: {model_id: 14}
+  resources :killer_bees, path: '/killer-bees',  defaults: {model_id: 21}
+ 
+ 
+ 
 end
