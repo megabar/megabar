@@ -2,12 +2,11 @@ module MegaBar
   module MegaBarConcern
     extend ActiveSupport::Concern
 
-    def controller_init(model_id)
+    def mega_displays_info(model_id)
       # yep, this is the main brain that loads all the model, model display, field, field_display stuff. 
       # after this runs you'll see the 'create' and 'update' type methods above run.
       #return redirect_to(new_model_display_path, :notice => "There was no ModelDisplay for that " + params[:action] +" action and " + model_id.to_s + "model_id combo. Would you like to create one?")    unless model_display
-      @mega_model_properties = Model.find(model_id)
-      @mega_infos = []
+      mega_displays_info = []
       ModelDisplay.by_model(model_id).by_action(params[:action]).each do | md |
         field_displays = FieldDisplay.where(model_display_id: md.id)
         displayable_fields = []
@@ -28,9 +27,9 @@ module MegaBar
           :model_display => md,
           :record_format => MegaBar::RecordsFormat.find(md.format)
         }
-        @mega_infos << info
+        mega_displays_info << info
       end
-      @mega_controller = params[:controller].split('/').last # this will not scale for other deeply nested controllers
+      mega_displays_info
     end
     
         # GET /models
@@ -38,7 +37,7 @@ module MegaBar
     def index
       #seems like you have to have an instance variable for the specific model because if you don't it doesn't pay attention to using your 'layout'
       #so we set one but then for convenience in the layout, we set @models equal to that.
-      instance_variable_set("@" + @mega_controller,  @mega_class.order(sort_column + " " + sort_direction))
+      instance_variable_set("@" + @mega_controller,  @mega_class.order(sort_column(@mega_class, @mega_model_properties, params) + " " + sort_direction(params)))
       @mega_instance = instance_variable_get("@" + @mega_controller);
       render @index_view_template
     end
@@ -77,7 +76,8 @@ module MegaBar
         # PATCH/PUT /models/1
     # PATCH/PUT /models/1.json
     def update
-      set_the_display
+      instance_variable_set("@" + params[:controller][9..-1].classify,  @mega_class.find(params[:id]))
+      @mega_instance = instance_variable_get("@" + params[:controller][9..-1].classify);
       respond_to do |format|
         if @mega_instance.update(_params)
           format.html { redirect_to @mega_instance, notice: 'Thing was successfully updated.' }
@@ -97,12 +97,7 @@ module MegaBar
         format.json { head :no_content }
       end
     end
-
-    def set_the_display
-      instance_variable_set("@" + params[:controller][9..-1].classify,  @mega_class.find(params[:id]))
-      @mega_instance = instance_variable_get("@" + params[:controller][9..-1].classify);
-    end
-
+    
     def form_path
       case params[:action]
       when 'index' 
@@ -122,11 +117,11 @@ module MegaBar
       end
     end 
 
-    def sort_column
-      @mega_class.column_names.include?(params[:sort]) ? params[:sort] :  @mega_model_properties[:default_sort_field]
+    def sort_column(mega_class, mega_model_properties, passed_params)
+      mega_class.column_names.include?(passed_params[:sort]) ? passed_params[:sort] :  mega_model_properties[:default_sort_field]
     end
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
+    def sort_direction(passed_params)
+      %w[asc desc].include?(passed_params[:direction]) ? passed_params[:direction] : 'asc'
     end
 
     def is_displayable?(format)

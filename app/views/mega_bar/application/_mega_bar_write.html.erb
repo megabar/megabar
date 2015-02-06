@@ -1,11 +1,11 @@
-<h1><%= @mega_info[:model_display].header %></h1>
+<h1><%= @mega_display[:model_display].header %></h1>
 
-<%=@mega_info[:app_format].record_wrapper.html_safe%>
-<% @mega_info[:displayable_fields].each do | displayable_field | %>
-  <% if @mega_info[:app_format].app_format == 'profile_table' %>
+<%=@mega_display[:app_format].record_wrapper.html_safe%>
+<% @mega_display[:displayable_fields].each do | displayable_field | %>
+  <% if @mega_display[:app_format].app_format == 'profile_table' %>
     <tr><th><%=displayable_field[:field_display].header %></th>
   <% end %>
-  <%= @mega_info[:app_format].field_wrapper.html_safe%>
+  <%= @mega_display[:app_format].field_wrapper.html_safe%>
   <%   
     instance_value = instance_variable_get("@" + displayable_field[:field].field)
     if instance_value.present? && (displayable_field[:field].field != 'field' and params[:action] == 'edit')
@@ -18,8 +18,8 @@
       end
     end
   %>
-  <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: @mega_instance, mega_bar: @mega_info, value: value} %>
-  <%= @mega_info[:app_format].field_wrapper_end.html_safe %>
+  <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: @mega_instance, mega_bar: @mega_display, value: value} %>
+  <%= @mega_display[:app_format].field_wrapper_end.html_safe %>
 <%end %>
-<%= @mega_info[:app_format].record_wrapper_end.html_safe%>
+<%= @mega_display[:app_format].record_wrapper_end.html_safe%>
 

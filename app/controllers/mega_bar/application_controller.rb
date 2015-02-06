@@ -5,7 +5,10 @@ module MegaBar
     protect_from_forgery with: :exception
     helper_method :sort_column, :sort_direction, :is_displayable
     before_action -> { @mega_class = constant_from_controller(params[:controller]).constantize }
-    before_action ->{ controller_init params[:model_id]},  only: [:index, :show, :edit, :new] #not save or update..
+    before_action -> {  @mega_model_properties = Model.find(params[:model_id]) },  only: [:index, :show, :edit, :new]
+    before_action -> {  @mega_controller = params[:controller].split('/').last },  only: [:index, :show, :edit, :new]
+    before_action ->{ @mega_displays = @mega_displays = mega_displays_info params[:model_id]},  only: [:index, :show, :edit, :new] #not save or update..
+
 
     before_filter :mega_template
    

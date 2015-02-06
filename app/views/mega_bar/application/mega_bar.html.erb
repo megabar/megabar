@@ -14,17 +14,17 @@
 <% end %>
 
 <%if ['index', 'show'].include? params[:action]%>
-  <% @mega_infos.each do |mega_info| %>
-    <% @mega_info = mega_info %>  
+  <% @mega_displays.each do |mega_display| %>
+    <% @mega_display= mega_display %>  
     <%= render partial: "mega_bar_read" %>
   <% end%>    
 <%else %>
   <%= form_for(@mega_instance) do |f| %>
-    <% @mega_infos.each do |mega_info| %>
-      <% @mega_info = mega_info %>  
-      <%=@mega_info[:app_format].app_wrapper.html_safe%>
+    <% @mega_displays.each do |mega_display| %>
+      <% @mega_display = mega_display %>  
+      <%=@mega_display[:app_format].app_wrapper.html_safe%>
       <%= render partial: "mega_bar_write" %>
-      <%=@mega_info[:app_format].app_wrapper_end.html_safe%>
+      <%=@mega_display[:app_format].app_wrapper_end.html_safe%>
     <% end %>
     <table><tr><th>Save</th><td><%= submit_tag %></td><th></tr></table>
   <% end%>
