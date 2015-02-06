@@ -49,7 +49,8 @@ module MegaBar
         Model.find(1).destroy
         RecordsFormat.find(1).destroy
       end
-      describe "GET index", focus: true do
+
+      describe "GET index" do
         it "assigns all model_displays as @mega_instance" do
           model_display = ModelDisplay.create! valid_attributes
           get :index, {use_route: :mega_bar, model_id: 1}, valid_session
