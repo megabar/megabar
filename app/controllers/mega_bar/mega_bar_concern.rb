@@ -2,12 +2,11 @@ module MegaBar
   module MegaBarConcern
     extend ActiveSupport::Concern
 
-    def controller_init(model_id)
+    def mega_displays_info(model_id)
       # yep, this is the main brain that loads all the model, model display, field, field_display stuff. 
       # after this runs you'll see the 'create' and 'update' type methods above run.
       #return redirect_to(new_model_display_path, :notice => "There was no ModelDisplay for that " + params[:action] +" action and " + model_id.to_s + "model_id combo. Would you like to create one?")    unless model_display
-      @mega_model_properties = Model.find(model_id)
-      @mega_infos = []
+      mega_displays_info = []
       ModelDisplay.by_model(model_id).by_action(params[:action]).each do | md |
         field_displays = FieldDisplay.where(model_display_id: md.id)
         displayable_fields = []
@@ -28,9 +27,9 @@ module MegaBar
           :model_display => md,
           :record_format => MegaBar::RecordsFormat.find(md.format)
         }
-        @mega_infos << info
+        mega_displays_info << info
       end
-      @mega_controller = params[:controller].split('/').last # this will not scale for other deeply nested controllers
+      mega_displays_info
     end
     
         # GET /models
@@ -122,7 +121,6 @@ module MegaBar
       mega_class.column_names.include?(passed_params[:sort]) ? passed_params[:sort] :  mega_model_properties[:default_sort_field]
     end
     def sort_direction(passed_params)
-      byebug
       %w[asc desc].include?(passed_params[:direction]) ? passed_params[:direction] : 'asc'
     end
 

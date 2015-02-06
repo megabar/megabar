@@ -1,37 +1,37 @@
 
-<h1><%= @mega_info[:model_display].header %></h1>
-<%= form_tag @mega_info[:form_path] do |f| %>
-  <%=@mega_info[:app_format].app_wrapper.html_safe%>
-  <% if @mega_info[:app_format].separate_header_row %>
-    <% @mega_info[:displayable_fields].each do | displayable_field | %>
-      <%= @mega_info[:app_format].field_header_wrapper.html_safe%>
+<h1><%= @mega_display[:model_display].header %></h1>
+<%= form_tag @mega_display[:form_path] do |f| %>
+  <%=@mega_display[:app_format].app_wrapper.html_safe%>
+  <% if @mega_display[:app_format].separate_header_row %>
+    <% @mega_display[:displayable_fields].each do | displayable_field | %>
+      <%= @mega_display[:app_format].field_header_wrapper.html_safe%>
       <%= sortable(displayable_field[:field].field, displayable_field[:field_display].header) %>
-      <%= @mega_info[:app_format].field_header_wrapper_end.html_safe%>
+      <%= @mega_display[:app_format].field_header_wrapper_end.html_safe%>
     <% end %>
   <% end %>
 
   <% @mega_instance.each do |mega_record| %>
-    <%= @mega_info[:app_format].record_wrapper.html_safe%>
-    <% @mega_info[:displayable_fields].each do | displayable_field | %>
-      <% if @mega_info[:app_format].app_format == 'profile_table' %>
+    <%= @mega_display[:app_format].record_wrapper.html_safe%>
+    <% @mega_display[:displayable_fields].each do | displayable_field | %>
+      <% if @mega_display[:app_format].app_format == 'profile_table' %>
         <tr><th><%=displayable_field[:field_display].header %></th><td>
       <% end %>
-      <%= @mega_info[:app_format].field_wrapper.html_safe%>
+      <%= @mega_display[:app_format].field_wrapper.html_safe%>
      
       <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: mega_record} %>
-      <%= @mega_info[:app_format].field_wrapper_end.html_safe %>
-      <% if @mega_info[:app_format].app_format == 'profile_table' %>
+      <%= @mega_display[:app_format].field_wrapper_end.html_safe %>
+      <% if @mega_display[:app_format].app_format == 'profile_table' %>
         </td>
       <% end %>
     <% end %>
-    <% if @mega_info[:app_format].app_format == 'grid' %>
+    <% if @mega_display[:app_format].app_format == 'grid' %>
       <td><%= link_to 'Show', link_path('show', mega_record.id) %></td>
       <td><%= link_to 'Edit', link_path('edit', mega_record.id) %></td>
       <td><%= link_to 'Destroy', mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
     <% end %>
-    <%= @mega_info[:app_format].record_wrapper_end.html_safe%>
+    <%= @mega_display[:app_format].record_wrapper_end.html_safe%>
   <% end %>
  
-  <%=@mega_info[:app_format].app_wrapper_end.html_safe%>
+  <%=@mega_display[:app_format].app_wrapper_end.html_safe%>
  <br><%= submit_tag %>
 <% end %>
