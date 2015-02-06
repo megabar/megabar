@@ -21,11 +21,9 @@ module MegaBar
         end
         info = {
           :mega_format => Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
-          :field_displays => field_displays,
           :displayable_fields => displayable_fields,
           :form_path => form_path,
           :model_display => md,
-          :record_format => MegaBar::RecordsFormat.find(md.format)
         }
         mega_displays_info << info
       end
