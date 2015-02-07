@@ -11,7 +11,6 @@ module MegaBar
     scope :by_model, ->(model_id) { where(model_id: model_id) if model_id.present? }
     def make_field_displays 
       actions = []
-      byebug
       index_model_display_id = ModelDisplay.by_model(self.model_id).by_action('index').pluck(:id).last
       show_model_display_id = ModelDisplay.by_model(self.model_id).by_action('show').pluck(:id).last
       new_model_display_id = ModelDisplay.by_model(self.model_id).by_action('new').pluck(:id).last
@@ -25,7 +24,6 @@ module MegaBar
       end
     end
     def make_migration
-      byebug
       return if Model.connection.column_exists?(self.tablename,  self.field)
       system 'rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + 'string'
       ActiveRecord::Migrator.migrate "db/migrate"
