@@ -1,24 +1,29 @@
 module MegaBar
   class MegaBarModelsGenerator < Rails::Generators::Base
     source_root File.expand_path('../templates', __FILE__)
+    argument :mod, type: :string
     argument :filename, type: :string
     argument :model_id, type: :string
+    @@notices = []
     
     # in generators, all public methods are run. Weird, huh?
 
     def create_controller_file
-      template 'generic_controller.rb', "#{the_controller_file_path}#{the_controller_file_name}.rb"
+      @@notices << "You will have to copy your controller manually over to the megabar gem" if gem_path == '' and the_module_name == 'MegaBar'
+      template 'generic_controller.rb', "#{gem_path}#{the_controller_file_path}#{the_controller_file_name}.rb"
     end
     def create_model_file
-       template 'generic_model.rb', "#{the_model_file_path}#{the_model_file_name}.rb"
+       template 'generic_model.rb', "#{gem_path}#{the_model_file_path}#{the_model_file_name}.rb"
+       @@notices <<  "You will have to copy your model files manually over to the megabar gem" if gem_path == '' and the_module_name == 'MegaBar'
        if the_module_name
-         template "generic_model.rb", "Tmp#{the_model_file_path}#{the_model_file_name}.rb"
+         template "generic_model.rb", "#{gem_path}Tmp#{the_model_file_path}#{the_model_file_name}.rb"
        end
     end
     def generate_migration
       if the_module_name
         generate 'migration create_' + the_module_name + '_' + the_table_name + ' created_at:datetime updated_at:datetime'
-        generate 'migration create_' + the_module_name + '_tmp_' + the_table_name + ' created_at:datetime updated_at:datetime'        
+        generate 'migration create_' + the_module_name + '_tmp_' + the_table_name + ' created_at:datetime updated_at:datetime'   
+        @@notices <<  "You will have to copy your Migrations manually over to the megabar gem"
         # generate 'migration create_tmp_' + the_module_name + '_' + the_table_name + ' created_at:datetime updated_at:datetime'
       else 
         generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'
@@ -26,22 +31,36 @@ module MegaBar
     end
     def route
       line = '  ##### MEGABAR END'
-      text = File.read('config/routes.rb')
+      text = File.read(gem_path + 'config/routes.rb')
       path = the_route_name.include?('_') ? "path: '/" + the_route_name.gsub('_', '-') + "', " : ''
-      new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, '  resources :' + the_route_name + ', ' + path + ' defaults: {model_id: ' + model_id + "}\n #{line}\n")
+      route_text = '  resources :' + the_route_name + ', ' + path + ' defaults: {model_id: ' + model_id + "}\n #{line}\n"
+      new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, route_text)
       # To write changes to the file, use:
-      File.open('config/routes.rb', "w") {|file| file.puts new_contents }
+      File.open(gem_path + 'config/routes.rb', "w") {|file| file.puts new_contents } unless gem_path == '' and the_module_name == 'MegaBar'
+      @@notices <<  "You will have to add the route yourself manually to the megabar route file: #{route_text}" if gem_path == '' and the_module_name == 'MegaBar'
+     
     end
 
     def create_controller_spec_file
-      template 'generic_controller_spec.rb', "#{the_controller_spec_file_path}#{the_controller_spec_file_name}.rb"
+      template 'generic_controller_spec.rb', "#{gem_path}#{the_controller_spec_file_path}#{the_controller_spec_file_name}.rb"
+      @@notices <<  "You will have to copy the spec file yourself manually to the megabar repo's spec/controllers directory" if gem_path == '' and the_module_name == 'MegaBar'
     end
 
     def create_factory
-      template 'generic_factory.rb', "#{the_factory_file_path}#{the_model_file_name}.rb"
+      @@notices <<  "You will have to copy the factory file yourself manually to the megabar repo's spec/internal/factories directory" if gem_path == '' and the_module_name == 'MegaBar'
+      template 'generic_factory.rb', "#{gem_path}#{the_factory_file_path}#{the_model_file_name}.rb"
     end
 
+    def write_notices
+      # todo .. take @@notices and write it to a db? or a file? hmm..
+    end
+
+
     private
+
+    def gem_path
+      File.directory?(Rails.root + '../megabar/')  && the_module_name == 'MegaBar' ? Rails.root + '../megabar/' : ''
+    end
 
     def the_controller_file_name
       the_file_name.pluralize.underscore + "_controller"
@@ -104,10 +123,10 @@ module MegaBar
     end
 
     def the_module_name
-      if filename.include? '::'
-        return filename[0..filename.index('::')-1] 
+      if mod == 'no_mod'
+         return nil
       else
-        return nil
+        (mod.downcase == 'megabar' || mod.downcase == 'mega_bar') ? 'MegaBar' : mod
       end
     end
   

@@ -3,6 +3,7 @@ module MegaBar
     self.table_name = "mega_bar_models"
     include MegaBar::MegaBarModelConcern
     validates_presence_of :classname
+    validates_presence_of :default_sort_field
     has_many :fields, dependent: :destroy
     has_many :model_displays, dependent: :destroy
     after_create  :make_model_displays
@@ -28,10 +29,10 @@ module MegaBar
     end
     def make_all_files
       # generate 'active_record:model', [self.classname]
+      mod = self.module ? self.module : 'no_mod'
       logger.info("creating scaffold for " + self.classname + 'via: ' + 'rails g mega_bar:mega_bar ' + self.classname + ' ' + self.id.to_s)
-      system 'rails g mega_bar:mega_bar_models ' + self.classname + ' ' + self.id.to_s
+      system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s
       ActiveRecord::Migrator.migrate "db/migrate"
-
     end
   end
 end
