@@ -4,7 +4,7 @@ module MegaBar
     validates_presence_of :model_id, :tablename, :field
     after_create  :make_field_displays #, :only => [:create] #add update.
     after_create  :make_migration #, :only => [:create] #add update.
-    after_save :make_field_displays
+    # after_save :make_field_displays
     attr_accessor :new_field_display, :edit_field_display, :index_field_display, :show_field_display
     after_destroy :delete_field_displays
     #after_create :make_migration 

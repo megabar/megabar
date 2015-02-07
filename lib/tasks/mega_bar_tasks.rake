@@ -38,6 +38,7 @@ namespace :mega_bar do
     #   add it to the mega_bar_classes array
     #   and probably add a resolver function.
     puts "Loading Data..."
+    MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
     MegaBar::Field.skip_callback("create",:after,:make_field_displays)
     MegaBar::Field.skip_callback("create",:after,:make_migration)
     MegaBar::Model.skip_callback("create",:after,:make_all_files)
