@@ -23,8 +23,11 @@ module MegaBar
     # This should return the minimal set of attributes required to create a valid
     # Model. As you add validations to Model, be sure to
     # adjust the attributes here as well.
-    Field.skip_callback("create",:after,:make_migration)
-    Model.skip_callback("create",:after,:make_all_files)
+    MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
+    MegaBar::Field.skip_callback("create",:after,:make_field_displays)
+    MegaBar::Field.skip_callback("create",:after,:make_migration)
+    MegaBar::Model.skip_callback("create",:after,:make_all_files)
+    MegaBar::Model.skip_callback("create",:after,:make_model_displays)
     let(:valid_attributes) {
       f = build(:field, tablename: 'fields', field: 'tablename')
 
@@ -32,6 +35,7 @@ module MegaBar
     }
 
     let(:invalid_attributes) {
+
       f = build(:field)
       { tablename: nil, field: nil, model_id: nil, id: f[:id]  }
     }
@@ -117,7 +121,7 @@ module MegaBar
             expect(assigns(:mega_instance)).to be_a_new(Field)
           end
 
-          it "re-renders the 'new' template"  do
+          it "re-renders the 'new' template", focus: true  do
             post :create, {use_route: :mega_bar, model_id: 1, :field => invalid_attributes}, valid_session
             expect(response).to render_template('mega_bar.html.erb')
           end

@@ -23,11 +23,15 @@ module MegaBar
     # This should return the minimal set of attributes required to create a valid
     # Model. As you add validations to Model, be sure to
     # adjust the attributes here as well.
-    Field.skip_callback("create",:after,:make_migration)
-    Model.skip_callback("create",:after,:make_all_files)
+    MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
+    MegaBar::Field.skip_callback("create",:after,:make_field_displays)
+    MegaBar::Field.skip_callback("create",:after,:make_migration)
+    MegaBar::Model.skip_callback("create",:after,:make_all_files)
+    MegaBar::Model.skip_callback("create",:after,:make_model_displays)
+    
     let(:valid_attributes) {
       m = build(:model)
-      { classname: m[:classname], name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }
+      { classname: m[:classname], name: m[:name], default_sort_field: m[:default_sort_field], modyule: m[:modyule], id: m[:id]  }
     }
 
     let(:invalid_attributes) {
@@ -74,13 +78,14 @@ module MegaBar
     context 'with field for model' do
       before(:each) do
         create(:field)
+        create(:field, tablename: 'mega_bar_models', field: 'default_sort_field')
       end
       after(:each) do
         Field.destroy_all
       end     
       describe "POST create" do
         describe "with valid params" do
-          it "creates a new Model" do
+          it "creates a new Model", focus: true do
             expect {
               post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
             }.to change(Model, :count).by(1)

@@ -23,8 +23,11 @@ module MegaBar
     # This should return the minimal set of attributes required to create a valid
     # Model. As you add validations to Model, be sure to
     # adjust the attributes here as well.
-    Field.skip_callback("create",:after,:make_migration)
-    Model.skip_callback("create",:after,:make_all_files)
+    MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
+    MegaBar::Field.skip_callback("create",:after,:make_field_displays)
+    MegaBar::Field.skip_callback("create",:after,:make_migration)
+    MegaBar::Model.skip_callback("create",:after,:make_all_files)
+    MegaBar::Model.skip_callback("create",:after,:make_model_displays)
    
     let(:valid_attributes) {
       f = build(:textbox)

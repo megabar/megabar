@@ -2,12 +2,22 @@ module MegaBar
   module MegaBarConcern
     extend ActiveSupport::Concern
 
-    def mega_displays_info(model_id)
+    def mega_model_properties
+      @mega_model_properties = Model.find(params[:model_id]) 
+    end
+    def mega_controller
+      @mega_controller = params[:controller].split('/').last
+    end
+    def mega_displays 
+      @mega_displays = mega_displays_info(ModelDisplay.by_model(params[:model_id]).by_action(params[:action]))
+    end
+
+    def mega_displays_info(model_displays)
       # yep, this is the main brain that loads all the model, model display, field, field_display stuff. 
       # after this runs you'll see the 'create' and 'update' type methods above run.
       #return redirect_to(new_model_display_path, :notice => "There was no ModelDisplay for that " + params[:action] +" action and " + model_id.to_s + "model_id combo. Would you like to create one?")    unless model_display
       mega_displays_info = []
-      ModelDisplay.by_model(model_id).by_action(params[:action]).each do | md |
+      model_displays.each do | md |
         field_displays = FieldDisplay.where(model_display_id: md.id)
         displayable_fields = []
         field_displays.each do |field_disp|
@@ -19,21 +29,16 @@ module MegaBar
           end
         end
         info = {
-          :app_format => Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
-          :field_displays => field_displays,
+          :mega_format => Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
           :displayable_fields => displayable_fields,
           :form_path => form_path,
-          :model_id => model_id,
-          :model_display => md,
-          :record_format => MegaBar::RecordsFormat.find(md.format)
+          :model_display => md
         }
         mega_displays_info << info
       end
       mega_displays_info
     end
     
-        # GET /models
-        # GET /models.json
     def index
       #seems like you have to have an instance variable for the specific model because if you don't it doesn't pay attention to using your 'layout'
       #so we set one but then for convenience in the layout, we set @models equal to that.

@@ -7,6 +7,19 @@ module MegaBar
       link_to title, {:sort => column, :direction => direction}, class: css_class
     end
 
+    def param_from_tablename(model_props, tablename)
+      # if tablename starts with the module from the model_props, then chop it.
+      # else just use it and hope for the best. 
+      # Joining to foreign modules not supported and what will happen is forms won't save if the table 
+      # additional possible logic:
+      # else if you can find that the table couldn't be namespaced, then use that
+      # elseif theres a module out there for it use it #todo: 
+      # else  use as is.... 
+      prefix = model_props.modyule.nil? || model_props.modyule.empty? ? '8675309' : model_props.modyule.split('::').map { | m | m.underscore }.join('_') + '_'
+      tablename.start_with?(model_props.modyule, prefix) ? tablename[prefix.size..-1].singularize : tablename.singluarize
+
+    end
+
     def link_path(action = nil, id = nil)
       # application helper
       action ||= params[:action]

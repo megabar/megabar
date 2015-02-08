@@ -9,9 +9,15 @@
 <body>
 <%= link_to 'Models', mega_bar.models_path %> | <%= link_to 'Fields', mega_bar.fields_path %> | <%= link_to 'Model Displays', mega_bar.model_displays_path %> | <%= link_to 'Field Displays', mega_bar.field_displays_path %> |  <%= link_to 'Record Formats', mega_bar.records_formats_path %> |<%= link_to 'Textboxes', mega_bar.textboxes_path %> | <%= link_to 'Text Reads', mega_bar.textreads_path %> | <%= link_to 'Selects', mega_bar.selects_path %> 
 
-<% if flash[:notice] %>
-  <div id="notice"><%= flash[:notice] %></div>
+
+
+<% flash.each do |key, msg| %>
+  <div id="<%= key %>">
+    <p><%= msg %></p>
+    <div class="clear"></div>
+  </div>
 <% end %>
+
 
 <%if ['index', 'show'].include? params[:action]%>
   <% @mega_displays.each do |mega_display| %>
@@ -22,9 +28,9 @@
   <%= form_for(@mega_instance) do |f| %>
     <% @mega_displays.each do |mega_display| %>
       <% @mega_display = mega_display %>  
-      <%=@mega_display[:app_format].app_wrapper.html_safe%>
+      <%=@mega_display[:mega_format].app_wrapper.html_safe%>
       <%= render partial: "mega_bar_write" %>
-      <%=@mega_display[:app_format].app_wrapper_end.html_safe%>
+      <%=@mega_display[:mega_format].app_wrapper_end.html_safe%>
     <% end %>
     <table><tr><th>Save</th><td><%= submit_tag %></td><th></tr></table>
   <% end%>
