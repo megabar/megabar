@@ -92,7 +92,7 @@ module MegaBar
       end
       describe "POST create" do
         describe "with valid params" do
-          it "creates a new Textbox" do
+          it "creates a new Textbox", focus: true do
             #  create(:field_for_field_model)
             expect {
               post :create, {use_route: :mega_bar, model_id: 1, :textbox=> valid_attributes}, valid_session
