@@ -1,6 +1,8 @@
 MegaBar::Engine.routes.draw do
   
-  ##### MEGABAR END
+  resources :pickles,  defaults: {model_id: 15}
+   ##### MEGABAR END
+
    # (leave that line in place with five #'s')
 
 

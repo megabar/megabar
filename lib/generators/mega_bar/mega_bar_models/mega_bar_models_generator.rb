@@ -9,7 +9,6 @@ module MegaBar
     # in generators, all public methods are run. Weird, huh?
 
     def create_controller_file
-      byebug
       @@notices << "You will have to copy your controller manually over to the megabar gem" if gem_path == '' && modul == 'MegaBar'
       template 'generic_controller.rb', "#{gem_path}#{the_controller_file_path}#{the_controller_file_name}.rb"
     end
@@ -40,13 +39,11 @@ module MegaBar
     end
 
     def create_controller_spec_file
-      byebug
       template 'generic_controller_spec.rb', "#{gem_path}#{the_controller_spec_file_path}#{the_controller_spec_file_name}.rb"
       @@notices <<  "You will have to copy the spec file yourself manually to the megabar repo's spec/controllers directory" if gem_path == '' && modul == 'MegaBar'
     end
 
     def create_factory
-      byebug
       @@notices <<  "You will have to copy the factory file yourself manually to the megabar repo's spec/internal/factories directory" if gem_path == '' && modul == 'MegaBar'
       template 'generic_factory.rb', "#{gem_path}#{the_factory_file_path}#{the_model_file_name}.rb"
     end
@@ -125,7 +122,7 @@ module MegaBar
     end
 
     def the_route_path
-       the_route_name.include?('_') ? the_route_name.gsub('_', '-') : 'the_route_name'
+       the_route_name.include?('_') ? the_route_name.gsub('_', '-') : the_route_name
     end
 
     def the_table_name
