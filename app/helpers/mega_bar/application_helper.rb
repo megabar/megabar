@@ -8,16 +8,15 @@ module MegaBar
     end
 
     def param_from_tablename(model_props, tablename)
-       
-       #if model_props.tablename == tablename
-
-       return 'hi'
-
-      # (byebug) model_props
-      # <MegaBar::Model id: 26, classname: "Vow", schema: "sqlite", tablename: "mega_bar_vows", name: "Vows", default_sort_field: "id", created_at: "2015-02-08 03:56:48", updated_at: "2015-02-08 03:56:48", steep: nil, module: "MegaBar">
-      # (byebug) tablename
-      # "mega_bar_vows"
-
+      # if tablename starts with the module from the model_props, then chop it.
+      # else just use it and hope for the best. 
+      # Joining to foreign modules not supported and what will happen is forms won't save if the table 
+      # additional possible logic:
+      # else if you can find that the table couldn't be namespaced, then use that
+      # elseif theres a module out there for it use it #todo: 
+      # else  use as is.... 
+      prefix = model_props.modyule.nil? || model_props.modyule.empty? ? '8675309' : model_props.modyule.split('::').map { | m | m.underscore }.join('_') + '_'
+      tablename.start_with?(model_props.modyule, prefix) ? tablename[prefix.size..-1].singularize : tablename.singluarize
 
     end
 
