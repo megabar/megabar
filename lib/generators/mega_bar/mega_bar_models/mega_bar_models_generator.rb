@@ -1,30 +1,28 @@
 module MegaBar
   class MegaBarModelsGenerator < Rails::Generators::Base
     source_root File.expand_path('../templates', __FILE__)
-    argument :mod, type: :string
-    argument :filename, type: :string
+    argument :modul, type: :string
+    argument :classname, type: :string
     argument :model_id, type: :string
     @@notices = []
     
     # in generators, all public methods are run. Weird, huh?
 
     def create_controller_file
-      @@notices << "You will have to copy your controller manually over to the megabar gem" if gem_path == '' and the_module_name == 'MegaBar'
+      byebug
+      @@notices << "You will have to copy your controller manually over to the megabar gem" if gem_path == '' && modul == 'MegaBar'
       template 'generic_controller.rb', "#{gem_path}#{the_controller_file_path}#{the_controller_file_name}.rb"
     end
     def create_model_file
-       template 'generic_model.rb', "#{gem_path}#{the_model_file_path}#{the_model_file_name}.rb"
-       @@notices <<  "You will have to copy your model files manually over to the megabar gem" if gem_path == '' and the_module_name == 'MegaBar'
-       if the_module_name
-         template "generic_model.rb", "#{gem_path}Tmp#{the_model_file_path}#{the_model_file_name}.rb"
-       end
+      template 'generic_model.rb', "#{gem_path}#{the_model_file_path}#{the_model_file_name}.rb"
+      @@notices <<  "You will have to copy your model files manually over to the megabar gem" if gem_path == '' && modul == 'MegaBar'
+      template "generic_model.rb", "#{gem_path}#{the_model_file_path}tmp_#{the_model_file_name}.rb" if modul == 'MegaBar'
     end
     def generate_migration
       if the_module_name
-        generate 'migration create_' + the_module_name + '_' + the_table_name + ' created_at:datetime updated_at:datetime'
-        generate 'migration create_' + the_module_name + '_tmp_' + the_table_name + ' created_at:datetime updated_at:datetime'   
+        generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'
+        generate 'migration create_' + 'mega_bar_tmp_' + classname.underscore.downcase.pluralize + ' created_at:datetime updated_at:datetime' if modul == 'MegaBar'
         @@notices <<  "You will have to copy your Migrations manually over to the megabar gem"
-        # generate 'migration create_tmp_' + the_module_name + '_' + the_table_name + ' created_at:datetime updated_at:datetime'
       else 
         generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'
       end
@@ -32,22 +30,24 @@ module MegaBar
     def route
       line = '  ##### MEGABAR END'
       text = File.read(gem_path + 'config/routes.rb')
-      path = the_route_name.include?('_') ? "path: '/" + the_route_name.gsub('_', '-') + "', " : ''
+      path = the_route_name.include?('_') ? "path: '/" + the_route_name.gsub('_', '-') + "', " : '' # no underscores!
       route_text = '  resources :' + the_route_name + ', ' + path + ' defaults: {model_id: ' + model_id + "}\n #{line}\n"
       new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, route_text)
       # To write changes to the file, use:
-      File.open(gem_path + 'config/routes.rb', "w") {|file| file.puts new_contents } unless gem_path == '' and the_module_name == 'MegaBar'
-      @@notices <<  "You will have to add the route yourself manually to the megabar route file: #{route_text}" if gem_path == '' and the_module_name == 'MegaBar'
+      File.open(gem_path + 'config/routes.rb', "w") {|file| file.puts new_contents } unless gem_path == '' && modul == 'MegaBar'
+      @@notices <<  "You will have to add the route yourself manually to the megabar route file: #{route_text}" if gem_path == '' && modul == 'MegaBar'
      
     end
 
     def create_controller_spec_file
+      byebug
       template 'generic_controller_spec.rb', "#{gem_path}#{the_controller_spec_file_path}#{the_controller_spec_file_name}.rb"
-      @@notices <<  "You will have to copy the spec file yourself manually to the megabar repo's spec/controllers directory" if gem_path == '' and the_module_name == 'MegaBar'
+      @@notices <<  "You will have to copy the spec file yourself manually to the megabar repo's spec/controllers directory" if gem_path == '' && modul == 'MegaBar'
     end
 
     def create_factory
-      @@notices <<  "You will have to copy the factory file yourself manually to the megabar repo's spec/internal/factories directory" if gem_path == '' and the_module_name == 'MegaBar'
+      byebug
+      @@notices <<  "You will have to copy the factory file yourself manually to the megabar repo's spec/internal/factories directory" if gem_path == '' && modul == 'MegaBar'
       template 'generic_factory.rb', "#{gem_path}#{the_factory_file_path}#{the_model_file_name}.rb"
     end
 
@@ -59,79 +59,69 @@ module MegaBar
     private
 
     def gem_path
-      File.directory?(Rails.root + '../megabar/')  && the_module_name == 'MegaBar' ? Rails.root + '../megabar/' : ''
+      File.directory?(Rails.root + '../megabar/')  && modul == 'MegaBar' ? Rails.root + '../megabar/' : ''
     end
 
+
     def the_controller_file_name
-      the_file_name.pluralize.underscore + "_controller"
+      classname.pluralize.underscore + "_controller"
     end
 
     def the_controller_file_path
       if the_module_name
-        'app/controllers/' + the_module_name.underscore + '/'
+        'app/controllers/' + the_module_path + '/'
       else
         'app/controllers/'
       end
     end
      
     def the_controller_name
-      the_file_name.classify.pluralize + 'Controller'
+      classname.pluralize + 'Controller'
     end 
 
     def the_controller_spec_file_name
-      the_file_name.pluralize.underscore + "_controller_spec"
+      classname.pluralize.underscore + "_controller_spec"
     end
 
     def the_controller_spec_file_path
-      if the_module_name
-        'spec/controllers/' + the_module_name.underscore + '/'
+      if the_module_name && gem_path == ''
+        'spec/controllers/' + the_module_path + '/'
       else
         'spec/controllers/'
       end
     end
     
     def the_factory_file_path
-      if the_module_name
+      if the_module_name == 'MegaBar'
         'spec/internal/factories/'
       else
         'spec/factories/'
       end
     end
 
-    def the_file_name
-       if filename.include? '::' 
-        return filename[filename.index('::')+2..-1] # nested modules not supported yet.
-      else
-        return filename
-      end
-    end
-
     def the_model_file_name
-      the_file_name.to_s.singularize.underscore
+      classname.to_s.singularize.underscore
     end
 
     def the_model_file_path
       if the_module_name
-        'app/models/' + the_module_name.underscore + '/'
+        'app/models/' + the_module_path + '/'
       else
         'app/models/'
       end
     end
 
-    def the_model_name
-      the_file_name.classify
+    def the_module_name
+      modul == 'no_mod' ? nil : modul
     end
 
-    def the_module_name
-      if mod == 'no_mod'
-         return nil
-      else
-        (mod.downcase == 'megabar' || mod.downcase == 'mega_bar') ? 'MegaBar' : mod
-      end
+    def the_module_path
+      return '' if modul == 'no_mod'
+      the_module_name.split('::').map { |m| m.underscore }.join('/')
     end
-  
+
     def the_route_name
-      the_file_name.pluralize.underscore
+      classname.pluralize.underscore
     end
 
     def the_route_path
@@ -139,10 +129,12 @@ module MegaBar
     end
 
     def the_table_name
-      the_file_name.pluralize
+      prefix = the_module_name.empty? ? '' : the_module_name.split('::').map { | m | m.underscore }.join('_') + '_'
+      prefix + classname.pluralize.underscore
     end
+
     def use_route
-      the_module_name ? 'use_route: :mega_bar, ' : ''
+      the_module_name.split('::').size == 1 ? 'use_route: ' + the_module_name + ', ' : '' #else might could be improved for other modules.
     end
   end
 end

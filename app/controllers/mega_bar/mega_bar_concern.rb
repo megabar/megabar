@@ -30,8 +30,6 @@ module MegaBar
       mega_displays_info
     end
     
-        # GET /models
-        # GET /models.json
     def index
       #seems like you have to have an instance variable for the specific model because if you don't it doesn't pay attention to using your 'layout'
       #so we set one but then for convenience in the layout, we set @models equal to that.
