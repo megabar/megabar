@@ -1,6 +1,5 @@
 MegaBar::Engine.routes.draw do
   
-  resources :pickles,  defaults: {model_id: 15}
    resources :sands,  defaults: {model_id: 25}
    resources :vows,  defaults: {model_id: 26}
    ##### MEGABAR END
