@@ -31,6 +31,7 @@ module MegaBar
     
     let(:valid_attributes) {
       m = build(:model)
+      byebug
       { classname: m[:classname], name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }
     }
 
@@ -53,7 +54,7 @@ module MegaBar
     end
 
     describe "GET show" do
-      it "assigns the requested model as @mega_instance" do
+      it "assigns the requested model as @mega_instance", focus: true do
         model =  Model.create! valid_attributes
         get :show, {use_route: :mega_bar, model_id: 1, :id => model.to_param}, valid_session
         expect(assigns(:mega_instance)).to eq([model])

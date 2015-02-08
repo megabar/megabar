@@ -7,6 +7,20 @@ module MegaBar
       link_to title, {:sort => column, :direction => direction}, class: css_class
     end
 
+    def param_from_tablename(model_props, tablename)
+       
+       #if model_props.tablename == tablename
+
+       return 'hi'
+
+      # (byebug) model_props
+      # <MegaBar::Model id: 26, classname: "Vow", schema: "sqlite", tablename: "mega_bar_vows", name: "Vows", default_sort_field: "id", created_at: "2015-02-08 03:56:48", updated_at: "2015-02-08 03:56:48", steep: nil, module: "MegaBar">
+      # (byebug) tablename
+      # "mega_bar_vows"
+
+
+    end
+
     def link_path(action = nil, id = nil)
       # application helper
       action ||= params[:action]

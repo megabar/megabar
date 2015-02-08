@@ -1,4 +1,4 @@
-<% the_module_name.split('::').each do | m | %>
+<% the_module_array.each do | m | %>
 module <%=m %> 
 <% end %>
   puts "Did you remember to copy the migration over to the megabar db/migrate directory?"
@@ -204,6 +204,6 @@ module <%=m %>
     end
 
   end  
-<% the_module_name.split('::').each do | m | %>
+<% the_module_array.each do | m | %>
 end 
 <% end %>

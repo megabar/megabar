@@ -2,7 +2,16 @@ module MegaBar
   module MegaBarConcern
     extend ActiveSupport::Concern
 
-    
+    def mega_model_properties
+      @mega_model_properties = Model.find(params[:model_id]) 
+    end
+    def mega_controller
+      @mega_controller = params[:controller].split('/').last
+    end
+    def mega_displays 
+      @mega_displays = mega_displays_info(ModelDisplay.by_model(params[:model_id]).by_action(params[:action]))
+    end
+
     def mega_displays_info(model_displays)
       # yep, this is the main brain that loads all the model, model display, field, field_display stuff. 
       # after this runs you'll see the 'create' and 'update' type methods above run.

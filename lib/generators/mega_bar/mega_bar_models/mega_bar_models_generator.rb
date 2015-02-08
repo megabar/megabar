@@ -22,7 +22,7 @@ module MegaBar
         generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'
         generate 'migration create_' + 'mega_bar_tmp_' + classname.underscore.downcase.pluralize + ' created_at:datetime updated_at:datetime' if modul == 'MegaBar'
         @@notices <<  "You will have to copy your Migrations manually over to the megabar gem"
-      else 
+      else
         generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'
       end
     end
@@ -108,6 +108,10 @@ module MegaBar
       end
     end
 
+    def the_module_array
+      the_module_name.nil? || the_module_name.empty? ? [] : the_module_name.split('::') 
+    end
+
     def the_module_name
       modul == 'no_mod' ? nil : modul
     end
@@ -126,11 +130,12 @@ module MegaBar
     end
 
     def the_table_name
-      prefix = the_module_name.empty? ? '' : the_module_name.split('::').map { | m | m.underscore }.join('_') + '_'
+      prefix = the_module_name.nil? || the_module_name.empty? ? '' : the_module_name.split('::').map { | m | m.underscore }.join('_') + '_'
       prefix + classname.pluralize.underscore
     end
 
     def use_route
+      return '' if the_module_name.nil? || the_module_name.empty? 
       the_module_name.split('::').size == 1 ? 'use_route: ' + the_module_name + ', ' : '' #else might could be improved for other modules.
     end
   end
