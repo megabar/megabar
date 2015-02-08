@@ -5,9 +5,10 @@ FactoryGirl.define do
     id 1
     classname 'Model'
     schema  'deep'
-    tablename 'models'
+    tablename 'mega_bar_models'
     name 'Models'
     default_sort_field 'id'
+    modyule 'MegaBar'
     factory :model_with_fields_and_displays do
       index_model_display 'y'
       show_model_display 'y'

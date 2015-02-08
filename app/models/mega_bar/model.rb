@@ -8,7 +8,7 @@ module MegaBar
  
     has_many :fields, dependent: :destroy
     has_many :model_displays, dependent: :destroy
-    before_create :standardize_module
+    before_create :standardize_modyule
     before_create :standardize_classname
     before_create :standardize_tablename
 
@@ -37,8 +37,8 @@ module MegaBar
     end
     def make_all_files
       # generate 'active_record:model', [self.classname]]
-      mod = self.module.nil? || self.module.empty?  ? 'no_mod' : self.module
       logger.info("creating scaffold for " + self.classname + 'via: ' + 'rails g mega_bar:mega_bar ' + self.classname + ' ' + self.id.to_s)
+      mod = self.modyule.nil? || self.modyule.empty?  ? 'no_mod' : self.modyule
       system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s
       ActiveRecord::Migrator.migrate "db/migrate"
     end
@@ -51,13 +51,13 @@ module MegaBar
       Object.module_eval("::#{$1}", __FILE__, __LINE__)
     end
 
-    def standardize_module
-      return if self.module.nil? || self.module.empty?
-      self.module = self.module.gsub('megabar', 'MegaBar')
-      self.module = self.module.chomp('::').chomp(':').chomp('/').reverse.chomp('::').chomp(':').chomp('/').reverse
-      self.module = self.module.gsub('-', '_')
-      self.module = self.module.gsub('/', '::')
-      self.module = self.module.split('::').map { | m |
+    def standardize_modyule
+      return if self.modyule.nil? || self.modyule.empty?
+      self.modyule = self.modyule.gsub('megabar', 'MegaBar')
+      self.modyule = self.modyule.chomp('::').chomp(':').chomp('/').reverse.chomp('::').chomp(':').chomp('/').reverse
+      self.modyule = self.modyule.gsub('-', '_')
+      self.modyule = self.modyule.gsub('/', '::')
+      self.modyule = self.modyule.split('::').map { | m |
         m = m.gsub('-', '_')
         m = m.classify
       }.join('::')
@@ -67,9 +67,8 @@ module MegaBar
       self.classname = self.classname.classify
     end
 
-    def standardize_tablename # must come after standardize_module
-      self.tablename = self.module.nil? || self.module.empty? ?   self.classname.pluralize.underscore : self.module.split('::').map { | m | m = m.underscore }.join('_') + '_' + self.classname.pluralize.underscore
+    def standardize_tablename # must come after standardize_modyule
+      self.tablename = self.modyule.nil? || self.modyule.empty? ?   self.classname.pluralize.underscore : self.modyule.split('::').map { | m | m = m.underscore }.join('_') + '_' + self.classname.pluralize.underscore
     end
   end
 end
-#<Model id: 12, classname: nil, schema: "sqlite", tablename: "testers", name: "Tester", created_at: "2014-05-23 20:32:46", updated_at: "2014-05-23 20:32:46", default_sort_field: "id">

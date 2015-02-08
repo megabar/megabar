@@ -35,6 +35,7 @@ module MegaBar
     }
 
     let(:invalid_attributes) {
+
       f = build(:field)
       { tablename: nil, field: nil, model_id: nil, id: f[:id]  }
     }
@@ -120,7 +121,7 @@ module MegaBar
             expect(assigns(:mega_instance)).to be_a_new(Field)
           end
 
-          it "re-renders the 'new' template"  do
+          it "re-renders the 'new' template", focus: true  do
             post :create, {use_route: :mega_bar, model_id: 1, :field => invalid_attributes}, valid_session
             expect(response).to render_template('mega_bar.html.erb')
           end

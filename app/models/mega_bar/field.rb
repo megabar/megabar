@@ -3,7 +3,7 @@ module MegaBar
     belongs_to :model
     validates_presence_of :model_id, :tablename, :field
     validates_format_of :tablename, on: [:create, :update], :multiline => true, allow_nil: false, with: /[a-z]+/, message: 'no caps'
-    validate :table_exists, on: :create
+    validate :table_exists, on: :create unless Rails.env.test?
     after_create  :make_field_displays #, :only => [:create] #add update.
     before_create  :standardize_tablename
     after_create  :make_migration #, :only => [:create] #add update.
@@ -16,15 +16,14 @@ module MegaBar
     private
 
     def table_exists
-      modle = Model.find(self.model_id)
-      prefix = modle.module.nil? || modle.module.empty? ? '' : modle.module.split('::').map { | m | m.underscore }.join('_') + '_'
+      modle = Model.find(self.model_id) #this is a ugly dependency so this doesn't run in test environment.
+      prefix = modle.modyule.nil? || modle.modyule.empty? ? '' : modle.modyule.split('::').map { | m | m.underscore }.join('_') + '_'
       self.tablename =  prefix + self.tablename if prefix + self.tablename == modle.tablename
       return true if ActiveRecord::Base.connection.table_exists? self.tablename
       errors.add(:base, 'That table does not exist')
       return false
     end
     def make_field_displays 
-      byebug
       actions = []
       index_model_display_id = ModelDisplay.by_model(self.model_id).by_action('index').pluck(:id).last
       show_model_display_id = ModelDisplay.by_model(self.model_id).by_action('show').pluck(:id).last
