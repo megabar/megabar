@@ -43,14 +43,14 @@ module MegaBar
     # in order to pass any filters (e.g. authentication) defined in
     # ModelsController. Be sure to keep this updated too.
     let(:valid_session) { {} }
-    context "with a model and records_format" do
+    context "with a model and model_display_format" do
       before(:each) do
         create(:model, classname: 'fields', name: 'Fields', tablename: 'fields')
-        create(:records_format)
+        create(:model_display_format)
       end
       after(:each) do
         Model.find(1).destroy
-        RecordsFormat.find(1).destroy
+        ModelDisplayFormat.find(1).destroy
       end
 
       describe "GET index" do
@@ -83,17 +83,17 @@ module MegaBar
         end
       end
     end
-    context 'with a model, a record format and fields for model_displays' do
+    context 'with a model, a model_display_format and fields for model_displays' do
       before(:each) do
         create(:model, classname: 'Fields', tablename: 'fields', name: 'Fields')
-        create(:records_format)
+        create(:model_display_format)
         create(:field, tablename: 'model_display', field: 'model_id')
         create(:field, tablename: 'model_display', field: 'action')
         create(:field, tablename: 'model_display', field: 'format')
       end
       after(:each) do
         Model.find(1).destroy
-        RecordsFormat.find(1).destroy
+        ModelDisplayFormat.find(1).destroy
         Field.destroy_all
       end
       describe "POST create" do

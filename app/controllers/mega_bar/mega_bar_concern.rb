@@ -16,6 +16,7 @@ module MegaBar
       # yep, this is the main brain that loads all the model, model display, field, field_display stuff. 
       # after this runs you'll see the 'create' and 'update' type methods above run.
       #return redirect_to(new_model_display_path, :notice => "There was no ModelDisplay for that " + params[:action] +" action and " + model_id.to_s + "model_id combo. Would you like to create one?")    unless model_display
+      
       mega_displays_info = []
       model_displays.each do | md |
         field_displays = FieldDisplay.where(model_display_id: md.id)
@@ -24,14 +25,16 @@ module MegaBar
           field = Field.find(field_disp.field_id)
           if is_displayable?(field_disp.format)
             #lets figure out how to display it right here.
-            display_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
-            displayable_fields << {:field_display=>field_disp, :field=>field, :display_format=>display_format, :obj=>@mega_instance}
+            field_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
+            displayable_fields << {:field_display=>field_disp, :field=>field, :field_format=>field_format, :obj=>@mega_instance}
           end
         end
+        model_display_format = ModelDisplayFormat.find(md.format)
         info = {
-          :mega_format => Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
+          :model_display_format => model_display_format, # Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
           :displayable_fields => displayable_fields,
           :form_path => form_path,
+          :new_model_display_format => model_display_format,
           :model_display => md
         }
         mega_displays_info << info

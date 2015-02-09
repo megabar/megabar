@@ -1,11 +1,11 @@
 <h1><%= @mega_display[:model_display].header %></h1>
 
-<%=@mega_display[:mega_format].record_wrapper.html_safe%>
+<%=@mega_display[:model_display_format].record_wrapper.html_safe%>
 <% @mega_display[:displayable_fields].each do | displayable_field | %>
-  <% if @mega_display[:mega_format].app_format == 'profile_table' %>
+  <% if @mega_display[:model_display_format].name == 'profile_table' %>
     <tr><th><%=displayable_field[:field_display].header %></th>
   <% end %>
-  <%= @mega_display[:mega_format].field_wrapper.html_safe%>
+  <%= @mega_display[:model_display_format].field_wrapper.html_safe%>
   <%   
     instance_value = instance_variable_get("@" + displayable_field[:field].field)
     if instance_value.present? && (displayable_field[:field].field != 'field' and params[:action] == 'edit')
@@ -19,7 +19,7 @@
     end
   %>
   <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: @mega_instance, mega_bar: @mega_display, value: value} %>
-  <%= @mega_display[:mega_format].field_wrapper_end.html_safe %>
+  <%= @mega_display[:model_display_format].field_wrapper_end.html_safe %>
 <%end %>
-<%= @mega_display[:mega_format].record_wrapper_end.html_safe%>
+<%= @mega_display[:model_display_format].record_wrapper_end.html_safe%>
 

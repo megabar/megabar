@@ -1,8 +1,11 @@
 MegaBar::Engine.routes.draw do
   
-   resources :sands,  defaults: {model_id: 25}
-   resources :vows,  defaults: {model_id: 26}
+   resources :model_display_formats, path: '/model-display-formats',  defaults: {model_id: 15}
    ##### MEGABAR END
+
+
+
+
 
 
 
