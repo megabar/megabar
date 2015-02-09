@@ -1,6 +1,6 @@
-class CreateMegaBarModelDisplayFormats < ActiveRecord::Migration
+class CreateMegaBarTmpModelDisplayFormats < ActiveRecord::Migration
   def change
-    create_table :mega_bar_model_display_formats do |t|
+    create_table :mega_bar_tmp_model_display_formats do |t|
       t.datetime :created_at
       t.datetime :updated_at
       string :name
