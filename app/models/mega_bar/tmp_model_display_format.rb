@@ -1,7 +1,7 @@
 
 module MegaBar 
 
-  class ModelDisplayFormat < ActiveRecord::Base
+  class TmpModelDisplayFormat < ActiveRecord::Base
   end
 
 

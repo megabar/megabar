@@ -119,10 +119,12 @@ namespace :mega_bar do
   def fix_model_displays(c) 
     new_obj = make_new_perm(c)
   end
+  def fix_model_display_format(c) 
+    new_obj = make_new_perm(c)
+  end
   def fix_records_format(c)
     new_obj = make_new_perm(c)
     MegaBar::TmpFieldDisplay.where(format: c[:tmp].format).update(format: new_obj.id)
-
   end
   def fix_fields(c)
     new_obj = make_new_perm(c)
@@ -170,17 +172,17 @@ namespace :mega_bar do
     mega_classes << {id: 2, tmp_class: MegaBar::TmpField, perm_class: MegaBar::Field, unique: [:model_id, :field], resolver: 'fix_fields', condition: 'tmp.model_id == perm.model_id && tmp.field == perm.field'}
     mega_classes << {id: 3, tmp_class: MegaBar::TmpModelDisplay, perm_class: MegaBar::ModelDisplay, unique: [:model_id, :action], resolver: 'fix_model_displays', condition: 'tmp.model_id == perm.model_id && tmp.action == perm.action'}
     mega_classes << {id: 4, tmp_class: MegaBar::TmpFieldDisplay, perm_class: MegaBar::FieldDisplay, unique: [:model_display_id], resolver: 'fix_field_displays', condition: 'tmp.model_display_id == perm.model_display_id'} 
-    mega_classes << {id: 5, tmp_class: MegaBar::TmpRecordsFormat, perm_class: MegaBar::RecordsFormat, unique: [:name], resolver: 'fix_records_format', condition: 'tmp.name == perm.name'}
     mega_classes << {id: 6, tmp_class: MegaBar::TmpTextbox, perm_class: MegaBar::Textbox, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {id: 7, tmp_class: MegaBar::TmpTextread, perm_class: MegaBar::Textread, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'} 
     mega_classes << {id: 14, tmp_class: MegaBar::TmpSelect, perm_class: MegaBar::Select, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'} 
+    mega_classes << {id: 15, tmp_class: MegaBar::TmpModelDisplayFormat, perm_class: MegaBar::ModelDisplayFormat, unique: [:name], resolver: 'fix_model_display_format', condition: 'tmp.name == perm.name'} 
    
     return mega_classes
   end
 
 
   task :dump_seeds => :environment do
-    mega_bar_model_ids = [1,2,3,4,5,6,7,14]
+    mega_bar_model_ids = [1,2,3,4,6,7,14,15]
     mega_bar_classes = MegaBar::Model.where(id: mega_bar_model_ids).pluck(:classname)
     mega_bar_fields =  MegaBar::Field.where(model_id: mega_bar_model_ids).pluck(:id)
     mega_bar_model_displays = MegaBar::ModelDisplay.where(model_id: mega_bar_model_ids).pluck(:id)
@@ -189,10 +191,10 @@ namespace :mega_bar do
     SeedDump.dump(MegaBar::ModelDisplay.where(model_id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Field.where(model_id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::FieldDisplay.where(model_display_id: mega_bar_model_displays), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::RecordsFormat, file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    # SeedDump.dump(MegaBar::Select.where(field_display_id: mega_bar_field_disp), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Textbox.where(field_display_id: mega_bar_field_disp), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Textread.where(field_display_id: mega_bar_field_disp), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    # SeedDump.dump(MegaBar::Select.where(field_display_id: mega_bar_field_disp), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::ModelDisplayFormat, file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
    
     File.open(Rails.root.join('db', 'mega_bar.seeds.rb'), "r+") do |file|
       text = File.read(file)

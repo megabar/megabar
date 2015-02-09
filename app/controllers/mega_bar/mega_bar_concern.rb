@@ -22,7 +22,6 @@ module MegaBar
         field_displays = FieldDisplay.where(model_display_id: md.id)
         displayable_fields = []
         field_displays.each do |field_disp|
-         # byebug
           field = Field.find(field_disp.field_id)
           if is_displayable?(field_disp.format)
             #lets figure out how to display it right here.
