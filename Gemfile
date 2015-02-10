@@ -9,6 +9,8 @@ group :test do
   gem 'factory_girl_rails', '~> 4.0'
   gem 'byebug'
   gem 'rubocop', require: false
+  gem 'simplecov', '~> 0.7.1'
+ 
 end
 
 # Declare your gem's dependencies in mega_bar.gemspec.

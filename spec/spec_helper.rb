@@ -6,6 +6,8 @@ require 'bundler/setup'
 require 'pry'
 require 'combustion'
 require 'capybara/rspec'
+require 'simplecov'
+SimpleCov.start
 
 Combustion.initialize! :all
 
@@ -13,6 +15,7 @@ Combustion.initialize! :all
 require 'rspec/rails'
 require 'capybara/rails'
 require 'factory_girl_rails'
+
 
 Rails.backtrace_cleaner.remove_silencers!
 # Load support files
