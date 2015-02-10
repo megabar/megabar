@@ -2,7 +2,7 @@
 <h1><%= @mega_display[:model_display].header %></h1>
 <%= form_tag @mega_display[:form_path] do |f| %>
   <%=@mega_display[:model_display_format].app_wrapper.html_safe%>
-  <% if @mega_display[:model_display_format].separate_header_row %>
+  <% if @mega_display[:model_display_format].separate_header_row == 'true' %>
     <% @mega_display[:displayable_fields].each do | displayable_field | %>
       <%= @mega_display[:model_display_format].field_header_wrapper.html_safe%>
       <%= sortable(displayable_field[:field].field, displayable_field[:field_display].header) %>
@@ -13,14 +13,14 @@
   <% @mega_instance.each do |mega_record| %>
     <%= @mega_display[:model_display_format].record_wrapper.html_safe%>
     <% @mega_display[:displayable_fields].each do | displayable_field | %>
-      <% if @mega_display[:model_display_format].name == 'profile_table' %>
+      <% if @mega_display[:model_display_format].name == 'ProfileTable' %>
         <tr><th><%=displayable_field[:field_display].header %></th><td>
       <% end %>
       <%= @mega_display[:model_display_format].field_wrapper.html_safe%>
      
       <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: mega_record} %>
       <%= @mega_display[:model_display_format].field_wrapper_end.html_safe %>
-      <% if @mega_display[:model_display_format].name == 'profile_table' %>
+      <% if @mega_display[:model_display_format].name == 'ProfileTable' %>
         </td>
       <% end %>
     <% end %>
