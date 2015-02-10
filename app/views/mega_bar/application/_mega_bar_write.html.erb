@@ -2,7 +2,7 @@
 
 <%=@mega_display[:model_display_format].record_wrapper.html_safe%>
 <% @mega_display[:displayable_fields].each do | displayable_field | %>
-  <% if @mega_display[:model_display_format].name == 'profile_table' %>
+  <% if @mega_display[:model_display_format].name == 'ProfileTable' %>
     <tr><th><%=displayable_field[:field_display].header %></th>
   <% end %>
   <%= @mega_display[:model_display_format].field_wrapper.html_safe%>
