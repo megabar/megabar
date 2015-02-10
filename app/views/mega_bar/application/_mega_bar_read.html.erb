@@ -11,7 +11,6 @@
   <% end %>
 
   <% @mega_instance.each do |mega_record| %>
-  beep
     <%= @mega_display[:model_display_format].record_wrapper.html_safe%>
     <% @mega_display[:displayable_fields].each do | displayable_field | %>
       <% if @mega_display[:model_display_format].name == 'ProfileTable' %>
