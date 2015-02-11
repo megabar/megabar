@@ -23,12 +23,6 @@ module MegaBar
     # This should return the minimal set of attributes required to create a valid
     # Model. As you add validations to Model, be sure to
     # adjust the attributes here as well.
-    MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
-    MegaBar::Field.skip_callback("create",:after,:make_field_displays)
-    MegaBar::Field.skip_callback("create",:after,:make_migration)
-    MegaBar::Model.skip_callback("create",:after,:make_all_files)
-    MegaBar::Model.skip_callback("create",:after,:make_model_displays)
-   
     let(:valid_attributes) {
       f = build(:textbox)
       {  field_display_id: f[:field_display_id], size: f[:size], id: f[:id]  }
@@ -45,10 +39,14 @@ module MegaBar
     let(:valid_session) { {} }
     context "with a model " do
       before(:each) do
+        MegaBar::Model.skip_callback("create",:after,:make_all_files)
+        MegaBar::Model.skip_callback("create",:after,:make_model_displays)
         create(:model, classname: 'textbox', name: 'Textboxes', tablename: 'textboxes')
       end
       after(:each) do
         Model.find(1).destroy
+        MegaBar::Model.set_callback("create",:after,:make_all_files)
+        MegaBar::Model.set_callback("create",:after,:make_model_displays)
       end
       describe "GET index", focus: true do
         it "assigns all textboxs as @mega_instance" do
@@ -82,6 +80,12 @@ module MegaBar
     end
     context 'with a model, a record format and fields for textboxs' do
       before(:each) do
+
+        MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
+        MegaBar::Field.skip_callback("create",:after,:make_field_displays)
+        MegaBar::Field.skip_callback("create",:after,:make_migration)
+        MegaBar::Model.skip_callback("create",:after,:make_all_files)
+        MegaBar::Model.skip_callback("create",:after,:make_model_displays)
         create(:model, classname: 'textbox', name: 'Textboxes', tablename: 'textboxes')
         create(:field, tablename: 'textbox', field: 'field_display_id')
         create(:field, tablename: 'textbox', field: 'size')
@@ -89,6 +93,12 @@ module MegaBar
       after(:each) do
         Model.find(1).destroy
         Field.destroy_all
+        MegaBar::Field.set_callback("save",:after,:make_field_displays) 
+        MegaBar::Field.set_callback("create",:after,:make_field_displays)
+        MegaBar::Field.set_callback("create",:after,:make_migration)
+        MegaBar::Model.set_callback("create",:after,:make_all_files)
+        MegaBar::Model.set_callback("create",:after,:make_model_displays)
+      
       end
       describe "POST create" do
         describe "with valid params" do
@@ -112,7 +122,7 @@ module MegaBar
         end
 
         describe "with invalid params" do
-          it "assigns a newly created but unsaved Textbox as @mega_instance" do
+          it "assigns a newly created but unsaved Textbox as @mega_instance", focus: true do
             post :create, {use_route: :mega_bar, model_id: 1, :textbox => invalid_attributes}, valid_session
             expect(assigns(:mega_instance)).to be_a_new(Textbox)
           end
