@@ -14,7 +14,7 @@
       <img src="./assets/0.7.1/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" style="display:none;">
-      <div class="timestamp">Generated <abbr class="timeago" title="2015-02-10T22:18:34-07:00">2015-02-10T22:18:34-07:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2015-02-10T23:09:29-07:00">2015-02-10T23:09:29-07:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -413,7 +413,7 @@
       <tr>
         <td class="strong"><a href="#3b4ae75334872278347453000e009a42e93b0a12" class="src_link" title="spec/controllers/models_controller_spec.rb">spec/controllers/models_controller_spec.rb</a></td>
         <td class="green strong">100.0 %</td>
-        <td>195</td>
+        <td>193</td>
         <td>106</td>
         <td>106</td>
         <td>0</td>
@@ -10376,442 +10376,442 @@
           <code class="ruby"></code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="59">
-          
-          
-          <code class="ruby"></code>
-        </li>
-      
-        <li class="never" data-hits="" data-linenumber="60">
-          
-          
-          <code class="ruby"></code>
-        </li>
-      
-        <li class="covered" data-hits="1" data-linenumber="61">
+        <li class="covered" data-hits="1" data-linenumber="59">
           <span class="hits">1</span>
           
           <code class="ruby">      describe &quot;GET index&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="62">
+        <li class="covered" data-hits="1" data-linenumber="60">
           <span class="hits">1</span>
           
           <code class="ruby">        it &quot;assigns all models as @mega_instance&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="63">
+        <li class="covered" data-hits="1" data-linenumber="61">
           <span class="hits">1</span>
           
           <code class="ruby">          model = Model.create! valid_attributes</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="64">
+        <li class="covered" data-hits="1" data-linenumber="62">
           <span class="hits">1</span>
           
           <code class="ruby">          get :index, {use_route: :mega_bar, model_id: 1}, valid_session</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="65">
+        <li class="covered" data-hits="1" data-linenumber="63">
           <span class="hits">1</span>
           
           <code class="ruby">          expect(assigns(:mega_instance)).to eq([model])</code>
+        </li>
+      
+        <li class="never" data-hits="" data-linenumber="64">
+          
+          
+          <code class="ruby">        end</code>
+        </li>
+      
+        <li class="never" data-hits="" data-linenumber="65">
+          
+          
+          <code class="ruby">      end</code>
         </li>
       
         <li class="never" data-hits="" data-linenumber="66">
           
           
-          <code class="ruby">        end</code>
-        </li>
-      
-        <li class="never" data-hits="" data-linenumber="67">
-          
-          
-          <code class="ruby">      end</code>
-        </li>
-      
-        <li class="never" data-hits="" data-linenumber="68">
-          
-          
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="69">
+        <li class="covered" data-hits="1" data-linenumber="67">
           <span class="hits">1</span>
           
           <code class="ruby">      describe &quot;GET show&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="70">
+        <li class="covered" data-hits="1" data-linenumber="68">
           <span class="hits">1</span>
           
           <code class="ruby">        it &quot;assigns the requested model as @mega_instance&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="71">
+        <li class="covered" data-hits="1" data-linenumber="69">
           <span class="hits">1</span>
           
           <code class="ruby">          model =  Model.create! valid_attributes</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="72">
+        <li class="covered" data-hits="1" data-linenumber="70">
           <span class="hits">1</span>
           
           <code class="ruby">          get :show, {use_route: :mega_bar, model_id: 1, :id =&gt; model.to_param}, valid_session</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="73">
+        <li class="covered" data-hits="1" data-linenumber="71">
           <span class="hits">1</span>
           
           <code class="ruby">          expect(assigns(:mega_instance)).to eq([model])</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="74">
+        <li class="never" data-hits="" data-linenumber="72">
           
           
           <code class="ruby">        end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="75">
+        <li class="never" data-hits="" data-linenumber="73">
           
           
           <code class="ruby">      end</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="76">
+        <li class="covered" data-hits="1" data-linenumber="74">
           <span class="hits">1</span>
           
           <code class="ruby">      describe &quot;GET new&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="77">
+        <li class="covered" data-hits="1" data-linenumber="75">
           <span class="hits">1</span>
           
           <code class="ruby">        it &quot;assigns a new model as @mega_instance&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="78">
+        <li class="covered" data-hits="1" data-linenumber="76">
           <span class="hits">1</span>
           
           <code class="ruby">          create(:model)</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="79">
+        <li class="covered" data-hits="1" data-linenumber="77">
           <span class="hits">1</span>
           
           <code class="ruby">          get :new, {use_route: :mega_bar, model_id: 1}, valid_session</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="80">
+        <li class="covered" data-hits="1" data-linenumber="78">
           <span class="hits">1</span>
           
           <code class="ruby">          Model.find(1).destroy</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="81">
+        <li class="covered" data-hits="1" data-linenumber="79">
           <span class="hits">1</span>
           
           <code class="ruby">          expect(assigns(:mega_instance)).to be_a_new(Model)</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="82">
+        <li class="never" data-hits="" data-linenumber="80">
           
           
           <code class="ruby">        end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="83">
+        <li class="never" data-hits="" data-linenumber="81">
           
           
           <code class="ruby">      end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="84">
+        <li class="never" data-hits="" data-linenumber="82">
           
           
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="85">
+        <li class="covered" data-hits="1" data-linenumber="83">
           <span class="hits">1</span>
           
           <code class="ruby">      describe &quot;GET edit&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="86">
+        <li class="covered" data-hits="1" data-linenumber="84">
           <span class="hits">1</span>
           
           <code class="ruby">        it &quot;assigns the requested model as @mega_instance&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="87">
+        <li class="covered" data-hits="1" data-linenumber="85">
           <span class="hits">1</span>
           
           <code class="ruby">          model = Model.create! valid_attributes</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="88">
+        <li class="covered" data-hits="1" data-linenumber="86">
           <span class="hits">1</span>
           
           <code class="ruby">          get :edit, {use_route: :mega_bar, model_id: 1, :id =&gt; model.to_param}, valid_session</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="89">
+        <li class="covered" data-hits="1" data-linenumber="87">
           <span class="hits">1</span>
           
           <code class="ruby">          expect(assigns(:mega_instance)).to eq(model)</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="90">
+        <li class="never" data-hits="" data-linenumber="88">
           
           
           <code class="ruby">        end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="91">
+        <li class="never" data-hits="" data-linenumber="89">
           
           
           <code class="ruby">      end</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="92">
+        <li class="covered" data-hits="1" data-linenumber="90">
           <span class="hits">1</span>
           
           <code class="ruby">      context &#39;with field for model&#39; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="93">
+        <li class="covered" data-hits="1" data-linenumber="91">
           <span class="hits">1</span>
           
           <code class="ruby">        before(:each) do</code>
         </li>
       
-        <li class="covered" data-hits="10" data-linenumber="94">
+        <li class="covered" data-hits="10" data-linenumber="92">
           <span class="hits">10</span>
           
           <code class="ruby">          create(:field)</code>
         </li>
       
-        <li class="covered" data-hits="10" data-linenumber="95">
+        <li class="covered" data-hits="10" data-linenumber="93">
           <span class="hits">10</span>
           
           <code class="ruby">          create(:field, tablename: &#39;mega_bar_models&#39;, field: &#39;default_sort_field&#39;)</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="96">
+        <li class="never" data-hits="" data-linenumber="94">
           
           
           <code class="ruby">        end</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="97">
+        <li class="covered" data-hits="1" data-linenumber="95">
           <span class="hits">1</span>
           
           <code class="ruby">        after(:each) do</code>
         </li>
       
-        <li class="covered" data-hits="10" data-linenumber="98">
+        <li class="covered" data-hits="10" data-linenumber="96">
           <span class="hits">10</span>
           
           <code class="ruby">          Field.destroy_all</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="99">
+        <li class="never" data-hits="" data-linenumber="97">
           
           
           <code class="ruby">        end     </code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="100">
+        <li class="covered" data-hits="1" data-linenumber="98">
           <span class="hits">1</span>
           
           <code class="ruby">        describe &quot;POST create&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="101">
+        <li class="covered" data-hits="1" data-linenumber="99">
           <span class="hits">1</span>
           
           <code class="ruby">          describe &quot;with valid params&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="102">
+        <li class="covered" data-hits="1" data-linenumber="100">
           <span class="hits">1</span>
           
           <code class="ruby">            it &quot;creates a new Model&quot;, focus: true do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="103">
+        <li class="covered" data-hits="1" data-linenumber="101">
           <span class="hits">1</span>
           
           <code class="ruby">              expect {</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="104">
+        <li class="covered" data-hits="1" data-linenumber="102">
           <span class="hits">1</span>
           
           <code class="ruby">                post :create, {use_route: :mega_bar, model_id: 1, :model =&gt; valid_attributes}, valid_session</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="105">
+        <li class="never" data-hits="" data-linenumber="103">
           
           
           <code class="ruby">              }.to change(Model, :count).by(1)</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="106">
+        <li class="never" data-hits="" data-linenumber="104">
           
           
           <code class="ruby">            end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="107">
+        <li class="never" data-hits="" data-linenumber="105">
           
           
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="108">
+        <li class="covered" data-hits="1" data-linenumber="106">
           <span class="hits">1</span>
           
           <code class="ruby">            it &quot;assigns a newly created model as @mega_instance&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="109">
+        <li class="covered" data-hits="1" data-linenumber="107">
           <span class="hits">1</span>
           
           <code class="ruby">              post :create, {use_route: :mega_bar, model_id: 1, :model =&gt; valid_attributes}, valid_session</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="110">
+        <li class="covered" data-hits="1" data-linenumber="108">
           <span class="hits">1</span>
           
           <code class="ruby">              expect(assigns(:mega_instance)).to be_a(Model)</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="111">
+        <li class="covered" data-hits="1" data-linenumber="109">
           <span class="hits">1</span>
           
           <code class="ruby">              expect(assigns(:mega_instance)).to be_persisted</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="112">
+        <li class="never" data-hits="" data-linenumber="110">
           
           
           <code class="ruby">            end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="113">
+        <li class="never" data-hits="" data-linenumber="111">
           
           
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="114">
+        <li class="covered" data-hits="1" data-linenumber="112">
           <span class="hits">1</span>
           
           <code class="ruby">            it &quot;redirects to the created model&quot;  do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="115">
+        <li class="covered" data-hits="1" data-linenumber="113">
           <span class="hits">1</span>
           
           <code class="ruby">              post :create, {use_route: :mega_bar, model_id: 1, :model =&gt; valid_attributes}, valid_session</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="116">
+        <li class="covered" data-hits="1" data-linenumber="114">
           <span class="hits">1</span>
           
           <code class="ruby">              expect(response).to redirect_to(Model.last)</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="117">
+        <li class="never" data-hits="" data-linenumber="115">
           
           
           <code class="ruby">            end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="118">
+        <li class="never" data-hits="" data-linenumber="116">
           
           
           <code class="ruby">          end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="119">
+        <li class="never" data-hits="" data-linenumber="117">
           
           
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="120">
+        <li class="covered" data-hits="1" data-linenumber="118">
           <span class="hits">1</span>
           
           <code class="ruby">          describe &quot;with invalid params&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="121">
+        <li class="covered" data-hits="1" data-linenumber="119">
           <span class="hits">1</span>
           
           <code class="ruby">            it &quot;assigns a newly created but unsaved model as @mega_instance&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="122">
+        <li class="covered" data-hits="1" data-linenumber="120">
           <span class="hits">1</span>
           
           <code class="ruby">              post :create, {use_route: :mega_bar, model_id: 1, :model =&gt; invalid_attributes}, valid_session</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="123">
+        <li class="covered" data-hits="1" data-linenumber="121">
           <span class="hits">1</span>
           
           <code class="ruby">              expect(assigns(:mega_instance)).to be_a_new(Model)</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="124">
+        <li class="never" data-hits="" data-linenumber="122">
           
           
           <code class="ruby">            end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="125">
+        <li class="never" data-hits="" data-linenumber="123">
           
           
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="126">
+        <li class="covered" data-hits="1" data-linenumber="124">
           <span class="hits">1</span>
           
           <code class="ruby">            it &quot;re-renders the &#39;new&#39; template&quot;  do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="127">
+        <li class="covered" data-hits="1" data-linenumber="125">
           <span class="hits">1</span>
           
           <code class="ruby">              post :create, {use_route: :mega_bar, model_id: 1, :model =&gt; invalid_attributes}, valid_session</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="128">
+        <li class="covered" data-hits="1" data-linenumber="126">
           <span class="hits">1</span>
           
           <code class="ruby">              expect(response).to render_template(&#39;mega_bar.html.erb&#39;)</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="129">
+        <li class="never" data-hits="" data-linenumber="127">
           
           
           <code class="ruby">            end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="130">
+        <li class="never" data-hits="" data-linenumber="128">
           
           
           <code class="ruby">          end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="131">
+        <li class="never" data-hits="" data-linenumber="129">
           
           
           <code class="ruby">        end</code>
+        </li>
+      
+        <li class="never" data-hits="" data-linenumber="130">
+          
+          
+          <code class="ruby"></code>
+        </li>
+      
+        <li class="never" data-hits="" data-linenumber="131">
+          
+          
+          <code class="ruby"></code>
         </li>
       
         <li class="never" data-hits="" data-linenumber="132">
@@ -10820,94 +10820,94 @@
           <code class="ruby"></code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="133">
-          
-          
-          <code class="ruby"></code>
-        </li>
-      
-        <li class="never" data-hits="" data-linenumber="134">
-          
-          
-          <code class="ruby"></code>
-        </li>
-      
-        <li class="covered" data-hits="1" data-linenumber="135">
+        <li class="covered" data-hits="1" data-linenumber="133">
           <span class="hits">1</span>
           
           <code class="ruby">        describe &quot;PUT update&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="136">
+        <li class="covered" data-hits="1" data-linenumber="134">
           <span class="hits">1</span>
           
           <code class="ruby">          describe &quot;with valid params&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="137">
+        <li class="covered" data-hits="1" data-linenumber="135">
           <span class="hits">1</span>
           
           <code class="ruby">            let(:new_attributes) {</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="138">
+        <li class="covered" data-hits="1" data-linenumber="136">
           <span class="hits">1</span>
           
           <code class="ruby">               m = build(:model)</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="139">
+        <li class="covered" data-hits="1" data-linenumber="137">
           <span class="hits">1</span>
           
           <code class="ruby">               { classname: &#39;testing&#39;, name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="140">
+        <li class="never" data-hits="" data-linenumber="138">
           
           
           <code class="ruby">            }</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="141">
+        <li class="never" data-hits="" data-linenumber="139">
           
           
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="142">
+        <li class="covered" data-hits="1" data-linenumber="140">
           <span class="hits">1</span>
           
           <code class="ruby">            it &quot;updates the requested model&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="143">
+        <li class="covered" data-hits="1" data-linenumber="141">
           <span class="hits">1</span>
           
           <code class="ruby">              model = Model.create! valid_attributes</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="144">
+        <li class="covered" data-hits="1" data-linenumber="142">
           <span class="hits">1</span>
           
           <code class="ruby">              put :update, {use_route: :mega_bar, :id =&gt; model.to_param, :model =&gt; new_attributes}, valid_session</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="145">
+        <li class="covered" data-hits="1" data-linenumber="143">
           <span class="hits">1</span>
           
           <code class="ruby">              model.reload</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="146">
+        <li class="covered" data-hits="1" data-linenumber="144">
           <span class="hits">1</span>
           
           <code class="ruby">              expect(model.attributes).to include( { &#39;classname&#39; =&gt; &#39;testing&#39; } )</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="147">
+        <li class="never" data-hits="" data-linenumber="145">
           
           
           <code class="ruby">            end</code>
+        </li>
+      
+        <li class="never" data-hits="" data-linenumber="146">
+          
+          
+          <code class="ruby"></code>
+        </li>
+      
+        <li class="covered" data-hits="1" data-linenumber="147">
+          <span class="hits">1</span>
+          
+          <code class="ruby">            it &quot;assigns the requested model as @mega_instance&quot; do</code>
         </li>
       
         <li class="never" data-hits="" data-linenumber="148">
@@ -10919,280 +10919,268 @@
         <li class="covered" data-hits="1" data-linenumber="149">
           <span class="hits">1</span>
           
-          <code class="ruby">            it &quot;assigns the requested model as @mega_instance&quot; do</code>
+          <code class="ruby">              model = Model.create! valid_attributes</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="150">
+        <li class="covered" data-hits="1" data-linenumber="150">
+          <span class="hits">1</span>
           
-          
-          <code class="ruby"></code>
+          <code class="ruby">              put :update, {use_route: :mega_bar, :id =&gt; model.to_param, :model =&gt; valid_attributes}, valid_session</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="151">
           <span class="hits">1</span>
           
-          <code class="ruby">              model = Model.create! valid_attributes</code>
-        </li>
-      
-        <li class="covered" data-hits="1" data-linenumber="152">
-          <span class="hits">1</span>
-          
-          <code class="ruby">              put :update, {use_route: :mega_bar, :id =&gt; model.to_param, :model =&gt; valid_attributes}, valid_session</code>
-        </li>
-      
-        <li class="covered" data-hits="1" data-linenumber="153">
-          <span class="hits">1</span>
-          
           <code class="ruby">              expect(assigns(:mega_instance)).to eq(model)</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="154">
+        <li class="never" data-hits="" data-linenumber="152">
           
           
           <code class="ruby">            end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="155">
+        <li class="never" data-hits="" data-linenumber="153">
           
           
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="156">
+        <li class="covered" data-hits="1" data-linenumber="154">
           <span class="hits">1</span>
           
           <code class="ruby">            it &quot;redirects to the model&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="157">
+        <li class="covered" data-hits="1" data-linenumber="155">
           <span class="hits">1</span>
           
           <code class="ruby">              model = Model.create! valid_attributes</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="158">
+        <li class="covered" data-hits="1" data-linenumber="156">
           <span class="hits">1</span>
           
           <code class="ruby">              put :update, {use_route: :mega_bar, :id =&gt; model.to_param, :model =&gt; valid_attributes}, valid_session</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="159">
+        <li class="covered" data-hits="1" data-linenumber="157">
           <span class="hits">1</span>
           
           <code class="ruby">              expect(response).to redirect_to(model)</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="160">
+        <li class="never" data-hits="" data-linenumber="158">
           
           
           <code class="ruby">            end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="161">
+        <li class="never" data-hits="" data-linenumber="159">
           
           
           <code class="ruby">          end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="162">
+        <li class="never" data-hits="" data-linenumber="160">
           
           
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="163">
+        <li class="covered" data-hits="1" data-linenumber="161">
           <span class="hits">1</span>
           
           <code class="ruby">          describe &quot;with invalid params&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="164">
+        <li class="covered" data-hits="1" data-linenumber="162">
           <span class="hits">1</span>
           
           <code class="ruby">            it &quot;assigns the model as @mega_instance&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="165">
+        <li class="covered" data-hits="1" data-linenumber="163">
           <span class="hits">1</span>
           
           <code class="ruby">              model = Model.create! valid_attributes</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="166">
+        <li class="covered" data-hits="1" data-linenumber="164">
           <span class="hits">1</span>
           
           <code class="ruby">              put :update, {use_route: :mega_bar, :id =&gt; model.to_param, :model =&gt; invalid_attributes}, valid_session</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="167">
+        <li class="covered" data-hits="1" data-linenumber="165">
           <span class="hits">1</span>
           
           <code class="ruby">              expect(assigns(:mega_instance)).to eq(model)</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="168">
+        <li class="never" data-hits="" data-linenumber="166">
           
           
           <code class="ruby">            end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="169">
+        <li class="never" data-hits="" data-linenumber="167">
           
           
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="170">
+        <li class="covered" data-hits="1" data-linenumber="168">
           <span class="hits">1</span>
           
           <code class="ruby">            it &quot;re-renders the &#39;edit&#39; template&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="171">
+        <li class="covered" data-hits="1" data-linenumber="169">
           <span class="hits">1</span>
           
           <code class="ruby">              model = Model.create! valid_attributes</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="172">
+        <li class="covered" data-hits="1" data-linenumber="170">
           <span class="hits">1</span>
           
           <code class="ruby">              put :update, {use_route: :mega_bar, :id =&gt; model.to_param, :model =&gt; invalid_attributes}, valid_session</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="173">
+        <li class="covered" data-hits="1" data-linenumber="171">
           <span class="hits">1</span>
           
           <code class="ruby">              expect(response).to render_template(&quot;mega_bar.html.erb&quot;)</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="174">
+        <li class="never" data-hits="" data-linenumber="172">
           
           
           <code class="ruby">            end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="175">
+        <li class="never" data-hits="" data-linenumber="173">
           
           
           <code class="ruby">          end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="176">
+        <li class="never" data-hits="" data-linenumber="174">
           
           
           <code class="ruby">        end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="177">
+        <li class="never" data-hits="" data-linenumber="175">
           
           
           <code class="ruby">      end</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="178">
+        <li class="covered" data-hits="1" data-linenumber="176">
           <span class="hits">1</span>
           
           <code class="ruby">      describe &quot;DELETE destroy&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="179">
+        <li class="covered" data-hits="1" data-linenumber="177">
           <span class="hits">1</span>
           
           <code class="ruby">        it &quot;destroys the requested model&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="180">
+        <li class="covered" data-hits="1" data-linenumber="178">
           <span class="hits">1</span>
           
           <code class="ruby">          model = Model.create! valid_attributes</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="181">
+        <li class="covered" data-hits="1" data-linenumber="179">
           <span class="hits">1</span>
           
           <code class="ruby">          expect {</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="182">
+        <li class="covered" data-hits="1" data-linenumber="180">
           <span class="hits">1</span>
           
           <code class="ruby">            delete :destroy, {use_route: :mega_bar, :id =&gt; model.to_param}, valid_session</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="183">
+        <li class="never" data-hits="" data-linenumber="181">
           
           
           <code class="ruby">          }.to change(Model, :count).by(-1)</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="184">
+        <li class="never" data-hits="" data-linenumber="182">
           
           
           <code class="ruby">        end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="185">
+        <li class="never" data-hits="" data-linenumber="183">
           
           
           <code class="ruby"></code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="186">
+        <li class="covered" data-hits="1" data-linenumber="184">
           <span class="hits">1</span>
           
           <code class="ruby">        it &quot;redirects to the models list&quot; do</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="187">
+        <li class="covered" data-hits="1" data-linenumber="185">
           <span class="hits">1</span>
           
           <code class="ruby">          model = Model.create! valid_attributes</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="188">
+        <li class="covered" data-hits="1" data-linenumber="186">
           <span class="hits">1</span>
           
           <code class="ruby">          delete :destroy, {use_route: :mega_bar, :id =&gt; model.to_param}, valid_session</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="189">
+        <li class="covered" data-hits="1" data-linenumber="187">
           <span class="hits">1</span>
           
           <code class="ruby">          puts &quot;url_for(&#39;models&#39;)&quot; + url_for(&#39;models&#39;).to_s</code>
         </li>
       
-        <li class="covered" data-hits="1" data-linenumber="190">
+        <li class="covered" data-hits="1" data-linenumber="188">
           <span class="hits">1</span>
           
           <code class="ruby">          expect(response).to redirect_to(&quot;/mega-bar/&quot; + url_for(&#39;models&#39;))</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="191">
+        <li class="never" data-hits="" data-linenumber="189">
           
           
           <code class="ruby">        end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="192">
+        <li class="never" data-hits="" data-linenumber="190">
           
           
           <code class="ruby">      end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="193">
+        <li class="never" data-hits="" data-linenumber="191">
           
           
           <code class="ruby">    end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="194">
+        <li class="never" data-hits="" data-linenumber="192">
           
           
           <code class="ruby">  end</code>
         </li>
       
-        <li class="never" data-hits="" data-linenumber="195">
+        <li class="never" data-hits="" data-linenumber="193">
           
           
           <code class="ruby">end</code>

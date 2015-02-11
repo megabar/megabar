@@ -36,7 +36,6 @@ module MegaBar
       end
     end
     def make_all_files
-      byebug
       # generate 'active_record:model', [self.classname]]
       logger.info("creating scaffold for " + self.classname + 'via: ' + 'rails g mega_bar:mega_bar ' + self.classname + ' ' + self.id.to_s)
       mod = self.modyule.nil? || self.modyule.empty?  ? 'no_mod' : self.modyule
