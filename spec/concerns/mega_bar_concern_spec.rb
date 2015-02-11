@@ -1,10 +1,7 @@
 module MegaBar
   require 'spec_helper'
 
-  RSpec.describe MegaBar::MegaBarConcern, :type => :controller do
-    Field.skip_callback("create",:after,:make_migration)
-    Model.skip_callback("create",:after,:make_all_files)
-     
+  RSpec.describe MegaBar::MegaBarConcern, :type => :controller do 
     before do
       class FakesController < ApplicationController
         include MegaBarConcern
@@ -13,10 +10,15 @@ module MegaBar
     
     context 'with init' do 
       before(:each) do
+        Field.skip_callback("create",:after,:make_migration)
+        Model.skip_callback("create",:after,:make_all_files)
         model = create(:model)
       end
       after(:each) do 
         Model.find(1).delete
+        MegaBar::Model.set_callback("create",:after,:make_all_files)
+        MegaBar::Model.set_callback("create",:after,:make_model_displays)
+      
       end
 
 

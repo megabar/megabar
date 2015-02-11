@@ -43,7 +43,7 @@ namespace :mega_bar do
     MegaBar::Field.skip_callback("create",:after,:make_migration)
     MegaBar::Model.skip_callback("create",:after,:make_all_files)
     MegaBar::Model.skip_callback("create",:after,:make_model_displays)
-      
+
     mega_classes = get_mega_classes
     all_conflicts = [] 
     # display_classes = [[MegaBar::TmpTextbox, MegaBar::Textbox, 'TextBox'],[MegaBar::TmpTextread, MegaBar::Textread, 'TextRead']] 
@@ -71,10 +71,10 @@ namespace :mega_bar do
     all_conflicts.each do |c|
       method(c[:mc][:resolver]).call(c)
     end
-
     # start loading tmp table data into real tables.
     mega_classes.each do |mc|
       mc[:tmp_class].all.each do |tmp|
+        # puts tmp.inspect
         perm = mc[:perm_class].find_or_initialize_by(id: tmp.id) 
         tmp.attributes.each do |attr| 
           perm[attr[0].to_sym] = attr[1] unless attr[0] == 'id' 
