@@ -64,7 +64,6 @@ module MegaBar
       end
       after(:each) do
         Model.set_callback('create', :after, :make_model_displays)
-        byebug
         File.delete('spec/internal/app/models/test_case.rb')
         File.delete('spec/internal/app/controllers/test_cases_controller.rb')
         File.delete('spec/internal/spec/controllers/test_cases_controller_spec.rb')

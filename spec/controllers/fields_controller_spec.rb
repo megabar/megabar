@@ -23,12 +23,7 @@ module MegaBar
     # This should return the minimal set of attributes required to create a valid
     # Model. As you add validations to Model, be sure to
     # adjust the attributes here as well.
-    MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
-    MegaBar::Field.skip_callback("create",:after,:make_field_displays)
-    MegaBar::Field.skip_callback("create",:after,:make_migration)
-    MegaBar::Model.skip_callback("create",:after,:make_all_files)
-    MegaBar::Model.skip_callback("create",:after,:make_model_displays)
-    let(:valid_attributes) {
+   let(:valid_attributes) {
       f = build(:field, tablename: 'fields', field: 'tablename')
 
       { tablename: f[:tablename], field: f[:field], model_id: f[:model_id], id: f[:id]  }
@@ -46,11 +41,22 @@ module MegaBar
     let(:valid_session) { {} }
     context "with a model " do
       before(:each) do
+        MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
+        MegaBar::Field.skip_callback("create",:after,:make_field_displays)
+        MegaBar::Field.skip_callback("create",:after,:make_migration)
+        MegaBar::Model.skip_callback("create",:after,:make_all_files)
+        MegaBar::Model.skip_callback("create",:after,:make_model_displays)
         create(:model, classname: 'fields', name: 'Fields', tablename: 'fields')
       end
       after(:each) do
         Model.find(1).destroy
         Field.destroy_all
+        MegaBar::Field.set_callback("save",:after,:make_field_displays) 
+        MegaBar::Field.set_callback("create",:after,:make_field_displays)
+        MegaBar::Field.set_callback("create",:after,:make_migration)
+        MegaBar::Model.set_callback("create",:after,:make_all_files)
+        MegaBar::Model.set_callback("create",:after,:make_model_displays)
+     
       end
       describe "GET index" do
         it "assigns all fields as @mega_instance" do
@@ -85,6 +91,11 @@ module MegaBar
 
     context 'with a field model and field fields' do
       before(:each) do
+        MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
+        MegaBar::Field.skip_callback("create",:after,:make_field_displays)
+        MegaBar::Field.skip_callback("create",:after,:make_migration)
+        MegaBar::Model.skip_callback("create",:after,:make_all_files)
+        MegaBar::Model.skip_callback("create",:after,:make_model_displays)
         create(:model, classname: 'fields', name: 'Fields', tablename: 'fields')
         create(:field, tablename: 'fields', field: 'tablename')
         create(:field, tablename: 'fields', field: 'model_id')
@@ -93,6 +104,12 @@ module MegaBar
       after(:each) do
         Model.find(1).destroy
         Field.destroy_all
+        MegaBar::Field.set_callback("save",:after,:make_field_displays) 
+        MegaBar::Field.set_callback("create",:after,:make_field_displays)
+        MegaBar::Field.set_callback("create",:after,:make_migration)
+        MegaBar::Model.set_callback("create",:after,:make_all_files)
+        MegaBar::Model.set_callback("create",:after,:make_model_displays)
+     
       end 
       describe "POST create" do
         describe "with valid params" do
