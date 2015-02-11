@@ -2,16 +2,16 @@ module MegaBar
   class Model < ActiveRecord::Base
     self.table_name = "mega_bar_models"
     include MegaBar::MegaBarModelConcern
+    # validates_format_of :classname, :multiline => true, allow_nil: false, with: /([A-Z][a-z])\w+/
     validates_presence_of :classname
+    validates :classname, format: { with: /\A[A-Za-z][A-Za-z0-9\-\_]*\z/, message: "Must start with a letter and have only letters, numbers, dashes or underscores" }
     validates_presence_of :default_sort_field
-   # validates_format_of :classname, on: [:create, :update], :multiline => true, allow_nil: false, with: /([A-Z][a-z])\w+/
  
     has_many :fields, dependent: :destroy
     has_many :model_displays, dependent: :destroy
     before_create :standardize_modyule
     before_create :standardize_classname
     before_create :standardize_tablename
-
     after_create  :make_model_displays
     after_create :make_all_files
     after_save :make_model_displays

@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*",  "spec/internal/factories/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   # s.add_development_dependency "rspec", "~> 2.6"
   #s.add_development_dependency 'rspec-rails'
-  s.add_dependency "rails", "~> 4.1.8"
+  s.add_dependency "rails"
   s.add_dependency 'seed_dump'
   s.add_dependency 'seedbank'
   s.add_development_dependency "aruba"

@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     mega_bar (0.0.1)
-      rails (~> 4.1.8)
+      rails
       seed_dump
       seedbank
 

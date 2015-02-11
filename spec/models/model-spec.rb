@@ -55,6 +55,10 @@ module MegaBar
       it 'creates four model displays ' , focus: true  do
         expect(ModelDisplay.count).to eq(4)
       end
+
+      it 'creates four model displays ' , focus: true  do
+        expect(ModelDisplay.count).to eq(4)
+      end
     end
 
     context 'with make_model_displays disabled for generator test' do

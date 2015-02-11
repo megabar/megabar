@@ -23,11 +23,6 @@ module MegaBar
     # This should return the minimal set of attributes required to create a valid
     # Model. As you add validations to Model, be sure to
     # adjust the attributes here as well.
-    MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
-    MegaBar::Field.skip_callback("create",:after,:make_field_displays)
-    MegaBar::Field.skip_callback("create",:after,:make_migration)
-    MegaBar::Model.skip_callback("create",:after,:make_all_files)
-    MegaBar::Model.skip_callback("create",:after,:make_model_displays)
    
     let(:valid_attributes) {
       f = build(:select)
@@ -43,144 +38,160 @@ module MegaBar
     # in order to pass any filters (e.g. authentication) defined in
     # ModelsController. Be sure to keep this updated too.
     let(:valid_session) { {} }
-    context "with a model " do
+    context 'with callbacks disabled' do 
       before(:each) do
-        create(:model, classname: 'select', name: 'Selects', tablename: 'selects')
+        MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
+        MegaBar::Field.skip_callback("create",:after,:make_field_displays)
+        MegaBar::Field.skip_callback("create",:after,:make_migration)
+        MegaBar::Model.skip_callback("create",:after,:make_all_files)
+        MegaBar::Model.skip_callback("create",:after,:make_model_displays)
       end
       after(:each) do
-        Model.find(1).destroy
+        MegaBar::Field.set_callback("save",:after,:make_field_displays) 
+        MegaBar::Field.set_callback("create",:after,:make_field_displays)
+        MegaBar::Field.set_callback("create",:after,:make_migration)
+        MegaBar::Model.set_callback("create",:after,:make_all_files)
+        MegaBar::Model.set_callback("create",:after,:make_model_displays)
       end
-      describe "GET index", focus: true do
-        it "assigns all selects as @mega_instance" do
-          select = Select.create! valid_attributes
-          get :index, {use_route: :mega_bar, model_id: 1}, valid_session
-          expect(assigns(:mega_instance)).to eq([select])
+
+      context "with a model " do
+        before(:each) do
+          create(:model, classname: 'select', name: 'Selects', tablename: 'selects')
         end
-      end
-
-      describe "GET show" do
-        it "assigns the requested select as @mega_instance" do
-          select = Select.create! valid_attributes
-          get :show, {use_route: :mega_bar, model_id: 1, :id => select.to_param}, valid_session
-          expect(assigns(:mega_instance)).to eq([select])
+        after(:each) do
+          Model.find(1).destroy
         end
-      end
-      describe "GET new" do
-        it "assigns a new select as @mega_instance" do
-          get :new, {use_route: :mega_bar, model_id: 1}, valid_session
-          expect(assigns(:mega_instance)).to be_a_new(Select)
-        end
-      end
-
-      describe "GET edit" do
-        it "assigns the requested select as @mega_instance" do
-          select = Select.create! valid_attributes
-          get :edit, {use_route: :mega_bar, model_id: 1, :id => select.to_param}, valid_session
-          expect(assigns(:mega_instance)).to eq(select)
-        end
-      end
-    end
-    context 'with a model, a record format and fields for selects' do
-      before(:each) do
-        create(:model, classname: 'select', name: 'Selects', tablename: 'selects')
-        create(:field, tablename: 'selects', field: 'field_display_id')
-        create(:field, tablename: 'selects', field: 'truncation')
-      end
-      after(:each) do
-        Model.find(1).destroy
-        Field.destroy_all
-      end
-      describe "POST create" do
-        describe "with valid params" do
-          it "creates a new Select" do
-            #  create(:field_for_field_model)
-            expect {
-              post :create, {use_route: :mega_bar, model_id: 1, :select=> valid_attributes}, valid_session
-            }.to change(Select, :count).by(1)
-          end
-
-          it "assigns a newly created Select as @mega_instance" do
-            post :create, {use_route: :mega_bar, model_id: 1, :select => valid_attributes}, valid_session
-            expect(assigns(:mega_instance)).to be_a(Select)
-            expect(assigns(:mega_instance)).to be_persisted
-          end
-
-          it "redirects to the created Select"  do
-            post :create, {use_route: :mega_bar, model_id: 1, :select => valid_attributes}, valid_session
-            expect(response).to redirect_to(Select.last)
-          end
-        end
-
-        describe "with invalid params" do
-          it "assigns a newly created but unsaved Select as @mega_instance" do
-            post :create, {use_route: :mega_bar, model_id: 1, :select => invalid_attributes}, valid_session
-            expect(assigns(:mega_instance)).to be_a_new(Select)
-          end
-
-          it "re-renders the 'new' template"  do
-            post :create, {use_route: :mega_bar, model_id: 1, :select => invalid_attributes}, valid_session
-            expect(response).to render_template('mega_bar.html.erb')
-          end
-        end
-      end
-
-      describe "PUT update" do
-        describe "with valid params" do
-          let(:new_attributes) {
-            md = build(:select)
-            { field_display_id: "5" }
-          }
-
-          it "updates the requested select" do
+        describe "GET index", focus: true do
+          it "assigns all selects as @mega_instance" do
             select = Select.create! valid_attributes
-            put :update, {use_route: :mega_bar, :id => select.to_param, :select => new_attributes}, valid_session
-            select.reload
-            expect(select.attributes).to include( { 'field_display_id' => "5" } )
+            get :index, {use_route: :mega_bar, model_id: 1}, valid_session
+            expect(assigns(:mega_instance)).to eq([select])
           end
+        end
 
+        describe "GET show" do
           it "assigns the requested select as @mega_instance" do
             select = Select.create! valid_attributes
-            put :update, {use_route: :mega_bar, :id => select.to_param, :select => valid_attributes}, valid_session
-            expect(assigns(:mega_instance)).to eq(select)
+            get :show, {use_route: :mega_bar, model_id: 1, :id => select.to_param}, valid_session
+            expect(assigns(:mega_instance)).to eq([select])
           end
-
-          it "redirects to the select" do
-            select = Select.create! valid_attributes
-            put :update, {use_route: :mega_bar, :id => select.to_param, :select => valid_attributes}, valid_session
-            expect(response).to redirect_to(select)
+        end
+        describe "GET new" do
+          it "assigns a new select as @mega_instance" do
+            get :new, {use_route: :mega_bar, model_id: 1}, valid_session
+            expect(assigns(:mega_instance)).to be_a_new(Select)
           end
         end
 
-        describe "with invalid params" do
-          it "assigns the select as @mega_instance" do
+        describe "GET edit" do
+          it "assigns the requested select as @mega_instance" do
             select = Select.create! valid_attributes
-            put :update, {use_route: :mega_bar, :id => select.to_param, :select => invalid_attributes}, valid_session
+            get :edit, {use_route: :mega_bar, model_id: 1, :id => select.to_param}, valid_session
             expect(assigns(:mega_instance)).to eq(select)
-          end
-
-          it "re-renders the 'edit' template" do
-            select = Select.create! valid_attributes
-            put :update, {use_route: :mega_bar, :id => select.to_param, :select => invalid_attributes}, valid_session
-            expect(response).to render_template("mega_bar.html.erb")
           end
         end
       end
-    end
+      context 'with a model, a record format and fields for selects' do
+        before(:each) do
+          create(:model, classname: 'select', name: 'Selects', tablename: 'selects')
+          create(:field, tablename: 'selects', field: 'field_display_id')
+          create(:field, tablename: 'selects', field: 'truncation')
+        end
+        after(:each) do
+          Model.find(1).destroy
+          Field.destroy_all
+        end
+        describe "POST create" do
+          describe "with valid params" do
+            it "creates a new Select" do
+              #  create(:field_for_field_model)
+              expect {
+                post :create, {use_route: :mega_bar, model_id: 1, :select=> valid_attributes}, valid_session
+              }.to change(Select, :count).by(1)
+            end
 
-    describe "DELETE destroy" do
-      it "destroys the requested select" do
-        select = Select.create! valid_attributes
-        expect {
+            it "assigns a newly created Select as @mega_instance" do
+              post :create, {use_route: :mega_bar, model_id: 1, :select => valid_attributes}, valid_session
+              expect(assigns(:mega_instance)).to be_a(Select)
+              expect(assigns(:mega_instance)).to be_persisted
+            end
+
+            it "redirects to the created Select"  do
+              post :create, {use_route: :mega_bar, model_id: 1, :select => valid_attributes}, valid_session
+              expect(response).to redirect_to(Select.last)
+            end
+          end
+
+          describe "with invalid params" do
+            it "assigns a newly created but unsaved Select as @mega_instance" do
+              post :create, {use_route: :mega_bar, model_id: 1, :select => invalid_attributes}, valid_session
+              expect(assigns(:mega_instance)).to be_a_new(Select)
+            end
+
+            it "re-renders the 'new' template"  do
+              post :create, {use_route: :mega_bar, model_id: 1, :select => invalid_attributes}, valid_session
+              expect(response).to render_template('mega_bar.html.erb')
+            end
+          end
+        end
+
+        describe "PUT update" do
+          describe "with valid params" do
+            let(:new_attributes) {
+              md = build(:select)
+              { field_display_id: "5" }
+            }
+
+            it "updates the requested select" do
+              select = Select.create! valid_attributes
+              put :update, {use_route: :mega_bar, :id => select.to_param, :select => new_attributes}, valid_session
+              select.reload
+              expect(select.attributes).to include( { 'field_display_id' => "5" } )
+            end
+
+            it "assigns the requested select as @mega_instance" do
+              select = Select.create! valid_attributes
+              put :update, {use_route: :mega_bar, :id => select.to_param, :select => valid_attributes}, valid_session
+              expect(assigns(:mega_instance)).to eq(select)
+            end
+
+            it "redirects to the select" do
+              select = Select.create! valid_attributes
+              put :update, {use_route: :mega_bar, :id => select.to_param, :select => valid_attributes}, valid_session
+              expect(response).to redirect_to(select)
+            end
+          end
+
+          describe "with invalid params" do
+            it "assigns the select as @mega_instance" do
+              select = Select.create! valid_attributes
+              put :update, {use_route: :mega_bar, :id => select.to_param, :select => invalid_attributes}, valid_session
+              expect(assigns(:mega_instance)).to eq(select)
+            end
+
+            it "re-renders the 'edit' template" do
+              select = Select.create! valid_attributes
+              put :update, {use_route: :mega_bar, :id => select.to_param, :select => invalid_attributes}, valid_session
+              expect(response).to render_template("mega_bar.html.erb")
+            end
+          end
+        end
+      end
+
+      describe "DELETE destroy" do
+        it "destroys the requested select" do
+          select = Select.create! valid_attributes
+          expect {
+            delete :destroy, {use_route: :mega_bar, :id => select.to_param}, valid_session
+          }.to change(Select, :count).by(-1)
+        end
+
+        it "redirects to the select list" do
+          select = Select.create! valid_attributes
           delete :destroy, {use_route: :mega_bar, :id => select.to_param}, valid_session
-        }.to change(Select, :count).by(-1)
-      end
-
-      it "redirects to the select list" do
-        select = Select.create! valid_attributes
-        delete :destroy, {use_route: :mega_bar, :id => select.to_param}, valid_session
-        expect(response).to redirect_to("/mega-bar/selects")
+          expect(response).to redirect_to("/mega-bar/selects")
+        end
       end
     end
-
   end
 end

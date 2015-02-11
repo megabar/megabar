@@ -1,5 +1,6 @@
 module MegaBar
   class MegaBarModelsGenerator < Rails::Generators::Base
+    require 'byebug'
     source_root File.expand_path('../templates', __FILE__)
     argument :modyule, type: :string
     argument :classname, type: :string
@@ -56,6 +57,7 @@ module MegaBar
     private
 
     def gem_path
+      return 'spec/internal/' if Rails.env == 'test'
       File.directory?(Rails.root + '../megabar/')  && modyule == 'MegaBar' ? Rails.root + '../megabar/' : ''
     end
 
