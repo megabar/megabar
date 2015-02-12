@@ -3,7 +3,7 @@ module MegaBar
     extend ActiveSupport::Concern
 
     def mega_model_properties
-      @mega_model_properties = Model.find(params[:model_id]) 
+      @mega_model_properties = Model.find(params[:model_id])
     end
     def mega_controller
       @mega_controller = params[:controller].split('/').last
@@ -25,7 +25,10 @@ module MegaBar
           if is_displayable?(field_disp.format)
             #lets figure out how to display it right here.
             data_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
-            displayable_fields << {:field_display=>field_disp, :field=>field, :data_format=>data_format, :obj=>@mega_instance}
+            if field_disp.format == 'select'
+              options = !@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil? ? @options[field.tablename.to_sym][field.field.to_sym] :  MegaBar::Option.where(field_id: field.id).collect {|o| [ o.text, o.value ] }             
+            end
+            displayable_fields << {:field_display=>field_disp, :field=>field, :data_format=>data_format, options: options, :obj=>@mega_instance}
           end
         end
         model_display_format = ModelDisplayFormat.find(md.format)

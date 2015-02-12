@@ -4,9 +4,8 @@ module MegaBar
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :exception
     helper_method :sort_column, :sort_direction, :is_displayable
-    before_action -> {
-      @mega_class = constant_from_controller(params[:controller]).constantize 
-    }
+    before_action -> { @mega_class = constant_from_controller(params[:controller]).constantize  }
+    before_action -> { @options = {}; self.try(:get_options) }
     before_action -> { mega_model_properties },  only: [:index, :show, :edit, :new]
     before_action -> { mega_controller },  only: [:index, :show, :edit, :new]
     before_action -> { mega_displays },  only: [:index, :show, :edit, :new] #not save or update..
