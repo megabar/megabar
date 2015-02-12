@@ -1,8 +1,4 @@
-
 module MegaBar 
-
-  class Option < ActiveRecord::Base
+  class TmpOption < ActiveRecord::Base
   end
-
-
 end 

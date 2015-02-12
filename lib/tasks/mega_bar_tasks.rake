@@ -74,7 +74,7 @@ namespace :mega_bar do
     # start loading tmp table data into real tables.
     mega_classes.each do |mc|
       mc[:tmp_class].all.each do |tmp|
-        # puts tmp.inspect
+        puts tmp.inspect
         perm = mc[:perm_class].find_or_initialize_by(id: tmp.id) 
         tmp.attributes.each do |attr| 
           perm[attr[0].to_sym] = attr[1] unless attr[0] == 'id' 

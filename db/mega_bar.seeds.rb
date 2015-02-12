@@ -135,8 +135,8 @@ MegaBar::TmpFieldDisplay.create!([
   {id: 30, field_id: 18, format: "textread", action: "index", header: "field id", model_display_id: 4, created_at: "2014-05-22 03:23:12", updated_at: "2015-01-21 18:57:05"},
   {id: 31, field_id: 18, format: "textbox", action: "new", header: "field id", model_display_id: 30, created_at: "2014-05-23 13:46:24", updated_at: "2015-01-21 18:57:05"},
   {id: 32, field_id: 18, format: "textbox", action: "edit", header: "field id", model_display_id: 31, created_at: "2014-05-23 13:46:32", updated_at: "2015-01-21 18:57:05"},
-  {id: 33, field_id: 19, format: "textbox", action: "new", header: "format", model_display_id: 30, created_at: "2014-05-23 13:47:05", updated_at: "2015-01-21 18:57:05"},
-  {id: 34, field_id: 19, format: "textbox", action: "edit", header: "format", model_display_id: 31, created_at: "2014-05-23 13:47:13", updated_at: "2015-01-21 18:57:05"},
+  {id: 33, field_id: 19, format: "select", action: "new", header: "format", model_display_id: 30, created_at: "2014-05-23 13:47:05", updated_at: "2015-02-12 05:14:08"},
+  {id: 34, field_id: 19, format: "select", action: "edit", header: "format", model_display_id: 31, created_at: "2014-05-23 13:47:13", updated_at: "2015-02-12 05:15:51"},
   {id: 37, field_id: 21, format: "textbox", action: "new", header: "Header", model_display_id: 30, created_at: "2014-05-23 13:48:07", updated_at: "2015-01-21 18:57:05"},
   {id: 38, field_id: 21, format: "textbox", action: "edit", header: "Header", model_display_id: 31, created_at: "2014-05-23 13:48:18", updated_at: "2015-01-21 18:57:05"},
   {id: 39, field_id: 9, format: "textread", action: "index", header: "Table Name", model_display_id: 2, created_at: "2014-05-23 15:19:36", updated_at: "2015-01-21 18:57:05"},
@@ -275,7 +275,8 @@ MegaBar::TmpFieldDisplay.create!([
   {id: 243, field_id: 78, format: "textread", action: nil, header: "values", model_display_id: 74, created_at: "2015-02-12 04:01:25", updated_at: "2015-02-12 04:01:25"},
   {id: 244, field_id: 78, format: "textread", action: nil, header: "value", model_display_id: 75, created_at: "2015-02-12 04:01:25", updated_at: "2015-02-12 04:01:25"},
   {id: 245, field_id: 78, format: "textbox", action: nil, header: "value", model_display_id: 72, created_at: "2015-02-12 04:01:25", updated_at: "2015-02-12 04:01:25"},
-  {id: 246, field_id: 78, format: "textbox", action: nil, header: "value", model_display_id: 73, created_at: "2015-02-12 04:01:25", updated_at: "2015-02-12 04:01:25"}
+  {id: 246, field_id: 78, format: "textbox", action: nil, header: "value", model_display_id: 73, created_at: "2015-02-12 04:01:25", updated_at: "2015-02-12 04:01:25"},
+  {id: 251, field_id: 19, format: "textread", action: nil, header: "Format", model_display_id: 32, created_at: "2015-02-12 05:19:06", updated_at: "2015-02-12 05:19:06"}
 ])
 MegaBar::TmpTextbox.create!([
   {id: 1, field_display_id: 3, size: 39, created_at: "2014-05-05 21:48:08", updated_at: "2015-01-01 19:31:06"},
@@ -296,8 +297,6 @@ MegaBar::TmpTextbox.create!([
   {id: 16, field_display_id: 25, size: 40, created_at: "2014-05-21 18:34:22", updated_at: "2014-05-21 18:34:22"},
   {id: 17, field_display_id: 31, size: 31, created_at: "2014-05-23 13:51:43", updated_at: "2014-05-23 13:51:43"},
   {id: 18, field_display_id: 32, size: 32, created_at: "2014-05-23 13:51:51", updated_at: "2014-05-23 13:51:51"},
-  {id: 19, field_display_id: 33, size: 33, created_at: "2014-05-23 13:51:59", updated_at: "2014-05-23 13:51:59"},
-  {id: 20, field_display_id: 34, size: 34, created_at: "2014-05-23 13:52:10", updated_at: "2014-05-23 13:52:10"},
   {id: 21, field_display_id: 38, size: 42, created_at: "2015-01-22 04:19:41", updated_at: "2015-01-22 04:19:41"},
   {id: 22, field_display_id: 44, size: 42, created_at: "2015-01-22 04:19:41", updated_at: "2015-01-22 04:19:41"},
   {id: 23, field_display_id: 37, size: 37, created_at: "2014-05-23 13:52:43", updated_at: "2014-05-23 13:52:43"},
@@ -382,8 +381,6 @@ MegaBar::TmpTextbox.create!([
   {id: 107, field_display_id: 25, size: 42, created_at: "2014-12-26 00:56:28", updated_at: "2014-12-26 00:56:28"},
   {id: 108, field_display_id: 31, size: 42, created_at: "2014-12-26 00:56:28", updated_at: "2014-12-26 00:56:28"},
   {id: 109, field_display_id: 32, size: 42, created_at: "2014-12-26 00:56:28", updated_at: "2014-12-26 00:56:28"},
-  {id: 110, field_display_id: 33, size: 42, created_at: "2014-12-26 00:56:28", updated_at: "2014-12-26 00:56:28"},
-  {id: 111, field_display_id: 34, size: 42, created_at: "2014-12-26 00:56:28", updated_at: "2014-12-26 00:56:28"},
   {id: 114, field_display_id: 37, size: 42, created_at: "2014-12-26 00:56:28", updated_at: "2014-12-26 00:56:28"},
   {id: 115, field_display_id: 38, size: 42, created_at: "2014-12-26 00:56:28", updated_at: "2014-12-26 00:56:28"},
   {id: 116, field_display_id: 44, size: 42, created_at: "2014-12-26 00:56:28", updated_at: "2014-12-26 00:56:28"},
@@ -443,8 +440,6 @@ MegaBar::TmpTextbox.create!([
   {id: 194, field_display_id: 25, size: 42, created_at: "2014-12-26 01:10:42", updated_at: "2014-12-26 01:10:42"},
   {id: 195, field_display_id: 31, size: 42, created_at: "2014-12-26 01:10:43", updated_at: "2014-12-26 01:10:43"},
   {id: 196, field_display_id: 32, size: 42, created_at: "2014-12-26 01:10:43", updated_at: "2014-12-26 01:10:43"},
-  {id: 197, field_display_id: 33, size: 42, created_at: "2014-12-26 01:10:43", updated_at: "2014-12-26 01:10:43"},
-  {id: 198, field_display_id: 34, size: 42, created_at: "2014-12-26 01:10:43", updated_at: "2014-12-26 01:10:43"},
   {id: 201, field_display_id: 37, size: 42, created_at: "2014-12-26 01:10:43", updated_at: "2014-12-26 01:10:43"},
   {id: 202, field_display_id: 38, size: 42, created_at: "2014-12-26 01:10:43", updated_at: "2014-12-26 01:10:43"},
   {id: 203, field_display_id: 44, size: 42, created_at: "2014-12-26 01:10:43", updated_at: "2014-12-26 01:10:43"},
@@ -529,8 +524,6 @@ MegaBar::TmpTextbox.create!([
   {id: 315, field_display_id: 25, size: 42, created_at: "2015-02-11 06:03:02", updated_at: "2015-02-11 06:03:02"},
   {id: 316, field_display_id: 31, size: 42, created_at: "2015-02-11 06:03:02", updated_at: "2015-02-11 06:03:02"},
   {id: 317, field_display_id: 32, size: 42, created_at: "2015-02-11 06:03:02", updated_at: "2015-02-11 06:03:02"},
-  {id: 318, field_display_id: 33, size: 42, created_at: "2015-02-11 06:03:02", updated_at: "2015-02-11 06:03:02"},
-  {id: 319, field_display_id: 34, size: 42, created_at: "2015-02-11 06:03:02", updated_at: "2015-02-11 06:03:02"},
   {id: 320, field_display_id: 37, size: 42, created_at: "2015-02-11 06:03:02", updated_at: "2015-02-11 06:03:02"},
   {id: 321, field_display_id: 38, size: 42, created_at: "2015-02-11 06:03:02", updated_at: "2015-02-11 06:03:02"},
   {id: 322, field_display_id: 44, size: 42, created_at: "2015-02-11 06:03:02", updated_at: "2015-02-11 06:03:02"},
@@ -614,8 +607,6 @@ MegaBar::TmpTextbox.create!([
   {id: 400, field_display_id: 25, size: 42, created_at: "2015-02-12 03:46:06", updated_at: "2015-02-12 03:46:06"},
   {id: 401, field_display_id: 31, size: 42, created_at: "2015-02-12 03:46:06", updated_at: "2015-02-12 03:46:06"},
   {id: 402, field_display_id: 32, size: 42, created_at: "2015-02-12 03:46:06", updated_at: "2015-02-12 03:46:06"},
-  {id: 403, field_display_id: 33, size: 42, created_at: "2015-02-12 03:46:06", updated_at: "2015-02-12 03:46:06"},
-  {id: 404, field_display_id: 34, size: 42, created_at: "2015-02-12 03:46:06", updated_at: "2015-02-12 03:46:06"},
   {id: 405, field_display_id: 37, size: 42, created_at: "2015-02-12 03:46:06", updated_at: "2015-02-12 03:46:06"},
   {id: 406, field_display_id: 38, size: 42, created_at: "2015-02-12 03:46:06", updated_at: "2015-02-12 03:46:06"},
   {id: 407, field_display_id: 44, size: 42, created_at: "2015-02-12 03:46:06", updated_at: "2015-02-12 03:46:06"},
@@ -1011,7 +1002,17 @@ MegaBar::TmpTextread.create!([
   {id: 380, field_display_id: 239, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-02-12 04:00:40", updated_at: "2015-02-12 04:00:40"},
   {id: 381, field_display_id: 240, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-02-12 04:00:40", updated_at: "2015-02-12 04:00:40"},
   {id: 382, field_display_id: 243, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-02-12 04:01:25", updated_at: "2015-02-12 04:01:25"},
-  {id: 383, field_display_id: 244, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-02-12 04:01:25", updated_at: "2015-02-12 04:01:25"}
+  {id: 383, field_display_id: 244, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-02-12 04:01:25", updated_at: "2015-02-12 04:01:25"},
+  {id: 386, field_display_id: 251, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-02-12 05:19:06", updated_at: "2015-02-12 05:19:06"}
+])
+MegaBar::TmpOption.create!([
+  {id: 3, created_at: "2015-02-12 05:14:39", updated_at: "2015-02-12 05:14:39", field_id: "19", text: "Textbox", value: "textbox"},
+  {id: 4, created_at: "2015-02-12 05:14:56", updated_at: "2015-02-12 05:14:56", field_id: "19", text: "Read Only", value: "textread"},
+  {id: 5, created_at: "2015-02-12 05:15:11", updated_at: "2015-02-12 05:15:11", field_id: "19", text: "Select", value: "select"}
+])
+MegaBar::TmpSelect.create!([
+  {id: 2, created_at: "2015-02-12 05:14:08", updated_at: "2015-02-12 05:14:08", field_display_id: "33"},
+  {id: 3, created_at: "2015-02-12 05:15:51", updated_at: "2015-02-12 05:15:51", field_display_id: "34"}
 ])
 MegaBar::TmpModelDisplayFormat.create!([
   {id: 1, created_at: "2015-02-08 18:52:01", updated_at: "2015-02-10 00:38:59", name: "GridHtml", app_wrapper: "<table>", app_wrapper_end: "</table>", field_header_wrapper: "<th>", field_header_wrapper_end: "</th>", record_wrapper: "<tr>", record_wrapper_end: "</tr>", field_wrapper: "<td>", field_wrapper_end: "</td>", separate_header_row: "true"},
