@@ -1,12 +1,7 @@
 <br>
 
-
-<%  bob = param_from_tablename(@mega_model_properties, displayable_field[:field].tablename) %>
-
-
-
 <%=text_field_tag(
-	bob + "[" + displayable_field[:field].field + "]", 
+	param_from_tablename(@mega_model_properties, displayable_field[:field].tablename) + "[" + displayable_field[:field].field + "]", 
 	value, 
 	size: displayable_field[:field_format].size 
 	)%>

@@ -15,8 +15,9 @@ module MegaBar
       # else if you can find that the table couldn't be namespaced, then use that
       # elseif theres a module out there for it use it #todo: 
       # else  use as is.... 
+
       prefix = model_props.modyule.nil? || model_props.modyule.empty? ? '8675309' : model_props.modyule.split('::').map { | m | m.underscore }.join('_') + '_'
-      tablename.start_with?(model_props.modyule, prefix) ? tablename[prefix.size..-1].singularize : tablename.singluarize
+      tablename.start_with?(prefix) ? tablename[prefix.size..-1].singularize : tablename.singularize
 
     end
 

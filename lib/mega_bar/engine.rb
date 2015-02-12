@@ -23,7 +23,8 @@ module MegaBar
     end
     ### taskrabbit: http://tech.taskrabbit.com/blog/2014/02/11/rails-4-engines/
     ### http://pivotallabs.com/leave-your-migrations-in-your-rails-engines/
-
+ 
+    config.action_view.logger = nil
 
   end
 end

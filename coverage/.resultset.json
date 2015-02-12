@@ -457,7 +457,6 @@
         null,
         null,
         1,
-        1,
         null,
         1,
         1,
@@ -560,23 +559,6 @@
         null,
         null
       ],
-      "/Users/bagus/websites/megabar/spec/internal/factories/sand.rb": [
-        1,
-        1,
-        1,
-        null,
-        null
-      ],
-      "/Users/bagus/websites/megabar/app/models/mega_bar/sand.rb": [
-        null,
-        1,
-        null,
-        1,
-        null,
-        null,
-        null,
-        null
-      ],
       "/Users/bagus/websites/megabar/spec/internal/factories/select.rb": [
         null,
         null,
@@ -638,23 +620,6 @@
         18,
         1,
         16,
-        null,
-        null,
-        null,
-        null
-      ],
-      "/Users/bagus/websites/megabar/spec/internal/factories/vow.rb": [
-        1,
-        1,
-        1,
-        null,
-        null
-      ],
-      "/Users/bagus/websites/megabar/app/models/mega_bar/vow.rb": [
-        null,
-        1,
-        null,
-        1,
         null,
         null,
         null,
@@ -1095,6 +1060,7 @@
         null,
         null,
         1,
+        null,
         null,
         null,
         null,
@@ -2724,6 +2690,6 @@
         null
       ]
     },
-    "timestamp": 1423634968
+    "timestamp": 1423693075
   }
 }
