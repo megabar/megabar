@@ -41,11 +41,10 @@ module MegaBar
      
     end
     def make_migration
-      
       return if Model.connection.column_exists?(self.tablename,  self.field)
-
       system 'rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + 'string'
       ActiveRecord::Migrator.migrate "db/migrate"
+      system 'rake db:schema:dump'
     end
     def delete_field_displays
       FieldDisplay.by_fields(self.id).destroy_all

@@ -3,7 +3,7 @@ module MegaBar
     extend ActiveSupport::Concern
 
     def mega_model_properties
-      @mega_model_properties = Model.find(params[:model_id]) 
+      @mega_model_properties = Model.find(params[:model_id])
     end
     def mega_controller
       @mega_controller = params[:controller].split('/').last
@@ -16,7 +16,6 @@ module MegaBar
       # yep, this is the main brain that loads all the model, model display, field, field_display stuff. 
       # after this runs you'll see the 'create' and 'update' type methods above run.
       #return redirect_to(new_model_display_path, :notice => "There was no ModelDisplay for that " + params[:action] +" action and " + model_id.to_s + "model_id combo. Would you like to create one?")    unless model_display
-      
       mega_displays_info = []
       model_displays.each do | md |
         field_displays = FieldDisplay.where(model_display_id: md.id)
@@ -25,8 +24,11 @@ module MegaBar
           field = Field.find(field_disp.field_id)
           if is_displayable?(field_disp.format)
             #lets figure out how to display it right here.
-            field_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
-            displayable_fields << {:field_display=>field_disp, :field=>field, :field_format=>field_format, :obj=>@mega_instance}
+            data_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
+            if field_disp.format == 'select'
+              options = !@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil? ? @options[field.tablename.to_sym][field.field.to_sym] :  MegaBar::Option.where(field_id: field.id).collect {|o| [ o.text, o.value ] }             
+            end
+            displayable_fields << {:field_display=>field_disp, :field=>field, :data_format=>data_format, options: options, :obj=>@mega_instance}
           end
         end
         model_display_format = ModelDisplayFormat.find(md.format)
@@ -43,6 +45,7 @@ module MegaBar
     end
     
     def index
+
       #seems like you have to have an instance variable for the specific model because if you don't it doesn't pay attention to using your 'layout'
       #so we set one but then for convenience in the layout, we set @models equal to that.
       instance_variable_set("@" + @mega_controller,  @mega_class.order(sort_column(@mega_class, @mega_model_properties, params) + " " + sort_direction(params)))
@@ -69,20 +72,23 @@ module MegaBar
       render @edit_view_template
     end
 
+
+
     def create
+      puts 'create me'
       @mega_instance = @mega_class.new(_params)
       respond_to do |format|
         if @mega_instance.save
+          MegaBar.call_rake('db:schema:dump') if [1,2].include? params[:model_id] 
           format.html { redirect_to @mega_instance, notice: 'It was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mega_instance }
         else
+
           format.html { render @new_view_template }
           format.json { render json: @model.errors, status: :unprocessable_entity }
         end
       end
     end
-        # PATCH/PUT /models/1
-    # PATCH/PUT /models/1.json
     def update
       instance_variable_set("@" + params[:controller][9..-1].classify,  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + params[:controller][9..-1].classify);

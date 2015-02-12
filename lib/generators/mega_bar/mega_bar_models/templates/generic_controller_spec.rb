@@ -37,7 +37,7 @@ module <%=m %>
       end
       context "with a model " do
         before(:each) do
-          create(:model, classname: '<%= classname %>', name: '<%= classname.humanize %>', tablename: '<%= the_table_name %>')
+          create(:model)
         end
         after(:each) do
           MegaBar::Model.find(1).destroy
