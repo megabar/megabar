@@ -24,8 +24,8 @@ module MegaBar
           field = Field.find(field_disp.field_id)
           if is_displayable?(field_disp.format)
             #lets figure out how to display it right here.
-            field_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
-            displayable_fields << {:field_display=>field_disp, :field=>field, :field_format=>field_format, :obj=>@mega_instance}
+            data_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
+            displayable_fields << {:field_display=>field_disp, :field=>field, :data_format=>data_format, :obj=>@mega_instance}
           end
         end
         model_display_format = ModelDisplayFormat.find(md.format)

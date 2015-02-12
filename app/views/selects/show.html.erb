@@ -1,3 +1,17 @@
-<%= select("pig", "id", Pig.all.collect {|p| [ p.id, p.id ] }, { include_blank: true }) %>
+
+
+
+<%= 
+
+
+select(
+  param_from_tablename(@mega_model_properties, displayable_field[:field].tablename),
+  displayable_field[:field].field, 
+
+  MegaBar::Option.where(field_id: displayable_field[:field].id).collect {|o| [ o.value, o.text ] }, 
+
+  { include_blank: false }
+
+)%>
 
 
