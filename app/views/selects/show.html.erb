@@ -8,7 +8,7 @@ select(
   param_from_tablename(@mega_model_properties, displayable_field[:field].tablename),
   displayable_field[:field].field, 
   displayable_field[:options], 
-  { include_blank: false }
+  { include_blank: true }
 
 )%>
 
