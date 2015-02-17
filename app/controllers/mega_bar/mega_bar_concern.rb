@@ -148,5 +148,13 @@ module MegaBar
       end
       constant_string
     end
+    def render_in_controller(controller, action)
+      c = controller.new
+      c.request = @_request
+      c.response = @_response
+      c.params = params
+      c.process(action)
+      c.response.body
+  end
   end
 end
