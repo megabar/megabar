@@ -45,7 +45,6 @@ module MegaBar
     end
     
     def index
-
       #seems like you have to have an instance variable for the specific model because if you don't it doesn't pay attention to using your 'layout'
       #so we set one but then for convenience in the layout, we set @models equal to that.
       instance_variable_set("@" + @mega_controller,  @mega_class.order(sort_column(@mega_class, @mega_model_properties, params) + " " + sort_direction(params)))
@@ -155,6 +154,14 @@ module MegaBar
       c.params = params
       c.process(action)
       c.response.body
-  end
+    end
+
+    def internal_redirect_to(options={})
+      params.merge!(options)
+      request.env['action_controller.request.path_parameters']['controller'] = params[:controller]
+      request.env['action_controller.request.path_parameters']['action'] = params[:action]
+      (c = ActionController.const_get(ActiveSupport::Inflector.classify("#{params[:controller]}_controller")).new).process(request,response)
+      c.instance_variables.each{|v| self.instance_variable_set(v,c.instance_variable_get(v))} 
+    end
   end
 end

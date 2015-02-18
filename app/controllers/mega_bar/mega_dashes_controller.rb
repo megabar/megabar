@@ -2,6 +2,7 @@ module MegaBar
   class MegaDashesController < MegaBar::ApplicationController
     include MegaBarConcern
 
+    
     def dashboards_init
       byebug
       initial_path_segments = RouteRecognizer.new.initial_path_segments
