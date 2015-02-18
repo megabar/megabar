@@ -6,8 +6,6 @@ module MegaBar
     config.autoload_paths << File.expand_path("../*", __FILE__)
 
     require File.expand_path('../layout_engine.rb', __FILE__)
-
-    # config.autoload_paths << Rails.root.join('lib')
     config.app_middleware.use LayoutEngine
 
 

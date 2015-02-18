@@ -1,6 +1,5 @@
 module MegaBar
   class ModelDisplay < ActiveRecord::Base
-    self.table_name = "mega_bar_model_displays"
     belongs_to :models
     has_many :field_displays, dependent: :destroy
     validates_presence_of :model_id, :action, :format

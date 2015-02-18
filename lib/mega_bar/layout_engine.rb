@@ -5,12 +5,12 @@ require 'logger'
 class LayoutEngine
   def initialize(app, message = "Response Time")
     @app = app
-    ActiveRecord::Base.logger = Logger.new('debug.log')
-    @configuration = YAML::load(IO.read('config/database.yml'))
-    ActiveRecord::Base.establish_connection(@configuration['development'])
+    #ActiveRecord::Base.logger = Logger.new('debug.log')
+    #@configuration = YAML::load(IO.read('config/database.yml'))
+    #ActiveRecord::Base.establish_connection(@configuration['development'])
     @message = message
-    modle = MegaBar::Model.all
-    puts modle.inspect
+    # modle = MegaBar::Model.all
+    # puts modle.inspect
 
     # env.inspect
     # dogs = render_in_controller(DogsController, 'index')
@@ -23,7 +23,17 @@ class LayoutEngine
   end
   
   def _call(env)
+    block = MegaBar::Block.find(1)
+    modle = MegaBar::Model.by_model(block.model_id).first
+    mod = modle.modyule.empty? ? '' : modle.modyule + '::'
+    controller = mod + modle.classname.classify.pluralize + "Controller"
+    klass = mod + modle.classname.classify
 
+    byebug
+
+    env["QUERY_STRING"] = env["QUERY_STRING"] + '&megab_klass=' + klass + '&megab_kontroller=' + controller + '&megab_id=' + modle.id
+    @status, @headers, @dogs = controller.constantize.action("index").call(env)
+    byebug
     # @status, @headers, @dogs = DogsController.action("index").call(env)
     # # byebug
     # dogs =  @dogs.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
