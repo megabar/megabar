@@ -1,15 +1,11 @@
 module MegaBar
   module MegaBarConcern
     extend ActiveSupport::Concern
-
-    def mega_model_properties
-      @mega_model_properties = Model.find(params[:model_id])
-    end
     def mega_controller
-      @mega_controller = params[:controller].split('/').last
+      @mega_controller = env[:mega_env][:kontroller_class].split('::').last
     end
     def mega_displays 
-      @mega_displays = mega_displays_info(ModelDisplay.by_model(params[:model_id]).by_action(params[:action]))
+      @mega_displays = mega_displays_info(ModelDisplay.by_model(env[:mega_env][:model_id]).by_action(params[:action]))
     end
 
     def mega_displays_info(model_displays)
@@ -47,27 +43,28 @@ module MegaBar
     def index
       #seems like you have to have an instance variable for the specific model because if you don't it doesn't pay attention to using your 'layout'
       #so we set one but then for convenience in the layout, we set @models equal to that.
-      instance_variable_set("@" + @mega_controller,  @mega_class.order(sort_column(@mega_class, @mega_model_properties, params) + " " + sort_direction(params)))
-      @mega_instance = instance_variable_get("@" + @mega_controller);
+
+      instance_variable_set("@" + env[:mega_env][:kontroller_inst].pluralize,  @mega_class.order(sort_column(@mega_class, @mega_model_properties, params) + " " + sort_direction(params)))
+      @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst].pluralize);
       render @index_view_template
     end
 
     def show
-      instance_variable_set("@"  + @mega_controller.singularize,  @mega_class.find(params[:id]))
+      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
       @mega_instance = []
-      @mega_instance << instance_variable_get("@"  + @mega_controller.singularize);  
+      @mega_instance << instance_variable_get("@"  + env[:mega_env][:kontroller_inst]);  
       render @show_view_template
     end
 
     def new
-      instance_variable_set("@"  + @mega_controller.singularize,  @mega_class.new)
-      @mega_instance = instance_variable_get("@"  + @mega_controller.singularize);  
+      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.new)
+      @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst]);  
       render @new_view_template
     end
 
     def edit
-      instance_variable_set("@"  + @mega_controller.singularize,  @mega_class.find(params[:id]))
-      @mega_instance = instance_variable_get("@"  + @mega_controller.singularize)
+      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
+      @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst])
       render @edit_view_template
     end
 
@@ -78,7 +75,7 @@ module MegaBar
       @mega_instance = @mega_class.new(_params)
       respond_to do |format|
         if @mega_instance.save
-          MegaBar.call_rake('db:schema:dump') if [1,2].include? params[:model_id] 
+          MegaBar.call_rake('db:schema:dump') if [1,2].include? env[:mega_env][:model_id] # gets new models into schema
           format.html { redirect_to @mega_instance, notice: 'It was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mega_instance }
         else
@@ -89,8 +86,9 @@ module MegaBar
       end
     end
     def update
-      instance_variable_set("@" + params[:controller][9..-1].classify,  @mega_class.find(params[:id]))
-      @mega_instance = instance_variable_get("@" + params[:controller][9..-1].classify);
+      byebug
+      instance_variable_set("@" + env[:mega_env][:kontroller_inst], @mega_class.find(params[:id]))
+      @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);
       respond_to do |format|
         if @mega_instance.update(_params)
           format.html { redirect_to @mega_instance, notice: 'Thing was successfully updated.' }
@@ -102,11 +100,11 @@ module MegaBar
       end
     end
     def destroy
-      instance_variable_set("@" + params[:controller][9..-1].classify.singularize,  @mega_class.find(params[:id]))
-      @mega_instance = instance_variable_get("@" + params[:controller][9..-1].classify.singularize); 
+      instance_variable_set("@" + env[:mega_env][:kontroller_class][9..-1].classify.singularize,  @mega_class.find(params[:id]))
+      @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_class][9..-1].classify.singularize); 
       @mega_instance.destroy
       respond_to do |format|
-        format.html { redirect_to eval(params[:controller].split('/').last + '_url') }
+        format.html { redirect_to eval(env[:mega_env][:kontroller_inst] + '_url') }
         format.json { head :no_content }
       end
     end
@@ -114,24 +112,25 @@ module MegaBar
     def form_path
       case params[:action]
       when 'index' 
-        url_for(controller: params[:controller].to_s,
+        url_for(controller: env[:mega_env][:kontroller_path].to_s,
           action:  params[:action],
           only_path: true)
       when 'new' 
-        url_for(controller: params[:controller].to_s,
+        url_for(controller: env[:mega_env][:kontroller_path].to_s,
           action:  'create',
           only_path: true)
       when 'edit' 
-        url_for(controller: params[:controller].to_s,
-          action:  'update',
+        url_for(controller: env[:mega_env][:kontroller_path].to_s,
+          action: 'update',
+          id: params[:id],
           only_path: true)
       else
        form_path = 'ack'
       end
     end 
 
-    def sort_column(mega_class, mega_model_properties, passed_params)
-      mega_class.column_names.include?(passed_params[:sort]) ? passed_params[:sort] :  mega_model_properties[:default_sort_field]
+    def sort_column(mega_class, model_properties, passed_params)
+      mega_class.column_names.include?(passed_params[:sort]) ? passed_params[:sort] :  model_properties[:default_sort_field]
     end
     def sort_direction(passed_params)
       %w[asc desc].include?(passed_params[:direction]) ? passed_params[:direction] : 'asc'
@@ -158,9 +157,9 @@ module MegaBar
 
     def internal_redirect_to(options={})
       params.merge!(options)
-      request.env['action_controller.request.path_parameters']['controller'] = params[:controller]
+      request.env['action_controller.request.path_parameters']['controller'] = env[:mega_env][:kontroller_class]
       request.env['action_controller.request.path_parameters']['action'] = params[:action]
-      (c = ActionController.const_get(ActiveSupport::Inflector.classify("#{params[:controller]}_controller")).new).process(request,response)
+      (c = ActionController.const_get(ActiveSupport::Inflector.classify("#{env[:mega_env][:kontroller_class]}_controller")).new).process(request,response)
       c.instance_variables.each{|v| self.instance_variable_set(v,c.instance_variable_get(v))} 
     end
   end

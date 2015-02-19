@@ -34,3 +34,4 @@ module MegaBar
 
   end
 end
+

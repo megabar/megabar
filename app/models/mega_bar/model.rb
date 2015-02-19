@@ -44,14 +44,6 @@ module MegaBar
       ActiveRecord::Migrator.migrate "db/migrate"
     end
 
-    def my_constantize(class_name)
-      #not in use
-      unless /\A(?:::)?([A-Z]\w*(?:::[A-Z]\w*)*)\z/ =~ class_name
-        raise NameError, "#{class_name.inspect} is not a valid constant name!"
-      end
-      Object.module_eval("::#{$1}", __FILE__, __LINE__)
-    end
-
     def standardize_modyule
       return if self.modyule.nil? || self.modyule.empty?
       self.modyule = self.modyule.gsub('megabar', 'MegaBar')
