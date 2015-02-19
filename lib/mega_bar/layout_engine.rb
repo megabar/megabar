@@ -27,58 +27,68 @@ class LayoutEngine
       @status, @headers, @response = @app.call(env)
       return  [@status, @headers, self]
     end
-    block = MegaBar::ModelDisplay.by_layout(1).by_action(:index)
-    modle = MegaBar::Model.by_model(block.model_id).first
-    modyule = modle.modyule.empty? ? '' : modle.modyule + '::'
-    klass = modyule + modle.classname.classify
-    kontroller_klass = modyule + modle.classname.classify.pluralize + "Controller"
-
-
-    block.each do | md |
-      byebug
-      field_displays = MegaBar::FieldDisplay.where(model_display_id: 1)
-      displayable_fields = []
-      field_displays.each do |field_disp|
-        field = MegaBar::Field.find(field_disp.field_id)
-        if is_displayable?(field_disp.format)
-          #lets figure out how to display it right here.
-          data_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
-          # if field_disp.format == 'select'
-          #   options = !@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil? ? @options[field.tablename.to_sym][field.field.to_sym] :  MegaBar::Option.where(field_id: field.id).collect {|o| [ o.text, o.value ] }             
-          # end
-          displayable_fields << {:field_display=>field_disp, :field=>field, :data_format=>data_format, options: @options, :obj=>@mega_instance}
+    final= []
+    initial_path_segments = RouteRecognizer.new.initial_path_segments
+    
+    fake_action = action_from_path(env['PATH_INFO'], initial_path_segments ) 
+byebug
+    env['fake_action'] = fake_action
+    page = MegaBar::Page.find(1)
+    page_layouts = MegaBar::Layout.by_page(page.id)
+    page_layouts.each do | page_layout |
+      displays = MegaBar::ModelDisplay.by_layout(page_layout.id).by_action(fake_action)
+      modle = MegaBar::Model.by_model(displays.first.model_id).first
+      modyule = modle.modyule.empty? ? '' : modle.modyule + '::'
+      klass = modyule + modle.classname.classify
+      kontroller_klass = modyule + modle.classname.classify.pluralize + "Controller"
+      mega_displays_info = []
+      displays.each do | display |
+        field_displays = MegaBar::FieldDisplay.where(model_display_id: 1)
+        displayable_fields = []
+        field_displays.each do |field_disp|
+          field = MegaBar::Field.find(field_disp.field_id)
+          if is_displayable?(field_disp.format)
+            #lets figure out how to display it right here.
+            data_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
+            # if field_disp.format == 'select'
+            #   options = !@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil? ? @options[field.tablename.to_sym][field.field.to_sym] :  MegaBar::Option.where(field_id: field.id).collect {|o| [ o.text, o.value ] }             
+            # end
+            displayable_fields << {:field_display=>field_disp, :field=>field, :data_format=>data_format, options: @options, :obj=>@mega_instance}
+          end
         end
+        model_display_format = MegaBar::ModelDisplayFormat.find(display.format)
+        info = {
+          :model_display_format => model_display_format, # Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
+          :displayable_fields => displayable_fields,
+          # :form_path => form_path(env),
+          :new_model_display_format => model_display_format,
+          :model_display => display
+        }
+        mega_displays_info << info     
       end
-      model_display_format = MegaBar::ModelDisplayFormat.find(md.format)
-      info = {
-        :model_display_format => model_display_format, # Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
-        :displayable_fields => displayable_fields,
-        :form_path => form_path,
-        :new_model_display_format => model_display_format,
-        :model_display => md
+      env[:mega_env] = { 
+        klass: klass, 
+        kontroller: kontroller_klass,
+        model_id: modle.id, 
+        kontroller_inst: modle.classname.underscore,
+        kontroller_path: modle.modyule.nil? || modle.modyule.empty? ?   modle.classname.pluralize.underscore :  modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + modle.classname.pluralize.underscore,
+        mega_model_properties: modle,
+        action: fake_action,
+        mega_displays_info: mega_displays_info
       }
-      mega_displays_info << info     
+
+      env["QUERY_STRING"] = env["QUERY_STRING"] + "&action=#{fake_action}" # &id=2"
+
+     # self.tablename = self.modyule.nil? || self.modyule.empty? ?   self.classname.pluralize.underscore : self.modyule.split('::').map { | m | m = m.underscore }.join('_') + '_' + self.classname.pluralize.underscore
+     
+
+  #     env["QUERY_STRING"] = env["QUERY_STRING"] + '&megab_klass=' + klass + '&megab_kontroller=' + kontroller + '&megab_id=' + modle.id.to_s
+      @status, @headers, @dogs = kontroller_klass.constantize.action('index').call(env)
+      # @status, @headers, @dogs = DogsController.action("index").call(env)
+      # # byebug
+      final <<  @dogs.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
     end
-   
-    env[:mega_env] = { 
-      klass: klass, 
-      kontroller: kontroller_klass,
-      model_id: modle.id, 
-      kontroller_inst: modle.classname.underscore,
-      kontroller_path: modle.modyule.nil? || modle.modyule.empty? ?   modle.classname.pluralize.underscore :  modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + modle.classname.pluralize.underscore,
-      mega_model_properties: modle,
-      mega_displays_info:  mega_displays_info
-    }
-    env["QUERY_STRING"] = env["QUERY_STRING"] + "&action=index" # &id=2"
 
-   # self.tablename = self.modyule.nil? || self.modyule.empty? ?   self.classname.pluralize.underscore : self.modyule.split('::').map { | m | m = m.underscore }.join('_') + '_' + self.classname.pluralize.underscore
-   
-
-#     env["QUERY_STRING"] = env["QUERY_STRING"] + '&megab_klass=' + klass + '&megab_kontroller=' + kontroller + '&megab_id=' + modle.id.to_s
-    @status, @headers, @dogs = kontroller_klass.constantize.action('index').call(env)
-    # @status, @headers, @dogs = DogsController.action("index").call(env)
-    # # byebug
-    dogs =  @dogs.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
     # @status, @headers, @reptiles = ReptilesController.action("index").call(env)
     # reptiles = @reptiles.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
     # both = [dogs, reptiles]
@@ -90,20 +100,24 @@ class LayoutEngine
     @start = Time.now
     # @status, @headers, @response = @app.call(env)
     @stop = Time.now
-    [@status, @headers, [dogs]]
+    [@status, @headers, final]
   end
   
-  def each(&block)
-    block.call("<!-- #{@message}: #{@stop - @start} -->\n") if @headers["Content-Type"].include? "text/html"
-    @response.each(&block)
+  def each(&display)
+    display.call("<!-- #{@message}: #{@stop - @start} -->\n") if @headers["Content-Type"].include? "text/html"
+    @response.each(&display)
   end
 
+  def is_displayable?(format)
+    return  (format == 'hidden' || format == 'off') ? false : true
+  end
 
-  def form_path
-      case params[:action]
+  def form_path(env, id=nil)
+    byebug
+      case env['fake_action']
       when 'index' 
         url_for(controller: env[:mega_env][:kontroller_path].to_s,
-          action:  params[:action],
+          action:  action,
           only_path: true)
       when 'new' 
         url_for(controller: env[:mega_env][:kontroller_path].to_s,
@@ -135,4 +149,45 @@ class LayoutEngine
   #   c.response.body
   # end
 
+  def action_from_path(path, path_segments)
+    path_array = path.split('/')
+    if ['edit', 'new'].include?(path_array.last) 
+      path_array.last
+    elsif path.last.match(/^(\d)+$/)
+      'show'
+    elsif  path_segments.include?(path_array.last)
+      'index'
+    else 
+      path_array.last
+    end
+  end
+
 end
+
+  class RouteRecognizer
+    attr_reader :paths
+    
+    # To use this inside your app, call:
+    # `RouteRecognizer.new.initial_path_segments`
+    # This returns an array, e.g.: ['assets','blog','team','faq','users']
+ 
+    INITIAL_SEGMENT_REGEX = %r{^\/([^\/\(:]+)}
+ 
+    def initialize
+      routes = Rails.application.routes.routes
+      mega_routes
+      @paths = routes.collect {|r| r.path.spec.to_s }
+    end
+ 
+    def initial_path_segments
+      @initial_path_segments ||= begin
+        paths.collect {|path| match_initial_path_segment(path)}.compact.uniq
+      end
+    end
+ 
+    def match_initial_path_segment(path)
+      if match = INITIAL_SEGMENT_REGEX.match(path)
+        match[1]
+      end
+    end
+  end
