@@ -29,14 +29,14 @@ class LayoutEngine
     end
     final= []
     initial_path_segments = RouteRecognizer.new.initial_path_segments
-    
-    fake_action = action_from_path(env['PATH_INFO'], initial_path_segments ) 
-byebug
-    env['fake_action'] = fake_action
+    action = action_from_path(env['PATH_INFO'], initial_path_segments ) 
+    id = env['PATH_INFO'][/(\d+)(?!.*\d)/]
+
+    env['fake_action'] = action
     page = MegaBar::Page.find(1)
     page_layouts = MegaBar::Layout.by_page(page.id)
     page_layouts.each do | page_layout |
-      displays = MegaBar::ModelDisplay.by_layout(page_layout.id).by_action(fake_action)
+      displays = MegaBar::ModelDisplay.by_layout(page_layout.id).by_action(action)
       modle = MegaBar::Model.by_model(displays.first.model_id).first
       modyule = modle.modyule.empty? ? '' : modle.modyule + '::'
       klass = modyule + modle.classname.classify
@@ -73,17 +73,18 @@ byebug
         kontroller_inst: modle.classname.underscore,
         kontroller_path: modle.modyule.nil? || modle.modyule.empty? ?   modle.classname.pluralize.underscore :  modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + modle.classname.pluralize.underscore,
         mega_model_properties: modle,
-        action: fake_action,
+        action: action,
         mega_displays_info: mega_displays_info
       }
 
-      env["QUERY_STRING"] = env["QUERY_STRING"] + "&action=#{fake_action}" # &id=2"
+      env["QUERY_STRING"] = env["QUERY_STRING"] + "&action=#{action}"
+      env["QUERY_STRING"] = env["QUERY_STRING"] + '&id=' +  id.to_s if !id.nil? && !id.empty?
 
      # self.tablename = self.modyule.nil? || self.modyule.empty? ?   self.classname.pluralize.underscore : self.modyule.split('::').map { | m | m = m.underscore }.join('_') + '_' + self.classname.pluralize.underscore
      
 
   #     env["QUERY_STRING"] = env["QUERY_STRING"] + '&megab_klass=' + klass + '&megab_kontroller=' + kontroller + '&megab_id=' + modle.id.to_s
-      @status, @headers, @dogs = kontroller_klass.constantize.action('index').call(env)
+      @status, @headers, @dogs = kontroller_klass.constantize.action(action).call(env)
       # @status, @headers, @dogs = DogsController.action("index").call(env)
       # # byebug
       final <<  @dogs.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
@@ -164,30 +165,33 @@ byebug
 
 end
 
-  class RouteRecognizer
-    attr_reader :paths
-    
-    # To use this inside your app, call:
-    # `RouteRecognizer.new.initial_path_segments`
-    # This returns an array, e.g.: ['assets','blog','team','faq','users']
- 
-    INITIAL_SEGMENT_REGEX = %r{^\/([^\/\(:]+)}
- 
-    def initialize
-      routes = Rails.application.routes.routes
-      mega_routes
-      @paths = routes.collect {|r| r.path.spec.to_s }
-    end
- 
-    def initial_path_segments
-      @initial_path_segments ||= begin
-        paths.collect {|path| match_initial_path_segment(path)}.compact.uniq
-      end
-    end
- 
-    def match_initial_path_segment(path)
-      if match = INITIAL_SEGMENT_REGEX.match(path)
-        match[1]
-      end
+class RouteRecognizer
+  attr_reader :paths
+  
+  # To use this inside your app, call:
+  # `RouteRecognizer.new.initial_path_segments`
+  # This returns an array, e.g.: ['assets','blog','team','faq','users']
+
+  INITIAL_SEGMENT_REGEX = %r{^\/([^\/\(:]+)}
+
+  def initialize
+    routes = Rails.application.routes.routes
+    paths = routes.collect {|r| r.path.spec.to_s }
+    mega_routes = MegaBar::Engine.routes.routes
+    mega_paths =  mega_routes.collect {|r| r.path.spec.to_s }
+    @paths = paths + mega_paths
+
+  end
+
+  def initial_path_segments
+    @initial_path_segments ||= begin
+      paths.collect {|path| match_initial_path_segment(path)}.compact.uniq
     end
   end
+
+  def match_initial_path_segment(path)
+    if match = INITIAL_SEGMENT_REGEX.match(path)
+      match[1]
+    end
+  end
+end
