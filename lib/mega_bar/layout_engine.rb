@@ -29,54 +29,54 @@ class LayoutEngine
     end
     final= []
     initial_path_segments = RouteRecognizer.new.initial_path_segments
-    action = action_from_path(env['PATH_INFO'], initial_path_segments ) 
+    action = action_from_path(env['PATH_INFO'], env['REQUEST_METHOD'], initial_path_segments ) 
     id = env['PATH_INFO'][/(\d+)(?!.*\d)/]
-
     env['fake_action'] = action
     page = MegaBar::Page.find(1)
     page_layouts = MegaBar::Layout.by_page(page.id)
     page_layouts.each do | page_layout |
-      displays = MegaBar::ModelDisplay.by_layout(page_layout.id).by_action(action)
+      displays = ['show', 'index', 'new', 'edit'].include?(action) ? MegaBar::ModelDisplay.by_layout(page_layout.id).by_action(action) : MegaBar::ModelDisplay.by_layout(page_layout.id)
       modle = MegaBar::Model.by_model(displays.first.model_id).first
       modyule = modle.modyule.empty? ? '' : modle.modyule + '::'
       klass = modyule + modle.classname.classify
       kontroller_klass = modyule + modle.classname.classify.pluralize + "Controller"
-      mega_displays_info = []
-      displays.each do | display |
-        field_displays = MegaBar::FieldDisplay.where(model_display_id: 1)
-        displayable_fields = []
-        field_displays.each do |field_disp|
-          field = MegaBar::Field.find(field_disp.field_id)
-          if is_displayable?(field_disp.format)
-            #lets figure out how to display it right here.
-            data_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
-            # if field_disp.format == 'select'
-            #   options = !@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil? ? @options[field.tablename.to_sym][field.field.to_sym] :  MegaBar::Option.where(field_id: field.id).collect {|o| [ o.text, o.value ] }             
-            # end
-            displayable_fields << {:field_display=>field_disp, :field=>field, :data_format=>data_format, options: @options, :obj=>@mega_instance}
+      if ['show', 'index', 'new', 'edit'].include? action
+        mega_displays_info = []
+        displays.each do | display |
+          field_displays = MegaBar::FieldDisplay.where(model_display_id: 1)
+          displayable_fields = []
+          field_displays.each do |field_disp|
+            field = MegaBar::Field.find(field_disp.field_id)
+            if is_displayable?(field_disp.format)
+              #lets figure out how to display it right here.
+              data_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
+              # if field_disp.format == 'select'
+              #   options = !@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil? ? @options[field.tablename.to_sym][field.field.to_sym] :  MegaBar::Option.where(field_id: field.id).collect {|o| [ o.text, o.value ] }             
+              # end
+              displayable_fields << {:field_display=>field_disp, :field=>field, :data_format=>data_format, options: @options, :obj=>@mega_instance}
+            end
           end
+          model_display_format = MegaBar::ModelDisplayFormat.find(display.format)
+          info = {
+            :model_display_format => model_display_format, # Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
+            :displayable_fields => displayable_fields,
+            # :form_path => form_path(env),
+            :new_model_display_format => model_display_format,
+            :model_display => display
+          }
+          mega_displays_info << info     
         end
-        model_display_format = MegaBar::ModelDisplayFormat.find(display.format)
-        info = {
-          :model_display_format => model_display_format, # Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
-          :displayable_fields => displayable_fields,
-          # :form_path => form_path(env),
-          :new_model_display_format => model_display_format,
-          :model_display => display
-        }
-        mega_displays_info << info     
       end
       env[:mega_env] = { 
-        klass: klass, 
-        kontroller: kontroller_klass,
-        model_id: modle.id, 
-        kontroller_inst: modle.classname.underscore,
-        kontroller_path: modle.modyule.nil? || modle.modyule.empty? ?   modle.classname.pluralize.underscore :  modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + modle.classname.pluralize.underscore,
-        mega_model_properties: modle,
-        action: action,
-        mega_displays_info: mega_displays_info
+          klass: klass, 
+          kontroller: kontroller_klass,
+          model_id: modle.id, 
+          kontroller_inst: modle.classname.underscore,
+          kontroller_path: modle.modyule.nil? || modle.modyule.empty? ?   modle.classname.pluralize.underscore :  modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + modle.classname.pluralize.underscore,
+          mega_model_properties: modle,
+          action: action,
+          mega_displays_info: mega_displays_info
       }
-
       env["QUERY_STRING"] = env["QUERY_STRING"] + "&action=#{action}"
       env["QUERY_STRING"] = env["QUERY_STRING"] + '&id=' +  id.to_s if !id.nil? && !id.empty?
 
@@ -150,16 +150,22 @@ class LayoutEngine
   #   c.response.body
   # end
 
-  def action_from_path(path, path_segments)
+  def action_from_path(path, method, path_segments)
     path_array = path.split('/')
-    if ['edit', 'new'].include?(path_array.last) 
-      path_array.last
-    elsif path.last.match(/^(\d)+$/)
-      'show'
-    elsif  path_segments.include?(path_array.last)
-      'index'
-    else 
-      path_array.last
+    if method == 'GET'
+      if ['edit', 'new'].include?(path_array.last) 
+        path_array.last
+      elsif path.last.match(/^(\d)+$/)
+        'show'
+      elsif  path_segments.include?(path_array.last)
+        'index'
+      else 
+        path_array.last
+      end
+    elsif ['POST', 'PUT', 'PATCH'].include? method
+      path.last.match(/^(\d)+$/) ? 'update' : 'create'
+    elsif ['DELETE'].include? method
+      'delete'
     end
   end
 
