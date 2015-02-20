@@ -29,66 +29,70 @@ class LayoutEngine
     end
     final= []
     initial_path_segments = RouteRecognizer.new.initial_path_segments
-    action = action_from_path(env['PATH_INFO'], env['REQUEST_METHOD'], initial_path_segments ) 
+    global_action = action_from_path(env['PATH_INFO'], env['REQUEST_METHOD'], initial_path_segments ) 
     id = env['PATH_INFO'][/(\d+)(?!.*\d)/]
-    env['fake_action'] = action
-    page = MegaBar::Page.find(1)
+    # env['fake_action'] = action
+    page = MegaBar::Page.find(10)
     page_layouts = MegaBar::Layout.by_page(page.id)
     page_layouts.each do | page_layout |
-       
-      displays = ['show', 'index', 'new', 'edit'].include?(action) ? MegaBar::ModelDisplay.by_layout(page_layout.id).by_action(action) : MegaBar::ModelDisplay.by_layout(page_layout.id)
-      modle = MegaBar::Model.by_model(displays.first.model_id).first
-      modyule = modle.modyule.empty? ? '' : modle.modyule + '::'
-      klass = modyule + modle.classname.classify
-      kontroller_klass = modyule + modle.classname.classify.pluralize + "Controller"
-      if ['show', 'index', 'new', 'edit'].include? action
-        mega_displays_info = []
-        displays.each do | display |
-          field_displays = MegaBar::FieldDisplay.where(model_display_id: 1)
-          displayable_fields = []
-          field_displays.each do |field_disp|
-            field = MegaBar::Field.find(field_disp.field_id)
-            if is_displayable?(field_disp.format)
-              #lets figure out how to display it right here.
-              data_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
-              # if field_disp.format == 'select'
-              #   options = !@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil? ? @options[field.tablename.to_sym][field.field.to_sym] :  MegaBar::Option.where(field_id: field.id).collect {|o| [ o.text, o.value ] }             
-              # end
-              displayable_fields << {:field_display=>field_disp, :field=>field, :data_format=>data_format, options: @options, :obj=>@mega_instance}
+      blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(global_action)
+      byebug
+      params_string = ''
+      byebug
+      blocks.each do |blck|
+        byebug
+        displays = MegaBar::ModelDisplay.by_block(blck.id).by_action(blck.action)
+        byebug
+        if !['update', 'create', 'delete'].include?(global_action)
+          mega_displays_info = []
+          displays.each do | display |
+            model_display_format = MegaBar::ModelDisplayFormat.find(display.format)
+            field_displays = MegaBar::FieldDisplay.by_model_display_id(display.id)
+            displayable_fields = []
+            field_displays.each do |field_disp|
+              field = MegaBar::Field.find(field_disp.field_id)
+              if is_displayable?(field_disp.format)
+                #lets figure out how to display it right here.
+                data_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
+                # if field_disp.format == 'select'
+                #   options = !@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil? ? @options[field.tablename.to_sym][field.field.to_sym] :  MegaBar::Option.where(field_id: field.id).collect {|o| [ o.text, o.value ] }             
+                # end
+                displayable_fields << {:field_display=>field_disp, :field=>field, :data_format=>data_format, options: @options, :obj=>@mega_instance}
+              end
             end
+            info = {
+              :model_display_format => model_display_format, # Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
+              :displayable_fields => displayable_fields,
+              :new_model_display_format => model_display_format,
+              :model_display => display
+            }
+            mega_displays_info << info     
           end
-          model_display_format = MegaBar::ModelDisplayFormat.find(display.format)
-          info = {
-            :model_display_format => model_display_format, # Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
-            :displayable_fields => displayable_fields,
-            :action => action,
-            :new_model_display_format => model_display_format,
-            :model_display => display
-          }
-          mega_displays_info << info     
         end
-      end
-      env[:mega_env] = { 
-          klass: klass, 
-          kontroller: kontroller_klass,
+        modle = MegaBar::Model.by_model(displays.first.model_id).first
+        modyule = modle.modyule.empty? ? '' : modle.modyule + '::'  
+        env[:mega_env] = { 
           model_id: modle.id, 
+          mega_model_properties: modle,
+          klass: modyule + modle.classname.classify, 
+          kontroller: modyule + modle.classname.classify.pluralize + "Controller",
           kontroller_inst: modle.classname.underscore,
           kontroller_path: modle.modyule.nil? || modle.modyule.empty? ?   modle.classname.pluralize.underscore :  modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + modle.classname.pluralize.underscore,
-          mega_model_properties: modle,
-          action: action,
-          mega_displays: mega_displays_info
-      }
-      env["QUERY_STRING"] = env["QUERY_STRING"] + "&action=#{action}"
-      env["QUERY_STRING"] = env["QUERY_STRING"] + '&id=' +  id.to_s if !id.nil? && !id.empty?
-
-     # self.tablename = self.modyule.nil? || self.modyule.empty? ?   self.classname.pluralize.underscore : self.modyule.split('::').map { | m | m = m.underscore }.join('_') + '_' + self.classname.pluralize.underscore
-     
-
-  #     env["QUERY_STRING"] = env["QUERY_STRING"] + '&megab_klass=' + klass + '&megab_kontroller=' + kontroller + '&megab_id=' + modle.id.to_s
-      @status, @headers, @dogs = kontroller_klass.constantize.action(action).call(env)
-      # @status, @headers, @dogs = DogsController.action("index").call(env)
-      # # byebug
-      final <<  @dogs.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
+          mega_displays: mega_displays_info,
+          action: displays.first.action
+        }
+        env[:QUERY_STRING] = env[:QUERY_STRING].sub!(params_string, '')
+        params_string = "&action=" + displays.first.action
+        params_string += '&id=' +  id.to_s if !id.nil? && !id.empty?
+        env["QUERY_STRING"] += params_string
+        byebug
+        # self.tablename = self.modyule.nil? || self.modyule.empty? ?   self.classname.pluralize.underscore : self.modyule.split('::').map { | m | m = m.underscore }.join('_') + '_' + self.classname.pluralize.underscore
+        #     env["QUERY_STRING"] = env["QUERY_STRING"] + '&megab_klass=' + klass + '&megab_kontroller=' + kontroller + '&megab_id=' + modle.id.to_s
+        @status, @headers, @dogs = kontroller_klass.constantize.action(action).call(env)
+        # @status, @headers, @dogs = DogsController.action("index").call(env)
+        # # byebug
+        final <<  @dogs.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
+      end
     end
 
     # @status, @headers, @reptiles = ReptilesController.action("index").call(env)

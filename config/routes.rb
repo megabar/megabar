@@ -2,18 +2,12 @@ MegaBar::Engine.routes.draw do
   
    resources :model_display_formats, path: '/model-display-formats',  defaults: {model_id: 15}
    resources :options,  defaults: {model_id: 17}
-   resources :pages,  defaults: {model_id: 18}
+   resources :pages,  defaults: {model_id: 18} do 
+     resources :layouts
+   end
    resources :layouts,  defaults: {model_id: 20}
    resources :blocks,  defaults: {model_id: 21}
    ##### MEGABAR END
-
-
-
-
-
-
-
-
 
 
 
