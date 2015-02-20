@@ -1,7 +1,7 @@
 module MegaBar 
   class Block < ActiveRecord::Base
     belongs_to :layout
-    scope :by_layout, ->(layout_id) { where(id: layout_id) if layout_id.present? }
+    scope :by_layout, ->(layout_id) { where(layout_id: layout_id) if layout_id.present? }
     scope :by_actions, ->(action) {
       if action.present? 
         case action

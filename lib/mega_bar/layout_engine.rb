@@ -35,13 +35,11 @@ class LayoutEngine
     page = MegaBar::Page.find(10)
     page_layouts = MegaBar::Layout.by_page(page.id)
     page_layouts.each do | page_layout |
-      blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(global_action)
-      byebug
+      blocks = MegaBar::Block.by_layout(page_layout.id).by_action(global_action)
       params_string = ''
-      byebug
       blocks.each do |blck|
         byebug
-        displays = MegaBar::ModelDisplay.by_block(blck.id).by_action(blck.action)
+        displays = MegaBar::ModelDisplay.by_block(blck.id).by_action(global_action)
         byebug
         if !['update', 'create', 'delete'].include?(global_action)
           mega_displays_info = []
