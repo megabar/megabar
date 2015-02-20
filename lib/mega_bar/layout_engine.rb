@@ -39,8 +39,7 @@ class LayoutEngine
       params_string = ''
       env[:QUERY_STRING] ||= ''
       blocks.each do |blck|
-        displays = MegaBar::ModelDisplay.by_block(blck.id).by_action(global_action)
-        byebug
+        displays = blck.actions == 'current' ? MegaBar::ModelDisplay.by_block(blck.id).by_action(global_action) : MegaBar::ModelDisplay.by_block(blck.id)
         if !['update', 'create', 'delete'].include?(global_action)
           mega_displays_info = []
           displays.each do | display |
