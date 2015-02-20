@@ -35,10 +35,10 @@ class LayoutEngine
     page = MegaBar::Page.find(10)
     page_layouts = MegaBar::Layout.by_page(page.id)
     page_layouts.each do | page_layout |
-      blocks = MegaBar::Block.by_layout(page_layout.id).by_action(global_action)
+      blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(global_action)
       params_string = ''
+      env[:QUERY_STRING] ||= ''
       blocks.each do |blck|
-        byebug
         displays = MegaBar::ModelDisplay.by_block(blck.id).by_action(global_action)
         byebug
         if !['update', 'create', 'delete'].include?(global_action)
@@ -69,16 +69,18 @@ class LayoutEngine
         end
         modle = MegaBar::Model.by_model(displays.first.model_id).first
         modyule = modle.modyule.empty? ? '' : modle.modyule + '::'  
+        kontroller_klass = modyule + modle.classname.classify.pluralize + "Controller"
         env[:mega_env] = { 
           model_id: modle.id, 
           mega_model_properties: modle,
           klass: modyule + modle.classname.classify, 
-          kontroller: modyule + modle.classname.classify.pluralize + "Controller",
+          kontroller: kontroller_klass,
           kontroller_inst: modle.classname.underscore,
           kontroller_path: modle.modyule.nil? || modle.modyule.empty? ?   modle.classname.pluralize.underscore :  modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + modle.classname.pluralize.underscore,
           mega_displays: mega_displays_info,
           action: displays.first.action
         }
+        byebug
         env[:QUERY_STRING] = env[:QUERY_STRING].sub!(params_string, '')
         params_string = "&action=" + displays.first.action
         params_string += '&id=' +  id.to_s if !id.nil? && !id.empty?
@@ -86,7 +88,7 @@ class LayoutEngine
         byebug
         # self.tablename = self.modyule.nil? || self.modyule.empty? ?   self.classname.pluralize.underscore : self.modyule.split('::').map { | m | m = m.underscore }.join('_') + '_' + self.classname.pluralize.underscore
         #     env["QUERY_STRING"] = env["QUERY_STRING"] + '&megab_klass=' + klass + '&megab_kontroller=' + kontroller + '&megab_id=' + modle.id.to_s
-        @status, @headers, @dogs = kontroller_klass.constantize.action(action).call(env)
+        @status, @headers, @dogs = kontroller_klass.constantize.action(env[:mega_env][:action]).call(env)
         # @status, @headers, @dogs = DogsController.action("index").call(env)
         # # byebug
         final <<  @dogs.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]

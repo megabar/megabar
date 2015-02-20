@@ -6,21 +6,21 @@ module MegaBar
       if action.present? 
         case action
         when 'show'
-          where(actions: ['all', 'sine', 'show'])
+          where(actions: ['all', 'sine', 'show', 'current'])
         when 'index'
-          where(actions: ['all', 'sine', 'index'])
+          where(actions: ['all', 'sine', 'index', 'current'])
         when 'new'
-          where(actions: ['all', 'sine', 'new'])
+          where(actions: ['all', 'sine', 'new', 'current'])
         when 'edit'
-          where(actions: ['all', 'sine', 'edit'])
+          where(actions: ['all', 'sine', 'edit', 'current'])
         when 'create'
-          where(actions: ['all'])
+          where(actions: ['all', 'current'])
         when 'update'
-          where(actions: ['all'])
+          where(actions: ['all', 'current'])
         when 'delete'
-          where(actions: ['all'])
+          where(actions: ['all', 'current'])
         else
-          where(action: ['all', action])
+          where(action: ['all', 'current', action])
         end
       end
     }
