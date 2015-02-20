@@ -4,8 +4,7 @@ module MegaBar
     before_filter :conditions
 
     def conditions
-      byebug
-      @conditions.merge!(page_id: 12)
+      @conditions.merge!(page_id: 10)
     end
   end
 end 

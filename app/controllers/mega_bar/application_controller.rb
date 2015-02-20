@@ -18,7 +18,6 @@ module MegaBar
     before_filter :conditioner
 
     def conditioner
-      byebug
       @conditions =  {}
     end
     def mega_template
