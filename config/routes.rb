@@ -13,7 +13,8 @@ MegaBar::Engine.routes.draw do
 
    # (leave that line in place with five #'s')
 
-
+  resources :blocks, defaults: {model_id: 21}
+  
   resources :field_displays, defaults: {model_id: 4}
   resources :fields, defaults: {model_id: 2}
   resources :model_displays, defaults: {model_id: 3}
