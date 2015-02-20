@@ -39,7 +39,15 @@ module MegaBar
       end
       mega_displays_info
     end
-    
+
+    def add_form_path_to_mega_displays(mega_env) 
+      mega_env[:mega_displays].each_with_index do | mega_display, index | 
+        id = params[:id]
+        mega_env[:mega_displays][index][:form_path] = form_path(mega_display[:action], mega_env[:kontroller_path], id)
+      end
+      mega_env
+    end  
+
     def index
       #seems like you have to have an instance variable for the specific model because if you don't it doesn't pay attention to using your 'layout'
       #so we set one but then for convenience in the layout, we set @models equal to that.
@@ -86,7 +94,6 @@ module MegaBar
       end
     end
     def update
-      byebug
       instance_variable_set("@" + env[:mega_env][:kontroller_inst], @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);
       respond_to do |format|
@@ -109,20 +116,20 @@ module MegaBar
       end
     end
     
-    def form_path
-      case params[:action]
+    def form_path(action, path, id=nil)
+      case action
       when 'index' 
-        url_for(controller: env[:mega_env][:kontroller_path].to_s,
-          action:  params[:action],
+        url_for(controller: path.to_s,
+          action:  action,
           only_path: true)
       when 'new' 
-        url_for(controller: env[:mega_env][:kontroller_path].to_s,
+        url_for(controller: path.to_s,
           action:  'create',
           only_path: true)
-      when 'edit' 
-        url_for(controller: env[:mega_env][:kontroller_path].to_s,
+      when 'edit'
+        url_for(controller: path.to_s,
           action: 'update',
-          id: params[:id],
+          id: id,
           only_path: true)
       else
        form_path = 'ack'
@@ -145,22 +152,6 @@ module MegaBar
         constant_string +=  i < str.split('/').size - 1 ? seg.classify + '::' : seg.classify
       end
       constant_string
-    end
-    def render_in_controller(controller, action)
-      c = controller.new
-      c.request = @_request
-      c.response = @_response
-      c.params = params
-      c.process(action)
-      c.response.body
-    end
-
-    def internal_redirect_to(options={})
-      params.merge!(options)
-      request.env['action_controller.request.path_parameters']['controller'] = env[:mega_env][:kontroller_class]
-      request.env['action_controller.request.path_parameters']['action'] = params[:action]
-      (c = ActionController.const_get(ActiveSupport::Inflector.classify("#{env[:mega_env][:kontroller_class]}_controller")).new).process(request,response)
-      c.instance_variables.each{|v| self.instance_variable_set(v,c.instance_variable_get(v))} 
     end
   end
 end

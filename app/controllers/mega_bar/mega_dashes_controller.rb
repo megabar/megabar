@@ -4,7 +4,6 @@ module MegaBar
 
     
     def dashboards_init
-      byebug
       initial_path_segments = RouteRecognizer.new.initial_path_segments
       class_segment = segment_for_class(@mega_params["path"], initial_path_segments)
       action = action_from_path(@mega_params["path"], initial_path_segments ) 

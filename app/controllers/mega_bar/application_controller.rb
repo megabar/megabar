@@ -8,12 +8,12 @@ module MegaBar
       @mega_class = env[:mega_env][:klass].constantize
       env[:mega_env].keys.each { | env_var | instance_variable_set('@' + env_var.to_s, env[:mega_env][env_var]) }
     }
-    before_action->{ 
-        #  byebug
-     }, only: :edit
-    before_action -> { @options = {}; self.try(:get_options) },  only: [:index, :show, :edit, :new]
-    # before_action -> { mega_controller },  only: [:index, :show, :edit, :new]
-    before_action -> { mega_displays },  only: [:index, :show, :edit, :new] #not save or update..
+
+    before_action -> { @options = {}; self.try(:get_options) },  only: [:show, :index, :new, :edit]
+    before_action -> { 
+      env[:mega_env] = add_form_path_to_mega_displays(env[:mega_env])
+      @mega_displays = env[:mega_env][:mega_displays]
+    }, only: [:show, :index, :new, :edit]
     before_filter :mega_template
     
     def mega_template

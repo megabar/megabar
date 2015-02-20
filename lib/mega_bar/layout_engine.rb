@@ -35,6 +35,7 @@ class LayoutEngine
     page = MegaBar::Page.find(1)
     page_layouts = MegaBar::Layout.by_page(page.id)
     page_layouts.each do | page_layout |
+       
       displays = ['show', 'index', 'new', 'edit'].include?(action) ? MegaBar::ModelDisplay.by_layout(page_layout.id).by_action(action) : MegaBar::ModelDisplay.by_layout(page_layout.id)
       modle = MegaBar::Model.by_model(displays.first.model_id).first
       modyule = modle.modyule.empty? ? '' : modle.modyule + '::'
@@ -60,7 +61,7 @@ class LayoutEngine
           info = {
             :model_display_format => model_display_format, # Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
             :displayable_fields => displayable_fields,
-            # :form_path => form_path(env),
+            :action => action,
             :new_model_display_format => model_display_format,
             :model_display => display
           }
@@ -75,7 +76,7 @@ class LayoutEngine
           kontroller_path: modle.modyule.nil? || modle.modyule.empty? ?   modle.classname.pluralize.underscore :  modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + modle.classname.pluralize.underscore,
           mega_model_properties: modle,
           action: action,
-          mega_displays_info: mega_displays_info
+          mega_displays: mega_displays_info
       }
       env["QUERY_STRING"] = env["QUERY_STRING"] + "&action=#{action}"
       env["QUERY_STRING"] = env["QUERY_STRING"] + '&id=' +  id.to_s if !id.nil? && !id.empty?
@@ -113,26 +114,7 @@ class LayoutEngine
     return  (format == 'hidden' || format == 'off') ? false : true
   end
 
-  def form_path(env, id=nil)
-    byebug
-      case env['fake_action']
-      when 'index' 
-        url_for(controller: env[:mega_env][:kontroller_path].to_s,
-          action:  action,
-          only_path: true)
-      when 'new' 
-        url_for(controller: env[:mega_env][:kontroller_path].to_s,
-          action:  'create',
-          only_path: true)
-      when 'edit' 
-        url_for(controller: env[:mega_env][:kontroller_path].to_s,
-          action: 'update',
-          id: params[:id],
-          only_path: true)
-      else
-       form_path = 'ack'
-      end
-    end 
+  
   # def internal_redirect_to(options={})
   #   params.merge!(options)
   #   request.env['action_controller.request.path_parameters']['controller'] = params[:controller]
