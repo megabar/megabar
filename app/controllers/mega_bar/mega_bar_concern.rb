@@ -49,11 +49,10 @@ module MegaBar
     end  
 
     def index
-      #seems like you have to have an instance variable for the specific model because if you don't it doesn't pay attention to using your 'layout'
-      #so we set one but then for convenience in the layout, we set @models equal to that.
-
+      byebug
       instance_variable_set("@" + env[:mega_env][:kontroller_inst].pluralize,  @mega_class.order(sort_column(@mega_class, @mega_model_properties, params) + " " + sort_direction(params)))
       @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst].pluralize);
+      byebug
       render @index_view_template
     end
 

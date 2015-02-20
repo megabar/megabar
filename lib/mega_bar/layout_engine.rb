@@ -79,12 +79,10 @@ class LayoutEngine
           mega_displays: mega_displays_info,
           action: displays.first.action
         }
-        byebug
         env[:QUERY_STRING] = env[:QUERY_STRING].sub!(params_string, '')
         params_string = "&action=" + displays.first.action
         params_string += '&id=' +  id.to_s if !id.nil? && !id.empty?
         env["QUERY_STRING"] += params_string
-        byebug
         # self.tablename = self.modyule.nil? || self.modyule.empty? ?   self.classname.pluralize.underscore : self.modyule.split('::').map { | m | m = m.underscore }.join('_') + '_' + self.classname.pluralize.underscore
         #     env["QUERY_STRING"] = env["QUERY_STRING"] + '&megab_klass=' + klass + '&megab_kontroller=' + kontroller + '&megab_id=' + modle.id.to_s
         @status, @headers, @dogs = kontroller_klass.constantize.action(env[:mega_env][:action]).call(env)
