@@ -25,8 +25,11 @@ module MegaBar
     end
 
     def edit
-      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
+      aa = env['mega_route'][:id]
+      byebug
+      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(env['mega_route'][:id]))
       @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst])
+      byebug
       render @edit_view_template
     end
 
@@ -71,6 +74,8 @@ module MegaBar
     end
     
     def set_vars_for_displays
+      @mega_action = env['mega_route'][:action]
+      byebug
       @conditions =  {}
       @options = {}; self.try(:get_options)
       self.try(:get_options)

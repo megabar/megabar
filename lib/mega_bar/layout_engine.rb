@@ -17,21 +17,50 @@ class LayoutEngine
       @status, @headers, @response = @app.call(env)
       return  [@status, @headers, self]
     end
-    initial_path_segments = RouteRecognizer.new.initial_path_segments
-    global_action = action_from_path(env['PATH_INFO'], env['REQUEST_METHOD'], initial_path_segments ) 
-    id = env['PATH_INFO'][/(\d+)(?!.*\d)/]
+    #   initial_path_segments = RouteRecognizer.new.initial_path_segments
+    #  rout[:action] = action_from_path(env['PATH_INFO'], env['REQUEST_METHOD'], initial_path_segments ) 
+    #  id = env['PATH_INFO'][/(\d+)(?!.*\d)/]
     # env['fake_action'] = action
-    page = MegaBar::Page.find(10)
+
+
+
+    # env[:QUERY_STRING] ||= {:model_id=>18, :action=>"index", :controller=>"mega_bar/pages"}
+
+    # Rails.application.routes.routes.named_routes.values.map do |route|
+    #  puts  "#{route.defaults[:controller]}##{route.defaults[:action]}"
+    # end 
+    # MegaBar::Engine.routes.routes.named_routes.values.map do |route|
+    #  puts  "#{route.defaults[:controller]}##{route.defaults[:action]}"
+    # end 
+    # byebug
+
+    request = Rack::Request.new(env)
+    rout = {}
+    page_route = {}
+    page_info = {}
+    rout = (Rails.application.routes.recognize_path request.path_info rescue {}) || {} 
+    rout = (MegaBar::Engine.routes.recognize_path request.path_info.sub!('/mega-bar/', '') rescue {}) || {}  if rout.empty? 
+    # page_path = { id: page[0], path: page[1]} if !rout.empty?
+    env['mega_route'] = rout
+    MegaBar::Page.all.pluck(:id, :path).each do | page |
+      page_rout = (Rails.application.routes.recognize_path page[1] rescue {}) || {} 
+      throwaway_path = page[1].dup
+      page_rout = (MegaBar::Engine.routes.recognize_path throwaway_path.sub!('/mega-bar/', '') rescue {}) || {}  if page_rout.empty? 
+      page_info = page if page_rout[:controller] == rout[:controller] # 150220      
+      break if page_rout[:controller] == rout[:controller]
+    end
+
     final_layouts = [] 
-    page_layouts = MegaBar::Layout.by_page(page.id)
+    page_layouts = MegaBar::Layout.by_page(page_info[0])
+
     page_layouts.each do | page_layout |
-      blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(global_action)
-      params_string = ''
-      env[:QUERY_STRING] ||= ''
+      blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(rout[:action])
       final_blocks = []
       blocks.each do |blck|
-        displays = blck.actions == 'current' ? MegaBar::ModelDisplay.by_block(blck.id).by_action(global_action) : MegaBar::ModelDisplay.by_block(blck.id)
-        if !['update', 'create', 'delete'].include?(global_action)
+        displays = blck.actions == 'current' ? MegaBar::ModelDisplay.by_block(blck.id).by_action(rout[:action]) : MegaBar::ModelDisplay.by_block(blck.id)
+        
+
+        if !['update', 'create', 'delete'].include?(rout[:action])
           mega_displays_info = []
           displays.each do | display |
             model_display_format = MegaBar::ModelDisplayFormat.find(display.format)
@@ -70,17 +99,15 @@ class LayoutEngine
           mega_displays: mega_displays_info,
           action: displays.first.action
         }
-        env[:QUERY_STRING] = env[:QUERY_STRING].sub!(params_string, '')
-        params_string = "&action=" + displays.first.action
-        params_string += '&id=' +  id.to_s if !id.nil? && !id.empty?
-        env["QUERY_STRING"] += params_string
+        byebug
         # self.tablename = self.modyule.nil? || self.modyule.empty? ?   self.classname.pluralize.underscore : self.modyule.split('::').map { | m | m = m.underscore }.join('_') + '_' + self.classname.pluralize.underscore
-        #     env["QUERY_STRING"] = env["QUERY_STRING"] + '&megab_klass=' + klass + '&megab_kontroller=' + kontroller + '&megab_id=' + modle.id.to_s
+        #env["QUERY_STRING"] = env["QUERY_STRING"] + '&megab_klass=' + klass + '&megab_kontroller=' + kontroller + '&megab_id=' + modle.id.to_s
         @status, @headers, @dogs = kontroller_klass.constantize.action(env[:mega_env][:action]).call(env)
         # @status, @headers, @dogs = DogsController.action("index").call(env)
         # # byebug
         final_blocks <<  @dogs.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
       end
+      byebug
       env['mega_final_blocks'] = final_blocks
       @status, @headers, @layouts = MegaBar::MasterLayoutsController.action(:render_layout_with_blocks).call(env)
       final_layouts <<  @layouts.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
