@@ -8,11 +8,10 @@
   <%= @mega_display[:model_display_format].field_wrapper.html_safe%>
   <%   
     instance_value = instance_variable_get("@" + displayable_field[:field].field)
-    byebug
-    if instance_value.present? && (displayable_field[:field].field != 'field' and @mega_action == 'edit')
+    if instance_value.present? && (displayable_field[:field].field != 'field' and params[:action] == 'edit')
         value = instance_value 
     else
-      if @mega_action == 'edit' 
+      if params[:action] == 'edit' 
         value= @mega_instance.read_attribute(displayable_field[:field].field) 
       else
         value = displayable_field[:field].default_value

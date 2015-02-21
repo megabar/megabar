@@ -25,11 +25,9 @@ module MegaBar
     end
 
     def edit
-      aa = env['mega_route'][:id]
-      byebug
-      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(env['mega_route'][:id]))
+
+      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst])
-      byebug
       render @edit_view_template
     end
 
@@ -40,7 +38,7 @@ module MegaBar
       @mega_instance = @mega_class.new(_params)
       respond_to do |format|
         if @mega_instance.save
-          MegaBar.call_rake('db:schema:dump') if [1,2].include? env[:mega_env][:model_id] # gets new models into schema
+          MegaBar.call_rake('db:schema:dump') if [1,2].include? @model_id # gets new models into schema
           format.html { redirect_to @mega_instance, notice: 'It was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mega_instance }
         else
@@ -51,8 +49,10 @@ module MegaBar
       end
     end
     def update
+      byebug
       instance_variable_set("@" + env[:mega_env][:kontroller_inst], @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);
+      byebug
       respond_to do |format|
         if @mega_instance.update(_params)
           format.html { redirect_to @mega_instance, notice: 'Thing was successfully updated.' }
@@ -74,8 +74,6 @@ module MegaBar
     end
     
     def set_vars_for_displays
-      @mega_action = env['mega_route'][:action]
-      byebug
       @conditions =  {}
       @options = {}; self.try(:get_options)
       self.try(:get_options)
@@ -93,9 +91,8 @@ module MegaBar
     end
 
     def add_form_path_to_mega_displays(mega_env) 
-      mega_env[:mega_displays].each_with_index do | mega_display, index | 
-        id = params[:id]
-        mega_env[:mega_displays][index][:form_path] = form_path(mega_display[:action], mega_env[:kontroller_path], id)
+      mega_env[:mega_displays].each_with_index do | mega_display, index |
+        mega_env[:mega_displays][index][:form_path] = form_path(params[:action], mega_env[:kontroller_path], params[:id])
       end
       mega_env
     end  

@@ -2,7 +2,7 @@ module MegaBar
   module ApplicationHelper
     def sortable(column, title=nil)
       title ||= column.titleize
-      css_class = column == sort_column(@mega_class, @mega_model_properties, @mega_action) ? 'current ' + sort_direction(params) : nil
+      css_class = column == sort_column(@mega_class, @mega_model_properties, params) ? 'current ' + sort_direction(params) : nil
       direction = column == sort_column(@mega_class, @mega_model_properties, params) && sort_direction(params) == 'asc' ? 'desc' : 'asc'
       link_to title, {:sort => column, :direction => direction, controller: @kontroller_path}, class: css_class
     end
@@ -25,10 +25,11 @@ module MegaBar
 
     def link_path(action = nil, id = nil)
       # application helper
+      action ||= params[:action]
       case action
       when 'index' #untested
         url_for(controller: @kontroller_path.to_s,
-        action:  action,
+        action:  params[:action],
         only_path: true)
       when 'new' 
         url_for(controller: @kontroller_path.to_s,

@@ -15,15 +15,15 @@ module MegaBar
       # {"model_id"=>2, "action"=>"edit", "controller"=>"mega_bar/fields", "id"=>"1"}
       # controller_class = controller.constantize
       require 'Rack'
-      byebug
+      
       params.each_with_index do |v, k |
         byebug
         Rack::Request.update_param(k, v)
-        byebug
+        
       end
-      byebug
+      
       @dogs = FieldsController.action("index").call(env)
-      byebug
+      
       render inline: @dogs[2].instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
  
 
