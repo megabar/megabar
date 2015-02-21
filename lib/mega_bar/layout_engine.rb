@@ -5,17 +5,7 @@ require 'logger'
 class LayoutEngine
   def initialize(app, message = "Response Time")
     @app = app
-    #ActiveRecord::Base.logger = Logger.new('debug.log')
-    #@configuration = YAML::load(IO.read('config/database.yml'))
-    #ActiveRecord::Base.establish_connection(@configuration['development'])
     @message = message
-    # modle = MegaBar::Model.all
-    # puts modle.inspect
-
-    # env.inspect
-    # dogs = render_in_controller(DogsController, 'index')
-    # puts dogs.inspect
-
   end
   
   def call(env)
@@ -27,17 +17,18 @@ class LayoutEngine
       @status, @headers, @response = @app.call(env)
       return  [@status, @headers, self]
     end
-    final= []
     initial_path_segments = RouteRecognizer.new.initial_path_segments
     global_action = action_from_path(env['PATH_INFO'], env['REQUEST_METHOD'], initial_path_segments ) 
     id = env['PATH_INFO'][/(\d+)(?!.*\d)/]
     # env['fake_action'] = action
     page = MegaBar::Page.find(10)
+    final_layouts = [] 
     page_layouts = MegaBar::Layout.by_page(page.id)
     page_layouts.each do | page_layout |
       blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(global_action)
       params_string = ''
       env[:QUERY_STRING] ||= ''
+      final_blocks = []
       blocks.each do |blck|
         displays = blck.actions == 'current' ? MegaBar::ModelDisplay.by_block(blck.id).by_action(global_action) : MegaBar::ModelDisplay.by_block(blck.id)
         if !['update', 'create', 'delete'].include?(global_action)
@@ -88,22 +79,19 @@ class LayoutEngine
         @status, @headers, @dogs = kontroller_klass.constantize.action(env[:mega_env][:action]).call(env)
         # @status, @headers, @dogs = DogsController.action("index").call(env)
         # # byebug
-        final <<  @dogs.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
+        final_blocks <<  @dogs.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
       end
+      env['mega_final_blocks'] = final_blocks
+      @status, @headers, @layouts = MegaBar::MasterLayoutsController.action(:render_layout_with_blocks).call(env)
+      final_layouts <<  @layouts.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
     end
+    env['mega_final_layouts'] = final_layouts
+    @status, @headers, @page = MegaBar::MasterPagesController.action(:render_page).call(env)
 
-    # @status, @headers, @reptiles = ReptilesController.action("index").call(env)
-    # reptiles = @reptiles.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
-    # both = [dogs, reptiles]
-    # @start = Time.now
-    # @stop = Time.now
-    # # [@status, @headers, both]
-    # [@status, @headers, self]
-    # MegaBar::Models.all.inspect
-    @start = Time.now
-    # @status, @headers, @response = @app.call(env)
-    @stop = Time.now
-    [@status, @headers, final]
+    final_page = []
+    final_page <<  @page.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
+  
+    [@status, @headers, final_page]
   end
   
   def each(&display)

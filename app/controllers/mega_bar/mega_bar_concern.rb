@@ -1,52 +1,7 @@
 module MegaBar
   module MegaBarConcern
     extend ActiveSupport::Concern
-    def mega_controller
-      @mega_controller = env[:mega_env][:kontroller_class].split('::').last
-    end
-    def mega_displays 
-      @mega_displays = mega_displays_info(ModelDisplay.by_model(env[:mega_env][:model_id]).by_action(params[:action]))
-    end
 
-    def mega_displays_info(model_displays)
-      # yep, this is the main brain that loads all the model, model display, field, field_display stuff. 
-      # after this runs you'll see the 'create' and 'update' type methods above run.
-      #return redirect_to(new_model_display_path, :notice => "There was no ModelDisplay for that " + params[:action] +" action and " + model_id.to_s + "model_id combo. Would you like to create one?")    unless model_display
-      mega_displays_info = []
-      model_displays.each do | md |
-        field_displays = FieldDisplay.where(model_display_id: md.id)
-        displayable_fields = []
-        field_displays.each do |field_disp|
-          field = Field.find(field_disp.field_id)
-          if is_displayable?(field_disp.format)
-            #lets figure out how to display it right here.
-            data_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
-            if field_disp.format == 'select'
-              options = !@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil? ? @options[field.tablename.to_sym][field.field.to_sym] :  MegaBar::Option.where(field_id: field.id).collect {|o| [ o.text, o.value ] }             
-            end
-            displayable_fields << {:field_display=>field_disp, :field=>field, :data_format=>data_format, options: options, :obj=>@mega_instance}
-          end
-        end
-        model_display_format = ModelDisplayFormat.find(md.format)
-        info = {
-          :model_display_format => model_display_format, # Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
-          :displayable_fields => displayable_fields,
-          :form_path => form_path,
-          :new_model_display_format => model_display_format,
-          :model_display => md
-        }
-        mega_displays_info << info
-      end
-      mega_displays_info
-    end
-
-    def add_form_path_to_mega_displays(mega_env) 
-      mega_env[:mega_displays].each_with_index do | mega_display, index | 
-        id = params[:id]
-        mega_env[:mega_displays][index][:form_path] = form_path(mega_display[:action], mega_env[:kontroller_path], id)
-      end
-      mega_env
-    end  
 
     def index
       records = @mega_class.where(@conditions).order(sort_column(@mega_class, @mega_model_properties, params) + " " + sort_direction(params))
@@ -115,6 +70,31 @@ module MegaBar
       end
     end
     
+    def set_vars_for_displays
+      @conditions =  {}
+      @options = {}; self.try(:get_options)
+      self.try(:get_options)
+      env[:mega_env] = add_form_path_to_mega_displays(env[:mega_env])
+      @mega_displays = env[:mega_env][:mega_displays]
+      @index_view_template ||= "mega_bar.html.erb"
+      @show_view_template ||= "mega_bar.html.erb"
+      @edit_view_template ||= "mega_bar.html.erb"
+      @new_view_template ||= "mega_bar.html.erb"
+    end
+
+    def set_vars_for_all
+      @mega_class = env[:mega_env][:klass].constantize
+      env[:mega_env].keys.each { | env_var | instance_variable_set('@' + env_var.to_s, env[:mega_env][env_var]) }
+    end
+
+    def add_form_path_to_mega_displays(mega_env) 
+      mega_env[:mega_displays].each_with_index do | mega_display, index | 
+        id = params[:id]
+        mega_env[:mega_displays][index][:form_path] = form_path(mega_display[:action], mega_env[:kontroller_path], id)
+      end
+      mega_env
+    end  
+
     def form_path(action, path, id=nil)
       case action
       when 'index' 

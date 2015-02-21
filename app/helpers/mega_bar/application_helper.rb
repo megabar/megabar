@@ -8,6 +8,8 @@ module MegaBar
     end
 
     def param_from_tablename(model_props, tablename)
+      # used in data_display stuff. but might could be replaced with env[:mega_env] stuff
+      
       # if tablename starts with the module from the model_props, then chop it.
       # else just use it and hope for the best. 
       # Joining to foreign modules not supported and what will happen is forms won't save if the table 

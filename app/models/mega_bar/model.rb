@@ -1,7 +1,7 @@
 module MegaBar
   class Model < ActiveRecord::Base
     self.table_name = "mega_bar_models"
-    include MegaBar::MegaBarModelConcern
+#     include MegaBar::MegaBarModelConcern
     # validates_format_of :classname, :multiline => true, allow_nil: false, with: /([A-Z][a-z])\w+/
     validates_presence_of :classname
     validates :classname, format: { with: /\A[A-Za-z][A-Za-z0-9\-\_]*\z/, message: "Must start with a letter and have only letters, numbers, dashes or underscores" }

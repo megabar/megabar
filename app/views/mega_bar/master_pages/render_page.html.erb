@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MEGA BAR yo</title>
+    <%= stylesheet_link_tag  "application", media: "all", "data-turbolinks-track" => true %>
+    <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+
+    <%= link_to 'Pages', mega_bar.pages_path %> | 
+    <%= link_to 'Layouts', mega_bar.layouts_path %> | 
+    <%= link_to 'Blocks', mega_bar.blocks_path %> ||
+    <%= link_to 'Models', mega_bar.models_path %> | 
+    <%= link_to 'Model Displays', mega_bar.model_displays_path %> | 
+    <%= link_to 'Field Displays', mega_bar.field_displays_path %> |  
+    <%= link_to 'Fields', mega_bar.fields_path %> | 
+    <%= link_to 'Model Display Formats', mega_bar.model_display_formats_path %> ||
+    <%= link_to 'Textboxes', mega_bar.textboxes_path %> | 
+    <%= link_to 'Text Reads', mega_bar.textreads_path %> | 
+    <%= link_to 'Selects', mega_bar.selects_path %> 
+
+    <% flash.each do |key, msg| %>
+      <div id="<%= key %>">
+        <p><%= msg %></p>
+        <div class="clear"></div>
+      </div>
+    <% end %>
+
+    <% @page_layouts.each do |layout| %>
+      <div class='layout'><%=layout%></div>
+    <% end %>
+
+  </body>
+</html>
