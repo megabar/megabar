@@ -25,7 +25,6 @@ module MegaBar
     end
 
     def edit
-
       instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst])
       render @edit_view_template
@@ -49,10 +48,8 @@ module MegaBar
       end
     end
     def update
-      byebug
       instance_variable_set("@" + env[:mega_env][:kontroller_inst], @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);
-      byebug
       respond_to do |format|
         if @mega_instance.update(_params)
           format.html { redirect_to @mega_instance, notice: 'Thing was successfully updated.' }
