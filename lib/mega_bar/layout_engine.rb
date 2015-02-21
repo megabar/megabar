@@ -31,6 +31,7 @@ class LayoutEngine
     #  puts  "#{route.defaults[:controller]}##{route.defaults[:action]}"
     # end 
     # byebug
+    redirect = false
 
     request = Rack::Request.new(env)
     rout = {}
@@ -71,7 +72,6 @@ class LayoutEngine
           kontroller_path = modle.modyule.nil? || modle.modyule.empty? ?   modle.classname.pluralize.underscore :  modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + modle.classname.pluralize.underscore
           displays = blck.actions == 'current' ? block_model_displays.by_block(blck.id).by_action(rout[:action]) : block_model_displays.by_block(blck.id)
           block_action = displays.empty? ? rout[:action] : displays.first.action
-byebug
           if !['update', 'create', 'delete'].include?(rout[:action])
             mega_displays_info = []
             displays.each do | display |
@@ -113,8 +113,9 @@ byebug
           params_hash = blck.actions == 'current' ? orig_query_hash.merge(rout) : {action: block_action, controller: kontroller_path} 
           params_hash = params_hash.merge(id_hash) 
           env['QUERY_STRING'] = params_hash.to_param # 150221!     
-          @status, @headers, @dogs = kontroller_klass.constantize.action(block_action).call(env)
-          final_blocks <<  @dogs.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
+          @status, @headers, @disp_body = kontroller_klass.constantize.action(block_action).call(env)
+          redirect = [@status, @headers, @disp_body] if @status == 302
+          final_blocks <<  @disp_body.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
         end
       end
       env['mega_final_blocks'] = final_blocks
@@ -127,8 +128,7 @@ byebug
 
     final_page = []
     final_page <<  @page.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
-  
-    [@status, @headers, final_page]
+    return redirect ? [redirect[0], redirect[1], ['you are being redirected']] : [@status, @headers, final_page]
   end
   
   def each(&display)
@@ -136,14 +136,14 @@ byebug
     @response.each(&display)
   end
 
+
+  # Helper methods
   def is_displayable?(format)
     return  (format == 'hidden' || format == 'off') ? false : true
   end
 
   end
 
-
-  # Helper methods
   def get_action(action, method)
     case method
     when 'PATCH', 'PUT', 'POST'
