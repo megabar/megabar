@@ -3,11 +3,7 @@ MegaBar::Engine.routes.draw do
    resources :model_display_formats, path: '/model-display-formats',  defaults: {model_id: 15}
    resources :options,  defaults: {model_id: 17}
    ##### MEGABAR END
-
-
-
-
-
+  root 'roots#root_page'
 
 
 

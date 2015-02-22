@@ -8,33 +8,18 @@ module MegaBar
     validates_presence_of :default_sort_field
  
     has_many :fields, dependent: :destroy
-    has_many :model_displays, dependent: :destroy
+    #has_many :model_displays, dependent: :destroy
     before_create :standardize_modyule
     before_create :standardize_classname
     before_create :standardize_tablename
-    after_create  :make_model_displays
     after_create :make_all_files
-    after_save :make_model_displays
     #has_many :attributes #ack you can't do this!  http://reservedwords.herokuapp.com/words/attributes
-    attr_accessor :model_id, :new_model_display, :edit_model_display, :index_model_display, :show_model_display
     attr_writer :model_id
 
     scope :by_model, ->(model_id) { where(id: model_id) if model_id.present? }
 
     private
 
-    def make_model_displays 
-      actions = []
-      actions << {:format=>2, :action=>'new', :header=>'Create ' + self.name}  if (!ModelDisplay.by_model(self.id).by_action('new').present? && @new_model_display == 'y')
-      actions << {:format=>2, :action=>'edit', :header=>'Edit ' + self.name} if (!ModelDisplay.by_model(self.id).by_action('edit').present? && @edit_model_display == 'y')
-      actions << {:format=>1, :action=>'index', :header=>self.name.pluralize} if (!ModelDisplay.by_model(self.id).by_action('index').present? && @index_model_display == 'y')
-      actions << {:format=>2, :action=>'show', :header=>self.name} if (!ModelDisplay.by_model(self.id).by_action('show').present? && @show_model_display == 'y')
-      log_arr = []
-      actions.each do | action |
-        ModelDisplay.create(:model_id=>self.id, :format=>action[:format], :action=>action[:action], :header=>action[:header])
-        # log_arr  << 'format: ' + action[:format] + ', action: ' + action[:action]
-      end
-    end
     def make_all_files
       # generate 'active_record:model', [self.classname]]
       logger.info("creating scaffold for " + self.classname + 'via: ' + 'rails g mega_bar:mega_bar ' + self.classname + ' ' + self.id.to_s)
