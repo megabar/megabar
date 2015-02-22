@@ -66,6 +66,7 @@ class LayoutEngine
           final_blocks <<  blck.html
         else 
           block_model_displays =   MegaBar::ModelDisplay.by_block(blck.id)
+          byebug
           modle = MegaBar::Model.by_model(block_model_displays.first.model_id).first
           modyule = modle.modyule.empty? ? '' : modle.modyule + '::'  
           kontroller_klass = modyule + modle.classname.classify.pluralize + "Controller"
