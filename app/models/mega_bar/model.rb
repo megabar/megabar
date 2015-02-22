@@ -4,15 +4,18 @@ module MegaBar
     include MegaBar::MegaBarModelConcern
     # validates_format_of :classname, :multiline => true, allow_nil: false, with: /([A-Z][a-z])\w+/
     validates_presence_of :classname
+    validates :email, uniqueness: true
     validates :classname, format: { with: /\A[A-Za-z][A-Za-z0-9\-\_]*\z/, message: "Must start with a letter and have only letters, numbers, dashes or underscores" }
     validates_presence_of :default_sort_field
- 
+    attr_accessor :make_page_for_model
+    
     has_many :fields, dependent: :destroy
     #has_many :model_displays, dependent: :destroy
     before_create :standardize_modyule
     before_create :standardize_classname
     before_create :standardize_tablename
     after_create :make_all_files
+    after_create :make_page
     #has_many :attributes #ack you can't do this!  http://reservedwords.herokuapp.com/words/attributes
     attr_writer :model_id
 
@@ -27,6 +30,12 @@ module MegaBar
       # MegaBar.call_rails('mega_bar_models', {modyule: mod, classname: self.classname, model_id: self.id.to_s}) 
       system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s
       ActiveRecord::Migrator.migrate "db/migrate"
+    end
+
+    def make_page
+      mod = self.modyule.nil? || self.modyule.empty?  ? '' : self.modyule.underscore + '/'
+      path = mod + self.tablename
+      Page.create(name: self.name + ' Model Page', path: path, create_layout_and_block: 'y' )
     end
 
     def my_constantize(class_name)
