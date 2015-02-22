@@ -9,6 +9,7 @@ module MegaBar
     
     scope :by_model, ->(model_id) { where(model_id: model_id) if model_id.present? }
     scope :by_action, ->(action) { where(action: action) if action.present? }
+    scope :by_block, ->(block_id) { where(block_id: block_id) if block_id.present? }
 
     def make_field_displays 
       byebug

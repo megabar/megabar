@@ -1,25 +1,19 @@
 module MegaBar
   class Model < ActiveRecord::Base
-    self.table_name = "mega_bar_models"
     include MegaBar::MegaBarModelConcern
-    # validates_format_of :classname, :multiline => true, allow_nil: false, with: /([A-Z][a-z])\w+/
-    validates_presence_of :classname
-    validates :email, uniqueness: true
-    validates :classname, format: { with: /\A[A-Za-z][A-Za-z0-9\-\_]*\z/, message: "Must start with a letter and have only letters, numbers, dashes or underscores" }
-    validates_presence_of :default_sort_field
-    attr_accessor :make_page_for_model
-    
-    has_many :fields, dependent: :destroy
-    #has_many :model_displays, dependent: :destroy
+
+    after_create  :make_all_files
+    after_create  :make_page_for_model
+    attr_accessor :make_page
+    attr_writer   :model_id
     before_create :standardize_modyule
     before_create :standardize_classname
     before_create :standardize_tablename
-    after_create :make_all_files
-    after_create :make_page
-    #has_many :attributes #ack you can't do this!  http://reservedwords.herokuapp.com/words/attributes
-    attr_writer :model_id
-
-    scope :by_model, ->(model_id) { where(id: model_id) if model_id.present? }
+    has_many      :fields, dependent: :destroy
+    scope         :by_model, ->(model_id) { where(id: model_id) if model_id.present? }
+    validate      :classname, format: { with: /\A[A-Za-z][A-Za-z0-9\-\_]*\z/, message: "Must start with a letter and have only letters, numbers, dashes or underscores" }
+    validates_presence_of :default_sort_field
+    validates_uniqueness_of :classname
 
     private
 
@@ -32,10 +26,10 @@ module MegaBar
       ActiveRecord::Migrator.migrate "db/migrate"
     end
 
-    def make_page
+    def make_page_for_model
       mod = self.modyule.nil? || self.modyule.empty?  ? '' : self.modyule.underscore + '/'
       path = mod + self.tablename
-      Page.create(name: self.name + ' Model Page', path: path, create_layout_and_block: 'y' )
+      Page.create(name: self.name + ' Model Page', path: path, make_layout_and_block: 'y' )
     end
 
     def my_constantize(class_name)
