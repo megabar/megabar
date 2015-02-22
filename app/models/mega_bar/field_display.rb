@@ -1,7 +1,7 @@
 module MegaBar
   class FieldDisplay < ActiveRecord::Base
     after_save :make_data_display
-    belongs_to :fields
+    belongs_to :model_displays
     validates_presence_of :model_display_id, :field_id
     has_many :textboxes, dependent: :destroy
     has_many :textreads, dependent: :destroy

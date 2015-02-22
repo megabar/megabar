@@ -2,12 +2,32 @@ module MegaBar
   class ModelDisplay < ActiveRecord::Base
     belongs_to :blocks
     has_many :field_displays, dependent: :destroy
-    validates_presence_of :block_id, :action, :format
-
-    # TODO : gotta enforce that only model_displays with the same model and action can go into any one block.
-
+    validates_presence_of :block_id, :model_id, :action, :format
+    attr_accessor :new_field_display, :edit_field_display, :index_field_display, :show_field_display
+    after_save    :make_field_displays
+    
+    scope :by_model, ->(model_id) { where(model_id: model_id) if model_id.present? }
     scope :by_action, ->(action) { where(action: action) if action.present? }
     scope :by_block, ->(block_id) { where(block_id: block_id) if block_id.present? }
 
+    def make_field_displays 
+      actions = []
+      fields = Field.by_model(self.model_id)
+      fields.each do | field | 
+        case self.action
+        when 'new'
+          actions << {:format=>field.default_data_format, :header=>field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
+        when 'index'
+          actions << {:format=>'textread', :header=>field.field.pluralize}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present? 
+        when 'show'
+          actions << {:format=>'textread', :header=>field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
+        when 'edit'
+          actions << {:format=>field.default_data_format_edit, :header=>field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
+        end
+      end
+      actions.each do | action |
+        FieldDisplay.create(model_display_id: self.id,:field_id=>field.id, :format=>action[:format], :header=>action[:header])
+      end
+    end
   end
 end

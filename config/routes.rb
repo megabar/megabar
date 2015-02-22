@@ -1,19 +1,21 @@
 MegaBar::Engine.routes.draw do
   
-   resources :model_display_formats, path: '/model-display-formats',  defaults: {model_id: 15}
-   resources :options,  defaults: {model_id: 17}
-   resources :pages do 
-     resources :layouts
-   end
-   resources :layouts,  defaults: {model_id: 20}
-   resources :blocks,  defaults: {model_id: 21}
-   ##### MEGABAR END
-
-
+  resources :model_display_formats, path: '/model-display-formats',  defaults: {model_id: 15}
+  resources :options,  defaults: {model_id: 17}
+  resources :pages do 
+    resources :layouts
+  end
+  resources :layouts,  defaults: {model_id: 20}
+  resources :blocks,  defaults: {model_id: 21}
+  ##### MEGABAR END
+  root 'roots#root_page'
 
    # (leave that line in place with five #'s')
 
-
+  resources :blocks, defaults: {model_id: 21}
+  resources :layouts, defaults: {model_id: 20}
+  resources :pages, defaults: {model_id: 18}
+  
   resources :field_displays, defaults: {model_id: 4}
   resources :fields, defaults: {model_id: 2}
   resources :model_displays, defaults: {model_id: 3}
