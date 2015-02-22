@@ -16,17 +16,17 @@ module MegaBar
       fields.each do | field | 
         case self.action
         when 'new'
-          actions << {:format=>field.default_data_format, :header=>field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
+          actions << {format: field.default_data_format, field_id: field.id, header: field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
         when 'index'
-          actions << {:format=>'textread', :header=>field.field.pluralize}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present? 
+          actions << {format: 'textread', field_id: field.id, header: field.field.pluralize}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present? 
         when 'show'
-          actions << {:format=>'textread', :header=>field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
+          actions << {format: 'textread', field_id: field.id, header: field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
         when 'edit'
-          actions << {:format=>field.default_data_format_edit, :header=>field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
+          actions << {format: field.default_data_format_edit, header: field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
         end
       end
       actions.each do | action |
-        FieldDisplay.create(model_display_id: self.id,:field_id=>field.id, :format=>action[:format], :header=>action[:header])
+        FieldDisplay.create(model_display_id: self.id,:field_id=>action[:field_id], :format=>action[:format], :header=>action[:header])
       end
     end
   end
