@@ -12,23 +12,22 @@ module MegaBar
     scope :by_block, ->(block_id) { where(block_id: block_id) if block_id.present? }
 
     def make_field_displays 
-      byebug
       actions = []
-      index_model_display_id = ModelDisplay.by_model(self.model_id).by_action('index').pluck(:id).last
-      show_model_display_id = ModelDisplay.by_model(self.model_id).by_action('show').pluck(:id).last
-      new_model_display_id = ModelDisplay.by_model(self.model_id).by_action('new').pluck(:id).last
-      edit_model_display_id = ModelDisplay.by_model(self.model_id).by_action('edit').pluck(:id).last
-
-      fields = Fields.by_model(self.model_id)
-      byebug
+      fields = Field.by_model(self.model_id)
       fields.each do | field | 
-        actions << {:format=>'textread', model_display_id: index_model_display_id, :field_id=>field.id, :header=>self.field.pluralize}  if (!FieldDisplay.by_model_display_id(index_model_display_id).by_fields(field.id).present? && @index_field_display == 'y')
-        actions << {:format=>'textread', model_display_id: show_model_display_id, :field_id=>field.id, :header=>self.field}  if (!FieldDisplay.by_model_display_id(show_model_display_id).by_fields(field.id).present? && @show_field_display == 'y')
-        actions << {:format=>field.default_data_format, model_display_id: new_model_display_id, :field_id=>field.id, :header=>self.field}  if (!FieldDisplay.by_model_display_id(new_model_display_id).by_fields(field.id).present? && @new_field_display == 'y')
-        actions << {:format=>field.default_data_format_edit, model_display_id: edit_model_display_id, :field_id=>field.id, :header=>self.field}  if (!FieldDisplay.by_model_display_id(edit_model_display_id).by_fields(field.id).present? && @edit_field_display == 'y')
-        actions.each do | action |
-          FieldDisplay.create(model_display_id: action[:model_display_id],:field_id=>self.id, :format=>action[:format], :header=>action[:header])
+        case self.action
+        when 'new'
+          actions << {:format=>field.default_data_format, model_display_id: self.id, :field_id=>field.id, :header=>field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
+        when 'index'
+          actions << {:format=>'textread', model_display_id: self.id, :field_id=>field.id, :header=>field.field.pluralize}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present? 
+        when 'show'
+          actions << {:format=>'textread', model_display_id: self.id, :field_id=>field.id, :header=>field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
+        when 'edit'
+          actions << {:format=>field.default_data_format_edit, model_display_id: self.id, :field_id=>field.id, :header=>field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
         end
+      end
+      actions.each do | action |
+        FieldDisplay.create(model_display_id: action[:model_display_id],:field_id=>self.id, :format=>action[:format], :header=>action[:header])
       end
     end
   end

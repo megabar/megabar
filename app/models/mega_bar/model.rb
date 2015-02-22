@@ -29,7 +29,7 @@ module MegaBar
     def make_page_for_model
       mod = self.modyule.nil? || self.modyule.empty?  ? '' : self.modyule.underscore + '/'
       path = mod + self.tablename
-      Page.create(name: self.name + ' Model Page', path: path, make_layout_and_block: 'y' )
+      Page.create(name: self.name + ' Model Page', path: path, make_layout_and_block: 'y', base_name: self.name, model_id: self.id )
     end
 
     def my_constantize(class_name)
