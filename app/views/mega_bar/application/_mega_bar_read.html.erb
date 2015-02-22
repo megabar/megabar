@@ -25,7 +25,11 @@
       <% end %>
     <% end %>
     <% if @mega_display[:model_display_format].name == 'GridHtml' %>
-      <td><%= link_to 'Show', link_path('show', mega_record.id) %></td>
+      <td>
+        <%= link_to 'Show', link_path('show', mega_record.id) %>
+       
+        <% #byebug %>
+      </td>
       <td><%= link_to 'Edit', link_path('edit', mega_record.id) %></td>
       <td><%= link_to 'Destroy', mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
     <% end %>
@@ -33,5 +37,5 @@
   <% end %>
  
   <%=@mega_display[:model_display_format].app_wrapper_end.html_safe%>
- <br><%= submit_tag %>
+ <br><%#= submit_tag %>
 <% end %>

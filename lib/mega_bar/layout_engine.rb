@@ -40,6 +40,7 @@ class LayoutEngine
     request_path_info = request.path_info.dup
     rout = (Rails.application.routes.recognize_path request_path_info rescue {}) || {} 
     rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', '') rescue {}) || {}  if rout.empty? 
+
     rout[:action] = get_action(rout[:action], env['REQUEST_METHOD'])
 
     # page_path = { id: page[0], path: page[1]} if !rout.empty?
@@ -48,8 +49,8 @@ class LayoutEngine
       page_rout = (Rails.application.routes.recognize_path page[1] rescue {}) || {} 
       throwaway_path = page[1].dup
       page_rout = (MegaBar::Engine.routes.recognize_path throwaway_path.sub!('/mega-bar/', '') rescue {}) || {}  if page_rout.empty? 
-      page_info = page if page_rout[:controller] == rout[:controller] # 150220      
-      break if page_rout[:controller] == rout[:controller]
+      page_info = page if (page_rout[:controller] == rout[:controller]  && page_rout.size == rout.size) # 150220      
+      break if (page_rout[:controller] == rout[:controller] && page_rout.size == rout.size)
     end
     
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
@@ -66,7 +67,6 @@ class LayoutEngine
           final_blocks <<  blck.html
         else 
           block_model_displays =   MegaBar::ModelDisplay.by_block(blck.id)
-          byebug
           modle = MegaBar::Model.by_model(block_model_displays.first.model_id).first
           modyule = modle.modyule.empty? ? '' : modle.modyule + '::'  
           kontroller_klass = modyule + modle.classname.classify.pluralize + "Controller"
@@ -110,6 +110,7 @@ class LayoutEngine
             id_field: modle.classname.underscore + '_id'
           }
           id_hash = orig_query_hash.has_key?(modle.classname.underscore + '_id') ? {id: orig_query_hash[modle.classname.underscore + '_id']} : {}
+          # byebug
           
           params_hash = blck.actions == 'current' ? orig_query_hash.merge(rout) : {action: block_action, controller: kontroller_path} 
           params_hash = params_hash.merge(id_hash) 
