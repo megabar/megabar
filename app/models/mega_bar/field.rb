@@ -15,10 +15,12 @@ module MegaBar
     private
 
     def table_exists
+      byebug
       return true if self.tablename == 'accessor'
       modle = Model.find(self.model_id) #this is a ugly dependency so this doesn't run in test environment.
       prefix = modle.modyule.nil? || modle.modyule.empty? ? '' : modle.modyule.split('::').map { | m | m.underscore }.join('_') + '_'
       self.tablename =  prefix + self.tablename if prefix + self.tablename == modle.tablename
+      byebug
       return true if ActiveRecord::Base.connection.table_exists? self.tablename
       errors.add(:base, 'That table does not exist')
       return false
