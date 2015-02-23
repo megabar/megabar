@@ -48,18 +48,19 @@ class LayoutEngine
     # page_path = { id: page[0], path: page[1]} if !rout.empty?
     env['mega_route'] = rout
     MegaBar::Page.all.order(' id desc').pluck(:id, :path).each do | page |
+      page_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
+      next if (rout_terms - page_terms).size != rout_terms.size - page_terms.size
+      
       page_rout = (Rails.application.routes.recognize_path page[1] rescue {}) || {} 
       throwaway_path = page[1].dup
       page_rout = (MegaBar::Engine.routes.recognize_path throwaway_path.sub!('/mega-bar/', '') rescue {}) || {}  if page_rout.empty? 
-      page_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
-      page_info = page if (rout_terms - page_terms).size == rout_terms.size - page_terms.size
-      # byebug if (rout_terms - page_terms).size == rout_terms.size - page_terms.size
-      break if (rout_terms - page_terms).size == rout_terms.size - page_terms.size
-              #page_info = page if (page_rout[:controller] == rout[:controller]  && page_rout.size == rout.size) # 150220      
+      page_info = {page: page, terms: page_terms}
+      break 
     end
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
     final_layouts = [] 
-    page_layouts = MegaBar::Layout.by_page(page_info[0])
+    page_layouts = MegaBar::Layout.by_page(page_info[:page][0])
+
     page_layouts.each do | page_layout |
       blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(rout[:action])
       final_blocks = []
@@ -113,8 +114,17 @@ class LayoutEngine
             action: block_action,
             id_field: modle.classname.underscore + '_id'
           }
+
           id_hash = orig_query_hash.has_key?(modle.classname.underscore + '_id') ? {id: orig_query_hash[modle.classname.underscore + '_id']} : {}
-          # byebug
+          byebug
+          if !blck.nest_level.nil?  && blck.nest_level > 0
+            if !blck.nest_level_2.nil?  && blck.nest_level_2 > 0
+              puts 'twoooo'
+            end
+            byebug
+            puts 'oneee'
+          end
+
           
           params_hash = blck.actions == 'current' ? orig_query_hash.merge(rout) : {action: block_action, controller: kontroller_path} 
           params_hash = params_hash.merge(id_hash) 
@@ -155,7 +165,7 @@ class LayoutEngine
     when 'PATCH', 'PUT', 'POST'
       action == 'show'  ? 'update' : 'create'
     when 'DELETE'
-      'delete'
+      'destroy'
     else
       action
     end

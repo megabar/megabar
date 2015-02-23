@@ -17,7 +17,6 @@ module MegaBar
       require 'Rack'
       
       params.each_with_index do |v, k |
-        byebug
         Rack::Request.update_param(k, v)
         
       end

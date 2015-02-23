@@ -17,10 +17,10 @@ module MegaBar
           where(actions: ['all', 'current'])
         when 'update'
           where(actions: ['all', 'current'])
-        when 'delete'
+        when 'destroy'
           where(actions: ['all', 'current'])
         else
-          where(action: ['all', 'current', action])
+          where(actions: ['all', 'current', action])
         end
       end
     }
@@ -31,7 +31,8 @@ module MegaBar
     
 
     def make_model_displays 
-      if self.model_id
+
+      if !self.model_id.empty?
         model_name = Model.find(self.model_id).name
         actions = []
         actions << {:format=>2, :action=>'new', :header=>'Create ' + model_name.singularize}  if (!ModelDisplay.by_block(self.id).by_action('new').present? && @new_model_display == 'y')
