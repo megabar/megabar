@@ -39,7 +39,6 @@ module MegaBar
         actions << {:format=>1, :action=>'index', :header=>model_name.pluralize} if (!ModelDisplay.by_block(self.id).by_action('index').present? && @index_model_display == 'y')
         actions << {:format=>2, :action=>'show', :header=>model_name.singularize} if (!ModelDisplay.by_block(self.id).by_action('show').present? && @show_model_display == 'y')
         log_arr = []
-        byebug
         actions.each do | action |
           md = ModelDisplay.create(:block_id=>self.id, model_id: self.model_id, :format=>action[:format], :action=>action[:action], :header=>action[:header])
         end

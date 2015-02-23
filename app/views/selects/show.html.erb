@@ -1,13 +1,11 @@
-
-
-
 <%= 
 
+options =  (!@options[displayable_field[:field].tablename.to_sym].nil? && !@options[displayable_field[:field].tablename.to_sym][displayable_field[:field].field.to_sym].nil?) ? @options[displayable_field[:field].tablename.to_sym][displayable_field[:field].field.to_sym] : displayable_field[:options]
 
 select(
   param_from_tablename(@mega_model_properties, displayable_field[:field].tablename),
   displayable_field[:field].field, 
-  displayable_field[:options], 
+  options, 
   { include_blank: true }
 
 )%>

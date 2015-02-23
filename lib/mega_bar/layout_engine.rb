@@ -37,6 +37,8 @@ class LayoutEngine
     rout = {}
     page_route = {}
     page_info = {}
+    rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
+ 
     request_path_info = request.path_info.dup
     rout = (Rails.application.routes.recognize_path request_path_info rescue {}) || {} 
     rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', '') rescue {}) || {}  if rout.empty? 
@@ -49,10 +51,12 @@ class LayoutEngine
       page_rout = (Rails.application.routes.recognize_path page[1] rescue {}) || {} 
       throwaway_path = page[1].dup
       page_rout = (MegaBar::Engine.routes.recognize_path throwaway_path.sub!('/mega-bar/', '') rescue {}) || {}  if page_rout.empty? 
-      page_info = page if (page_rout[:controller] == rout[:controller]  && page_rout.size == rout.size) # 150220      
-      break if (page_rout[:controller] == rout[:controller] && page_rout.size == rout.size)
+      page_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
+      page_info = page if (rout_terms - page_terms).size == rout_terms.size - page_terms.size
+      # byebug if (rout_terms - page_terms).size == rout_terms.size - page_terms.size
+      break if (rout_terms - page_terms).size == rout_terms.size - page_terms.size
+              #page_info = page if (page_rout[:controller] == rout[:controller]  && page_rout.size == rout.size) # 150220      
     end
-    
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
     final_layouts = [] 
     page_layouts = MegaBar::Layout.by_page(page_info[0])
@@ -84,10 +88,10 @@ class LayoutEngine
                 if is_displayable?(field_disp.format)
                   #lets figure out how to display it right here.
                   data_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
-                  # if field_disp.format == 'select'
-                  #   options = !@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil? ? @options[field.tablename.to_sym][field.field.to_sym] :  MegaBar::Option.where(field_id: field.id).collect {|o| [ o.text, o.value ] }             
-                  # end
-                  displayable_fields << {field_display: field_disp, field: field, data_format: data_format, options: @options, obj: @mega_instance}
+                  if field_disp.format == 'select'
+                    options = MegaBar::Option.where(field_id: field.id).collect {|o| [ o.text, o.value ] }
+                  end
+                  displayable_fields << {field_display: field_disp, field: field, data_format: data_format, options: options, obj: @mega_instance}
                 end
               end
               info = {
