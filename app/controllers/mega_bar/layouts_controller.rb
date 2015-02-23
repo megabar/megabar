@@ -4,7 +4,8 @@ module MegaBar
     before_filter :conditions
 
     def conditions
-      @conditions.merge!(page_id: 10)
+
+      @conditions.merge!(env[:mega_env][:nested_ids][0]) if env[:mega_env][:nested_ids][0] 
     end
     def get_options
       @options[:mega_bar_layouts] =  {

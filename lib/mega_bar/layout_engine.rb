@@ -51,16 +51,15 @@ class LayoutEngine
       page_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
       next if (rout_terms - page_terms).size != rout_terms.size - page_terms.size
       
-      page_rout = (Rails.application.routes.recognize_path page[1] rescue {}) || {} 
-      throwaway_path = page[1].dup
-      page_rout = (MegaBar::Engine.routes.recognize_path throwaway_path.sub!('/mega-bar/', '') rescue {}) || {}  if page_rout.empty? 
+      #page_rout = (Rails.application.routes.recognize_path page[1] rescue {}) || {} 
+      #throwaway_path = page[1].dup
+      #page_rout = (MegaBar::Engine.routes.recognize_path throwaway_path.sub!('/mega-bar/', '') rescue {}) || {}  if page_rout.empty? 
       page_info = {page: page, terms: page_terms}
       break 
     end
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
     final_layouts = [] 
     page_layouts = MegaBar::Layout.by_page(page_info[:page][0])
-
     page_layouts.each do | page_layout |
       blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(rout[:action])
       final_blocks = []
@@ -78,6 +77,14 @@ class LayoutEngine
           kontroller_path = modle.modyule.nil? || modle.modyule.empty? ?   modle.classname.pluralize.underscore :  modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + modle.classname.pluralize.underscore
           displays = blck.actions == 'current' ? block_model_displays.by_block(blck.id).by_action(rout[:action]) : block_model_displays.by_block(blck.id)
           block_action = displays.empty? ? rout[:action] : displays.first.action
+          nested_ids = []
+          if !blck.nest_level_1.nil?  && blck.nest_level_1 > 0
+            nested_ids << {MegaBar::Model.find(blck.nest_level_1).classname.downcase +  '_id' =>rout[:id] }
+            if !blck.nest_level_2.nil?  && blck.nest_level_2 > 0
+              puts 'twoooo'
+            end
+          end
+
           if !['update', 'create', 'delete'].include?(rout[:action])
             mega_displays_info = []
             displays.each do | display |
@@ -112,20 +119,11 @@ class LayoutEngine
             kontroller_path: kontroller_path,
             mega_displays: mega_displays_info,
             action: block_action,
-            id_field: modle.classname.underscore + '_id'
+            id_field: modle.classname.underscore + '_id',
+            nested_ids: nested_ids
           }
-
-          id_hash = orig_query_hash.has_key?(modle.classname.underscore + '_id') ? {id: orig_query_hash[modle.classname.underscore + '_id']} : {}
-          byebug
-          if !blck.nest_level.nil?  && blck.nest_level > 0
-            if !blck.nest_level_2.nil?  && blck.nest_level_2 > 0
-              puts 'twoooo'
-            end
-            byebug
-            puts 'oneee'
-          end
-
           
+          id_hash = orig_query_hash.has_key?(modle.classname.underscore + '_id') ? {id: orig_query_hash[modle.classname.underscore + '_id']} : {}
           params_hash = blck.actions == 'current' ? orig_query_hash.merge(rout) : {action: block_action, controller: kontroller_path} 
           params_hash = params_hash.merge(id_hash) 
           env['QUERY_STRING'] = params_hash.to_param # 150221!     

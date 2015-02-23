@@ -1,5 +1,4 @@
 <%= 
-
 options =  (!@options[displayable_field[:field].tablename.to_sym].nil? && !@options[displayable_field[:field].tablename.to_sym][displayable_field[:field].field.to_sym].nil?) ? @options[displayable_field[:field].tablename.to_sym][displayable_field[:field].field.to_sym] : displayable_field[:options]
 
 select(
