@@ -17,8 +17,16 @@
         <tr><th><%=displayable_field[:field_display].header %></th><td>
       <% end %>
       <%= @mega_display[:model_display_format].field_wrapper.html_safe%>
-     
-      <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: mega_record} %>
+      
+      <% data = render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: mega_record} %>
+
+      <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
+         <a href='<%=data%>'>
+      <% end %>    
+      <%= data %>
+      <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
+         </a>
+      <% end %>
       <%= @mega_display[:model_display_format].field_wrapper_end.html_safe %>
       <% if @mega_display[:model_display_format].name == 'ProfileTable' %>
         </td>

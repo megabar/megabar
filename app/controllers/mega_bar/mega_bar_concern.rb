@@ -71,7 +71,7 @@ module MegaBar
     end
     
     def set_vars_for_displays
-      @conditions =  {}
+      @conditions =  {}; self.try(:conditions)
       @options = {}; self.try(:get_options)
       self.try(:get_options)
       env[:mega_env] = add_form_path_to_mega_displays(env[:mega_env])
@@ -87,6 +87,9 @@ module MegaBar
       env[:mega_env].keys.each { | env_var | instance_variable_set('@' + env_var.to_s, env[:mega_env][env_var]) }
     end
 
+    def conditions 
+       @conditions.merge!(env[:mega_env][:nested_ids][0]) if env[:mega_env][:nested_ids][0] 
+    end
     def add_form_path_to_mega_displays(mega_env) 
       mega_env[:mega_displays].each_with_index do | mega_display, index |
         mega_env[:mega_displays][index][:form_path] = form_path(params[:action], mega_env[:kontroller_path], params[:id])

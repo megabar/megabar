@@ -32,7 +32,6 @@ class LayoutEngine
     # end 
     # byebug
     redirect = false
-
     request = Rack::Request.new(env)
     rout = {}
     page_route = {}
@@ -42,7 +41,6 @@ class LayoutEngine
     request_path_info = request.path_info.dup
     rout = (Rails.application.routes.recognize_path request_path_info rescue {}) || {} 
     rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', '') rescue {}) || {}  if rout.empty? 
-
     rout[:action] = get_action(rout[:action], env['REQUEST_METHOD'])
 
     # page_path = { id: page[0], path: page[1]} if !rout.empty?
@@ -79,7 +77,7 @@ class LayoutEngine
           block_action = displays.empty? ? rout[:action] : displays.first.action
           nested_ids = []
           if !blck.nest_level_1.nil?  && blck.nest_level_1 > 0
-            nested_ids << {MegaBar::Model.find(blck.nest_level_1).classname.downcase +  '_id' =>rout[:id] }
+            nested_ids << {MegaBar::Model.find(blck.nest_level_1).classname.underscore.downcase +  '_id' =>rout[:id] }
             if !blck.nest_level_2.nil?  && blck.nest_level_2 > 0
               puts 'twoooo'
             end
@@ -146,7 +144,7 @@ class LayoutEngine
   end
   
   def each(&display)
-    display.call("<!-- #{@message}: #{@stop - @start} -->\n") if @headers["Content-Type"].include? "text/html"
+    display.call("<!-- #{@message}: #{@stop - @start} -->\n") if (!@headers['Content-Type'].nil? && @headers["Content-Type"].include?("text/html"))
     @response.each(&display)
   end
 

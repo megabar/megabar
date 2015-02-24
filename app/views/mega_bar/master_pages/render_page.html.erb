@@ -7,6 +7,12 @@
     <%= csrf_meta_tags %>
   </head>
   <body>
+    <nav>
+    Nav:
+    <%= link_to 'Models', mega_bar.models_path %> ||
+    <%= link_to 'Pages', mega_bar.pages_path %> ||
+    <%= link_to "MDF's", mega_bar.model_display_formats_path %> 
+    </nav>
 
     <% flash.each do |key, msg| %>
       <div id="<%= key %>">
@@ -20,21 +26,6 @@
     <% end %>
 
 
-    <p>
-    Nav:<br>
-    <%= link_to 'Models', mega_bar.models_path %> -> 
-    <%= link_to 'Fields', mega_bar.fields_path %> ->
-    <%= link_to 'Options', mega_bar.options_path %> <br>
-    <%= link_to 'Pages', mega_bar.pages_path %> ->
-    <%= link_to 'Layouts', mega_bar.layouts_path %> ->
-    <%= link_to 'Blocks', mega_bar.blocks_path %> ->
-    <%= link_to 'Model Displays', mega_bar.model_displays_path %> -> 
-    <%= link_to 'Field Displays', mega_bar.field_displays_path %> <br>
-    [  
-    <%= link_to 'Textboxes', mega_bar.textboxes_path %> | 
-    <%= link_to 'Text Reads', mega_bar.textreads_path %> | 
-    <%= link_to 'Selects', mega_bar.selects_path %> ]<br>
-    <%= link_to 'Model Display Formats', mega_bar.model_display_formats_path %> 
-    </p>
+
   </body>
 </html>
