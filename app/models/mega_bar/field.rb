@@ -26,10 +26,10 @@ module MegaBar
     def make_field_displays 
       model_displays = mds = ModelDisplay.by_block(self.block_id)
       actions = []
-      actions << {format: 'textread', model_display_id: mds.by_action('index').last.id,  header: self.field.pluralize}  if (!FieldDisplay.by_model_display_id(mds.by_action('index').last.id).by_fields(self.id).present? && @index_field_display == 'y')
-      actions << {format: 'textread', model_display_id: mds.by_action('show').last.id,  header: self.field}  if (!FieldDisplay.by_model_display_id(mds.by_action('show').last.id).by_fields(self.id).present? && @show_field_display == 'y')
-      actions << {format: self.default_data_format, model_display_id: mds.by_action('new').last.id, header:self.field}  if (!FieldDisplay.by_model_display_id(mds.by_action('new').last.id).by_fields(self.id).present? && @new_field_display == 'y')
-      actions << {format: self.default_data_format_edit, model_display_id: mds.by_action('edit').last.id, header: self.field}  if (!FieldDisplay.by_model_display_id(mds.by_action('edit').last.id).by_fields(self.id).present? && @edit_field_display == 'y')
+      actions << {format: 'textread', model_display_id: mds.by_action('index').last.id,  header: self.field.humanize} if (!FieldDisplay.by_model_display_id(mds.by_action('index').last.id).by_fields(self.id).present? && @index_field_display == 'y')
+      actions << {format: 'textread', model_display_id: mds.by_action('show').last.id,  header: self.field.humanize} if (!FieldDisplay.by_model_display_id(mds.by_action('show').last.id).by_fields(self.id).present? && @show_field_display == 'y')
+      actions << {format: self.default_data_format, model_display_id: mds.by_action('new').last.id, header:self.field.humanize} if (!FieldDisplay.by_model_display_id(mds.by_action('new').last.id).by_fields(self.id).present? && @new_field_display == 'y')
+      actions << {format: self.default_data_format_edit, model_display_id: mds.by_action('edit').last.id, header: self.field.humanize} if (!FieldDisplay.by_model_display_id(mds.by_action('edit').last.id).by_fields(self.id).present? && @edit_field_display == 'y')
       actions.each do | action |
         FieldDisplay.create(model_display_id: action[:model_display_id], field_id: self.id, format:action[:format], header: action[:header])
       end

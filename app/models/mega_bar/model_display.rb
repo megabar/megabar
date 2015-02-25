@@ -4,7 +4,7 @@ module MegaBar
     has_many :field_displays, dependent: :destroy
     validates_presence_of :block_id, :model_id, :action, :format
     attr_accessor :new_field_display, :edit_field_display, :index_field_display, :show_field_display
-    after_save    :make_field_displays
+    # after_save    :make_field_displays
     
     scope :by_model, ->(model_id) { where(model_id: model_id) if model_id.present? }
     scope :by_action, ->(action) { where(action: action) if action.present? }
@@ -16,13 +16,13 @@ module MegaBar
       fields.each do | field | 
         case self.action
         when 'new'
-          actions << {format: field.default_data_format, field_id: field.id, header: field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
+          actions << {format: field.default_data_format, field_id: field.id, header: field.field.humanize}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
         when 'index'
-          actions << {format: 'textread', field_id: field.id, header: field.field.pluralize}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present? 
+          actions << {format: 'textread', field_id: field.id, header: field.field.humanize}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present? 
         when 'show'
-          actions << {format: 'textread', field_id: field.id, header: field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
+          actions << {format: 'textread', field_id: field.id, header: field.field.humanize}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
         when 'edit'
-          actions << {format: field.default_data_format_edit, header: field.field}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
+          actions << {format: field.default_data_format_edit, header: field.field.humanize}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
         end
       end
       actions.each do | action |

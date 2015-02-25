@@ -1,8 +1,6 @@
 class CreateMegaBarModelDisplayFormats < ActiveRecord::Migration
   def change
     create_table :mega_bar_model_display_formats do |t|
-      t.datetime :created_at
-      t.datetime :updated_at
       t.string :name
       t.string :app_wrapper
       t.string :app_wrapper_end
@@ -13,6 +11,8 @@ class CreateMegaBarModelDisplayFormats < ActiveRecord::Migration
       t.string :field_wrapper
       t.string :field_wrapper_end
       t.string :separate_header_row
+      t.datetime :created_at
+      t.datetime :updated_at
     end
   end
 end

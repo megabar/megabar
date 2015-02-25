@@ -1,4 +1,3 @@
-
 module MegaBar
   class TmpModelDisplay < ActiveRecord::Base
     

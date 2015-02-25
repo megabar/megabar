@@ -1,8 +1,4 @@
-
 module MegaBar 
-
-  class Page < ActiveRecord::Base
+  class TmpPage < ActiveRecord::Base
   end
-
-
 end 

@@ -1,4 +1,3 @@
-
 module MegaBar
   class TmpModel < ActiveRecord::Base
     

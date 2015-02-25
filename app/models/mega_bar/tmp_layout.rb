@@ -1,7 +1,7 @@
 
 module MegaBar 
 
-  class Layout < ActiveRecord::Base
+  class TmpLayout < ActiveRecord::Base
   end
 
 

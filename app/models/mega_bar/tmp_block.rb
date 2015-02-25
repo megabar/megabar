@@ -1,8 +1,4 @@
-
 module MegaBar 
-
-  class Block < ActiveRecord::Base
+  class TmpBlock < ActiveRecord::Base
   end
-
-
 end 
