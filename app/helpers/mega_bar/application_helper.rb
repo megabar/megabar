@@ -4,10 +4,12 @@ module MegaBar
       title ||= column.titleize
       css_class = column == sort_column(@mega_class, @mega_model_properties, params) ? 'current ' + sort_direction(params) : nil
       direction = column == sort_column(@mega_class, @mega_model_properties, params) && sort_direction(params) == 'asc' ? 'desc' : 'asc'
-      link_to title, {:sort => column, :direction => direction}, class: css_class
+      link_to title, {:sort => column, :direction => direction, controller: @kontroller_path}, class: css_class
     end
 
     def param_from_tablename(model_props, tablename)
+      # used in data_display stuff. but might could be replaced with env[:mega_env] stuff
+      
       # if tablename starts with the module from the model_props, then chop it.
       # else just use it and hope for the best. 
       # Joining to foreign modules not supported and what will happen is forms won't save if the table 
@@ -26,20 +28,20 @@ module MegaBar
       action ||= params[:action]
       case action
       when 'index' #untested
-        url_for(controller: params[:controller].to_s,
+        url_for(controller: @kontroller_path.to_s,
         action:  params[:action],
         only_path: true)
       when 'new' 
-        url_for(controller: params[:controller].to_s,
+        url_for(controller: @kontroller_path.to_s,
         action:  'new',
         only_path: true)
       when 'edit'  #untested
-        url_for(controller: params[:controller].to_s,
+        url_for(controller: @kontroller_path.to_s,
         action:  'edit',
         :id=>id,#catch errors
         only_path: true)
       when 'show'  #untested
-        url_for(controller: params[:controller].to_s,
+        url_for(controller: @kontroller_path.to_s,
           :id => id,
           action:  'show',
           only_path: true

@@ -4,23 +4,12 @@ module MegaBar
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :exception
     helper_method :sort_column, :sort_direction, :is_displayable
-    before_action -> { @mega_class = constant_from_controller(params[:controller]).constantize  }
-    before_action -> { @options = {}; self.try(:get_options) }
-    before_action -> { mega_model_properties },  only: [:index, :show, :edit, :new]
-    before_action -> { mega_controller },  only: [:index, :show, :edit, :new]
-    before_action -> { mega_displays },  only: [:index, :show, :edit, :new] #not save or update..
-    before_filter :mega_template
-    
-    def mega_template
-      @index_view_template ||= "mega_bar.html.erb"
-      @show_view_template ||= "mega_bar.html.erb"
-      @edit_view_template ||= "mega_bar.html.erb"
-      @new_view_template ||= "mega_bar.html.erb"
-    end
+    before_action :set_vars_for_all
+    before_action :set_vars_for_displays, only: [:show, :index, :new, :edit]
 
     def _params
       permits = []  
-      MegaBar::Field.by_model(params[:model_id]).pluck(:field).each do |att|
+      MegaBar::Field.by_model(env[:mega_env][:model_id]).pluck(:field).each do |att|
         permits << att unless ['id', 'created_at', 'updated_at'].include?(att)
       end
       params.require(controller_name.singularize).permit(permits)

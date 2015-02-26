@@ -1,7 +1,7 @@
 class CreateMegaBarTmpTextreads < ActiveRecord::Migration
   def change
     create_table :mega_bar_tmp_textreads do |t|   
-      t.integer :field_display_id
+      t.references :field_display
       t.integer :truncation
       t.text :truncation_format
       t.text :transformation

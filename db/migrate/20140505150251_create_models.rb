@@ -1,6 +1,7 @@
 class CreateModels < ActiveRecord::Migration
   def change
     create_table :mega_bar_models do |t|
+      t.string :modyule
       t.string :classname
       t.string :schema
       t.string :tablename

@@ -4,7 +4,6 @@ class CreateRecordsFormats < ActiveRecord::Migration
       t.string :name
       t.string :classname
       t.string :type
-
       t.timestamps
     end
   end

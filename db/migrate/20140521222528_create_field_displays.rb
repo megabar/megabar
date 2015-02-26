@@ -1,11 +1,12 @@
 class CreateFieldDisplays < ActiveRecord::Migration
   def change
     create_table :mega_bar_field_displays do |t|
-      t.integer :field_id
+      t.references :model_display
+      t.references :field
       t.string :format
       t.string :action
       t.string :header
-      t.integer :model_display_id
+      t.string :link_type
       t.timestamps
     end
   end

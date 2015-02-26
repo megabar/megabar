@@ -3,6 +3,12 @@ module MegaBar
     isolate_namespace MegaBar
     require 'seed_dump'
 
+    config.autoload_paths << File.expand_path("../*", __FILE__)
+
+    require File.expand_path('../layout_engine.rb', __FILE__)
+    config.app_middleware.use LayoutEngine
+
+
 
     initializer :append_migrations do |app|
       unless app.root.to_s.match root.to_s
