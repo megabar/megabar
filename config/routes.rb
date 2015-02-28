@@ -3,7 +3,9 @@ MegaBar::Engine.routes.draw do
   resources :model_display_formats, path: '/model-display-formats'
   resources :options
   resources :pages do 
-    resources :layouts
+    resources :layouts do
+      resources :blocks
+    end
   end
   resources :layouts
   resources :blocks

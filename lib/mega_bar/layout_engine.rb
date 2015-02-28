@@ -42,7 +42,6 @@ class LayoutEngine
     rout = (Rails.application.routes.recognize_path request_path_info rescue {}) || {} 
     rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', '') rescue {}) || {}  if rout.empty? 
     rout[:action] = get_action(rout[:action], env['REQUEST_METHOD'])
-    
     # page_path = { id: page[0], path: page[1]} if !rout.empty?
     env['mega_route'] = rout
     MegaBar::Page.all.order(' id desc').pluck(:id, :path).each do | page |
@@ -60,7 +59,7 @@ class LayoutEngine
       break 
     end
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
-    byebug
+    
     final_layouts = [] 
     page_layouts = MegaBar::Layout.by_page(page_info[:page_id])
     page_layouts.each do | page_layout |
@@ -75,10 +74,12 @@ class LayoutEngine
         else 
           params_hash_arr = []
           block_model_displays =   MegaBar::ModelDisplay.by_block(blck.id)
+          # byebug
           modle = MegaBar::Model.by_model(block_model_displays.first.model_id).first
           modyule = modle.modyule.empty? ? '' : modle.modyule + '::'  
           kontroller_klass = modyule + modle.classname.classify.pluralize + "Controller"
           kontroller_path = modle.modyule.nil? || modle.modyule.empty? ?   modle.classname.pluralize.underscore :  modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + modle.classname.pluralize.underscore
+          # byebug
           displays = blck.actions == 'current' ? block_model_displays.by_block(blck.id).by_action(rout[:action]) : block_model_displays.by_block(blck.id)
           block_action = displays.empty? ? rout[:action] : displays.first.action
           id_field = modle.classname.underscore + '_id'
@@ -88,7 +89,7 @@ class LayoutEngine
           
           if blck.path_base
             # block_path_stub = blck.path_base.rindex(':').nil? ? block_path_stub : blck.path_base[0..blck.path_base.rindex(':') - 2]
-
+            # byebug
             if page_info[:page_path].starts_with?(blck.path_base) || blck.path_base.starts_with?(page_info[:page_path])
               block_path_vars = blck.path_base.split('/').map{ | m | m if m[0] == ':'} - ["", nil]
               depth = -1 
@@ -97,12 +98,15 @@ class LayoutEngine
                 v = "nest_level_#{depth + 1}"
                 blck_model = depth == ( -1) ? modle :  MegaBar::Model.find(blck.send(v))
                 fk_field =  depth == ( -1)? 'id' : blck_model.classname.underscore.downcase +  '_id'
+          #      byebug
+                
                 new_hash = {fk_field => page_info[:vars][block_path_vars.size-depth-1]}
                 params_hash_arr <<  new_hash
                 nested_ids << new_hash if depth > -1
-                
+
                 depth += 1
               end
+              
             end
           else
             # you can do layouts with a block nested one deep without setting path_base
@@ -110,7 +114,6 @@ class LayoutEngine
             params_hash_arr << i =  {MegaBar::Model.find(blck.nest_level_1).classname.underscore + '_id' =>  rout[:id]} if !blck.nest_level_1.nil?
             nested_ids << i if i
           end
-
           if !['update', 'create', 'delete'].include?(rout[:action])
             mega_displays_info = []
             displays.each do | display |
@@ -157,7 +160,7 @@ class LayoutEngine
           params_hash = params_hash.merge(env['rack.request.form_hash']) if block_action == 'update'
           env['QUERY_STRING'] = params_hash.to_param # 150221! 
           env['action_dispatch.request.parameters'] = params_hash
-          byebug
+          
           @status, @headers, @disp_body = kontroller_klass.constantize.action(block_action).call(env)
           redirect = [@status, @headers, @disp_body] if @status == 302
           final_blocks <<  @disp_body.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]

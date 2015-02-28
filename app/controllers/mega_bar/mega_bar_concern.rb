@@ -49,8 +49,6 @@ module MegaBar
       end
     end
     def update
-
-      byebug
       
       instance_variable_set("@" + env[:mega_env][:kontroller_inst], @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);

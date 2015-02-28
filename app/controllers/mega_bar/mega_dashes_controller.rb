@@ -49,7 +49,6 @@ module MegaBar
       cc.instance_variable_set("@mega_model_properties", mega_model_properties(params)) if ["index", "show", "edit", "new"].include?params[:action]
       cc.instance_variable_set("@mega_displays", mega_displays(params)) if ["index", "show", "edit", "new"].include?params[:action]
       cc.try(:mega_template)
-      byebug
       cc.try(:index)
     end
 

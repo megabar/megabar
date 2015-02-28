@@ -11,21 +11,22 @@ module MegaBar
     scope :by_action, ->(action) { where(action: action) }
     scope :by_model_display_id, ->(model_display_id) { where(model_display_id: model_display_id) }
     def make_data_display
+      return if self.format.to_s == 'off'
+
       Textbox.by_field_display_id(self.id).delete_all
       Textread.by_field_display_id(self.id).delete_all
       Select.by_field_display_id(self.id).delete_all
-      data_display_class = ("MegaBar::" + self.format.to_s.classify).constantize
-      data_display_obj = data_display_class.new
+      data_display_obj = ("MegaBar::" + self.format.to_s.classify).constantize.new
       model_id = data_display_obj.get_model_id
       fields = Field.by_model(model_id)
       fields_defaults = {}
       fields.each do |field| 
-        unless field.default_value.nil?
+        unless (field.default_value.nil? || field.default_value == 'off')
           fields_defaults[field.field.parameterize.underscore.to_sym] = field.default_value
         end
       end
       fields_defaults[:field_display_id] = self.id
-      data_display_class.where(:field_display_id => self.id).first_or_create(fields_defaults)
+       ("MegaBar::" + self.format.to_s.classify).constantize.where(:field_display_id => self.id).first_or_create(fields_defaults)
       f = Field.where(id: self.field_id)
 
     end
