@@ -42,32 +42,38 @@ class LayoutEngine
     rout = (Rails.application.routes.recognize_path request_path_info rescue {}) || {} 
     rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', '') rescue {}) || {}  if rout.empty? 
     rout[:action] = get_action(rout[:action], env['REQUEST_METHOD'])
-
+    
     # page_path = { id: page[0], path: page[1]} if !rout.empty?
     env['mega_route'] = rout
     MegaBar::Page.all.order(' id desc').pluck(:id, :path).each do | page |
-      page_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
-      next if (rout_terms - page_terms).size != rout_terms.size - page_terms.size
+      page_path_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
+      next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
+      page_terms = page[1].split('/').reject! { |c| (c.nil? || c.empty?) }
+      variable_segments = []
+      page_terms.each_with_index do | v, k |
+        
+        variable_segments << rout_terms[k] if page_terms[k].starts_with?(':')
+      end
+      variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
+      page_info = {page_id: page[0], page_path: page[1], terms: page_terms, vars: variable_segments}
       
-      #page_rout = (Rails.application.routes.recognize_path page[1] rescue {}) || {} 
-      #throwaway_path = page[1].dup
-      #page_rout = (MegaBar::Engine.routes.recognize_path throwaway_path.sub!('/mega-bar/', '') rescue {}) || {}  if page_rout.empty? 
-      page_info = {page: page, terms: page_terms}
       break 
     end
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
+    byebug
     final_layouts = [] 
-    page_layouts = MegaBar::Layout.by_page(page_info[:page][0])
+    page_layouts = MegaBar::Layout.by_page(page_info[:page_id])
     page_layouts.each do | page_layout |
       blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(rout[:action])
       final_blocks = []
       params_string = ''
       params_hash = {}
       id_hash = {}
-      blocks.each do |blck|
+      blocks.each do |blck|  
         if ! blck.html.nil? && ! blck.html.empty? 
           final_blocks <<  blck.html
         else 
+          params_hash_arr = []
           block_model_displays =   MegaBar::ModelDisplay.by_block(blck.id)
           modle = MegaBar::Model.by_model(block_model_displays.first.model_id).first
           modyule = modle.modyule.empty? ? '' : modle.modyule + '::'  
@@ -75,12 +81,35 @@ class LayoutEngine
           kontroller_path = modle.modyule.nil? || modle.modyule.empty? ?   modle.classname.pluralize.underscore :  modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + modle.classname.pluralize.underscore
           displays = blck.actions == 'current' ? block_model_displays.by_block(blck.id).by_action(rout[:action]) : block_model_displays.by_block(blck.id)
           block_action = displays.empty? ? rout[:action] : displays.first.action
+          id_field = modle.classname.underscore + '_id'
           nested_ids = []
-          if !blck.nest_level_1.nil?  && blck.nest_level_1 > 0
-            nested_ids << {MegaBar::Model.find(blck.nest_level_1).classname.underscore.downcase +  '_id' =>rout[:id] }
-            if !blck.nest_level_2.nil?  && blck.nest_level_2 > 0
-              puts 'twoooo'
+          params_hash_arr << {action: block_action} 
+          params_hash_arr << {controller: kontroller_path} 
+          
+          if blck.path_base
+            # block_path_stub = blck.path_base.rindex(':').nil? ? block_path_stub : blck.path_base[0..blck.path_base.rindex(':') - 2]
+
+            if page_info[:page_path].starts_with?(blck.path_base) || blck.path_base.starts_with?(page_info[:page_path])
+              block_path_vars = blck.path_base.split('/').map{ | m | m if m[0] == ':'} - ["", nil]
+              depth = -1 
+              
+              until depth == block_path_vars.size
+                v = "nest_level_#{depth + 1}"
+                blck_model = depth == ( -1) ? modle :  MegaBar::Model.find(blck.send(v))
+                fk_field =  depth == ( -1)? 'id' : blck_model.classname.underscore.downcase +  '_id'
+                new_hash = {fk_field => page_info[:vars][block_path_vars.size-depth-1]}
+                params_hash_arr <<  new_hash
+                nested_ids << new_hash if depth > -1
+                
+                depth += 1
+              end
             end
+          else
+            
+            params_hash_arr << h =(rout[:id] && blck.nest_level_1.nil?) ? {id: rout[:id]} : {id: nil}
+            
+            params_hash_arr << i =  {MegaBar::Model.find(blck.nest_level_1).classname.underscore + '_id' =>  rout[:id]} if !blck.nest_level_1.nil?
+            nested_ids << i if i
           end
 
           if !['update', 'create', 'delete'].include?(rout[:action])
@@ -117,14 +146,19 @@ class LayoutEngine
             kontroller_path: kontroller_path,
             mega_displays: mega_displays_info,
             action: block_action,
-            id_field: modle.classname.underscore + '_id',
+            id_field: id_field,
             nested_ids: nested_ids
           }
           
           id_hash = orig_query_hash.has_key?(modle.classname.underscore + '_id') ? {id: orig_query_hash[modle.classname.underscore + '_id']} : {}
-          params_hash = blck.actions == 'current' ? orig_query_hash.merge(rout) : {action: block_action, controller: kontroller_path} 
-          params_hash = params_hash.merge(id_hash) 
-          env['QUERY_STRING'] = params_hash.to_param # 150221!     
+          params_hash_arr.each do |param|
+            params_hash = params_hash.merge(param)
+          end
+          params_hash.merge(orig_query_hash)
+
+         # env['QUERY_STRING'] = params_hash.to_param # 150221! 
+         # env['action_dispatch.request.parameters'] = params_hash
+            
           @status, @headers, @disp_body = kontroller_klass.constantize.action(block_action).call(env)
           redirect = [@status, @headers, @disp_body] if @status == 302
           final_blocks <<  @disp_body.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]

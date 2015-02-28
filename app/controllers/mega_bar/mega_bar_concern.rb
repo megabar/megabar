@@ -12,6 +12,7 @@ module MegaBar
     end
 
     def show
+
       instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
       @mega_instance = []
       @mega_instance << instance_variable_get("@"  + env[:mega_env][:kontroller_inst]);  
@@ -48,6 +49,9 @@ module MegaBar
       end
     end
     def update
+
+      byebug
+      
       instance_variable_set("@" + env[:mega_env][:kontroller_inst], @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);
       respond_to do |format|
@@ -88,6 +92,7 @@ module MegaBar
     end
 
     def conditions 
+
        @conditions.merge!(env[:mega_env][:nested_ids][0]) if env[:mega_env][:nested_ids][0] 
     end
     def add_form_path_to_mega_displays(mega_env) 
