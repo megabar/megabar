@@ -72,7 +72,8 @@ class LayoutEngine
         if ! blck.html.nil? && ! blck.html.empty? 
           final_blocks <<  blck.html
         else 
-          params_hash_arr = []
+          params_hash_arr = [] #used for 'params'
+          nested_ids = [] #used for '@conditions'
           block_model_displays =   MegaBar::ModelDisplay.by_block(blck.id)
           # byebug
           modle = MegaBar::Model.by_model(block_model_displays.first.model_id).first
@@ -83,27 +84,20 @@ class LayoutEngine
           displays = blck.actions == 'current' ? block_model_displays.by_block(blck.id).by_action(rout[:action]) : block_model_displays.by_block(blck.id)
           block_action = displays.empty? ? rout[:action] : displays.first.action
           id_field = modle.classname.underscore + '_id'
-          nested_ids = []
           params_hash_arr << {action: block_action} 
           params_hash_arr << {controller: kontroller_path} 
-          
           if blck.path_base
             # block_path_stub = blck.path_base.rindex(':').nil? ? block_path_stub : blck.path_base[0..blck.path_base.rindex(':') - 2]
             # byebug
             if page_info[:page_path].starts_with?(blck.path_base) || blck.path_base.starts_with?(page_info[:page_path])
               block_path_vars = blck.path_base.split('/').map{ | m | m if m[0] == ':'} - ["", nil]
-              depth = -1 
-              
-              until depth == block_path_vars.size
-                v = "nest_level_#{depth + 1}"
-                blck_model = depth == ( -1) ? modle :  MegaBar::Model.find(blck.send(v))
-                fk_field =  depth == ( -1)? 'id' : blck_model.classname.underscore.downcase +  '_id'
-          #      byebug
-                
-                new_hash = {fk_field => page_info[:vars][block_path_vars.size-depth-1]}
+              depth = 0 
+              until depth == block_path_vars.size + 1            
+                blck_model = depth == 0 ? modle :  MegaBar::Model.find(blck.send("nest_level_#{depth}"))
+                fk_field =  depth == 0 ? 'id' : blck_model.classname.underscore.downcase +  '_id'
+                new_hash = {fk_field => page_info[:vars][block_path_vars.size - depth]}
                 params_hash_arr <<  new_hash
-                nested_ids << new_hash if depth > -1
-
+                nested_ids << new_hash if depth > 0
                 depth += 1
               end
               
@@ -160,7 +154,7 @@ class LayoutEngine
           params_hash = params_hash.merge(env['rack.request.form_hash']) if block_action == 'update'
           env['QUERY_STRING'] = params_hash.to_param # 150221! 
           env['action_dispatch.request.parameters'] = params_hash
-          
+
           @status, @headers, @disp_body = kontroller_klass.constantize.action(block_action).call(env)
           redirect = [@status, @headers, @disp_body] if @status == 302
           final_blocks <<  @disp_body.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
