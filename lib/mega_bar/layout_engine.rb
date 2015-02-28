@@ -105,9 +105,8 @@ class LayoutEngine
               end
             end
           else
-            
+            # you can do layouts with a block nested one deep without setting path_base
             params_hash_arr << h =(rout[:id] && blck.nest_level_1.nil?) ? {id: rout[:id]} : {id: nil}
-            
             params_hash_arr << i =  {MegaBar::Model.find(blck.nest_level_1).classname.underscore + '_id' =>  rout[:id]} if !blck.nest_level_1.nil?
             nested_ids << i if i
           end
@@ -156,9 +155,9 @@ class LayoutEngine
           end
           params_hash.merge(orig_query_hash)
 
-         # env['QUERY_STRING'] = params_hash.to_param # 150221! 
-         # env['action_dispatch.request.parameters'] = params_hash
-            
+            byebug
+         env['QUERY_STRING'] = params_hash.to_param # 150221! 
+         env['action_dispatch.request.parameters'] = params_hash
           @status, @headers, @disp_body = kontroller_klass.constantize.action(block_action).call(env)
           redirect = [@status, @headers, @disp_body] if @status == 302
           final_blocks <<  @disp_body.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
