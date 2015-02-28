@@ -153,11 +153,11 @@ class LayoutEngine
           params_hash_arr.each do |param|
             params_hash = params_hash.merge(param)
           end
-          params_hash.merge(orig_query_hash)
-
-            byebug
-         env['QUERY_STRING'] = params_hash.to_param # 150221! 
-         env['action_dispatch.request.parameters'] = params_hash
+          params_hash = params_hash.merge(orig_query_hash)
+          params_hash = params_hash.merge(env['rack.request.form_hash']) if block_action == 'update'
+          env['QUERY_STRING'] = params_hash.to_param # 150221! 
+          env['action_dispatch.request.parameters'] = params_hash
+          byebug
           @status, @headers, @disp_body = kontroller_klass.constantize.action(block_action).call(env)
           redirect = [@status, @headers, @disp_body] if @status == 302
           final_blocks <<  @disp_body.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
