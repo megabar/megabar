@@ -4,6 +4,8 @@ module MegaBar
     scope :by_route, ->(route) { where(path: route) if route.present? }
     attr_accessor :make_layout_and_block, :block_text, :model_id, :base_name
     after_create :create_layout_for_page
+    validates_presence_of :path, :name
+  
 
     def create_layout_for_page
       base_name = (self.base_name.nil? || self.base_name.empty?) ? self.name : self.base_name
