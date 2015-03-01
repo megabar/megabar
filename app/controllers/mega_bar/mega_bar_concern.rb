@@ -34,8 +34,6 @@ module MegaBar
 
 
     def create
-      puts 'create me'
-      byebug
       @mega_instance = @mega_class.new(_params)
       respond_to do |format|
         if @mega_instance.save
@@ -49,7 +47,6 @@ module MegaBar
       end
     end
     def update
-      
       instance_variable_set("@" + env[:mega_env][:kontroller_inst], @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);
       respond_to do |format|
@@ -57,7 +54,6 @@ module MegaBar
           format.html { redirect_to @mega_instance, notice: 'Thing was successfully updated.' }
           format.json { head :no_content }
         else
-          byebug
           format.html { render action: 'mega_bar.html.erb' }
           format.json { render json: @mega_instance.errors, status: :unprocessable_entity }
         end
