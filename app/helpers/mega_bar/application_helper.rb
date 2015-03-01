@@ -25,30 +25,14 @@ module MegaBar
 
     def link_path(action = nil, id = nil)
       # application helper
-      action ||= params[:action]
-      case action
-      when 'index' #untested
-        url_for(controller: @kontroller_path.to_s,
-        action:  params[:action],
-        only_path: true)
-      when 'new' 
-        url_for(controller: @kontroller_path.to_s,
-        action:  'new',
-        only_path: true)
-      when 'edit'  #untested
-        url_for(controller: @kontroller_path.to_s,
-        action:  'edit',
-        :id=>id,#catch errors
-        only_path: true)
-      when 'show'  #untested
-        url_for(controller: @kontroller_path.to_s,
-          :id => id,
-          action:  'show',
-          only_path: true
-        )
-      else
-        form_path = 'tbd'
+      ph = {}
+      @nested_ids.each do |param|
+        ph = ph.merge(param)
       end
+      ph = ph.merge(params.dup)
+      ph[:action] = action
+      ph[:id] = id
+      return url_for(ph)
     end
     def pre_render
     end

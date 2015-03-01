@@ -144,7 +144,7 @@ end
 
 class MegaEnv
   attr_writer :mega_model_properties, :mega_displays, :nested_ids
-  attr_reader :modle, :model_id, :mega_model_properties, :klass, :kontroller_inst, :kontroller_path, :kontroller_klass, :mega_displays, :nested_ids, :block_action, :params_hash_arr
+  attr_reader :block, :modle, :model_id, :mega_model_properties, :klass, :kontroller_inst, :kontroller_path, :kontroller_klass, :mega_displays, :nested_ids, :block_action, :params_hash_arr
   
   def initialize(blck, rout, page_info)
     @block_model_displays =   MegaBar::ModelDisplay.by_block(blck.id)
@@ -160,10 +160,12 @@ class MegaEnv
     @kontroller_inst = @modle.classname.underscore
     @mega_displays = set_mega_displays(@displays)
     @nested_ids, @params_hash_arr = nest_info(blck, rout, page_info)
+    @block = blck
   end
 
   def to_hash
     { 
+      block: @block,
       model_id: @model_id, 
       mega_model_properties: @modle,
       klass: @klass, 
@@ -211,6 +213,7 @@ class MegaEnv
         until depth == block_path_vars.size + 1            
           blck_model = depth == 0 ? modle :  MegaBar::Model.find(blck.send("nest_level_#{depth}"))
           fk_field =  depth == 0 ? 'id' : blck_model.classname.underscore.downcase +  '_id'
+          #byebug
           new_hash = {fk_field => page_info[:vars][block_path_vars.size - depth]}
           params_hash_arr <<  new_hash
           nested_ids << new_hash if depth > 0
@@ -223,6 +226,7 @@ class MegaEnv
       params_hash_arr << i =  {MegaBar::Model.find(blck.nest_level_1).classname.underscore + '_id' =>  rout[:id]} if !blck.nest_level_1.nil?
       nested_ids << i if i
     end
+    #byebug
     return nested_ids, params_hash_arr
   end
     # Helper methods
