@@ -11,7 +11,7 @@ module MegaBar
     before_create :standardize_tablename
     has_many      :fields, dependent: :destroy
     scope         :by_model, ->(model_id) { where(id: model_id) if model_id.present? }
-    validate      :classname, format: { with: /\A[A-Za-z][A-Za-z0-9\-\_]*\z/, message: "Must start with a letter and have only letters, numbers, dashes or underscores" }
+    validates     :classname, format: { with: /\A[A-Za-z][A-Za-z0-9\-\_]*\z/, message: "Must start with a letter and have only letters, numbers, dashes or underscores" }
     validates_presence_of :default_sort_field
     validates_uniqueness_of :classname
 
