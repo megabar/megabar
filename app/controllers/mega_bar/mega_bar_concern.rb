@@ -97,23 +97,25 @@ module MegaBar
     end  
 
     def form_path(action, path, id=nil)
-      case action
-      when 'index' 
-        url_for(controller: path.to_s,
-          action:  action,
-          only_path: true)
-      when 'new' 
-        url_for(controller: path.to_s,
-          action:  'create',
-          only_path: true)
-      when 'edit'
-        url_for(controller: path.to_s,
-          action: 'update',
-          id: id,
-          only_path: true)
-      else
-       form_path = 'ack'
+
+      param_hash = {}
+      @nested_ids.each do |param|
+        param_hash = param_hash.merge(param)
       end
+      param_hash = param_hash.merge(params.dup)
+      param_hash[:id] = id
+      param_hash[:only_path] = true
+      case action
+      when 'new'
+        param_hash['action'] = 'create'
+      when 'edit' 
+        param_hash['action'] = 'update'
+      else
+         param_hash['action'] = action
+      end
+      byebug
+      url_for(param_hash)
+     
     end 
 
     def sort_column(mega_class, model_properties, passed_params)

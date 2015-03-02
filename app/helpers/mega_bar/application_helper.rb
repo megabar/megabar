@@ -25,14 +25,14 @@ module MegaBar
 
     def link_path(action = nil, id = nil)
       # application helper
-      ph = {}
+      param_hash = {}
       @nested_ids.each do |param|
-        ph = ph.merge(param)
+        param_hash = param_hash.merge(param)
       end
-      ph = ph.merge(params.dup)
-      ph[:action] = action
-      ph[:id] = id
-      return url_for(ph)
+      param_hash = param_hash.merge(params.dup)
+      param_hash[:action] = action
+      param_hash[:id] = id
+      url_for(param_hash)
     end
     def pre_render
     end
