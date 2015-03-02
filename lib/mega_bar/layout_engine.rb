@@ -118,10 +118,6 @@ class LayoutEngine
   end  
 
   def action_from_path(path, method, path_segments)
-    # called like: 
-    #   initial_path_segments = RouteRecognizer.new.initial_path_segments
-    #   rout[:action] = action_from_path(env['PATH_INFO'], env['REQUEST_METHOD'], initial_path_segments ) 
-    # but not in use
     path_array = path.split('/')
     if method == 'GET'
       if ['edit', 'new'].include?(path_array.last) 
@@ -144,7 +140,7 @@ end
 
 class MegaEnv
   attr_writer :mega_model_properties, :mega_displays, :nested_ids
-  attr_reader :block, :modle, :model_id, :mega_model_properties, :klass, :kontroller_inst, :kontroller_path, :kontroller_klass, :mega_displays, :nested_ids, :block_action, :params_hash_arr
+  attr_reader :block, :modle, :model_id, :mega_model_properties, :klass, :kontroller_inst, :kontroller_path, :kontroller_klass, :mega_displays, :nested_ids, :block_action, :params_hash_arr, :nested_instance_vars
   
   def initialize(blck, rout, page_info)
     @block_model_displays =   MegaBar::ModelDisplay.by_block(blck.id)
@@ -159,7 +155,8 @@ class MegaEnv
     @klass = @modyule + @modle.classname.classify
     @kontroller_inst = @modle.classname.underscore
     @mega_displays = set_mega_displays(@displays)
-    @nested_ids, @params_hash_arr = nest_info(blck, rout, page_info)
+    @nested_ids, @params_hash_arr, @nested_classes = nest_info(blck, rout, page_info)
+    @nested_instance_vars = set_nested_instance_vars(@nested_classes)
     @block = blck
   end
 
@@ -172,7 +169,8 @@ class MegaEnv
       kontroller_inst: @kontroller_inst,
       kontroller_path: @kontroller_path,
       mega_displays: @mega_displays,
-      nested_ids: @nested_ids
+      nested_ids: @nested_ids,
+      nested_instance_vars: @nested_instance_vars
     }
   end
 
@@ -206,6 +204,7 @@ class MegaEnv
   def nest_info(blck, rout, page_info)
     params_hash_arr = []
     nested_ids = []
+    nested_classes = []
     if blck.path_base
       if page_info[:page_path].starts_with?(blck.path_base) || blck.path_base.starts_with?(page_info[:page_path])
         block_path_vars = blck.path_base.split('/').map{ | m | m if m[0] == ':'} - ["", nil]
@@ -217,6 +216,7 @@ class MegaEnv
           new_hash = {fk_field => page_info[:vars][block_path_vars.size - depth]}
           params_hash_arr <<  new_hash
           nested_ids << new_hash if depth > 0
+          nested_classes << blck_model
           depth += 1
         end
       end
@@ -226,43 +226,18 @@ class MegaEnv
       params_hash_arr << i =  {MegaBar::Model.find(blck.nest_level_1).classname.underscore + '_id' =>  rout[:id]} if !blck.nest_level_1.nil?
       nested_ids << i if i
     end
-    #byebug
-    return nested_ids, params_hash_arr
+    return nested_ids, params_hash_arr, nested_classes
   end
-    # Helper methods
+  def set_nested_instance_vars(nested_classes)
+    nested_instance_vars = []
+    nested_classes.each do |nc|
+      modyule = nc.modyule.empty? ? '' : nc.modyule + '::'  
+      klass = modyule + nc.classname.classify
+      nested_instance_vars << [klass, nc.classname.underscore]
+    end
+    nested_instance_vars
+  end
   def is_displayable?(format)
     return  (format == 'hidden' || format == 'off') ? false : true
-  end
-end
-
-
-class RouteRecognizer
-  attr_reader :paths
-  
-  # To use this inside your app, call:
-  # `RouteRecognizer.new.initial_path_segments`
-  # This returns an array, e.g.: ['assets','blog','team','faq','users']
-
-  INITIAL_SEGMENT_REGEX = %r{^\/([^\/\(:]+)}
-
-  def initialize
-    routes = Rails.application.routes.routes
-    paths = routes.collect {|r| r.path.spec.to_s }
-    mega_routes = MegaBar::Engine.routes.routes
-    mega_paths =  mega_routes.collect {|r| r.path.spec.to_s }
-    @paths = paths + mega_paths
-
-  end
-
-  def initial_path_segments
-    @initial_path_segments ||= begin
-      paths.collect {|path| match_initial_path_segment(path)}.compact.uniq
-    end
-  end
-
-  def match_initial_path_segment(path)
-    if match = INITIAL_SEGMENT_REGEX.match(path)
-      match[1]
-    end
   end
 end

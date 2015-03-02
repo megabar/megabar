@@ -12,9 +12,8 @@ module MegaBar
     end
 
     def show
-
-      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
       @mega_instance = []
+      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
       @mega_instance << instance_variable_get("@"  + env[:mega_env][:kontroller_inst]);  
       render @show_view_template
     end
@@ -38,7 +37,15 @@ module MegaBar
       respond_to do |format|
         if @mega_instance.save
           MegaBar.call_rake('db:schema:dump') if [1,2].include? @model_id # gets new models into schema
-          format.html { redirect_to @mega_instance, notice: 'It was successfully created.' }
+          param_hash = {}
+          @nested_ids.each do |param|
+            param_hash = param_hash.merge(param)
+          end
+          param_hash[:action] = 'index'
+          param_hash[:controller] = params["controller"]
+          # param_hash[:id] = id
+          param_hash[:only_path] = true
+          format.html { redirect_to url_for(param_hash), notice: 'It was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mega_instance }
         else
           format.html { render @new_view_template }
@@ -80,12 +87,18 @@ module MegaBar
     def set_vars_for_all
       @mega_class = env[:mega_env][:klass].constantize
       env[:mega_env].keys.each { | env_var | instance_variable_set('@' + env_var.to_s, env[:mega_env][env_var]) }
+      unpack_nested_classes(@nested_instance_vars)
       @index_view_template ||= "mega_bar.html.erb"
       @show_view_template ||= "mega_bar.html.erb"
       @edit_view_template ||= "mega_bar.html.erb"
       @new_view_template ||= "mega_bar.html.erb"
     end
 
+    def unpack_nested_classes(nested_instance_vars)
+      nested_instance_vars.each do |niv|
+        puts 'make a instance var!'
+      end
+    end
     def conditions
        @conditions.merge!(env[:mega_env][:nested_ids][0]) if env[:mega_env][:nested_ids][0] 
     end
@@ -97,6 +110,7 @@ module MegaBar
     end  
 
     def form_path(action, path, id=nil)
+      #used on index and show forms (for filters & reordering)
       param_hash = {}
       @nested_ids.each do |param|
         param_hash = param_hash.merge(param)
