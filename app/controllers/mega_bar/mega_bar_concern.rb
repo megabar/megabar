@@ -97,7 +97,6 @@ module MegaBar
     end  
 
     def form_path(action, path, id=nil)
-
       param_hash = {}
       @nested_ids.each do |param|
         param_hash = param_hash.merge(param)
@@ -113,9 +112,7 @@ module MegaBar
       else
          param_hash['action'] = action
       end
-      byebug
       url_for(param_hash)
-     
     end 
 
     def sort_column(mega_class, model_properties, passed_params)
