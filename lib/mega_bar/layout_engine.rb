@@ -140,7 +140,7 @@ end
 
 class MegaEnv
   attr_writer :mega_model_properties, :mega_displays, :nested_ids
-  attr_reader :block, :modle, :model_id, :mega_model_properties, :klass, :kontroller_inst, :kontroller_path, :kontroller_klass, :mega_displays, :nested_ids, :block_action, :params_hash_arr, :nested_instance_vars
+  attr_reader :block, :modle, :model_id, :mega_model_properties, :klass, :kontroller_inst, :kontroller_path, :kontroller_klass, :mega_displays, :nested_ids, :block_action, :params_hash_arr, :nested_class_info
   
   def initialize(blck, rout, page_info)
     @block_model_displays =   MegaBar::ModelDisplay.by_block(blck.id)
@@ -156,7 +156,7 @@ class MegaEnv
     @kontroller_inst = @modle.classname.underscore
     @mega_displays = set_mega_displays(@displays)
     @nested_ids, @params_hash_arr, @nested_classes = nest_info(blck, rout, page_info)
-    @nested_instance_vars = set_nested_instance_vars(@nested_classes)
+    @nested_class_info = set_nested_class_info(@nested_classes)
     @block = blck
   end
 
@@ -170,7 +170,7 @@ class MegaEnv
       kontroller_path: @kontroller_path,
       mega_displays: @mega_displays,
       nested_ids: @nested_ids,
-      nested_instance_vars: @nested_instance_vars
+      nested_class_info: @nested_class_info
     }
   end
 
@@ -228,14 +228,14 @@ class MegaEnv
     end
     return nested_ids, params_hash_arr, nested_classes
   end
-  def set_nested_instance_vars(nested_classes)
-    nested_instance_vars = []
-    nested_classes.each do |nc|
+  def set_nested_class_info(nested_classes)
+    nested_class_info = []
+    nested_classes.each_with_index do |nc, idx|
       modyule = nc.modyule.empty? ? '' : nc.modyule + '::'  
       klass = modyule + nc.classname.classify
-      nested_instance_vars << [klass, nc.classname.underscore]
+      nested_class_info << [klass, nc.classname.underscore] if idx != 0
     end
-    nested_instance_vars
+    nested_class_info
   end
   def is_displayable?(format)
     return  (format == 'hidden' || format == 'off') ? false : true

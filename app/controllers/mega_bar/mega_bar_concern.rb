@@ -21,12 +21,14 @@ module MegaBar
     def new
       instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.new)
       @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst]);  
+      @form_instance_vars = @nested_instance_variables  + [@mega_instance]
       render @new_view_template
     end
 
     def edit
       instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst])
+      @form_instance_vars = @nested_instance_variables  + [@mega_instance]
       render @edit_view_template
     end
 
@@ -87,17 +89,23 @@ module MegaBar
     def set_vars_for_all
       @mega_class = env[:mega_env][:klass].constantize
       env[:mega_env].keys.each { | env_var | instance_variable_set('@' + env_var.to_s, env[:mega_env][env_var]) }
-      unpack_nested_classes(@nested_instance_vars)
+      unpack_nested_classes(@nested_class_info)
       @index_view_template ||= "mega_bar.html.erb"
       @show_view_template ||= "mega_bar.html.erb"
       @edit_view_template ||= "mega_bar.html.erb"
       @new_view_template ||= "mega_bar.html.erb"
     end
 
-    def unpack_nested_classes(nested_instance_vars)
-      nested_instance_vars.each do |niv|
+    def unpack_nested_classes(nested_class_infos)
+      nested_instance_variables = []
+      nested_class_infos.each_with_index do |info, idx|
         puts 'make a instance var!'
+        if @nested_ids[idx]
+          instance_variable_set("@" + info[1], info[0].constantize.find(@nested_ids[idx].map{|k,v|v}).first) 
+          nested_instance_variables << instance_variable_get("@" + info[1]) 
+        end
       end
+      @nested_instance_variables = nested_instance_variables.reverse
     end
     def conditions
        @conditions.merge!(env[:mega_env][:nested_ids][0]) if env[:mega_env][:nested_ids][0] 
