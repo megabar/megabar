@@ -12,8 +12,8 @@ module MegaBar
     end
 
     def show
-      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
       @mega_instance = []
+      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
       @mega_instance << instance_variable_get("@"  + env[:mega_env][:kontroller_inst]);  
       render @show_view_template
     end
@@ -21,27 +21,35 @@ module MegaBar
     def new
       instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.new)
       @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst]);  
+      @form_instance_vars = @nested_instance_variables  + [@mega_instance]
       render @new_view_template
     end
 
     def edit
       instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst])
+      @form_instance_vars = @nested_instance_variables  + [@mega_instance]
       render @edit_view_template
     end
 
 
 
     def create
-      puts 'create me'
       @mega_instance = @mega_class.new(_params)
       respond_to do |format|
         if @mega_instance.save
           MegaBar.call_rake('db:schema:dump') if [1,2].include? @model_id # gets new models into schema
-          format.html { redirect_to @mega_instance, notice: 'It was successfully created.' }
+          param_hash = {}
+          @nested_ids.each do |param|
+            param_hash = param_hash.merge(param)
+          end
+          param_hash[:action] = 'index'
+          param_hash[:controller] = params["controller"]
+          # param_hash[:id] = id
+          param_hash[:only_path] = true
+          format.html { redirect_to url_for(param_hash), notice: 'It was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mega_instance }
         else
-
           format.html { render @new_view_template }
           format.json { render json: @model.errors, status: :unprocessable_entity }
         end
@@ -76,18 +84,30 @@ module MegaBar
       self.try(:get_options)
       env[:mega_env] = add_form_path_to_mega_displays(env[:mega_env])
       @mega_displays = env[:mega_env][:mega_displays]
+    end
+
+    def set_vars_for_all
+      @mega_class = env[:mega_env][:klass].constantize
+      env[:mega_env].keys.each { | env_var | instance_variable_set('@' + env_var.to_s, env[:mega_env][env_var]) }
+      unpack_nested_classes(@nested_class_info)
       @index_view_template ||= "mega_bar.html.erb"
       @show_view_template ||= "mega_bar.html.erb"
       @edit_view_template ||= "mega_bar.html.erb"
       @new_view_template ||= "mega_bar.html.erb"
     end
 
-    def set_vars_for_all
-      @mega_class = env[:mega_env][:klass].constantize
-      env[:mega_env].keys.each { | env_var | instance_variable_set('@' + env_var.to_s, env[:mega_env][env_var]) }
+    def unpack_nested_classes(nested_class_infos)
+      nested_instance_variables = []
+      nested_class_infos.each_with_index do |info, idx|
+        puts 'make a instance var!'
+        if @nested_ids[idx]
+          instance_variable_set("@" + info[1], info[0].constantize.find(@nested_ids[idx].map{|k,v|v}).first) 
+          nested_instance_variables << instance_variable_get("@" + info[1]) 
+        end
+      end
+      @nested_instance_variables = nested_instance_variables.reverse
     end
-
-    def conditions 
+    def conditions
        @conditions.merge!(env[:mega_env][:nested_ids][0]) if env[:mega_env][:nested_ids][0] 
     end
     def add_form_path_to_mega_displays(mega_env) 
@@ -98,23 +118,23 @@ module MegaBar
     end  
 
     def form_path(action, path, id=nil)
-      case action
-      when 'index' 
-        url_for(controller: path.to_s,
-          action:  action,
-          only_path: true)
-      when 'new' 
-        url_for(controller: path.to_s,
-          action:  'create',
-          only_path: true)
-      when 'edit'
-        url_for(controller: path.to_s,
-          action: 'update',
-          id: id,
-          only_path: true)
-      else
-       form_path = 'ack'
+      #used on index and show forms (for filters & reordering)
+      param_hash = {}
+      @nested_ids.each do |param|
+        param_hash = param_hash.merge(param)
       end
+      param_hash = param_hash.merge(params.dup)
+      param_hash[:id] = id
+      param_hash[:only_path] = true
+      case action
+      when 'new'
+        param_hash['action'] = 'create'
+      when 'edit' 
+        param_hash['action'] = 'update'
+      else
+         param_hash['action'] = action
+      end
+      url_for(param_hash)
     end 
 
     def sort_column(mega_class, model_properties, passed_params)

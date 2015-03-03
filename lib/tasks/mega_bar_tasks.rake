@@ -94,6 +94,7 @@ namespace :mega_bar do
         end
         perm.save # written 141231
       end
+      puts 'loaded ' + mc.perm_class.to_s
     end
     # end of main function for loading data
     # important sub functions are below
@@ -199,10 +200,8 @@ namespace :mega_bar do
     mega_bar_model_ids = [1,2,3,4,6,7,14,15,17,18,20,21]
     mega_bar_classes = MegaBar::Model.where(id: mega_bar_model_ids).pluck(:classname)
     mega_bar_fields =  MegaBar::Field.where(model_id: mega_bar_model_ids).pluck(:id)
-
     SeedDump.dump(MegaBar::Model.where(id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [])
     SeedDump.dump(MegaBar::Field.where(model_id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-   byebug
     SeedDump.dump(MegaBar::Option.where(field_id: mega_bar_fields), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::ModelDisplayFormat, file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
   

@@ -4,7 +4,7 @@
     <%= render partial: "mega_bar_read" %>
   <% end%>    
 <% else %>
-  <%= form_for(@mega_instance) do |f| %>
+  <%= form_for(@form_instance_vars) do |f| %>
     <% @mega_displays.each do |mega_display| %>
       <% @mega_display = mega_display %>  
       <%=@mega_display[:model_display_format].app_wrapper.html_safe%>
