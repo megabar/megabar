@@ -1,3 +1,4 @@
+
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
@@ -5,6 +6,8 @@ FactoryGirl.define do
     model_id 1
     tablename 'models'
     field 'classname'
+    default_data_format 'textread'
+    default_data_format_edit 'textbox'
     factory :field_with_displays do
       index_field_display 'y'
       show_field_display 'y'
