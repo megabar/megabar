@@ -8,7 +8,7 @@ module MegaBar
     attr_accessor  :model_id, :new_model_display, :edit_model_display, :index_model_display, :show_model_display
     validates_uniqueness_of :name
 
-    def by_actions(action)
+    def self.by_actions(action)
       if action.present? 
         case action
         when 'show'
