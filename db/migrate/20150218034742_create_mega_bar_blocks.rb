@@ -8,6 +8,7 @@ class CreateMegaBarBlocks < ActiveRecord::Migration
       t.text :html
       t.integer :nest_level_1
       t.integer :nest_level_2
+      t.string :path_base
       t.datetime :created_at
       t.datetime :updated_at
     end
