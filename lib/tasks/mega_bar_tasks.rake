@@ -94,7 +94,7 @@ namespace :mega_bar do
         end
         perm.save # written 141231
       end
-      puts 'loaded ' + mc.perm_class.to_s
+      puts 'loaded ' + mc[:perm_class].to_s
     end
     # end of main function for loading data
     # important sub functions are below
