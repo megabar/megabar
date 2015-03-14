@@ -32,7 +32,6 @@ module MegaBar
     end
 
     def make_model_displays
-      byebug
       if (!self.model_id.nil? && !self.model_id.empty? && self.model_id > 0)
         model_name = Model.find(self.model_id).name
         actions = []
