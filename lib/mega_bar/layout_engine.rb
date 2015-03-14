@@ -23,8 +23,15 @@ class LayoutEngine
     rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
     rout = set_rout(request, env)
     page_info = set_page_info(rout, rout_terms)
+    if page_info.empty? #non megabar pages.
+     gotta_be_an_array = []
+     @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)
+     #gotta_be_an_array << not_mega = @page.instance_variable_get(:@response).nil? ? @page.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @page.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]
+     gotta_be_an_array << @page
+     return @status, @headers, gotta_be_an_array
+      # return @status, @headers, @page = rout.
+    end
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
-    
     final_layouts = [] 
     page_layouts = MegaBar::Layout.by_page(page_info[:page_id])
     page_layouts.each do | page_layout |
@@ -59,7 +66,6 @@ class LayoutEngine
       page_terms = page[1].split('/').reject! { |c| (c.nil? || c.empty?) }
       variable_segments = []
       page_terms.each_with_index do | v, k |
-        
         variable_segments << rout_terms[k] if page_terms[k].starts_with?(':')
       end
       variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
@@ -160,7 +166,6 @@ class MegaEnv
     @nested_ids, @params_hash_arr, @nested_classes = nest_info(blck, rout, page_info)
     @nested_class_info = set_nested_class_info(@nested_classes)
     @block = blck
-
   end
 
   def to_hash
@@ -215,7 +220,6 @@ class MegaEnv
         until depth == block_path_vars.size + 1            
           blck_model = depth == 0 ? modle :  MegaBar::Model.find(blck.send("nest_level_#{depth}"))
           fk_field =  depth == 0 ? 'id' : blck_model.classname.underscore.downcase +  '_id'
-          #byebug
           new_hash = {fk_field => page_info[:vars][block_path_vars.size - depth]}
           params_hash_arr <<  new_hash
           nested_ids << new_hash if depth > 0
@@ -244,3 +248,10 @@ class MegaEnv
     return  (format == 'hidden' || format == 'off') ? false : true
   end
 end
+
+class FlatsController < ActionController::Base
+  def index
+  end
+end
+
+

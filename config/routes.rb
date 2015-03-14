@@ -1,29 +1,24 @@
 MegaBar::Engine.routes.draw do
   
-  resources :model_display_formats, path: '/model-display-formats'
-  resources :options
   resources :pages do 
     resources :layouts do
       resources :blocks
     end
   end
-  resources :layouts
   resources :blocks
-  ##### MEGABAR END
-  root 'roots#root_page'
-
-   # (leave that line in place with five #'s')
-
   resources :blocks
-  resources :layouts
-  resources :pages
-  
   resources :field_displays
   resources :fields
+  resources :layouts
+  resources :model_display_formats, path: '/model-display-formats'
   resources :model_displays
   resources :models
+  resources :options
   resources :records_formats
+  resources :selects
   resources :textboxes
   resources :textreads
-  resources :selects
+  root 'roots#root_page'
+  ##### MEGABAR END
+  # (leave that line in place with five #'s')
 end
