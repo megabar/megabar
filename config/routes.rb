@@ -18,7 +18,7 @@ MegaBar::Engine.routes.draw do
   resources :selects
   resources :textboxes
   resources :textreads
+  # (leave that line in place with five
   root 'roots#root_page'
-  ##### MEGABAR END
-  # (leave that line in place with five #'s')
+  ##### MEGABAR END #'s')
 end

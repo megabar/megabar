@@ -42,14 +42,14 @@ class LayoutEngine
       end
       env['mega_final_blocks'] = final_blocks #used in master_layouts_controller
       @status, @headers, @layouts = MegaBar::MasterLayoutsController.action(:render_layout_with_blocks).call(env)
-      final_layouts << a_layout = @layouts.instance_variable_get(:@response).nil? ? @layouts.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @layouts.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]
-      # final_layouts <<  @layouts.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
+      final_layouts <<  @layouts.body
     end
     env['mega_final_layouts'] = final_layouts
     @status, @headers, @page = MegaBar::MasterPagesController.action(:render_page).call(env)
     final_page = []
-    final_page_content = @page.instance_variable_get(:@response).nil? ? @page.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @page.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]
+    final_page_content = @page.body
     final_page << final_page_content
+
     return @redirect ? [@redirect[0], @redirect[1], ['you are being redirected']] : [@status, @headers, final_page]
   end
   
@@ -118,10 +118,10 @@ class LayoutEngine
       env['action_dispatch.request.parameters'] = params_hash
       
       @status, @headers, @disp_body = mega_env.kontroller_klass.constantize.action(mega_env.block_action).call(env)
-      
       @redirect = [@status, @headers, @disp_body] if @status == 302
-      block_body = @disp_body.instance_variable_get(:@response).nil? ? @disp_body.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @disp_body.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]
-      end
+      # block_body = @disp_body.instance_variable_get(:@response).nil? ? @disp_body.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @disp_body.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]
+      block_body = @disp_body.body
+    end
   end  
 
   def action_from_path(path, method, path_segments)

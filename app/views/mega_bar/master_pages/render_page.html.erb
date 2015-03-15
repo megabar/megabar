@@ -18,11 +18,9 @@
       </div>
     <% end %>
 
-    <% @page_layouts.each do |layout| %>
-      <div class='layout'><%=layout%></div>
+    <% @page_layouts.each do |layout_src| %>
+      <div class='layout'><%= layout_src.html_safe%></div>
     <% end %>
-
-
 
   </body>
 </html>
