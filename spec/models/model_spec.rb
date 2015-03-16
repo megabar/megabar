@@ -67,7 +67,6 @@ module MegaBar
         expect(Layout.count).to eq(1)
       end
       it 'creates a block ' do
-        byebug
         expect(Block.count).to eq(1)
       end
     end

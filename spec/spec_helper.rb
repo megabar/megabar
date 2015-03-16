@@ -1,5 +1,4 @@
 ENV['RAILS_ENV'] ||= 'test'
-
 require 'byebug'
 require 'rubygems'
 require 'bundler/setup'
@@ -27,6 +26,7 @@ RSpec.configure do |config|
   config.order = "random"
   config.include FactoryGirl::Syntax::Methods
 end
+
 
 # binding.pry
 #require 'rake'

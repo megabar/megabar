@@ -37,40 +37,52 @@ module MegaBar
     # This should return the minimal set of values that should be in the session
     # in order to pass any filters (e.g. authentication) defined in
     # ModelsController. Be sure to keep this updated too.
-    let(:valid_session) { 
-
-      byebug
-      {
-mega_env: 'mooooooooo'
-      } }
+    let(:valid_session) { {} }
     context 'with mega_env' do 
       before(:each) do 
         byebug
-        # build mega_env
-      end
+        MegaBar::Field.skip_callback("create",:after,:make_migration)
+        MegaBar::Model.skip_callback("create",:after,:make_all_files)
+        env = Rack::MockRequest.env_for('/mega-bar/models')
+        byebug
+        page = create(:model_with_page)
+        field1 = create(:field_with_displays)
 
+        env[:mega_env] = 'hello b'
+        byebug
+        status, headers, body = MegaBar::ModelsController.action(:index).call(env)
+       
+        #@response = ActionDispatch::TestResponse.new(status, headers, body)
+        #@controller = body.request.env['action_controller.instance']
+        byebug
+
+        # blck: #<MegaBar::Block id: 1, layout_id: 1, model_id: 1, name: "Models on Models Layout boo", actions: "current", html: "", nest_level_1: nil, nest_level_2: nil, path_base: "", created_at: "2015-02-18 05:20:43", updated_at: "2015-03-02 00:14:20">
+        # rout {:action=>"index", :controller=>"mega_bar/models"}
+        #page_info {:page_id=>1, :page_path=>"/mega-bar/models", :terms=>["mega-bar", "models"], :vars=>[]}
+      end
+      after(:each) do
+        MegaBar::Field.set_callback("create",:after,:make_migration)
+        MegaBar::Model.set_callback("create",:after,:make_all_files)
+      end
 
       context 'with callbacks disabled ' do
         before(:each) do
           MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
           MegaBar::Field.skip_callback("create",:after,:make_field_displays)
-          MegaBar::Field.skip_callback("create",:after,:make_migration)
-          MegaBar::Model.skip_callback("create",:after,:make_all_files)
           MegaBar::Model.skip_callback("create",:after,:make_model_displays)
+          MegaBar::Page.cre
         end
         after(:each) do
           MegaBar::Field.set_callback("save",:after,:make_field_displays) 
           MegaBar::Field.set_callback("create",:after,:make_field_displays)
-          MegaBar::Field.set_callback("create",:after,:make_migration)
-          MegaBar::Model.set_callback("create",:after,:make_all_files)
           MegaBar::Model.set_callback("create",:after,:make_model_displays)
         end
 
         describe "GET index", focus: true do
           it "assigns all models as @mega_instance" do
-            byebug
             model = Model.create! valid_attributes
-            get :index, {use_route: :mega_bar, model_id: 1, env: {hi: 'there'}}, valid_session
+            byebug
+            get :index, {use_route: :mega_bar, model_id: 1}, valid_session
             expect(assigns(:mega_instance)).to eq([model])
           end
         end

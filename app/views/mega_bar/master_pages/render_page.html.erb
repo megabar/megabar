@@ -8,10 +8,7 @@
   </head>
   <body>
     <nav>
-    Nav:
-    <%= link_to 'Models', mega_bar.models_path %> ||
-    <%= link_to 'Pages', mega_bar.pages_path %> ||
-    <%= link_to "MDF's", mega_bar.model_display_formats_path %> 
+      <%= link_to 'List of all Pages', mega_bar.pages_path %>
     </nav>
 
     <% flash.each do |key, msg| %>
