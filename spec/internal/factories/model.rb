@@ -10,7 +10,7 @@ FactoryGirl.define do
     default_sort_field 'id'
     modyule 'MegaBar'
     factory :model_with_page do
-      make_page 'y'
+      # make_page 'y'
     end
   end
 end

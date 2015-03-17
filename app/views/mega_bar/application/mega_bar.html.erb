@@ -1,4 +1,6 @@
+<% byebug %>
 <% if ['index', 'show'].include? params[:action]%>
+
   <% @mega_displays.each do |mega_display| %>
     <% @mega_display= mega_display %>  
     <%= render partial: "mega_bar_read" %>

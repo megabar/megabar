@@ -7,7 +7,7 @@ module MegaBar
       records = @mega_class.where(@conditions).order(sort_column(@mega_class, @mega_model_properties, params) + " " + sort_direction(params))
       instance_variable_set("@" + env[:mega_env][:kontroller_inst].pluralize,  records)
       @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst].pluralize);
-      
+      byebug
       render @index_view_template
     end
 

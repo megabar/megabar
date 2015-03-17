@@ -12,6 +12,10 @@ class LayoutEngine
     dup._call(env)
   end
   
+  def testme
+    puts 'hi'
+  end
+
   def _call(env)
     if env['PATH_INFO'].end_with?('.css')  || env['PATH_INFO'].end_with?('.js')
       @status, @headers, @response = @app.call(env)
@@ -101,7 +105,6 @@ class LayoutEngine
     else 
       params_hash = {} # used to set params var for controllers
       params_hash_arr = [] #used to collect 'params_hash' pieces
-
       mega_env = MegaEnv.new(blck, rout, page_info) # added to env for use in controllers
       
       params_hash_arr = mega_env.params_hash_arr
@@ -120,6 +123,7 @@ class LayoutEngine
       @status, @headers, @disp_body = mega_env.kontroller_klass.constantize.action(mega_env.block_action).call(env)
       @redirect = [@status, @headers, @disp_body] if @status == 302
       # block_body = @disp_body.instance_variable_get(:@response).nil? ? @disp_body.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @disp_body.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]
+      byebug
       block_body = @disp_body.body
     end
   end  
@@ -150,12 +154,11 @@ class MegaEnv
   attr_reader :block, :modle, :model_id, :mega_model_properties, :klass, :kontroller_inst, :kontroller_path, :kontroller_klass, :mega_displays, :nested_ids, :block_action, :params_hash_arr, :nested_class_info
   
   def initialize(blck, rout, page_info)
-    
+
     @block_model_displays =   MegaBar::ModelDisplay.by_block(blck.id)
     @displays = blck.actions == 'current' ? @block_model_displays.by_block(blck.id).by_action(rout[:action]) : @block_model_displays.by_block(blck.id)
-    @block_action = @displays.empty? ? rout[:action] : @displays.first.action
-     
-    @modle = MegaBar::Model.by_model(@block_model_displays.first.model_id).first
+    @block_action = @displays.empty? ? rout[:action] : @displays.first.action 
+    @modle = MegaBar::Model.find(@block_model_displays.first.model_id)
     @model_id = @modle.id
     @modyule = @modle.modyule.empty? ? '' : @modle.modyule + '::'  
     @kontroller_klass = @modyule + @modle.classname.classify.pluralize + "Controller"

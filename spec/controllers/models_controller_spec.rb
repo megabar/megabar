@@ -34,27 +34,39 @@ module MegaBar
       { classname: nil, name: m[:name], default_sort_field: '', id: m[:id]  }
     }
 
+    let(:page_info) { {page_id: 1, page_path: 'mega-bar/models', terms: ['mega-bar', 'models'], vars: []} }
+    let(:rout) { {action: 'index', controller: 'mega_bar/models'} }
+    let(:layout_engine) { LayoutEngine.new(app) }
+    let(:orig_query_hash) {{}}
+    let(:valid_session) { {} }
+    let(:app) { lambda {[200, {'Content-Type' => 'text/plain'}, ['OK']]} }
+    let(:env) { Rack::MockRequest.env_for('/mega-bar/models') }
+    let(:model) { create(:model) }
+    let(:page) { create(:page) }
+    let(:layout) { create(:layout) }
+    let(:blck) { create(:block) }
+    let(:model_display) { create(:model_display) }
+    let(:field_display) { create(:field_display) }
+    let(:field1) { create(:field_with_displays) }
+    let(:model_display_format) { create(:model_display_format) }
+       
     # This should return the minimal set of values that should be in the session
     # in order to pass any filters (e.g. authentication) defined in
     # ModelsController. Be sure to keep this updated too.
-    let(:valid_session) { {} }
+
     context 'with mega_env' do 
       before(:each) do 
-        byebug
         MegaBar::Field.skip_callback("create",:after,:make_migration)
         MegaBar::Model.skip_callback("create",:after,:make_all_files)
-        env = Rack::MockRequest.env_for('/mega-bar/models')
-        byebug
-        page = create(:model_with_page)
-        field1 = create(:field_with_displays)
-
-        env[:mega_env] = 'hello b'
-        byebug
-        status, headers, body = MegaBar::ModelsController.action(:index).call(env)
-       
-        #@response = ActionDispatch::TestResponse.new(status, headers, body)
-        #@controller = body.request.env['action_controller.instance']
-        byebug
+        MegaBar::ModelDisplay.skip_callback("save", :after, :make_field_displays)
+        model
+        field1
+        page
+        layout
+        blck
+        model_display
+        field_display
+        model_display_format
 
         # blck: #<MegaBar::Block id: 1, layout_id: 1, model_id: 1, name: "Models on Models Layout boo", actions: "current", html: "", nest_level_1: nil, nest_level_2: nil, path_base: "", created_at: "2015-02-18 05:20:43", updated_at: "2015-03-02 00:14:20">
         # rout {:action=>"index", :controller=>"mega_bar/models"}
@@ -70,7 +82,6 @@ module MegaBar
           MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
           MegaBar::Field.skip_callback("create",:after,:make_field_displays)
           MegaBar::Model.skip_callback("create",:after,:make_model_displays)
-          MegaBar::Page.cre
         end
         after(:each) do
           MegaBar::Field.set_callback("save",:after,:make_field_displays) 
@@ -80,9 +91,13 @@ module MegaBar
 
         describe "GET index", focus: true do
           it "assigns all models as @mega_instance" do
-            model = Model.create! valid_attributes
-            byebug
-            get :index, {use_route: :mega_bar, model_id: 1}, valid_session
+            # model = Model.create! valid_attributes
+
+            beep = layout_engine.process_block(blck, page_info, rout, orig_query_hash, env)
+        byebug
+         #   get :index, {use_route: :mega_bar, model_id: 1}, valid_session
+         # env["action_controller.instance"].instance_variable_get(:@mega_instance)
+
             expect(assigns(:mega_instance)).to eq([model])
           end
         end
