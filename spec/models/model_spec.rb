@@ -33,7 +33,7 @@ module MegaBar
         expect(mod.tablename).to eq('another_tables')
       end
 
-      it 'fixes bad module names', focus: true do 
+      it 'fixes bad module names' do 
         
         mod = create(:model, modyule: 'megabar')
         expect(mod.modyule).to eq('MegaBar')
@@ -86,7 +86,7 @@ module MegaBar
         Model.find(1).destroy
       end
 
-      it 'generates everything for a non megabar model' do 
+      it 'generates everything for a non megabar model', focus: true do 
         expect(File).to exist('spec/internal/app/models/test_case.rb') 
         expect(File).to exist('spec/internal/app/controllers/test_cases_controller.rb') 
         expect(File).to exist('spec/internal/spec/controllers/test_cases_controller_spec.rb') 

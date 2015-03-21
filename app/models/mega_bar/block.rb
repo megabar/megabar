@@ -32,7 +32,7 @@ module MegaBar
     end
 
     def make_model_displays
-      if (!self.model_id.nil? && !self.model_id.empty? && Integer(self.model_id) > 0)
+      if (!self.model_id.nil? && !self.model_id.to_s.empty? && Integer(self.model_id) > 0)
         model_name = Model.find(self.model_id).name
         actions = []
         actions << {:format=>2, :action=>'new', :header=>'Create ' + model_name.humanize.singularize}  if (!ModelDisplay.by_block(self.id).by_action('new').present? && @new_model_display == 'y')
