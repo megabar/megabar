@@ -81,7 +81,6 @@ module MegaBar
     def set_vars_for_displays
       @conditions =  {}; self.try(:conditions)
       @options = {}; self.try(:get_options)
-      self.try(:get_options)
       env[:mega_env] = add_form_path_to_mega_displays(env[:mega_env])
       @mega_displays = env[:mega_env][:mega_displays]
     end
