@@ -27,18 +27,7 @@ module MegaBar
         generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'
       end
     end
-    def route
-      line = '  ##### MEGABAR END'
-      text = File.read(gem_path + 'config/routes.rb')
-      path = the_route_name.include?('_') ? "path: '/" + the_route_name.gsub('_', '-') + "', " : '' # no underscores!
-      route_text = '  resources :' + the_route_name + ', ' + path + ' defaults: {model_id: ' + model_id + "}\n #{line}\n"
-      new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, route_text)
-      # To write changes to the file, use:
-      File.open(gem_path + 'config/routes.rb', "w") {|file| file.puts new_contents } unless gem_path == '' && modyule == 'MegaBar'
-      @@notices <<  "You will have to add the route yourself manually to the megabar route file: #{route_text}" if gem_path == '' && modyule == 'MegaBar'
-     
-    end
-
+   
     def create_controller_spec_file
       template 'generic_controller_spec.rb', "#{gem_path}#{the_controller_spec_file_path}#{the_controller_spec_file_name}.rb"
       @@notices <<  "You will have to copy the spec file yourself manually to the megabar repo's spec/controllers directory" if gem_path == '' && modyule == 'MegaBar'
