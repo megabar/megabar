@@ -11,3 +11,4 @@
 // about supported directives.
 //
 //= require_tree .
+//= require mega_bar/mega_bar

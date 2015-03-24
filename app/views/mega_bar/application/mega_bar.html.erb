@@ -2,6 +2,7 @@
   <% @mega_displays.each do |mega_display| %>
     <% @mega_display= mega_display %>  
     <%= render partial: "mega_bar_read" %>
+    <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_help_links} %>
   <% end%>    
 <% else %>
   <%= form_for(@form_instance_vars) do |f| %>
@@ -10,9 +11,11 @@
       <%=@mega_display[:model_display_format].app_wrapper.html_safe%>
       <%= render partial: "mega_bar_write" %>
       <%=@mega_display[:model_display_format].app_wrapper_end.html_safe%>
+      <%= render partial: "mega_bar_help_links",:locals => {:links => model_display_help_links} %>
     <% end %>
     <table><tr><th>Save</th><td><%= submit_tag %></td><th></tr></table>
   <% end%>
 <% end %>
 
-<%= link_to 'New', link_path('new') %>
+<%= link_to 'New', link_path('new') %> 
+<%= render partial: "mega_bar_help_links", :locals => {:links => block_help_links} %>
