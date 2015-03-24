@@ -2,7 +2,11 @@ MegaBar::Engine.routes.draw do
   
   resources :pages do 
     resources :layouts do
-      resources :blocks
+      resources :blocks do
+        resources :model_displays do
+          resources :field_displays
+        end
+      end
     end
   end
   resources :blocks
