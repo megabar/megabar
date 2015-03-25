@@ -81,13 +81,13 @@ module MegaBar
     def set_vars_for_displays
       @conditions =  {}; self.try(:conditions)
       @options = {}; self.try(:get_options)
-      self.try(:get_options)
       env[:mega_env] = add_form_path_to_mega_displays(env[:mega_env])
       @mega_displays = env[:mega_env][:mega_displays]
     end
 
     def set_vars_for_all
-      
+      @mega_page = env[:mega_page]
+      @mega_layout = env[:mega_layout]
       @mega_class = env[:mega_env][:klass].constantize
       env[:mega_env].keys.each { | env_var | instance_variable_set('@' + env_var.to_s, env[:mega_env][env_var]) }
       unpack_nested_classes(@nested_class_info)

@@ -23,6 +23,7 @@ class LayoutEngine
     rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
     rout = set_rout(request, env)
     page_info = set_page_info(rout, rout_terms)
+    env[:mega_page] = page_info
     if page_info.empty? #non megabar pages.
      gotta_be_an_array = []
      @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)
@@ -35,6 +36,7 @@ class LayoutEngine
     final_layouts = [] 
     page_layouts = MegaBar::Layout.by_page(page_info[:page_id])
     page_layouts.each do | page_layout |
+      env[:mega_layout] = page_layout
       blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(rout[:action])
       final_blocks = []
       blocks.each do |blck|  
@@ -60,7 +62,7 @@ class LayoutEngine
 
   def set_page_info(rout, rout_terms)
     page_info = {}
-    MegaBar::Page.all.order(' id desc').pluck(:id, :path).each do | page |
+    MegaBar::Page.all.order(' id desc').pluck(:id, :path, :name).each do | page |
       page_path_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
       next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
       page_terms = page[1].split('/').reject! { |c| (c.nil? || c.empty?) }
@@ -69,7 +71,7 @@ class LayoutEngine
         variable_segments << rout_terms[k] if page_terms[k].starts_with?(':')
       end
       variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
-      page_info = {page_id: page[0], page_path: page[1], terms: page_terms, vars: variable_segments}
+      page_info = {page_id: page[0], page_path: page[1], terms: page_terms, vars: variable_segments, name: page[2]}
       
       break 
     end
@@ -178,7 +180,7 @@ class MegaEnv
       kontroller_path: @kontroller_path,
       mega_displays: @mega_displays,
       nested_ids: @nested_ids,
-      nested_class_info: @nested_class_info
+      nested_class_info: @nested_class_info,
     }
   end
 

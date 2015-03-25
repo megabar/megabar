@@ -36,6 +36,37 @@ module MegaBar
     end
     def pre_render
     end
+
+    def model_display_help_links
+      links = []
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '/model_displays/' + @mega_display[:model_display].id.to_s, 'Field Displays for the "' + @mega_display[:model_display].header.to_s +  '" model display']
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '/model_displays/' + @mega_display[:model_display].id.to_s  + '/edit' , 'Edit Model Display']
+      links.map{ |l| link_to l[1], l[0]}.join(' | ')
+    end
+    def block_help_links
+      links = []
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s, 'Model Displays for the "' + @block.name + '" Block']
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '/edit', 'Edit Block']
+      links.map{ |l| link_to l[1], l[0]}.join(' | ')
+    end
+    def layout_help_links
+      links = []
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s, 'List Model Displays for the ' + @block.name + ' Block']
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '/edit', 'Edit Block']
+      links.map{ |l| link_to l[1], l[0]}.join(' | ')
+    end
+    def layout_help_links
+      links = []
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s , 'Blocks on the "' + @mega_layout.name + '" Layout']
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/edit', 'Edit Layout']
+      links.map{ |l| link_to l[1], l[0]}.join(' | ')
+    end
+    def page_help_links
+      links = []
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s, 'Layouts on the "' + @mega_page[:name] + '" Page']
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/edit/', 'Edit Page']
+      links.map{ |l| link_to l[1], l[0]}.join(' | ')
+    end
   end
 
 end

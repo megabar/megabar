@@ -23,6 +23,8 @@ module MegaBar
           actions << {format: 'textread', field_id: field.id, header: field.field.humanize}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
         when 'edit'
           actions << {format: field.default_data_format_edit, field_id: field.id, header: field.field.humanize}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?
+        else 
+          actions << {format: 'textread', field_id: field.id, header: field.field.humanize}  if !FieldDisplay.by_model_display_id(self.id).by_fields(field.id).present?          
         end
       end
       actions.each do | action |
