@@ -62,7 +62,7 @@ class LayoutEngine
 
   def set_page_info(rout, rout_terms)
     page_info = {}
-    MegaBar::Page.all.order(' id desc').pluck(:id, :path).each do | page |
+    MegaBar::Page.all.order(' id desc').pluck(:id, :path, :name).each do | page |
       page_path_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
       next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
       page_terms = page[1].split('/').reject! { |c| (c.nil? || c.empty?) }
@@ -71,7 +71,7 @@ class LayoutEngine
         variable_segments << rout_terms[k] if page_terms[k].starts_with?(':')
       end
       variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
-      page_info = {page_id: page[0], page_path: page[1], terms: page_terms, vars: variable_segments}
+      page_info = {page_id: page[0], page_path: page[1], terms: page_terms, vars: variable_segments, name: page[2]}
       
       break 
     end

@@ -17,5 +17,5 @@
   <% end%>
 <% end %>
 
-<%= link_to 'New', link_path('new') %> 
 <%= render partial: "mega_bar_help_links", :locals => {:links => block_help_links} %>
+<%= link_to 'Create New ' + @mega_model_properties.name.singularize, link_path('new') %> 

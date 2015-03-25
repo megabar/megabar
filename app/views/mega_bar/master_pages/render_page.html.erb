@@ -23,8 +23,6 @@
     <% @page_layouts.each do |layout| %>
       <div class='layout'><%=layout%></div>
     <% end %>
-
-
-
+    <%= render partial: 'mega_bar_help_links' ,:locals => {:links => page_help_links} %>
   </body>
 </html>
