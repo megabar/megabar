@@ -23,6 +23,10 @@ MegaBar::Engine.routes.draw do
   resources :textboxes
   resources :textreads
   root 'roots#root_page'
-  ##### MEGABAR END
+ resources :mega_bar_models, path: 'y'
+  resources :mega_bar_models, path: 'y'
+  resources :mega_bar_models, path: 'y'
+  resources :mega_bar_models, path: 'y'
+   ##### MEGABAR END
   # (leave that line in place with five #'s')
 end

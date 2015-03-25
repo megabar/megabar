@@ -20,7 +20,6 @@ module MegaBar
       line = '  ##### MEGABAR END'
       text = File.read(gem_path + 'config/routes.rb')
       if self.model_id
-        byebug
         mod = Model.find(self.model_id)
         gem_path = Rails.root + '../megabar/'  if File.directory?(Rails.root + '../megabar/')  && mod.modyule == 'MegaBar'
         route_text = ' resources :' + mod.tablename
