@@ -10,9 +10,11 @@ module MegaBar
     
     def _params
       permits = []  
+
       MegaBar::Field.by_model(env[:mega_env][:model_id]).pluck(:field).each do |att|
         permits << att unless ['id', 'created_at', 'updated_at'].include?(att)
       end
+      byebug
       params.require(controller_name.singularize).permit(permits)
     end
   end

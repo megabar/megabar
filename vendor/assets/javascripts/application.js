@@ -12,8 +12,3 @@
 //
 //= require_tree .
 //= require mega_bar/mega_bar
-//= require best_in_place
-
-//= require jquery-ui
-//= require best_in_place.jquery-ui
- 

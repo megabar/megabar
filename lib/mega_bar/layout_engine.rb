@@ -114,6 +114,7 @@ class LayoutEngine
       params_hash_arr.each do |param|
         params_hash = params_hash.merge(param)
       end
+    #  byebug
       params_hash = params_hash.merge(orig_query_hash)
       params_hash = params_hash.merge(env['rack.request.form_hash']) if mega_env.block_action == 'update' || mega_env.block_action == 'create'
       env['QUERY_STRING'] = params_hash.to_param # 150221! 
