@@ -2,6 +2,7 @@ module MegaBar
   class Engine < ::Rails::Engine
     isolate_namespace MegaBar
     require 'seed_dump'
+    require 'best_in_place' 
 
     config.autoload_paths << File.expand_path("../*", __FILE__)
 
