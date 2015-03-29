@@ -10,7 +10,7 @@ group :test do
   gem 'byebug'
   gem 'rubocop', require: false
   gem 'simplecov', '~> 0.7.1'
- 
+  gem 'jquery-ui-rails'
 end
 
 # Declare your gem's dependencies in mega_bar.gemspec.

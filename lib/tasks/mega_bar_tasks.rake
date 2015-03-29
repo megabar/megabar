@@ -11,10 +11,19 @@ namespace :mega_bar do
     text = File.read('config/routes.rb')
     new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, "#{line}\n\n  ##### MEGABAR BEGIN #####\n  mount MegaBar::Engine, at: '/mega-bar'\n  ##### MEGABAR END #####\n")
     File.open('config/routes.rb', "w") {|file| file.puts new_contents }
+
+    File.open('app/assets/javascripts/application.js', 'a') { |f|
+      f.puts "//= require mega_bar/application.js "
+    }
+    File.open('app/assets/stylesheets/application.css', 'a') { |f|
+      f.puts "//= require mega_bar/application.css "
+    }
+    
     Rake::Task["db:migrate"].invoke
     Rake::Task['mega_bar:data_load'].invoke
 
     puts "mounted the engine in the routes file"
+    puts 'added mega_bar assets to the pipeline'
     puts " migrated the mega_bar db. "
     puts " and loaded the data."
     puts "Yer all set!" 

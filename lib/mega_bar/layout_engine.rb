@@ -20,6 +20,7 @@ class LayoutEngine
 
     @redirect = false
     request = Rack::Request.new(env)
+    request.params # strangely this needs to be here for best_in_place updates.
     rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
     rout = set_rout(request, env)
     page_info = set_page_info(rout, rout_terms)
@@ -44,13 +45,13 @@ class LayoutEngine
       end
       env['mega_final_blocks'] = final_blocks #used in master_layouts_controller
       @status, @headers, @layouts = MegaBar::MasterLayoutsController.action(:render_layout_with_blocks).call(env)
-      final_layouts << a_layout = @layouts.instance_variable_get(:@response).nil? ? @layouts.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @layouts.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]
-      # final_layouts <<  @layouts.instance_variable_get("@body").instance_variable_get("@stream").instance_variable_get("@buf")[0]
+      final_layouts <<  l = @layouts.blank? ? '' : @layouts.body.html_safe
     end
     env['mega_final_layouts'] = final_layouts
     @status, @headers, @page = MegaBar::MasterPagesController.action(:render_page).call(env)
     final_page = []
-    final_page_content = @page.instance_variable_get(:@response).nil? ? @page.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @page.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]
+    final_page_content = @page.blank? ? '' : @page.body.html_safe
+    # final_page_content = @page.instance_variable_get(:@response).nil? ? @page.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @page.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]
     final_page << final_page_content
     return @redirect ? [@redirect[0], @redirect[1], ['you are being redirected']] : [@status, @headers, final_page]
   end
@@ -115,14 +116,13 @@ class LayoutEngine
         params_hash = params_hash.merge(param)
       end
       params_hash = params_hash.merge(orig_query_hash)
-      params_hash = params_hash.merge(env['rack.request.form_hash']) if mega_env.block_action == 'update' || mega_env.block_action == 'create'
+      params_hash = params_hash.merge(env['rack.request.form_hash']) if (mega_env.block_action == 'update' || mega_env.block_action == 'create') && !env['rack.request.form_hash'].nil?
       env['QUERY_STRING'] = params_hash.to_param # 150221! 
       env['action_dispatch.request.parameters'] = params_hash
       
       @status, @headers, @disp_body = mega_env.kontroller_klass.constantize.action(mega_env.block_action).call(env)
-      
       @redirect = [@status, @headers, @disp_body] if @status == 302
-      block_body = @disp_body.instance_variable_get(:@response).nil? ? @disp_body.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @disp_body.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]
+      block_body = @disp_body.blank? ? '' : @disp_body.body.html_safe
       end
   end  
 
