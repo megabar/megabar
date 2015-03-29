@@ -20,7 +20,7 @@ class LayoutEngine
 
     @redirect = false
     request = Rack::Request.new(env)
-    request.params
+    request.params # strangely this needs to be here for best_in_place updates.
     rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
     rout = set_rout(request, env)
     page_info = set_page_info(rout, rout_terms)
