@@ -61,7 +61,7 @@ module MegaBar
       respond_to do |format|
         if @mega_instance.update(_params)
           format.html { redirect_to @mega_instance, notice: 'Thing was successfully updated.' }
-          format.json { head :no_content }
+          format.json { respond_with_bip(@mega_instance) }
         else
           format.html { render action: 'mega_bar.html.erb' }
           format.json { render json: @mega_instance.errors, status: :unprocessable_entity }

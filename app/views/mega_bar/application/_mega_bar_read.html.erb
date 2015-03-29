@@ -22,7 +22,7 @@ $(document).ready(function() {
     <%= @mf.record_wrapper.html_safe%>
     <% @mega_display[:displayable_fields].each do | displayable_field | %>
       <% if @mf.name == 'ProfileTable' %>
-        <tr><th><%=displayable_field[:field_display].header %></th><td>
+        <tr><th><%=  best_in_place displayable_field[:field_display], :header, path: displayable_field[:field_display] %></th><td>
       <% end %>
       <%= @mf.field_wrapper.html_safe%>
       
