@@ -9,8 +9,7 @@ module MegaBar
     skip_before_filter :verify_authenticity_token
     
     def _params
-      permits = []  
-
+      permits = []
       MegaBar::Field.by_model(env[:mega_env][:model_id]).pluck(:field).each do |att|
         permits << att unless ['id', 'created_at', 'updated_at'].include?(att)
       end
