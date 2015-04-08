@@ -113,6 +113,7 @@ module MegaBar
     end
     def add_form_path_to_mega_displays(mega_env) 
       mega_env[:mega_displays].each_with_index do | mega_display, index |
+
         mega_env[:mega_displays][index][:form_path] = form_path(params[:action], mega_env[:kontroller_path], params[:id])
       end
       mega_env
@@ -125,7 +126,7 @@ module MegaBar
         param_hash = param_hash.merge(param)
       end
       param_hash = param_hash.merge(params.dup)
-      param_hash[:id] = id
+      param_hash[:id] = id 
       param_hash[:only_path] = true
       case action
       when 'new'
@@ -142,7 +143,7 @@ module MegaBar
       mega_class.column_names.include?(passed_params[:sort]) ? passed_params[:sort] :  model_properties[:default_sort_field]
     end
     def sort_direction(passed_params)
-      %w[asc desc].include?(passed_params[:direction]) ? passed_params[:direction] : 'asc'
+      %w[asc desc].include?(passed_params[:direction]) ? passed_params[:direction] : 'desc'
     end
 
     def is_displayable?(format)

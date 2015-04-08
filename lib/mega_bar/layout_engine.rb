@@ -3,6 +3,13 @@ require 'sqlite3'
 require 'logger'
 
 class LayoutEngine
+  # honestly, there shouldn't be anything in this file that concerns regular developers or users.
+  # if you've set up your page->layouts->blocks->model_displays->field_displays properly this should just work.
+  # if you've created a page using the gui and its not working.. check it's path setting and check your routes file to see that they are looking right.
+  # Here we figure out which is the current page, then collect which blocks go on a layout and which layouts go on a page.
+  # For each block, if it holds a model_display, we'll call the controller for that model.
+  # treat your controllers and models like you would in a normal rails app. 
+  # this does set some environment variables that are then used in your controllers, but inspect them there.
   def initialize(app, message = "Response Time")
     @app = app
     @message = message
@@ -13,6 +20,7 @@ class LayoutEngine
   end
   
   def _call(env)
+    # so.. a lot does go on here... I'll have to write a white paper.
     if env['PATH_INFO'].end_with?('.css')  || env['PATH_INFO'].end_with?('.js')
       @status, @headers, @response = @app.call(env)
       return  [@status, @headers, self]
@@ -21,8 +29,13 @@ class LayoutEngine
     @redirect = false
     request = Rack::Request.new(env)
     request.params # strangely this needs to be here for best_in_place updates.
+    ################################
+    ## figure out what page it is
+    # the general strategy is.. 
+    # have rails recognize the path_info..
+    # tbcontinued.
+    rout = set_rout(request, env) #set below via 'recognize_path'
     rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
-    rout = set_rout(request, env)
     page_info = set_page_info(rout, rout_terms)
     env[:mega_page] = page_info
     if page_info.empty? #non megabar pages.
@@ -33,6 +46,7 @@ class LayoutEngine
      return @status, @headers, gotta_be_an_array
       # return @status, @headers, @page = rout.
     end
+    ################################
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
     final_layouts = [] 
     page_layouts = MegaBar::Layout.by_page(page_info[:page_id])
@@ -63,10 +77,13 @@ class LayoutEngine
 
   def set_page_info(rout, rout_terms)
     page_info = {}
+    rout_terms ||= []
     MegaBar::Page.all.order(' id desc').pluck(:id, :path, :name).each do | page |
       page_path_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
       next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
+      next if (page_path_terms.empty? && !rout_terms.empty? ) # home page /
       page_terms = page[1].split('/').reject! { |c| (c.nil? || c.empty?) }
+      page_terms ||= []
       variable_segments = []
       page_terms.each_with_index do | v, k |
         variable_segments << rout_terms[k] if page_terms[k].starts_with?(':')

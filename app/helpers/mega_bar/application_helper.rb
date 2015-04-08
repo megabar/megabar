@@ -5,6 +5,9 @@ module MegaBar
       css_class = column == sort_column(@mega_class, @mega_model_properties, params) ? 'current ' + sort_direction(params) : nil
       direction = column == sort_column(@mega_class, @mega_model_properties, params) && sort_direction(params) == 'asc' ? 'desc' : 'asc'
       link_to title, {:sort => column, :direction => direction, controller: @kontroller_path}, class: css_class
+      # byebug
+      #link_to best_in_place sort_column, title, {:sort => column, :direction => direction, controller: @kontroller_path}, class: css_class
+    
     end
 
     def param_from_tablename(model_props, tablename)
@@ -34,6 +37,7 @@ module MegaBar
       param_hash[:id] = id
       url_for(param_hash)
     end
+    
     def pre_render
     end
 
