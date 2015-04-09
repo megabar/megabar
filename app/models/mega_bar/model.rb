@@ -30,7 +30,7 @@ module MegaBar
       if !self.make_page.nil? && !self.make_page.empty?
         mod = self.modyule.nil? || self.modyule.empty?  ? '' : self.modyule.underscore + '/'
         path = '/' + mod + self.tablename
-        path = self.make_page == 'default_model_path' ? path : self.make_page
+        # path = self.make_page == 'default_model_path' ? path : self.make_page
         Page.create(name: self.name + ' Model Page', path: path, make_layout_and_block: 'y', base_name: self.name, model_id: self.id )
       end
     end

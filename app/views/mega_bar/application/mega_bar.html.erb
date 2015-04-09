@@ -1,15 +1,23 @@
 <% if !['edit', 'new'].include? params[:action]%>
+  <% # FORM STUFF %>
   <% @mega_displays.each do |mega_display| %>
-    <% @mega_display= mega_display %>  
-    <% @mf = @mega_display[:model_display_format] %>
+    <% 
+      @mega_display= mega_display   
+      @mf = @mega_display[:model_display_format]
+      @model_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/model_displays', action: 'show', id: @mega_display[:model_display].id, :only_path=> true)
+    %>
     <%= render partial: "mega_bar_read" %>
     <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_help_links} %>
-  <% end%>    
+  <% end %>
 <% else %>
+  <% # INDEX AND SHOW STUFF %>
   <%= form_for(@form_instance_vars) do |f| %>
     <% @mega_displays.each do |mega_display| %>
-      <% @mega_display = mega_display %>
-      <% @mf = @mega_display[:model_display_format] %>
+      <% 
+        @mega_display = mega_display 
+        @mf = @mega_display[:model_display_format]
+        @model_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/model_displays', action: 'show', id: @mega_display[:model_display].id, :only_path=> true)
+      %>
       <%=@mf.app_wrapper.html_safe%>
       <%= render partial: "mega_bar_write" %>
       <%=@mf.app_wrapper_end.html_safe%>
