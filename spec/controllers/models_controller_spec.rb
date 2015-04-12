@@ -35,12 +35,18 @@ module MegaBar
       { classname: nil, name: m[:name], default_sort_field: '', id: m[:id]  }
     }
     let(:model) { create(:model_with_page) }
-    let(:field) { create(:field_with_displays) }
+    let(:fields) { 
+      create(:field_with_displays)
+      create(:field_with_displays, field: 'tablename' )
+      create(:field_with_displays, field: 'default_sort_field')
+    }
     let(:model_display_format) { create(:model_display_format) }
     let(:model_display_format_2) { create(:model_display_format_2) }
     let(:page_info) { {:page_id=>1, :page_path=>"/mega-bar/models", :terms=>["mega-bar", "models"], :vars=>[], :name=>"Models Page"} }
     let(:page_info_for_show) { {:page_id=>1, :page_path=>"/mega-bar/models", :terms=>["mega-bar", "models"], :vars=>["23"], :name=>"Models Page"} }
-
+    let(:rout_for_collection) { {:action=>"index", :controller=>"mega_bar/models"} }
+    let(:rout_for_member) { {:action=>"index", :controller=>"mega_bar/models", :id=>"1"} }
+    let(:blck) { Block.find(1) }     
     # This should return the minimal set of values that should be in the session
     # in order to pass any filters (e.g. authentication) defined in
     # ModelsController. Be sure to keep this updated too.
@@ -49,7 +55,7 @@ module MegaBar
         MegaBar::Field.skip_callback("create",:after,:make_migration)
         MegaBar::Model.skip_callback("create",:after,:make_all_files)
         model
-        field
+        fields
         model_display_format
         model_display_format_2
       end
@@ -76,11 +82,11 @@ module MegaBar
 
         describe "GET index", focus: true do
           it "assigns all models as @mega_instance" do
-            blck = Block.find(1)
-            rout = {:action=>"index", :controller=>"mega_bar/models"}
-            env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"action"=>"index", "controller"=>"mega_bar/models"} )
+            blck
+            rout_for_collection
+            env = Rack::MockRequest.env_for('/mega-bar/models', :params => rout_for_collection )
             env[:mega_page] = page_info
-            env[:mega_env] = MegaEnv.new(blck, rout, page_info).to_hash # added to env for use in controllers
+            env[:mega_env] = MegaEnv.new(blck, rout_for_collection, page_info).to_hash # added to env for use in controllers
             status, headers, body = MegaBar::ModelsController.action(:index).call(env)
             # @response = ActionDispatch::TestResponse.new(status, headers, body)
             @controller = body.request.env['action_controller.instance']
@@ -88,26 +94,26 @@ module MegaBar
           end
         end
 
-        describe "GET show", focus: true do
+        describe "GET show" do
           it "assigns the requested model as @mega_instance" do
-            blck = Block.find(1)
-            rout = {:action=>"show", :controller=>"mega_bar/models", :id=>"1"}
+            blck
+            rout_for_member
             env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"id"=>"1", "action"=>"show", "controller"=>"mega_bar/models"} )
             env[:mega_page] = page_info_for_show
-            env[:mega_env] = MegaEnv.new(blck, rout, page_info_for_show).to_hash # added to env for use in controllers 
+            env[:mega_env] = MegaEnv.new(blck, rout_for_member, page_info_for_show).to_hash # added to env for use in controllers 
             status, headers, body = MegaBar::ModelsController.action(:show).call(env)
             # @response = ActionDispatch::TestResponse.new(status, headers, body)
             @controller = body.request.env['action_controller.instance']
             expect(assigns(:mega_instance)).to eq([model])
           end
         end
-        describe "GET new", focus: true do
+        describe "GET new" do
           it "assigns a new model as @mega_instance" do
-            blck = Block.find(1)
-            rout = {:action=>"new", :controller=>"mega_bar/models"}
+            blck
+            rout_for_collection
             env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"action"=>"new", "controller"=>"mega_bar/models"} )
             env[:mega_page] = page_info
-            env[:mega_env] = mega_env = MegaEnv.new(blck, rout, page_info).to_hash # added to env for use in controllers 
+            env[:mega_env] = MegaEnv.new(blck, rout_for_collection, page_info).to_hash # added to env for use in controllers 
             status, headers, body = MegaBar::ModelsController.action(:new).call(env)
             # @response = ActionDispatch::TestResponse.new(status, headers, body)
             @controller = body.request.env['action_controller.instance']
@@ -115,102 +121,103 @@ module MegaBar
           end
         end
 
-        describe "GET edit", focus: true do
+        describe "GET edit" do
           it "assigns the requested model as @mega_instance" do
-            blck = Block.find(1)
-            rout = {:action=>"edit", :controller=>"mega_bar/models", :id=>"1"}
+            blck
+            rout_for_member
             env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"id"=>"1", "action"=>"edit", "controller"=>"mega_bar/models"} )
             env[:mega_page] = page_info_for_show
-            env[:mega_env] = mega_env = MegaEnv.new(blck, rout, page_info_for_show).to_hash # added to env for use in controllers 
+            env[:mega_env] = MegaEnv.new(blck, rout_for_member, page_info_for_show).to_hash # added to env for use in controllers 
             status, headers, body = MegaBar::ModelsController.action(:edit).call(env)
             # @response = ActionDispatch::TestResponse.new(status, headers, body)
             @controller = body.request.env['action_controller.instance']
             expect(assigns(:mega_instance)).to eq(model)
           end
         end
-        context 'with field for model' do
-          before(:each) do
-            create(:field)
-            create(:field, tablename: 'mega_bar_models', field: 'default_sort_field')
-          end
-          after(:each) do
-            Field.destroy_all
-          end     
-          describe "POST create" do
-            describe "with valid params" do
-              it "creates a new Model" do
-                expect {
-                  post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
-                }.to change(Model, :count).by(1)
-              end
+    
+        describe "POST create" do
 
-              it "assigns a newly created model as @mega_instance" do
-                post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
-                expect(assigns(:mega_instance)).to be_a(Model)
-                expect(assigns(:mega_instance)).to be_persisted
-              end
 
-              it "redirects to the created model"  do
-                post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
-                expect(response).to redirect_to(Model.last)
-              end
+          describe "with valid params" do
+            it "creates a new Model", focus: true do
+            blck
+            rout_for_collection
+            env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"id"=>nil, "action"=>"create", "controller"=>"mega_bar/models", "model"=>{"schema"=>"sqlite", "name"=>"zoiks", "default_sort_field"=>"id", "classname"=>"zoik", "modyule"=>"", "make_page"=>""} })
+            env[:mega_page] = page_info
+            env[:mega_env] = MegaEnv.new(blck, rout_for_collection, page_info).to_hash # added to env for use in controllers 
+            expect {
+              status, headers, body = MegaBar::ModelsController.action(:create).call(env)
+              # @response = ActionDispatch::TestResponse.new(status, headers, body)
+              @controller = body.request.env['action_controller.instance']
+            }.to change(Model, :count).by(1)
             end
 
-            describe "with invalid params" do
-              it "assigns a newly created but unsaved model as @mega_instance" do
-                post :create, {use_route: :mega_bar, model_id: 1, :model => invalid_attributes}, valid_session
-                expect(assigns(:mega_instance)).to be_a_new(Model)
-              end
+            it "assigns a newly created model as @mega_instance" do
+              post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
+              expect(assigns(:mega_instance)).to be_a(Model)
+              expect(assigns(:mega_instance)).to be_persisted
+            end
 
-              it "re-renders the 'new' template"  do
-                post :create, {use_route: :mega_bar, model_id: 1, :model => invalid_attributes}, valid_session
-                expect(response).to render_template('mega_bar.html.erb')
-              end
+            it "redirects to the created model"  do
+              post :create, {use_route: :mega_bar, model_id: 1, :model => valid_attributes}, valid_session
+              expect(response).to redirect_to(Model.last)
             end
           end
 
-
-
-          describe "PUT update" do
-            describe "with valid params" do
-              let(:new_attributes) {
-                 m = build(:model)
-                 { classname: 'testing', name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }
-              }
-
-              it "updates the requested model" do
-                model = Model.create! valid_attributes
-                put :update, {use_route: :mega_bar, :id => model.to_param, :model => new_attributes}, valid_session
-                model.reload
-                expect(model.attributes).to include( { 'classname' => 'testing' } )
-              end
-
-              it "assigns the requested model as @mega_instance" do
-
-                model = Model.create! valid_attributes
-                put :update, {use_route: :mega_bar, :id => model.to_param, :model => valid_attributes}, valid_session
-                expect(assigns(:mega_instance)).to eq(model)
-              end
-
-              it "redirects to the model" do
-                model = Model.create! valid_attributes
-                put :update, {use_route: :mega_bar, :id => model.to_param, :model => valid_attributes}, valid_session
-                expect(response).to redirect_to(model)
-              end
+          describe "with invalid params" do
+            it "assigns a newly created but unsaved model as @mega_instance" do
+              post :create, {use_route: :mega_bar, model_id: 1, :model => invalid_attributes}, valid_session
+              expect(assigns(:mega_instance)).to be_a_new(Model)
             end
 
-            describe "with invalid params" do
-              it "assigns the model as @mega_instance" do
-                model = Model.create! valid_attributes
-                put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
-                expect(assigns(:mega_instance)).to eq(model)
-              end
+            it "re-renders the 'new' template"  do
+              post :create, {use_route: :mega_bar, model_id: 1, :model => invalid_attributes}, valid_session
+              expect(response).to render_template('mega_bar.html.erb')
+            end
+          end
+        end
 
-              it "re-renders the 'edit' template" do
-                model = Model.create! valid_attributes
-                put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
-                expect(response).to render_template("mega_bar.html.erb")
-              end
+
+
+        describe "PUT update" do
+          describe "with valid params" do
+            let(:new_attributes) {
+               m = build(:model)
+               { classname: 'testing', name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }
+            }
+
+            it "updates the requested model" do
+              model = Model.create! valid_attributes
+              put :update, {use_route: :mega_bar, :id => model.to_param, :model => new_attributes}, valid_session
+              model.reload
+              expect(model.attributes).to include( { 'classname' => 'testing' } )
+            end
+
+            it "assigns the requested model as @mega_instance" do
+
+              model = Model.create! valid_attributes
+              put :update, {use_route: :mega_bar, :id => model.to_param, :model => valid_attributes}, valid_session
+              expect(assigns(:mega_instance)).to eq(model)
+            end
+
+            it "redirects to the model" do
+              model = Model.create! valid_attributes
+              put :update, {use_route: :mega_bar, :id => model.to_param, :model => valid_attributes}, valid_session
+              expect(response).to redirect_to(model)
+            end
+          end
+
+          describe "with invalid params" do
+            it "assigns the model as @mega_instance" do
+              model = Model.create! valid_attributes
+              put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
+              expect(assigns(:mega_instance)).to eq(model)
+            end
+
+            it "re-renders the 'edit' template" do
+              model = Model.create! valid_attributes
+              put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
+              expect(response).to render_template("mega_bar.html.erb")
             end
           end
         end
