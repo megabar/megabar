@@ -23,6 +23,20 @@ Add MegaBar to your Gemfile so that it uses your local copy of the gem:
 
 ```gem 'mega_bar', :path => '../megabar/' ```
 
+Actually add all of this for now: 
+```gem 'mega_bar', :path => '../megabar/'
+gem 'mega_users', :path => '../MegaUsers/'
+
+group :development, :test do
+  gem 'byebug'
+  gem 'rspec-rails', '~> 3.0'
+  gem 'factory_girl_rails', require: false
+end
+
+gem 'best_in_place'
+
+gem 'jquery-ui-rails'```
+
 (if you will not be contributing to the gem, you can omit the 'path' segment.)
 
 Bundle Install
