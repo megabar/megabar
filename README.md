@@ -26,7 +26,6 @@ Add MegaBar to your Gemfile so that it uses your local copy of the gem:
 Actually add all of this for now: 
 ```
 gem 'mega_bar', :path => '../megabar/'
-gem 'mega_users', :path => '../MegaUsers/'
 
 group :development, :test do
   gem 'byebug'
