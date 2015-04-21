@@ -1,6 +1,6 @@
 MegaBar::Engine.routes.draw do
-  
-  resources :pages do 
+
+  resources :pages do
     resources :layouts do
       resources :blocks do
         resources :model_displays do
@@ -23,5 +23,4 @@ MegaBar::Engine.routes.draw do
   resources :textboxes
   resources :textreads
   # root 'roots#root_page'
-  ##### MEGABAR END ##### (leave that line in place with five #'s')
 end

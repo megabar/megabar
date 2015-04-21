@@ -9,7 +9,7 @@
   </head>
   <body>
     <nav>
-      <%= link_to 'Pages Index', mega_bar.pages_path %>
+      <%= link_to 'Pages Index', mega_bar.pages_path %> |  <%= link_to 'Models Index', mega_bar.models_path %>
     </nav>
 
     <% flash.each do |key, msg| %>
@@ -17,12 +17,6 @@
         <p><%= msg %></p>
         <div class="clear"></div>
       </div>
-    <% end %>
-    <% if notice %>
-      <p class="alert alert-success"><%= notice %></p>
-    <% end %>
-    <% if alert %>
-      <p class="alert alert-danger"><%= alert %></p>
     <% end %>
 
 
