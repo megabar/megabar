@@ -8,20 +8,20 @@ class LayoutEngine
   # if you've created a page using the gui and its not working.. check it's path setting and check your routes file to see that they are looking right.
   # Here we figure out which is the current page, then collect which blocks go on a layout and which layouts go on a page.
   # For each block, if it holds a model_display, we'll call the controller for that model.
-  # treat your controllers and models like you would in a normal rails app. 
+  # treat your controllers and models like you would in a normal rails app.
   # this does set some environment variables that are then used in your controllers, but inspect them there.
   def initialize(app, message = "Response Time")
     @app = app
     @message = message
   end
-  
+
   def call(env)
     dup._call(env)
   end
-  
+
   def _call(env)
     # so.. a lot does go on here... I'll have to write a white paper.
-    if env['PATH_INFO'].end_with?('.css')  || env['PATH_INFO'].end_with?('.js')
+    if env['PATH_INFO'].end_with?('.css')  || env['PATH_INFO'].end_with?('.js') || env['PATH_INFO'].end_with?('.jpeg')
       @status, @headers, @response = @app.call(env)
       return  [@status, @headers, self]
     end
@@ -31,7 +31,7 @@ class LayoutEngine
     request.params # strangely this needs to be here for best_in_place updates.
     ################################
     ## figure out what page it is
-    # the general strategy is.. 
+    # the general strategy is..
     # have rails recognize the path_info..
     # tbcontinued.
     rout = set_rout(request, env) #set below via 'recognize_path'
@@ -48,13 +48,13 @@ class LayoutEngine
     end
     ################################
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
-    final_layouts = [] 
+    final_layouts = []
     page_layouts = MegaBar::Layout.by_page(page_info[:page_id])
     page_layouts.each do | page_layout |
       env[:mega_layout] = page_layout
       blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(rout[:action])
       final_blocks = []
-      blocks.each do |blck|  
+      blocks.each do |blck|
         final_blocks << process_block(blck, page_info, rout, orig_query_hash, env)
       end
       env['mega_final_blocks'] = final_blocks #used in master_layouts_controller
@@ -69,7 +69,7 @@ class LayoutEngine
     final_page << final_page_content
     return @redirect ? [@redirect[0], @redirect[1], ['you are being redirected']] : [@status, @headers, final_page]
   end
-  
+
   def each(&display)
     display.call("<!-- #{@message}: #{@stop - @start} -->\n") if (!@headers['Content-Type'].nil? && @headers["Content-Type"].include?("text/html"))
     @response.each(&display)
@@ -90,16 +90,16 @@ class LayoutEngine
       end
       variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
       page_info = {page_id: page[0], page_path: page[1], terms: page_terms, vars: variable_segments, name: page[2]}
-      
-      break 
+
+      break
     end
     page_info
   end
 
   def set_rout(request, env)
     request_path_info = request.path_info.dup
-    rout = (Rails.application.routes.recognize_path request_path_info rescue {}) || {} 
-    rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', '') rescue {}) || {}  if rout.empty? 
+    rout = (Rails.application.routes.recognize_path request_path_info rescue {}) || {}
+    rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', '') rescue {}) || {}  if rout.empty?
     rout[:action] = get_action(rout[:action], env['REQUEST_METHOD'], )
     rout
   end
@@ -116,43 +116,43 @@ class LayoutEngine
   end
 
   def process_block(blck, page_info, rout, orig_query_hash, env)
-    if ! blck.html.nil? && ! blck.html.empty? 
-      blck.html
-    else 
+    if ! blck.html.nil? && ! blck.html.empty?
+      blck.html.html_safe
+    else
       params_hash = {} # used to set params var for controllers
       params_hash_arr = [] #used to collect 'params_hash' pieces
 
       mega_env = MegaEnv.new(blck, rout, page_info) # added to env for use in controllers
-      
+
       params_hash_arr = mega_env.params_hash_arr
       env[:mega_env] = mega_env.to_hash
-      
-      params_hash_arr << {action: mega_env.block_action} 
-      params_hash_arr << {controller: mega_env.kontroller_path} 
+
+      params_hash_arr << {action: mega_env.block_action}
+      params_hash_arr << {controller: mega_env.kontroller_path}
       params_hash_arr.each do |param|
         params_hash = params_hash.merge(param)
       end
       params_hash = params_hash.merge(orig_query_hash)
       params_hash = params_hash.merge(env['rack.request.form_hash']) if (mega_env.block_action == 'update' || mega_env.block_action == 'create') && !env['rack.request.form_hash'].nil?
-      env['QUERY_STRING'] = params_hash.to_param # 150221! 
+      env['QUERY_STRING'] = params_hash.to_param # 150221!
       env['action_dispatch.request.parameters'] = params_hash
-      
+
       @status, @headers, @disp_body = mega_env.kontroller_klass.constantize.action(mega_env.block_action).call(env)
       @redirect = [@status, @headers, @disp_body] if @status == 302
       block_body = @disp_body.blank? ? '' : @disp_body.body.html_safe
       end
-  end  
+  end
 
   def action_from_path(path, method, path_segments)
     path_array = path.split('/')
     if method == 'GET'
-      if ['edit', 'new'].include?(path_array.last) 
+      if ['edit', 'new'].include?(path_array.last)
         path_array.last
       elsif path.last.match(/^(\d)+$/)
         'show'
       elsif  path_segments.include?(path_array.last)
         'index'
-      else 
+      else
         path_array.last
       end
     elsif ['POST', 'PUT', 'PATCH'].include? method
@@ -167,18 +167,18 @@ end
 class MegaEnv
   attr_writer :mega_model_properties, :mega_displays, :nested_ids
   attr_reader :block, :modle, :model_id, :mega_model_properties, :klass, :kontroller_inst, :kontroller_path, :kontroller_klass, :mega_displays, :nested_ids, :block_action, :params_hash_arr, :nested_class_info
-  
+
   def initialize(blck, rout, page_info)
-    
+
     @block_model_displays =   MegaBar::ModelDisplay.by_block(blck.id)
     @displays = blck.actions == 'current' ? @block_model_displays.by_block(blck.id).by_action(rout[:action]) : @block_model_displays.by_block(blck.id)
     @block_action = @displays.empty? ? rout[:action] : @displays.first.action
-     
+
     @modle = MegaBar::Model.by_model(@block_model_displays.first.model_id).first
     @model_id = @modle.id
-    @modyule = @modle.modyule.empty? ? '' : @modle.modyule + '::'  
+    @modyule = @modle.modyule.empty? ? '' : @modle.modyule + '::'
     @kontroller_klass = @modyule + @modle.classname.classify.pluralize + "Controller"
-    @kontroller_path = @modle.modyule.nil? || @modle.modyule.empty? ?   @modle.classname.pluralize.underscore :  @modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + @modle.classname.pluralize.underscore    
+    @kontroller_path = @modle.modyule.nil? || @modle.modyule.empty? ?   @modle.classname.pluralize.underscore :  @modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + @modle.classname.pluralize.underscore
     @klass = @modyule + @modle.classname.classify
     @kontroller_inst = @modle.classname.underscore
     @mega_displays = set_mega_displays(@displays)
@@ -188,11 +188,11 @@ class MegaEnv
   end
 
   def to_hash
-    { 
+    {
       block: @block,
-      model_id: @model_id, 
+      model_id: @model_id,
       mega_model_properties: @modle,
-      klass: @klass, 
+      klass: @klass,
       kontroller_inst: @kontroller_inst,
       kontroller_path: @kontroller_path,
       mega_displays: @mega_displays,
@@ -219,11 +219,11 @@ class MegaEnv
         end
       end
       info = {
-        :model_display_format => model_display_format, # Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new, 
+        :model_display_format => model_display_format, # Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new,
         :displayable_fields => displayable_fields,
         :model_display => display
       }
-      mega_displays_info << info     
+      mega_displays_info << info
     end
     mega_displays_info
   end
@@ -235,8 +235,8 @@ class MegaEnv
     if blck.path_base
       if page_info[:page_path].starts_with?(blck.path_base) || blck.path_base.starts_with?(page_info[:page_path])
         block_path_vars = blck.path_base.split('/').map{ | m | m if m[0] == ':'} - ["", nil]
-        depth = 0 
-        until depth == block_path_vars.size + 1            
+        depth = 0
+        until depth == block_path_vars.size + 1
           blck_model = depth == 0 ? modle :  MegaBar::Model.find(blck.send("nest_level_#{depth}"))
           fk_field =  depth == 0 ? 'id' : blck_model.classname.underscore.downcase +  '_id'
           new_hash = {fk_field => page_info[:vars][block_path_vars.size - depth]}
@@ -257,7 +257,7 @@ class MegaEnv
   def set_nested_class_info(nested_classes)
     nested_class_info = []
     nested_classes.each_with_index do |nc, idx|
-      modyule = nc.modyule.empty? ? '' : nc.modyule + '::'  
+      modyule = nc.modyule.empty? ? '' : nc.modyule + '::'
       klass = modyule + nc.classname.classify
       nested_class_info << [klass, nc.classname.underscore] if idx != 0
     end
@@ -272,5 +272,3 @@ class FlatsController < ActionController::Base
   def index
   end
 end
-
-

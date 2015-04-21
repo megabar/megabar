@@ -16,16 +16,19 @@
   <% @mega_instance.each do |mega_record| %>
     <%= @mf.record_wrapper.html_safe%>
     <% @mega_display[:displayable_fields].each do | displayable_field | %>
+
+      <% @field_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/field_displays', action: 'show', id: displayable_field[:field_display].id, :only_path=> true) %>
+
       <% if @mf.name == 'ProfileTable' %>
-        <tr><th><%=  best_in_place displayable_field[:field_display], :header, path: displayable_field[:field_display] %></th><td>
+        <tr><th><%=  best_in_place displayable_field[:field_display], :header, path:  @field_display_path %></th><td>
       <% end %>
       <%= @mf.field_wrapper.html_safe%>
-      
+
       <% data = render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: mega_record} %>
 
       <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
          <a href='<%=data%>'>
-      <% end %>    
+      <% end %>
       <%= data %>
       <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
          </a>
@@ -38,7 +41,7 @@
     <% if @mf.name == 'GridHtml' %>
       <td>
         <%= link_to 'Show', link_path('show', mega_record.id) %>
-       
+
         <% #byebug %>
       </td>
       <td><%= link_to 'Edit', link_path('edit', mega_record.id) %></td>
@@ -46,7 +49,7 @@
     <% end %>
     <%= @mf.record_wrapper_end.html_safe%>
   <% end %>
- 
+
   <%=@mf.app_wrapper_end.html_safe%>
  <br><%#= submit_tag %>
 <% end %>
