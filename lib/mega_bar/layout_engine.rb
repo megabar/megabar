@@ -49,7 +49,6 @@ class LayoutEngine
     ################################
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
     final_layouts = [] 
-    byebug
     page_layouts = MegaBar::Layout.by_page(page_info[:page_id])
     page_layouts.each do | page_layout |
       env[:mega_layout] = page_layout
