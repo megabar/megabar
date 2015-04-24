@@ -4,7 +4,7 @@ module MegaBar
 
 
     def index
-      @mega_instance = Model.where(['id > ?', 21]).order(sort_stuff)
+      @mega_instance = Model.where(['id > ?', 21]).order(column_sorting)
       super.index
     end
 
