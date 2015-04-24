@@ -179,11 +179,7 @@ MegaBar::TmpLayout.create!([
   {id: 16, page_id: 1, name: "Just a faker layout", created_at: "2015-03-01 20:06:52", updated_at: "2015-03-01 20:06:52"},
   {id: 17, page_id: 14, name: "fun layout", created_at: "2015-03-02 02:11:36", updated_at: "2015-03-02 02:11:36"},
   {id: 18, page_id: 14, name: "another fun layout", created_at: "2015-03-02 02:14:08", updated_at: "2015-03-02 02:14:08"},
-  {id: 19, page_id: 14, name: "another fun layout 2", created_at: "2015-03-02 02:20:06", updated_at: "2015-03-02 02:20:06"},
-  {id: 20, page_id: 14, name: "another fun layout 3", created_at: "2015-03-02 02:32:15", updated_at: "2015-03-02 02:32:15"},
-  {id: 21, page_id: 14, name: "another layout", created_at: "2015-03-02 02:37:11", updated_at: "2015-03-02 02:37:11"},
-  {id: 22, page_id: 14, name: "a layout with base", created_at: "2015-03-02 02:39:50", updated_at: "2015-03-02 02:39:50"},
-  {id: 23, page_id: 14, name: "a layout with base 2", created_at: "2015-03-02 03:00:18", updated_at: "2015-03-02 03:00:18"}
+  {id: 19, page_id: 14, name: "another fun layout 2", created_at: "2015-03-02 02:20:06", updated_at: "2015-03-02 02:20:06"}
 ])
 MegaBar::TmpBlock.create!([
   {id: 1, layout_id: 1, model_id: 1, name: "Models on Models Layout boo", actions: "current", html: "", nest_level_1: nil, nest_level_2: nil, path_base: "", created_at: "2015-02-18 05:20:43", updated_at: "2015-03-02 00:14:20", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
@@ -221,10 +217,6 @@ MegaBar::TmpBlock.create!([
   {id: 41, layout_id: 17, model_id: nil, name: " on fun layout Block", actions: "sine", html: "this will be real fun", nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2015-03-02 02:11:36", updated_at: "2015-03-02 02:11:36", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 42, layout_id: 18, model_id: nil, name: " on another fun layout Block", actions: "sine", html: "with a fun block", nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2015-03-02 02:14:08", updated_at: "2015-03-02 02:14:08", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 43, layout_id: 19, model_id: nil, name: " on another fun layout 2 Block", actions: "sine", html: "with a fun block 2", nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2015-03-02 02:20:06", updated_at: "2015-03-02 02:20:06", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
-  {id: 44, layout_id: 20, model_id: nil, name: " on another fun layout 3 Block", actions: "sine", html: "with a fun block 3", nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2015-03-02 02:32:15", updated_at: "2015-03-02 02:32:15", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
-  {id: 45, layout_id: 21, model_id: nil, name: " on another layout Block", actions: "sine", html: "heres another layout", nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2015-03-02 02:37:11", updated_at: "2015-03-02 02:37:11", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
-  {id: 46, layout_id: 22, model_id: nil, name: " on a layout with base Block", actions: "sine", html: "here's a layout with base", nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2015-03-02 02:39:50", updated_at: "2015-03-02 02:39:50", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
-  {id: 47, layout_id: 23, model_id: nil, name: " on a layout with base 2 Block", actions: "sine", html: "here's a layout with base 2", nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2015-03-02 03:00:18", updated_at: "2015-03-02 03:00:18", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 50, layout_id: 14, model_id: nil, name: "Model Displays on Page-Layouts-Block layout", actions: "show", html: "", nest_level_1: 21, nest_level_2: 20, path_base: "/mega-bar/pages/:id/layouts/:id/blocks/:id/displays", created_at: "2015-03-20 20:19:32", updated_at: "2015-03-20 20:19:32", nest_level_3: 18, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 51, layout_id: 15, model_id: nil, name: "Field Displays on Page-Layouts-Blocks-Displays layout", actions: "show", html: "", nest_level_1: 3, nest_level_2: 21, path_base: "/mega-bar/pages/:id/layouts/:id/blocks/:id/model_displays/:id/field_displays", created_at: "2015-03-24 00:10:30", updated_at: "2015-03-24 00:45:48", nest_level_3: 20, nest_level_4: 18, nest_level_5: nil, nest_level_6: nil}
 ])
@@ -238,7 +230,7 @@ MegaBar::TmpModelDisplay.create!([
   {id: 30, block_id: 6, model_id: 4, format: "2", action: "new", header: "Create Field Displays", created_at: "2014-12-26 00:57:25", updated_at: "2014-12-26 00:57:25"},
   {id: 31, block_id: 6, model_id: 4, format: "2", action: "edit", header: "Edit Field Displays", created_at: "2014-12-26 00:57:25", updated_at: "2014-12-26 00:57:25"},
   {id: 32, block_id: 6, model_id: 4, format: "2", action: "show", header: "ShowField Displays", created_at: "2014-12-26 00:57:25", updated_at: "2014-12-26 00:57:25"},
-  {id: 33, block_id: 1, model_id: 1, format: "2", action: "show", header: "ShowModel", created_at: "2014-12-26 00:58:09", updated_at: "2014-12-26 00:58:09"},
+  {id: 33, block_id: 1, model_id: 1, format: "2", action: "show", header: "Model", created_at: "2014-12-26 00:58:09", updated_at: "2015-04-24 03:00:23"},
   {id: 34, block_id: 4, model_id: 2, format: "2", action: "new", header: "Create Fields", created_at: "2014-12-26 00:58:26", updated_at: "2014-12-26 00:58:26"},
   {id: 35, block_id: 4, model_id: 2, format: "2", action: "edit", header: "Edit Fields", created_at: "2014-12-26 00:58:26", updated_at: "2014-12-26 00:58:26"},
   {id: 36, block_id: 4, model_id: 2, format: "2", action: "show", header: "ShowFields", created_at: "2014-12-26 00:58:26", updated_at: "2014-12-26 00:58:26"},
@@ -307,7 +299,8 @@ MegaBar::TmpModelDisplay.create!([
   {id: 164, block_id: 24, model_id: 3, format: "2", action: "show", header: "Model display", created_at: "2015-03-24 00:13:51", updated_at: "2015-03-24 00:13:51"},
   {id: 165, block_id: 23, model_id: 21, format: "2", action: "show", header: "Block", created_at: "2015-03-24 00:14:50", updated_at: "2015-03-24 00:14:50"},
   {id: 166, block_id: 22, model_id: 20, format: "2", action: "show", header: "Layout", created_at: "2015-03-24 00:22:37", updated_at: "2015-03-24 00:22:37"},
-  {id: 167, block_id: 21, model_id: 18, format: "2", action: "show", header: "Page", created_at: "2015-03-24 00:25:54", updated_at: "2015-03-24 00:25:54"}
+  {id: 167, block_id: 21, model_id: 18, format: "2", action: "show", header: "Page", created_at: "2015-03-24 00:25:54", updated_at: "2015-03-24 00:25:54"},
+  {id: 180, block_id: 11, model_id: 18, format: "1", action: "all", header: "All Pages", created_at: "2015-04-23 19:28:47", updated_at: "2015-04-23 19:28:47"}
 ])
 MegaBar::TmpFieldDisplay.create!([
   {id: 2, model_display_id: 1, field_id: 5, format: "textread", action: "index", header: "Model Name", link_type: nil, created_at: "2014-05-05 20:04:39", updated_at: "2015-02-08 08:23:30"},
@@ -808,7 +801,15 @@ MegaBar::TmpFieldDisplay.create!([
   {id: 789, model_display_id: 167, field_id: 91, format: "textread", action: nil, header: "Id", link_type: nil, created_at: "2015-03-24 00:25:54", updated_at: "2015-03-24 00:25:54"},
   {id: 790, model_display_id: 167, field_id: 96, format: "textread", action: nil, header: "Make layout and block", link_type: nil, created_at: "2015-03-24 00:25:54", updated_at: "2015-03-24 00:25:54"},
   {id: 791, model_display_id: 167, field_id: 103, format: "textread", action: nil, header: "Block text", link_type: nil, created_at: "2015-03-24 00:25:54", updated_at: "2015-03-24 00:25:54"},
-  {id: 792, model_display_id: 167, field_id: 108, format: "textread", action: nil, header: "Base name", link_type: nil, created_at: "2015-03-24 00:25:54", updated_at: "2015-03-24 00:25:54"}
+  {id: 792, model_display_id: 167, field_id: 108, format: "textread", action: nil, header: "Base name", link_type: nil, created_at: "2015-03-24 00:25:54", updated_at: "2015-03-24 00:25:54"},
+  {id: 833, model_display_id: 180, field_id: 79, format: "textread", action: nil, header: "Name", link_type: nil, created_at: "2015-04-23 19:28:47", updated_at: "2015-04-23 19:28:47"},
+  {id: 834, model_display_id: 180, field_id: 80, format: "textread", action: nil, header: "Path", link_type: nil, created_at: "2015-04-23 19:28:47", updated_at: "2015-04-23 19:28:47"},
+  {id: 835, model_display_id: 180, field_id: 91, format: "textread", action: nil, header: "Id", link_type: nil, created_at: "2015-04-23 19:28:47", updated_at: "2015-04-23 19:28:47"},
+  {id: 836, model_display_id: 180, field_id: 96, format: "textread", action: nil, header: "Make layout and block", link_type: nil, created_at: "2015-04-23 19:28:47", updated_at: "2015-04-23 19:28:47"},
+  {id: 837, model_display_id: 180, field_id: 103, format: "textread", action: nil, header: "Block text", link_type: nil, created_at: "2015-04-23 19:28:47", updated_at: "2015-04-23 19:28:47"},
+  {id: 838, model_display_id: 180, field_id: 108, format: "textread", action: nil, header: "Base name", link_type: nil, created_at: "2015-04-23 19:28:47", updated_at: "2015-04-23 19:28:47"},
+  {id: 839, model_display_id: 33, field_id: 26, format: "textread", action: nil, header: "Default sort field", link_type: nil, created_at: "2015-04-24 03:00:23", updated_at: "2015-04-24 03:00:23"},
+  {id: 840, model_display_id: 33, field_id: 107, format: "textread", action: nil, header: "Make page", link_type: nil, created_at: "2015-04-24 03:00:23", updated_at: "2015-04-24 03:00:23"}
 ])
 MegaBar::TmpSelect.create!([
   {id: 1, field_display_id: 15, created_at: "2015-02-13 01:16:05", updated_at: "2015-02-13 01:16:05"},
@@ -1593,5 +1594,13 @@ MegaBar::TmpTextread.create!([
   {id: 857, field_display_id: 789, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-03-24 00:25:54", updated_at: "2015-03-24 00:25:54"},
   {id: 858, field_display_id: 790, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-03-24 00:25:54", updated_at: "2015-03-24 00:25:54"},
   {id: 859, field_display_id: 791, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-03-24 00:25:54", updated_at: "2015-03-24 00:25:54"},
-  {id: 860, field_display_id: 792, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-03-24 00:25:54", updated_at: "2015-03-24 00:25:54"}
+  {id: 860, field_display_id: 792, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-03-24 00:25:54", updated_at: "2015-03-24 00:25:54"},
+  {id: 883, field_display_id: 833, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-04-23 19:28:47", updated_at: "2015-04-23 19:28:47"},
+  {id: 884, field_display_id: 834, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-04-23 19:28:47", updated_at: "2015-04-23 19:28:47"},
+  {id: 885, field_display_id: 835, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-04-23 19:28:47", updated_at: "2015-04-23 19:28:47"},
+  {id: 886, field_display_id: 836, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-04-23 19:28:47", updated_at: "2015-04-23 19:28:47"},
+  {id: 887, field_display_id: 837, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-04-23 19:28:47", updated_at: "2015-04-23 19:28:47"},
+  {id: 888, field_display_id: 838, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-04-23 19:28:47", updated_at: "2015-04-23 19:28:47"},
+  {id: 889, field_display_id: 839, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-04-24 03:00:23", updated_at: "2015-04-24 03:00:23"},
+  {id: 890, field_display_id: 840, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-04-24 03:00:23", updated_at: "2015-04-24 03:00:23"}
 ])
