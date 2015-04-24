@@ -38,6 +38,7 @@ class LayoutEngine
     rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
     page_info = set_page_info(rout, rout_terms)
     env[:mega_page] = page_info
+    env[:mega_rout] = rout
     if page_info.empty? #non megabar pages.
      gotta_be_an_array = []
      @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)

@@ -1,7 +1,8 @@
 module MegaBar
   class Model < ActiveRecord::Base
 
- 
+    include MegaBar::MegaBarModelConcern
+
     after_create  :make_all_files
     after_create  :make_page_for_model
     attr_accessor :make_page
@@ -15,13 +16,14 @@ module MegaBar
     validates_presence_of :default_sort_field
     validates_uniqueness_of :classname
 
+
     private
 
     def make_all_files
       # generate 'active_record:model', [self.classname]]
       logger.info("creating scaffold for " + self.classname + 'via: ' + 'rails g mega_bar:mega_bar ' + self.classname + ' ' + self.id.to_s)
       mod = self.modyule.nil? || self.modyule.empty?  ? 'no_mod' : self.modyule
-      # MegaBar.call_rails('mega_bar_models', {modyule: mod, classname: self.classname, model_id: self.id.to_s}) 
+      # MegaBar.call_rails('mega_bar_models', {modyule: mod, classname: self.classname, model_id: self.id.to_s})
       system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s
       ActiveRecord::Migrator.migrate "db/migrate"
     end
