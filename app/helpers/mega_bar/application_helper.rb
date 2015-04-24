@@ -53,7 +53,7 @@ module MegaBar
     end
     def block_help_links
       links = []
-      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s, 'Model Displays for the "' + @block.name + '" Block']
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s, 'Model Displays for the "' + @block.name + '" Block'] if @block.name
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '/edit', 'Edit Block']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end

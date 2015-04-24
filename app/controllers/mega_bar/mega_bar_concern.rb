@@ -24,6 +24,8 @@ module MegaBar
     end
 
     def edit
+      session[:return_to] ||= request.referer
+      byebug
       instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst])
       @form_instance_vars = @nested_instance_variables  + [@mega_instance]
@@ -59,7 +61,7 @@ module MegaBar
       @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);
       respond_to do |format|
         if @mega_instance.update(_params)
-          format.html { redirect_to @mega_instance, notice: 'Thing was successfully updated.' }
+          format.html { redirect_to session.delete(:return_to), notice: 'Thing was successfully updated.' }
           format.json { respond_with_bip(@mega_instance) }
         else
           format.html { render action: 'mega_bar.html.erb' }
