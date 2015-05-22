@@ -152,10 +152,12 @@ module MegaBar
       return  (format == 'hidden' || format == 'off') ? false : true
     end
     def constant_from_controller(str)
+      logger.info("str::::" + str)
       constant_string = ''
       str.split('/').each_with_index do | seg, i |
         constant_string +=  i < str.split('/').size - 1 ? seg.classify + '::' : seg.classify
       end
+      logger.info("constant string" + constant_string)
       constant_string
     end
     def column_sorting

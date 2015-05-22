@@ -9,7 +9,6 @@ module MegaBar
       hsh = {sort: column, direction: direction, controller: @kontroller_path}
       hsh.merge!({action: @mega_rout[:action]}) if @mega_rout[:action] != 'show'
       link_to title, hsh, class: css_class
-      # byebug
       #link_to best_in_place sort_column, title, {:sort => column, :direction => direction, controller: @kontroller_path}, class: css_class
 
     end

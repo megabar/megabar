@@ -1,34 +1,18 @@
+
 Rails.application.routes.draw do
 
-  MegaBar::Engine.routes.draw do
-
-    resources :pages do
-      get 'all', on: :collection
-      resources :layouts do
-        resources :blocks do
-          resources :model_displays do
-            resources :field_displays
-          end
-        end
-      end
+  MegaBar::Engine.routes.draw do  
+    match '/model-displays/:id' => 'models_displays#show', via: :get
+    MegaRoute.load('/mega-bar').each do |route|
+      # puts "#{route[:path]} => #{route[:controller]}##{route[:action]} via #{route[:method]}"
+      match route[:path] => "#{route[:controller]}##{route[:action]}", via: route[:method]
     end
-    resources :blocks
-    resources :blocks
-    resources :field_displays
-    resources :fields
-    resources :layouts
-    resources :model_display_formats, path: '/model-display-formats'
-    resources :model_displays
-    resources :models
-    resources :options
-    resources :records_formats
-    resources :selects
-    resources :textboxes
-    resources :textreads
-    # root 'roots#root_page'
-    resources :all_models, path: '/all-models'
   end
-
-   ##### MEGABAR END #####
-
+  puts "ended"
 end
+
+
+
+#    PUT    /models/:id(.:format)    mega_bar/models#update
+#    PATCH  /models/:id(.:format)    mega_bar/models#update # resource!
+#    PATCH  /models/:id(.:format)   mega_bar/models#update

@@ -1,5 +1,5 @@
 <% if !['edit', 'new'].include? params[:action]%>
-  <% # FORM STUFF %>
+  <% # INDEX AND SHOW STUFF %>
   <% @mega_displays.each do |mega_display| %>
     <% 
       @mega_display= mega_display   
@@ -10,7 +10,11 @@
     <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_help_links} %>
   <% end %>
 <% else %>
-  <% # INDEX AND SHOW STUFF %>
+whaa
+  <% # Forms: 
+  byebug
+   %>
+     <%  byebug  %>
   <%= form_for(@form_instance_vars) do |f| %>
     <% @mega_displays.each do |mega_display| %>
       <% 

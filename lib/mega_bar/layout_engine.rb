@@ -3,13 +3,13 @@ require 'sqlite3'
 require 'logger'
 
 class LayoutEngine
-  # honestly, there shouldn't be anything in this file that concerns regular developers or users.
-  # if you've set up your page->layouts->blocks->model_displays->field_displays properly this should just work.
-  # if you've created a page using the gui and its not working.. check it's path setting and check your routes file to see that they are looking right.
+  # honestly, this is a hugely important file, but there shouldn't be anything in this file that concerns regular developers or users.
   # Here we figure out which is the current page, then collect which blocks go on a layout and which layouts go on a page.
   # For each block, if it holds a model_display, we'll call the controller for that model.
   # treat your controllers and models like you would in a normal rails app.
   # this does set some environment variables that are then used in your controllers, but inspect them there.
+  # if you've set up your page->layouts->blocks->model_displays->field_displays properly this should just work.
+  # if you've created a page using the gui and its not working.. check it's path setting and check your routes file to see that they are looking right.
   def initialize(app, message = "Response Time")
     @app = app
     @message = message
@@ -26,9 +26,20 @@ class LayoutEngine
       return  [@status, @headers, self]
     end
 
+
+
+
     @redirect = false
     request = Rack::Request.new(env)
     request.params # strangely this needs to be here for best_in_place updates.
+
+    # MegaBar::Engine.routes.routes.named_routes.values.map do |route|
+      
+    #   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + "#{route.defaults[:controller]}##{route.defaults[:action]}"
+    # end #vs. Rails.application.routes.routes.named_routes.values.map
+    # Rails.application.routes.routes.named_routes.values.map do |route|
+    #   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + "#{route.defaults[:controller]}##{route.defaults[:action]}"
+    # end #vs. Rails.application.routes.routes.named_routes.values.map
     ################################
     ## figure out what page it is
     # the general strategy is..
@@ -40,12 +51,15 @@ class LayoutEngine
     env[:mega_page] = page_info
     env[:mega_rout] = rout
     if page_info.empty? #non megabar pages.
-     gotta_be_an_array = []
-     @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)
-     #gotta_be_an_array << not_mega = @page.instance_variable_get(:@response).nil? ? @page.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @page.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]
-     gotta_be_an_array << @page
-     return @status, @headers, gotta_be_an_array
-      # return @status, @headers, @page = rout.
+      byebug
+      gotta_be_an_array = []
+      if rout[:controller].nil?
+        rout[:controller] = 'flats'
+        rout[:action] = 'index'
+      end
+      @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)
+      gotta_be_an_array << page = @page.blank? ? '' : @page.body.html_safe
+      return @status, @headers, gotta_be_an_array
     end
     ################################
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
@@ -118,6 +132,7 @@ class LayoutEngine
 
   def process_block(blck, page_info, rout, orig_query_hash, env)
     if ! blck.html.nil? && ! blck.html.empty?
+      byebug
       blck.html.html_safe
     else
       params_hash = {} # used to set params var for controllers
