@@ -30,8 +30,16 @@ class MegaRoute
               next
             end 
           end
+  
+          path = ''
+          p1 = p.split('/')
+          p1.each do | seg |
+            next if (seg.empty? || seg.starts_with?(':'))
+            path += seg.singularize + '_'
+          end
+          path = path.chomp('_').pluralize
           # puts "new block: " + block.id.to_s
-          # puts "p2: " + p
+          # puts "path: " + path
           if block.html?
             # p = block.path_base? ? block.path_base : pg.path
             # routes << {path: p, method: 'get', controller: 'flats', action: 'index'}
@@ -45,31 +53,46 @@ class MegaRoute
               routes << {path: p.singularize, method: 'delete', action: 'destroy', controller: controller} 
               MegaBar::ModelDisplay.by_block(block.id).each do | md | 
                 # puts "mid" + md.model_id.to_s
+                modle = MegaBar::Model.find(md.model_id)
                 pf = ''
-                # byebug if md.model_id == 3
+                as = nil
                 case md.action
                 when 'show' 
                   pf = p + '/:id'
                   x = 'member'
+                  as = path.singularize
                 when 'index'
                   x = 'collection'
                   pf = p
+                  as = path
                 when 'new'
                   pf = p + '/new'
+                  as = 'new_' + path
                 when 'edit'
                   pf = p + '/:id/edit'
                   x = 'member'
+                  as = 'edit_' + path
+                else 
+                  # pf = p + '/' + md.action
+
+                  # db should track whether custom model_display actions are on member or collection and if they have a special 'as' or anything.
                 end
-                # byebug if md.model_id == 3
-                routes << {path: pf, method: 'get', action: md.action, controller: controller}
+                route = {path: pf, method: 'get', action: md.action, controller: controller}
+                route = route.merge({as: as}) if as
+                routes << route
+                # puts route.inspect
                 # get "#{p}"
-                # puts pf + ": " + controller + " -- " + md.action
+                # puts pf + ": " + controller + " -- " + md.action  + ' | ' + as.to_s
               end
             end
           end
         end
       end
     end #pages each
+
+    
+
+    puts "ENDEDEDEDED"
     routes.uniq
   end
 

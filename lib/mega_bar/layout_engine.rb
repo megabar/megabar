@@ -51,7 +51,6 @@ class LayoutEngine
     env[:mega_page] = page_info
     env[:mega_rout] = rout
     if page_info.empty? #non megabar pages.
-      byebug
       gotta_be_an_array = []
       if rout[:controller].nil?
         rout[:controller] = 'flats'
@@ -132,7 +131,6 @@ class LayoutEngine
 
   def process_block(blck, page_info, rout, orig_query_hash, env)
     if ! blck.html.nil? && ! blck.html.empty?
-      byebug
       blck.html.html_safe
     else
       params_hash = {} # used to set params var for controllers
