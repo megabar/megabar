@@ -154,7 +154,7 @@ class LayoutEngine
       @status, @headers, @disp_body = mega_env.kontroller_klass.constantize.action(mega_env.block_action).call(env)
       @redirect = [@status, @headers, @disp_body] if @status == 302
       block_body = @disp_body.blank? ? '' : @disp_body.body.html_safe
-      end
+    end
   end
 
   def action_from_path(path, method, path_segments)

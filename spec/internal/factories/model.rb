@@ -2,10 +2,10 @@
 
 FactoryGirl.define do
   factory :model, class: MegaBar::Model do
-    
+
     id 1
     classname 'Model'
-    schema  'deep'
+    schema  'deeper'
     tablename 'mega_bar_models'
     name 'Models'
     default_sort_field 'id'

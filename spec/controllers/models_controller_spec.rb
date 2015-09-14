@@ -23,7 +23,7 @@ module MegaBar
     # This should return the minimal set of attributes required to create a valid
     # Model. As you add validations to Model, be sure to
     # adjust the attributes here as well.
-    
+    puts 'whatever'
     let(:valid_session) { {} }
     let(:valid_attributes) {
       m = build(:model)
@@ -34,8 +34,8 @@ module MegaBar
       m = build(:model)
       { classname: nil, name: m[:name], default_sort_field: '', id: m[:id]  }
     }
-    let(:model) { create(:model_with_page) }
-    let(:fields) { 
+    let(:model) {create(:model_with_page) }
+    let(:fields) {
       create(:field_with_displays)
       create(:field_with_displays, field: 'tablename' )
       create(:field_with_displays, field: 'default_sort_field')
@@ -48,18 +48,24 @@ module MegaBar
     let(:rout_for_member) { {:action=>"index", :controller=>"mega_bar/models", :id=>"1"} }
     let(:valid_new_model) { {"schema"=>"sqlite", "name"=>"zoiks", "default_sort_field"=>"id", "classname"=>"zoik", "modyule"=>"", "make_page"=>""} }
 
-    let(:blck) { Block.find(1) }     
+    let(:blck) { Block.find(1) }
     # This should return the minimal set of values that should be in the session
     # in order to pass any filters (e.g. authentication) defined in
     # ModelsController. Be sure to keep this updated too.
-    context 'with mega_env' do 
-      before(:each) do 
+    context 'with mega_env' do
+      before(:each) do
         MegaBar::Field.skip_callback("create",:after,:make_migration)
         MegaBar::Model.skip_callback("create",:after,:make_all_files)
+        MegaBar::Model.set_callback("create", :after, :make_page_for_model)
+        MegaBar::Page.set_callback("create", :after, :create_layout_for_page)
+        MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
+        MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
+        MegaBar::Block.set_callback("create", :after, :make_model_displays)
         model
         fields
         model_display_format
         model_display_format_2
+        byebug
       end
       after(:each) do
         MegaBar::Field.set_callback("create",:after,:make_migration)
@@ -71,12 +77,12 @@ module MegaBar
 
       context 'with callbacks disabled ' do
         before(:each) do
-          MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
+          MegaBar::Field.skip_callback("save",:after,:make_field_displays)
           MegaBar::Field.skip_callback("create",:after,:make_field_displays)
           MegaBar::Model.skip_callback("create",:after,:make_page_for_model)
         end
         after(:each) do
-          MegaBar::Field.set_callback("save",:after,:make_field_displays) 
+          MegaBar::Field.set_callback("save",:after,:make_field_displays)
           MegaBar::Field.set_callback("create",:after,:make_field_displays)
           MegaBar::Model.set_callback("create",:after,:make_page_for_model)
 
@@ -96,13 +102,14 @@ module MegaBar
           end
         end
 
-        describe "GET show" do
+        describe "GET show", focus: true do
           it "assigns the requested model as @mega_instance" do
             blck
+            byebug
             rout_for_member
             env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"id"=>"1", "action"=>"show", "controller"=>"mega_bar/models"} )
             env[:mega_page] = page_info_for_show
-            env[:mega_env] = MegaEnv.new(blck, rout_for_member, page_info_for_show).to_hash # added to env for use in controllers 
+            env[:mega_env] = MegaEnv.new(blck, rout_for_member, page_info_for_show).to_hash # added to env for use in controllers
             status, headers, body = MegaBar::ModelsController.action(:show).call(env)
             # @response = ActionDispatch::TestResponse.new(status, headers, body)
             @controller = body.request.env['action_controller.instance']
@@ -115,7 +122,7 @@ module MegaBar
             rout_for_collection
             env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"action"=>"new", "controller"=>"mega_bar/models"} )
             env[:mega_page] = page_info
-            env[:mega_env] = MegaEnv.new(blck, rout_for_collection, page_info).to_hash # added to env for use in controllers 
+            env[:mega_env] = MegaEnv.new(blck, rout_for_collection, page_info).to_hash # added to env for use in controllers
             status, headers, body = MegaBar::ModelsController.action(:new).call(env)
             # @response = ActionDispatch::TestResponse.new(status, headers, body)
             @controller = body.request.env['action_controller.instance']
@@ -129,14 +136,14 @@ module MegaBar
             rout_for_member
             env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"id"=>"1", "action"=>"edit", "controller"=>"mega_bar/models"} )
             env[:mega_page] = page_info_for_show
-            env[:mega_env] = MegaEnv.new(blck, rout_for_member, page_info_for_show).to_hash # added to env for use in controllers 
+            env[:mega_env] = MegaEnv.new(blck, rout_for_member, page_info_for_show).to_hash # added to env for use in controllers
             status, headers, body = MegaBar::ModelsController.action(:edit).call(env)
             # @response = ActionDispatch::TestResponse.new(status, headers, body)
             @controller = body.request.env['action_controller.instance']
             expect(assigns(:mega_instance)).to eq(model)
           end
         end
-    
+
         describe "POST create" do
 
 
@@ -146,7 +153,7 @@ module MegaBar
             rout_for_collection
             env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"id"=>nil, "action"=>"create", "controller"=>"mega_bar/models", "model"=>valid_new_model })
             env[:mega_page] = page_info
-            env[:mega_env] = MegaEnv.new(blck, rout_for_collection, page_info).to_hash # added to env for use in controllers 
+            env[:mega_env] = MegaEnv.new(blck, rout_for_collection, page_info).to_hash # added to env for use in controllers
             expect {
               status, headers, body = MegaBar::ModelsController.action(:create).call(env)
               # @response = ActionDispatch::TestResponse.new(status, headers, body)
@@ -154,14 +161,13 @@ module MegaBar
             }.to change(Model, :count).by(1)
             end
 
-            it "assigns a newly created model as @mega_instance", focus: true do
+            it "assigns a newly created model as @mega_instance" do
               blck
               rout_for_collection
               env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"id"=>nil, "action"=>"create", "controller"=>"mega_bar/models", "model"=>valid_new_model })
               env[:mega_page] = page_info
-              env[:mega_env] = MegaEnv.new(blck, rout_for_collection, page_info).to_hash # added to env for use in controllers 
+              env[:mega_env] = MegaEnv.new(blck, rout_for_collection, page_info).to_hash # added to env for use in controllers
               status, headers, body = MegaBar::ModelsController.action(:create).call(env)
-              byebug
               expect(assigns(:mega_instance)).to be_a(Model)
               expect(assigns(:mega_instance)).to be_persisted
             end
