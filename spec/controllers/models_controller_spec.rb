@@ -221,10 +221,21 @@ module MegaBar
                { classname: 'testing', name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }
             }
 
-            it "updates the requested model" do
-              model = Model.create! valid_attributes
-              put :update, {use_route: :mega_bar, :id => model.to_param, :model => new_attributes}, valid_session
+            it "updates the requested model", focus: true do
+              model = Model.last
+              blck
+              rout_for_member
+              env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"id"=>"1", "action"=>"update", "controller"=>"mega_bar/models", :model => new_attributes} )
+              env[:mega_page] = page_info_for_show
+              env[:mega_env] = MegaEnv.new(blck, rout_for_member, page_info_for_show).to_hash # added to env for use in controllers
+              request = Rack::Request.new(env)
+              request.session[:return_to] = url_for('mega-bar/models');
+              status, headers, body = MegaBar::ModelsController.action(:update).call(env)
+              @controller = body.request.env['action_controller.instance']
+              byebug
               model.reload
+              expect(assigns(:mega_instance)).to eq(model)
+              byebug
               expect(model.attributes).to include( { 'classname' => 'testing' } )
             end
 

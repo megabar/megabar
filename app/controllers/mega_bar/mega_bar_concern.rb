@@ -44,7 +44,7 @@ module MegaBar
           end
           param_hash[:action] = 'index'
           param_hash[:controller] = params["controller"]
-          param_hash[:id] = @mega_instance.id if @mega_instance.id
+          param_hash[:id] = @mega_instance.id if @mega_instance.id #danger.. added during testing.
           param_hash[:only_path] = true
           format.html { redirect_to url_for(param_hash), notice: 'It was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mega_instance }
