@@ -34,7 +34,7 @@ class LayoutEngine
     request.params # strangely this needs to be here for best_in_place updates.
 
     # MegaBar::Engine.routes.routes.named_routes.values.map do |route|
-      
+
     #   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + "#{route.defaults[:controller]}##{route.defaults[:action]}"
     # end #vs. Rails.application.routes.routes.named_routes.values.map
     # Rails.application.routes.routes.named_routes.values.map do |route|

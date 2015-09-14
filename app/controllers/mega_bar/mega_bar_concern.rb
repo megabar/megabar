@@ -37,15 +37,14 @@ module MegaBar
       @mega_instance = @mega_class.new(_params)
       respond_to do |format|
         if @mega_instance.save
-          MegaBar.call_rake('db:schema:dump') if [1,2].include? @model_id # gets new models into schema
+          MegaBar.call_rake('db:schema:dump') if [1,2].include? @model_id and Rails.env != 'test'# gets new models into schema
           param_hash = {}
           @nested_ids.each do |param|
             param_hash = param_hash.merge(param)
           end
           param_hash[:action] = 'index'
           param_hash[:controller] = params["controller"]
-          # param_hash[:id] = id
-
+          param_hash[:id] = @mega_instance.id if @mega_instance.id
           param_hash[:only_path] = true
           format.html { redirect_to url_for(param_hash), notice: 'It was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mega_instance }

@@ -29,7 +29,6 @@ module MegaBar
     end
 
     def make_page_for_model
-      byebug
       if !self.make_page.nil? && !self.make_page.empty?
         mod = self.modyule.nil? || self.modyule.empty?  ? '' : self.modyule.underscore + '/'
         path = '/' + mod + self.tablename
