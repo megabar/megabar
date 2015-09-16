@@ -172,7 +172,7 @@ module MegaBar
               expect(assigns(:mega_instance)).to be_persisted
             end
 
-            it "redirects to the created model", focus: true  do
+            it "redirects to the created model"  do
               blck
               rout_for_collection
               env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"id"=>nil, "action"=>"create", "controller"=>"mega_bar/models", "model"=>valid_new_model })
@@ -221,7 +221,21 @@ module MegaBar
                { classname: 'testing', name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }
             }
 
-            it "updates the requested model", focus: true do
+            it "updates the requested model" do
+              model = Model.last
+              blck
+              rout_for_member
+              env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"id"=>"1", "action"=>"update", "controller"=>"mega_bar/models", :model => new_attributes} )
+              env[:mega_page] = page_info_for_show
+              env[:mega_env] = MegaEnv.new(blck, rout_for_member, page_info_for_show).to_hash # added to env for use in controllers
+              request = Rack::Request.new(env)
+              request.session[:return_to] = url_for('mega-bar/models');
+              status, headers, body = MegaBar::ModelsController.action(:update).call(env)
+              model.reload
+              expect(model.attributes).to include( { 'classname' => 'testing' } )
+            end
+
+            it "assigns the requested model as @mega_instance" do
               model = Model.last
               blck
               rout_for_member
@@ -232,24 +246,22 @@ module MegaBar
               request.session[:return_to] = url_for('mega-bar/models');
               status, headers, body = MegaBar::ModelsController.action(:update).call(env)
               @controller = body.request.env['action_controller.instance']
-              byebug
-              model.reload
-              expect(assigns(:mega_instance)).to eq(model)
-              byebug
-              expect(model.attributes).to include( { 'classname' => 'testing' } )
-            end
-
-            it "assigns the requested model as @mega_instance" do
-
-              model = Model.create! valid_attributes
-              put :update, {use_route: :mega_bar, :id => model.to_param, :model => valid_attributes}, valid_session
               expect(assigns(:mega_instance)).to eq(model)
             end
 
-            it "redirects to the model" do
-              model = Model.create! valid_attributes
-              put :update, {use_route: :mega_bar, :id => model.to_param, :model => valid_attributes}, valid_session
-              expect(response).to redirect_to(model)
+            it "redirects to the model", focus: true do
+              byebug
+              model = Model.last
+              blck
+              rout_for_member
+              env = Rack::MockRequest.env_for('/mega-bar/models', :params => {"id"=>"1", "action"=>"update", "controller"=>"mega_bar/models", :model => new_attributes} )
+              env[:mega_page] = page_info_for_show
+              env[:mega_env] = MegaEnv.new(blck, rout_for_member, page_info_for_show).to_hash # added to env for use in controllers
+              request = Rack::Request.new(env)
+              request.session[:return_to] = url_for('/mega-bar/models');
+              status, headers, body = MegaBar::ModelsController.action(:update).call(env)
+              expect(body.instance_variable_get(:@body).instance_variable_get(:@header)["Location"]).to include("/mega-bar/models") #almost good enough
+            #   expect(response).to redirect_to(model)
             end
           end
 
