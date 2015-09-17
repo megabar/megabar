@@ -51,7 +51,9 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 end
 
-
+def hello_bob
+  'hello bob'
+end
 # binding.pry
 #require 'rake'
 #load File.expand_path("../../lib/tasks/mega_bar_tasks.rake", __FILE__)

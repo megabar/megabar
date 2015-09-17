@@ -13,7 +13,6 @@ module MegaBar
     end
 
     def get_options
-      puts 'oioookokokokokokokoko;'
       @options[:mega_bar_models] =  {
         default_sort_field: Field.by_model(params[:id]).pluck("field, field")
       }
