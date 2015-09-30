@@ -58,7 +58,7 @@ namespace :mega_bar do
     # what this all means is that if you add a new 'core' thing, you'll have to:
     #   add it to the mega_bar_classes array
     #   and probably add a resolver function.
-    puts "Loading Data..."
+    puts "Loading Route Information..."
 
 
     mega_classes = get_mega_classes

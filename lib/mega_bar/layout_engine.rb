@@ -112,6 +112,7 @@ class LayoutEngine
 
   def set_rout(request, env)
     request_path_info = request.path_info.dup
+byebug
     rout = (Rails.application.routes.recognize_path request_path_info rescue {}) || {}
     rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', '') rescue {}) || {}  if rout.empty?
     rout[:action] = get_action(rout[:action], env['REQUEST_METHOD'], )

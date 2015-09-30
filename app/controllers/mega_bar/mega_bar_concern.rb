@@ -49,12 +49,14 @@ module MegaBar
           format.html { redirect_to url_for(param_hash), notice: 'It was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mega_instance }
         else
+          byebug
           format.html { render @new_view_template }
           format.json { render json: @model.errors, status: :unprocessable_entity }
         end
       end
     end
     def update
+      byebug
       instance_variable_set("@" + env[:mega_env][:kontroller_inst], @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);
       respond_to do |format|
@@ -62,6 +64,8 @@ module MegaBar
           format.html { redirect_to session.delete(:return_to), notice: 'Thing was successfully updated.' }
           format.json { respond_with_bip(@mega_instance) }
         else
+           byebug
+           # params[:action] = 'edit'
           format.html { render action: 'mega_bar.html.erb' }
           format.json { render json: @mega_instance.errors, status: :unprocessable_entity }
         end
@@ -86,6 +90,7 @@ module MegaBar
     end
 
     def set_vars_for_all
+      # byebug
       @mega_page = env[:mega_page]
       @mega_rout = env[:mega_rout]
       @mega_layout = env[:mega_layout]

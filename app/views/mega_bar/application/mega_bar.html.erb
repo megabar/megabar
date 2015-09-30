@@ -1,8 +1,9 @@
+<% puts params[:action] + '--action' %>
 <% if !['edit', 'new'].include? params[:action]%>
   <% # INDEX AND SHOW STUFF %>
   <% @mega_displays.each do |mega_display| %>
-    <% 
-      @mega_display= mega_display   
+    <%
+      @mega_display= mega_display
       @mf = @mega_display[:model_display_format]
       @model_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/model_displays', action: 'show', id: @mega_display[:model_display].id, :only_path=> true)
     %>
@@ -10,10 +11,11 @@
     <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_help_links} %>
   <% end %>
 <% else %>
+  <%byebug%>
   <%= form_for(@form_instance_vars) do |f| %>
     <% @mega_displays.each do |mega_display| %>
-      <% 
-        @mega_display = mega_display 
+      <%
+        @mega_display = mega_display
         @mf = @mega_display[:model_display_format]
         @model_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/model_displays', action: 'show', id: @mega_display[:model_display].id, :only_path=> true)
       %>
@@ -27,4 +29,4 @@
 <% end %>
 
 <%= render partial: "mega_bar_help_links", :locals => {:links => block_help_links} %>
-<%= link_to 'Create New ' + @mega_model_properties.name.singularize, link_path('new') %> 
+<%= link_to 'Create New ' + @mega_model_properties.name.singularize, link_path('new') %>
