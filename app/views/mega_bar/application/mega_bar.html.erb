@@ -11,7 +11,6 @@
     <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_help_links} %>
   <% end %>
 <% else %>
-  <%byebug%>
   <%= form_for(@form_instance_vars) do |f| %>
     <% @mega_displays.each do |mega_display| %>
       <%

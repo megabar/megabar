@@ -56,15 +56,15 @@ module MegaBar
       end
     end
     def update
-      byebug
+      session[:return_to] ||= request.referer
       instance_variable_set("@" + env[:mega_env][:kontroller_inst], @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);
       respond_to do |format|
         if @mega_instance.update(_params)
+          byebug
           format.html { redirect_to session.delete(:return_to), notice: 'Thing was successfully updated.' }
           format.json { respond_with_bip(@mega_instance) }
         else
-           byebug
            # params[:action] = 'edit'
           format.html { render action: 'mega_bar.html.erb' }
           format.json { render json: @mega_instance.errors, status: :unprocessable_entity }
