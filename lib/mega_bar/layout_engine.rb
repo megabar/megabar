@@ -196,6 +196,7 @@ class MegaEnv
     @klass = @modyule + @modle.classname.classify
     @kontroller_inst = @modle.classname.underscore
     @mega_displays = set_mega_displays(@displays)
+    byebug
     @nested_ids, @params_hash_arr, @nested_classes = nest_info(blck, rout, page_info)
     @nested_class_info = set_nested_class_info(@nested_classes)
     @block = blck

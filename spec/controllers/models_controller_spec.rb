@@ -35,10 +35,11 @@ module MegaBar
       { classname: nil, name: m[:name], default_sort_field: '', id: m[:id]  }
     }
     let(:model) {create(:model_with_page) }
-    let(:fields) {
+    let(:fields) { #have to at least have the required model fields.
       create(:field_with_displays)
       create(:field_with_displays, field: 'tablename' )
       create(:field_with_displays, field: 'default_sort_field')
+      create(:field_with_displays, field: 'name')
     }
     let(:model_display_format) { create(:model_display_format) }
     let(:model_display_format_2) { create(:model_display_format_2) }
@@ -54,7 +55,7 @@ module MegaBar
     let(:params_for_create) { {"id"=>nil, "action"=>"create", "controller"=>"mega_bar/models", "model"=>valid_new_model } }
     let(:params_for_invalid_create) { {"id"=>nil, "action"=>"create", "controller"=>"mega_bar/models", "model"=>invalid_new_model } }
     let(:params_for_invalid_new) { {"id"=>nil, "action"=>"create", "controller"=>"mega_bar/models", "model"=>invalid_new_model } }
-    let(:valid_new_model) { {"schema"=>"sqlite", "name"=>"zoiks", "default_sort_field"=>"id", "classname"=>"zoik", "modyule"=>"", "make_page"=>""} }
+    let(:valid_new_model) { {"schema"=>"sqlite", "name"=>"zoiks", "default_sort_field"=>"id", "classname"=>"oink", "modyule"=>"", "make_page"=>""} }
     let(:invalid_new_model) { {"make_page"=>""} }
     let(:env_for_index) {
       env = Rack::MockRequest.env_for('/mega-bar/models', :params => params_for_index )
@@ -96,6 +97,8 @@ module MegaBar
       env = Rack::MockRequest.env_for('/mega-bar/models', :params => params_for_invalid_new)
       env[:mega_page] = page_info
       env[:mega_env] = MegaEnv.new(blck, rout_for_collection, page_info).to_hash # added to env for use in controllers
+      env
+
     }
     let(:env_for_update) {
       env = Rack::MockRequest.env_for('/mega-bar/models', :params => params_for_update )
@@ -106,11 +109,9 @@ module MegaBar
       env
     }
     let(:env_for_invalid_update) {
-      byebug
       env = Rack::MockRequest.env_for('/mega-bar/models', :params => invalid_attributes )
       env[:mega_page] = page_info_for_show
       env[:mega_env] = MegaEnv.new(blck, rout_for_member, page_info_for_show).to_hash # added to env for use in controllers
-      byebug
       request = Rack::Request.new(env)
       request.session[:return_to] = url_for('/mega-bar/models');
       env
@@ -187,7 +188,7 @@ module MegaBar
 
         describe "POST create" do
           describe "with valid params" do
-            it "creates a new Model"  do
+            it "creates a new Model", focus: true  do
             expect {
               status, headers, body = MegaBar::ModelsController.action(:create).call(env_for_create)
               @controller = body.request.env['action_controller.instance']
@@ -201,7 +202,7 @@ module MegaBar
               expect(assigns(:mega_instance)).to be_persisted
             end
 
-            it "redirects to the created model"  do
+            it "redirects to the created model" do # , focus: true do
               status, headers, body = MegaBar::ModelsController.action(:create).call(env_for_create)
               @controller = body.request.env['action_controller.instance']
               expect(status).to be(302)
@@ -267,7 +268,6 @@ module MegaBar
             it "re-renders the 'edit' template" do # , focus: true do
               model = Model.last
               status, headers, body = MegaBar::ModelsController.action(:update).call(env_for_invalid_update)
-              byebug
               put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
               # expect(body.instance_variable_get(:@body).instance_variable_get(:@header)["Location"]).to include("/mega-bar/models") #almost good enough
 

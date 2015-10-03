@@ -5,9 +5,9 @@ module MegaBar
     protect_from_forgery with: :exception
     helper_method :sort_column, :sort_direction, :is_displayable
     before_action :set_vars_for_all
-    before_action :set_vars_for_displays, except: [:update, :create, :destroy]
+    before_action :set_vars_for_displays # , except: [:update, :create, :destroy]
     skip_before_filter :verify_authenticity_token
-    
+
     def _params
       permits = []
       MegaBar::Field.by_model(env[:mega_env][:model_id]).pluck(:field).each do |att|

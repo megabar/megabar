@@ -20,6 +20,7 @@ module MegaBar
       instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.new)
       @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst]);
       @form_instance_vars = @nested_instance_variables  + [@mega_instance]
+      byebug
       render @new_view_template
     end
 
@@ -30,8 +31,6 @@ module MegaBar
       @form_instance_vars = @nested_instance_variables  + [@mega_instance]
       render @edit_view_template
     end
-
-
 
     def create
       @mega_instance = @mega_class.new(_params)
@@ -49,19 +48,27 @@ module MegaBar
           format.html { redirect_to url_for(param_hash), notice: 'It was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mega_instance }
         else
-          byebug
-          format.html { render @new_view_template }
+          format.html {
+            env[:mega_rout][:action] = 'new'
+            env[:mega_env] = MegaEnv.new(@block, env[:mega_rout], env[:mega_page]).to_hash
+            set_vars_for_all
+            set_vars_for_displays
+            params[:action] = 'new'
+            params[:redo] = true
+            @form_instance_vars = @nested_instance_variables  + [@mega_instance]
+            render @new_view_template
+           }
           format.json { render json: @model.errors, status: :unprocessable_entity }
         end
       end
     end
+
     def update
       session[:return_to] ||= request.referer
       instance_variable_set("@" + env[:mega_env][:kontroller_inst], @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);
       respond_to do |format|
         if @mega_instance.update(_params)
-          byebug
           format.html { redirect_to session.delete(:return_to), notice: 'Thing was successfully updated.' }
           format.json { respond_with_bip(@mega_instance) }
         else
@@ -82,15 +89,14 @@ module MegaBar
     end
 
     def set_vars_for_displays
-      @conditions =  {}; self.try(:conditions)
+      @conditions =  {}; self.try(:conditions) #allows various 'where' statements in queries.
       @conditions_array =  []; self.try(:conditions_array)
-      @options = {}; self.try(:get_options)
+      @options = {}; self.try(:get_options) # allows for queries to populate menus
       env[:mega_env] = add_form_path_to_mega_displays(env[:mega_env])
       @mega_displays = env[:mega_env][:mega_displays]
     end
 
     def set_vars_for_all
-      # byebug
       @mega_page = env[:mega_page]
       @mega_rout = env[:mega_rout]
       @mega_layout = env[:mega_layout]
@@ -104,6 +110,7 @@ module MegaBar
     end
 
     def unpack_nested_classes(nested_class_infos)
+      # nested as in nested resource routes.
       nested_instance_variables = []
       nested_class_infos.each_with_index do |info, idx|
         puts 'make a instance var!'
@@ -119,7 +126,6 @@ module MegaBar
     end
     def add_form_path_to_mega_displays(mega_env)
       mega_env[:mega_displays].each_with_index do | mega_display, index |
-
         mega_env[:mega_displays][index][:form_path] = form_path(params[:action], mega_env[:kontroller_path], params[:id])
       end
       mega_env

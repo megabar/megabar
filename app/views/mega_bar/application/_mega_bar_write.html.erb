@@ -1,5 +1,4 @@
 <h1><%= best_in_place @mega_display[:model_display], :header, path: @model_display_path %></h1>
-
 <%=@mf.record_wrapper.html_safe%>
 <% @mega_display[:displayable_fields].each do | displayable_field | %>
   <%
@@ -14,12 +13,13 @@
     if instance_value.present? && (displayable_field[:field].field != 'field' and params[:action] == 'edit')
       value = instance_value
     else
-      if params[:action] == 'edit'
+      if params[:action] == 'edit' || params[:redo]
         value= @mega_instance.read_attribute(displayable_field[:field].field)
       else
         value = displayable_field[:field].default_value
       end
     end
+byebug
   %>
   <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: @mega_instance, mega_bar: @mega_display, value: value} %>
   <%= @mf.field_wrapper_end.html_safe %>
