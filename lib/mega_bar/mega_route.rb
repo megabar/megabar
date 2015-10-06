@@ -90,6 +90,8 @@ class MegaRoute
       end
     end #pages each
     routes.uniq
+  rescue ActiveRecord::StatementInvalid # you can also add this
+    []
   end
 
   def self.reload

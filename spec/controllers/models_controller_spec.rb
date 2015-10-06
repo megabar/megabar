@@ -47,11 +47,14 @@ module MegaBar
     let(:page_info_for_show) { {:page_id=>1, :page_path=>"/mega-bar/models", :terms=>["mega-bar", "models"], :vars=>["23"], :name=>"Models Page"} }
     let(:rout_for_collection) { {:action=>"index", :controller=>"mega_bar/models"} }
     let(:rout_for_member) { {:action=>"index", :controller=>"mega_bar/models", :id=>"1"} }
+    let(:rout_for_update) { {:controller=>"mega_bar/models", :action=>"update", :id=>"1"} }
     let(:params_for_index) { {:action=>"index", :controller=>"mega_bar/models"} }
     let(:params_for_show) { {:action=>"index", :controller=>"mega_bar/models", :id=>"1"} }
     let(:params_for_new) { {"action"=>"new", "controller"=>"mega_bar/models"} }
+    let(:params_for_destroy) {  {"id"=>"1", "action"=>"destroy", "controller"=>"mega_bar/models"} }
     let(:params_for_edit) {  {"id"=>"1", "action"=>"edit", "controller"=>"mega_bar/models"} }
     let(:params_for_update) { {"id"=>"1", "action"=>"update", "controller"=>"mega_bar/models", :model => new_attributes} }
+    let(:params_for_invalid_update) { {"id"=>1, "action"=>"update", "controller"=>"mega_bar/models", :model =>new_attributes } }
     let(:params_for_create) { {"id"=>nil, "action"=>"create", "controller"=>"mega_bar/models", "model"=>valid_new_model } }
     let(:params_for_invalid_create) { {"id"=>nil, "action"=>"create", "controller"=>"mega_bar/models", "model"=>invalid_new_model } }
     let(:params_for_invalid_new) { {"id"=>nil, "action"=>"create", "controller"=>"mega_bar/models", "model"=>invalid_new_model } }
@@ -90,6 +93,7 @@ module MegaBar
     let(:env_for_invalid_create) {
       env = Rack::MockRequest.env_for('/mega-bar/models', :params => params_for_invalid_create)
       env[:mega_page] = page_info
+      env[:mega_rout] = rout_for_collection
       env[:mega_env] = MegaEnv.new(blck, rout_for_collection, page_info).to_hash # added to env for use in controllers
       env
     }
@@ -103,17 +107,16 @@ module MegaBar
     let(:env_for_update) {
       env = Rack::MockRequest.env_for('/mega-bar/models', :params => params_for_update )
       env[:mega_page] = page_info_for_show
+      env[:mega_rout] = rout_for_member
       env[:mega_env] = MegaEnv.new(blck, rout_for_member, page_info_for_show).to_hash # added to env for use in controllers
       request = Rack::Request.new(env)
       request.session[:return_to] = url_for('/mega-bar/models');
       env
     }
-    let(:env_for_invalid_update) {
-      env = Rack::MockRequest.env_for('/mega-bar/models', :params => invalid_attributes )
+    let(:env_for_destroy) {
+      env = Rack::MockRequest.env_for('/mega-bar/models', :params => params_for_destroy )
       env[:mega_page] = page_info_for_show
       env[:mega_env] = MegaEnv.new(blck, rout_for_member, page_info_for_show).to_hash # added to env for use in controllers
-      request = Rack::Request.new(env)
-      request.session[:return_to] = url_for('/mega-bar/models');
       env
     }
     let(:blck) { Block.find(1) }
@@ -188,7 +191,7 @@ module MegaBar
 
         describe "POST create" do
           describe "with valid params" do
-            it "creates a new Model", focus: true  do
+            it "creates a new Model" do # , focus: true  do
             expect {
               status, headers, body = MegaBar::ModelsController.action(:create).call(env_for_create)
               @controller = body.request.env['action_controller.instance']
@@ -218,8 +221,8 @@ module MegaBar
               expect(assigns(:mega_instance)).to be_a_new(Model)
             end
 
-            it "re-renders the 'new' template", focus: true  do
-              status, headers, body = MegaBar::ModelsController.action(:create).call(env_for_invalid_new)
+            it "re-renders the 'new' template" do #, focus: true  do
+              status, headers, body = MegaBar::ModelsController.action(:create).call(env_for_invalid_create)
               @controller = body.request.env['action_controller.instance']
               expect(response).to render_template('mega_bar.html.erb')
             end
@@ -234,7 +237,6 @@ module MegaBar
                m = build(:model)
                { classname: 'testing', name: m[:name], default_sort_field: m[:default_sort_field], id: m[:id]  }
             }
-
             it "updates the requested model" do
               model = Model.last
               status, headers, body = MegaBar::ModelsController.action(:update).call(env_for_update)
@@ -258,36 +260,38 @@ module MegaBar
           end
 
           describe "with invalid params" do
-            it "assigns the model as @mega_instance" do # , focus: true do
+            let(:new_attributes) {
+               m = build(:model)
+               { classname: 'testing', name: '', id: m[:id]  }
+            }
+            it "assigns the model as @mega_instance" do #, focus: true do
               model = Model.last
-              return false
-              put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
+              status, headers, body = MegaBar::ModelsController.action(:update).call(env_for_update)
+              @controller = body.request.env['action_controller.instance']
               expect(assigns(:mega_instance)).to eq(model)
             end
 
-            it "re-renders the 'edit' template" do # , focus: true do
+            it "re-renders the 'edit' template" do #, focus: true do
               model = Model.last
-              status, headers, body = MegaBar::ModelsController.action(:update).call(env_for_invalid_update)
-              put :update, {use_route: :mega_bar, :id => model.to_param, :model => invalid_attributes}, valid_session
-              # expect(body.instance_variable_get(:@body).instance_variable_get(:@header)["Location"]).to include("/mega-bar/models") #almost good enough
-
+              status, headers, body = MegaBar::ModelsController.action(:update).call(env_for_update)
+              @controller = body.request.env['action_controller.instance']
               expect(response).to render_template("mega_bar.html.erb")
             end
           end
         end
         describe "DELETE destroy" do
-          it "destroys the requested model" do # , focus: true do
-            model = Model.create! valid_attributes
+          it "destroys the requested model" do
+            # model = Model.create! valid_attributes
             expect {
-              delete :destroy, {use_route: :mega_bar, :id => model.to_param}, valid_session
+              status, headers, body = MegaBar::ModelsController.action(:destroy).call(env_for_destroy)
+              @controller = body.request.env['action_controller.instance']
             }.to change(Model, :count).by(-1)
           end
 
-          it "redirects to the models list" do # , focus: true do
-            model = Model.create! valid_attributes
-            delete :destroy, {use_route: :mega_bar, :id => model.to_param}, valid_session
-            puts "url_for('models')" + url_for('models').to_s
-            expect(response).to redirect_to("/mega-bar/" + url_for('models'))
+          it "redirects to the models list", focus: true do
+            status, headers, body = MegaBar::ModelsController.action(:destroy).call(env_for_destroy)
+            expect(body.instance_variable_get(:@body).instance_variable_get(:@header)["Location"]).to include("/mega-bar/" + url_for('models')) #almost good enough
+
           end
         end
       end

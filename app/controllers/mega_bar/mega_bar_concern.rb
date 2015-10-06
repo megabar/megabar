@@ -20,7 +20,6 @@ module MegaBar
       instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.new)
       @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst]);
       @form_instance_vars = @nested_instance_variables  + [@mega_instance]
-      byebug
       render @new_view_template
     end
 
@@ -48,6 +47,7 @@ module MegaBar
           format.html { redirect_to url_for(param_hash), notice: 'It was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mega_instance }
         else
+
           format.html {
             env[:mega_rout][:action] = 'new'
             env[:mega_env] = MegaEnv.new(@block, env[:mega_rout], env[:mega_page]).to_hash
@@ -64,16 +64,24 @@ module MegaBar
     end
 
     def update
-      session[:return_to] ||= request.referer
       instance_variable_set("@" + env[:mega_env][:kontroller_inst], @mega_class.find(params[:id]))
-      @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);
+      @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst])
       respond_to do |format|
         if @mega_instance.update(_params)
+          session[:return_to] ||= request.referer
           format.html { redirect_to session.delete(:return_to), notice: 'Thing was successfully updated.' }
           format.json { respond_with_bip(@mega_instance) }
         else
-           # params[:action] = 'edit'
-          format.html { render action: 'mega_bar.html.erb' }
+          format.html {
+            env[:mega_rout][:action] = 'edit'
+            env[:mega_env] = MegaEnv.new(@block, env[:mega_rout], env[:mega_page]).to_hash
+            set_vars_for_all
+            set_vars_for_displays
+            params[:action] = 'edit'
+            params[:redo] = true
+            @form_instance_vars = @nested_instance_variables  + [@mega_instance]
+            render action: 'mega_bar.html.erb'
+          }
           format.json { render json: @mega_instance.errors, status: :unprocessable_entity }
         end
       end

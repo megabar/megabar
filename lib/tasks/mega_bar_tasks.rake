@@ -14,7 +14,8 @@ namespace :mega_bar do
     # TODO see if it already was run.
     line = 'Rails.application.routes.draw do'
     text = File.read('config/routes.rb')
-    new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, "#{line}\n\n  ##### MEGABAR BEGIN #####\n  mount MegaBar::Engine, at: '/mega-bar'\n  ##### MEGABAR END #####\n")
+
+    new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, "#{line}\n\n  MegaRoute.load(['/mega-bar']).each do |route|\n    match route[:path] => \"\#{route[:controller]}\#\#{route[:action]}\", via: route[:method], as: route[:as]\n  end \n  ##### MEGABAR BEGIN #####\n  mount MegaBar::Engine, at: '/mega-bar'\n  ##### MEGABAR END #####\n")
     File.open('config/routes.rb', "w") {|file| file.puts new_contents }
 
     File.open('app/assets/javascripts/application.js', 'a') { |f|
