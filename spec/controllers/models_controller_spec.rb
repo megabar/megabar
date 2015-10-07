@@ -28,9 +28,6 @@ module MegaBar
       create(:field_with_displays, field: 'name')
     }
 
-    # This should return the minimal set of values that should be in the session
-    # in order to pass any filters (e.g. authentication) defined in
-    # ModelsController. Be sure to keep this updated too.
     context 'with mega_env' do
       before(:each) do
         MegaBar::Field.skip_callback("create",:after,:make_migration)
