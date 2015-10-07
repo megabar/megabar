@@ -64,7 +64,6 @@ module MegaBar
         MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
         MegaBar::Block.set_callback("create", :after, :make_model_displays)
         model
-        byebug
         # fields
         model_display_format
         model_display_format_2
@@ -99,7 +98,7 @@ module MegaBar
             Field.destroy_all
           end
           describe "GET index" do
-            it "assigns all fields as @mega_instance", focus: true do
+            it "assigns all fields as @mega_instance" do
               status, headers, body = MegaBar::FieldsController.action(:index).call(get_env(env_index))
               @controller = body.request.env['action_controller.instance']
               expect(assigns(:mega_instance)).to eq([field])
@@ -108,23 +107,24 @@ module MegaBar
 
           describe "GET show" do
             it "assigns the requested field as @mega_instance" do
-              field = Field.create! valid_attributes
-              get :show, {use_route: :mega_bar, model_id: 1, :id => field.to_param}, valid_session
+              status, headers, body = MegaBar::FieldsController.action(:show).call(get_env(env_show))
+              @controller = body.request.env['action_controller.instance']
               expect(assigns(:mega_instance)).to eq([field])
             end
           end
           describe "GET new" do
             it "assigns a new field as @mega_instance" do
-              get :new, {use_route: :mega_bar, model_id: 1}, valid_session
+              status, headers, body = MegaBar::FieldsController.action(:new).call(get_env(env_new))
+              @controller = body.request.env['action_controller.instance']
               expect(assigns(:mega_instance)).to be_a_new(Field)
             end
           end
 
           describe "GET edit" do
             it "assigns the requested field as @mega_instance" do
-              field = Field.create! valid_attributes
-              get :edit, {use_route: :mega_bar, model_id: 1, :id => field.to_param}, valid_session
-              expect(assigns(:mega_instance)).to eq(field)
+              status, headers, body = MegaBar::FieldsController.action(:new).call(get_env(env_new))
+              @controller = body.request.env['action_controller.instance']
+              expect(assigns(:mega_instance)).to be_a_new(Field)
             end
           end
         end
