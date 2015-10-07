@@ -47,15 +47,8 @@ module MegaBar
           format.html { redirect_to url_for(param_hash), notice: 'It was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mega_instance }
         else
-
           format.html {
-            env[:mega_rout][:action] = 'new'
-            env[:mega_env] = MegaEnv.new(@block, env[:mega_rout], env[:mega_page]).to_hash
-            set_vars_for_all
-            set_vars_for_displays
-            params[:action] = 'new'
-            params[:redo] = true
-            @form_instance_vars = @nested_instance_variables  + [@mega_instance]
+            redo_setup('new')
             render @new_view_template
            }
           format.json { render json: @model.errors, status: :unprocessable_entity }
@@ -73,13 +66,7 @@ module MegaBar
           format.json { respond_with_bip(@mega_instance) }
         else
           format.html {
-            env[:mega_rout][:action] = 'edit'
-            env[:mega_env] = MegaEnv.new(@block, env[:mega_rout], env[:mega_page]).to_hash
-            set_vars_for_all
-            set_vars_for_displays
-            params[:action] = 'edit'
-            params[:redo] = true
-            @form_instance_vars = @nested_instance_variables  + [@mega_instance]
+            redo_setup('edit')
             render action: 'mega_bar.html.erb'
           }
           format.json { render json: @mega_instance.errors, status: :unprocessable_entity }
@@ -181,6 +168,15 @@ module MegaBar
     def column_sorting
       sort_column(@mega_class, @mega_model_properties, params) + " " + sort_direction(params)
     end
-
+    def redo_setup(action)
+      env[:mega_rout][:action] = action
+      env[:mega_env] = MegaEnv.new(@block, env[:mega_rout], env[:mega_page]).to_hash
+      set_vars_for_all
+      set_vars_for_displays
+      params[:action] = 'edit'
+      params[:redo] = true
+      @form_instance_vars = @nested_instance_variables  + [@mega_instance]
+      'hello'
+    end
   end
 end

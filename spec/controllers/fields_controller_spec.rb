@@ -34,22 +34,22 @@ module MegaBar
       f = build(:field)
       { tablename: nil, field: nil, model_id: nil, id: f[:id]  }
     }
-    
+
     # This should return the minimal set of values that should be in the session
     # in order to pass any filters (e.g. authentication) defined in
     # ModelsController. Be sure to keep this updated too.
     let(:valid_session) { {} }
-    
-    context 'with callbacks disabled' do 
+
+    context 'with callbacks disabled' do
       before(:each) do
-        MegaBar::Field.skip_callback("save",:after,:make_field_displays) 
+        MegaBar::Field.skip_callback("save",:after,:make_field_displays)
         MegaBar::Field.skip_callback("create",:after,:make_field_displays)
         MegaBar::Field.skip_callback("create",:after,:make_migration)
         MegaBar::Model.skip_callback("create",:after,:make_all_files)
         MegaBar::Model.skip_callback("create",:after,:make_model_displays)
       end
       after(:each) do
-        MegaBar::Field.set_callback("save",:after,:make_field_displays) 
+        MegaBar::Field.set_callback("save",:after,:make_field_displays)
         MegaBar::Field.set_callback("create",:after,:make_field_displays)
         MegaBar::Field.set_callback("create",:after,:make_migration)
         MegaBar::Model.set_callback("create",:after,:make_all_files)
@@ -61,7 +61,7 @@ module MegaBar
         end
         after(:each) do
           Model.find(1).destroy
-          Field.destroy_all 
+          Field.destroy_all
         end
         describe "GET index" do
           it "assigns all fields as @mega_instance" do
@@ -104,7 +104,7 @@ module MegaBar
         after(:each) do
           Model.find(1).destroy
           Field.destroy_all
-        end 
+        end
         describe "POST create" do
           describe "with valid params" do
             it "creates a new Field" do
