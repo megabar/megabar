@@ -37,7 +37,6 @@ RSpec.shared_context "common", :a => :b do
       MegaBar::Block.set_callback("create", :after, :make_model_displays)
       model_and_page
       fields_and_displays
-      # byebug
       a_record
       model_display_format
       model_display_format_2
