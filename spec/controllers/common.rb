@@ -54,15 +54,17 @@ RSpec.shared_context "common", :a => :b do
         MegaBar::Field.skip_callback("save",:after,:make_field_displays)
         MegaBar::Field.skip_callback("create",:after,:make_field_displays)
         MegaBar::Model.skip_callback("create",:after,:make_page_for_model)
+        MegaBar::Layout.skip_callback("create",:after,:create_block_for_layout)
       end
       after(:each) do
         MegaBar::Field.set_callback("save",:after,:make_field_displays)
         MegaBar::Field.set_callback("create",:after,:make_field_displays)
         MegaBar::Model.set_callback("create",:after,:make_page_for_model)
+        MegaBar::Layout.set_callback("create",:after,:create_block_for_layout)
 
       end
 
-      describe "GET index", focus: true  do
+      describe "GET index"  do
         it "assigns all records as @mega_instance" do
           status, headers, body = controller_class.action(:index).call(get_env(env_index))
           @controller = body.request.env['action_controller.instance']
@@ -97,7 +99,7 @@ RSpec.shared_context "common", :a => :b do
 
       describe "POST create" do
         describe "with valid params" do
-          it "creates a new record" do # , focus: true  do
+          it "creates a new record" do
             expect {
               status, headers, body = controller_class.action(:create).call(get_env(env_create))
               @controller = body.request.env['action_controller.instance']
@@ -137,6 +139,7 @@ RSpec.shared_context "common", :a => :b do
         describe "with valid params" do
           it "updates the requested record" do
             record = model_class.first
+            byebug
             status, headers, body = controller_class.action(:update).call(get_env(env_update))
             record.reload
             expect(record.attributes).to include( updated_attrs )
@@ -165,7 +168,7 @@ RSpec.shared_context "common", :a => :b do
             expect(assigns(:mega_instance)).to eq(a_record)
           end
 
-          it "re-renders the 'edit' template" do #, focus: true do
+          it "re-renders the 'edit' template", focus: true do
             model = model_class.last
             status, headers, body = controller_class.action(:update).call(get_env(env_invalid_update))
             @controller = body.request.env['action_controller.instance']
