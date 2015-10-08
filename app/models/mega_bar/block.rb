@@ -1,4 +1,4 @@
-module MegaBar 
+module MegaBar
   class Block < ActiveRecord::Base
     belongs_to :layout
     scope :by_layout, ->(layout_id) { where(layout_id: layout_id) if layout_id.present? }
@@ -9,7 +9,7 @@ module MegaBar
     validates_uniqueness_of :name
 
     def self.by_actions(action)
-      if action.present? 
+      if action.present?
         case action
         when 'show'
           where(actions: ['all', 'sine', 'show', 'current'])
@@ -32,6 +32,7 @@ module MegaBar
     end
 
     def make_model_displays
+
       if (!self.model_id.nil? && !self.model_id.to_s.empty? && Integer(self.model_id) > 0)
         model_name = Model.find(self.model_id).name
         actions = []

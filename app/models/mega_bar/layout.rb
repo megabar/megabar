@@ -1,4 +1,4 @@
-module MegaBar 
+module MegaBar
   class Layout < ActiveRecord::Base
     after_create    :create_block_for_layout
     attr_accessor :make_block, :block_text, :model_id, :base_name
@@ -15,4 +15,4 @@ module MegaBar
     end
 
   end
-end 
+end

@@ -1,7 +1,7 @@
 module MegaBar
   module ApplicationHelper
     def sortable(column, title=nil)
-
+      #422pm.
       return title if !params[:id].blank?
       title ||= column.titleize
       css_class = column == sort_column(@mega_class, @mega_model_properties, params) ? 'current ' + sort_direction(params) : nil

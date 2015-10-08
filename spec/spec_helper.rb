@@ -34,7 +34,6 @@ MegaBar::ModelDisplay.connection.execute('delete from sqlite_sequence where name
 MegaBar::Model.connection.execute('delete from mega_bar_models')
 MegaBar::Model.connection.execute('delete from sqlite_sequence where name="mega_bar_models"')
 
-
 require 'rspec/rails'
 require 'capybara/rails'
 require 'factory_girl_rails'
@@ -88,4 +87,11 @@ def get_env(args)
 end
 
 def params_for_index
+end
+
+RSpec::Matchers.define :have_same_attributes_as do |expected|
+  match do |actual|
+    ignored = [:id, :updated_at, :created_at]
+    actual.attributes.except(*ignored) == expected.attributes.except(*ignored)
+  end
 end

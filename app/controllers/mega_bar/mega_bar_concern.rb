@@ -28,7 +28,6 @@ module MegaBar
       instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst])
       @form_instance_vars = @nested_instance_variables  + [@mega_instance]
-      byebug
       render @edit_view_template
     end
 
