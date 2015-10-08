@@ -38,8 +38,8 @@ RSpec.shared_context "common", :a => :b do
       model_and_page
       fields_and_displays
       a_record
-      model_display_format
-      model_display_format_2
+      model_display_format unless MegaBar::ModelDisplayFormat.first
+      model_display_format_2 unless MegaBar::ModelDisplayFormat.count > 1
     end
     after(:each) do
       MegaBar::Field.set_callback("create",:after,:make_migration)
@@ -74,7 +74,7 @@ RSpec.shared_context "common", :a => :b do
       end
 
       describe "GET show" do
-        it "assigns the requested record as @mega_instance", focus: true do
+        it "assigns the requested record as @mega_instance" do
           status, headers, body = controller_class.action(:show).call(get_env(env_show))
           @controller = body.request.env['action_controller.instance']
           expect(assigns(:mega_instance)).to eq([a_record])
