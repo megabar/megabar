@@ -23,7 +23,7 @@ module MegaBar
       errors.add(:base, 'That table does not exist')
       return false
     end
-    def make_field_displays 
+    def make_field_displays
       model_displays = mds = ModelDisplay.by_block(self.block_id)
       actions = []
       actions << {format: 'textread', model_display_id: mds.by_action('index').last.id,  header: self.field.humanize} if (!mds.by_action('index').last.nil? && !FieldDisplay.by_model_display_id(mds.by_action('index').last.id).by_fields(self.id).present? && @index_field_display == 'y')
@@ -35,7 +35,7 @@ module MegaBar
       end
     end
     def standardize_tablename
-     
+
     end
     def make_migration
       return true if self.accessor == 'y'
