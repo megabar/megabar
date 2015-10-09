@@ -15,13 +15,13 @@ module MegaBar
     let(:model_and_page) { create(:model_with_page, classname: 'ModelDisplayFormat', tablename: 'mega_bar_model_display_formats', name: 'Model Display Formats') }
     let(:page_name) { 'Model Display Formats Page' }
     let(:page_terms) { ['mega-bar', 'model_display_formats'] }
+    let(:skip_invalids) { true }
     let(:spec_subject) { 'model_display_format' }
     let(:updated_attrs) { { 'name' => 'testing' } }
-    let(:uri) { '/mega-bar/model_display_formats' }
+    let(:uri) { '/mega-bar/model-display-formats' }
     let(:valid_attributes) { { 'name' => "testing"  } }
     let(:valid_new) { { name: 'new Model Display Format'} }
     let(:valid_session) { {} }
-
     let(:fields_and_displays) {
       create(:field_with_displays, field: 'name', tablename: 'mega_bar_model_display_formats')
     }

@@ -13,6 +13,7 @@ module MegaBar
   let(:model_and_page) { create(:model_with_page, classname: 'Layout', tablename: 'mega_bar_layouts', name: 'Layouts') }
   let(:page_name) { 'Layout Page' }
   let(:page_terms) { ['mega-bar', 'layouts'] }
+  let(:skip_invalids) { false }
   let(:spec_subject) { 'layout' }
   let(:updated_attrs) { { 'name' => 'testing' } }
   let(:uri) { '/mega-bar/layouts' }

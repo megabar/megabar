@@ -15,6 +15,7 @@ module MegaBar
     let(:model_and_page) { create(:model_with_page, classname: 'ModelDisplay', tablename: 'mega_bar_model_displays', name: 'Model Displays') }
     let(:page_name) { 'Model Display Page' }
     let(:page_terms) { ['mega-bar', 'model_displays'] }
+    let(:skip_invalids) { false }
     let(:spec_subject) { 'model_display' }
     let(:updated_attrs) { { 'header' => 'testing' } }
     let(:uri) { '/mega-bar/model_displays' }

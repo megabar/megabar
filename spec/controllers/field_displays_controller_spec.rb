@@ -15,6 +15,7 @@ module MegaBar
     let(:model_and_page) { create(:model_with_page, classname: 'FieldDisplay', tablename: 'mega_bar_field_displays', name: 'Field Displays') }
     let(:page_name) { 'Field Display Page' }
     let(:page_terms) { ['mega-bar', 'field_displays'] }
+    let(:skip_invalids) { false }
     let(:spec_subject) { 'field_display' }
     let(:updated_attrs) { { 'header' => 'testing' } }
     let(:uri) { '/mega-bar/field_displays' }

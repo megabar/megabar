@@ -10,6 +10,7 @@ module MegaBar
     let(:a_record) { create(:field) }
     let(:page_name) { 'Fields Page' }
     let(:page_terms) { ['mega-bar', 'fields'] }
+    let(:skip_invalids) { false }
     let(:spec_subject) { 'field' }
 
     let(:updated_attrs) { { 'default_data_format_edit' => 'sselect' } }

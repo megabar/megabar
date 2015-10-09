@@ -64,7 +64,7 @@ RSpec.shared_context "common", :a => :b do
       end
 
       describe "GET index"  do
-        it "assigns all records as @mega_instance", focus: true do
+        it "assigns all records as @mega_instance" do
           status, headers, body = controller_class.action(:index).call(get_env(env_index))
           @controller = body.request.env['action_controller.instance']
           assigns(:mega_instance).each_with_index do | v, k |
@@ -74,7 +74,7 @@ RSpec.shared_context "common", :a => :b do
       end
 
       describe "GET show" do
-        it "assigns the requested record as @mega_instance" do
+        it "assigns the requested record as @mega_instance" do # , focus: true do
           status, headers, body = controller_class.action(:show).call(get_env(env_show))
           @controller = body.request.env['action_controller.instance']
           expect(assigns(:mega_instance)).to eq([a_record])
@@ -112,7 +112,7 @@ RSpec.shared_context "common", :a => :b do
             expect(assigns(:mega_instance)).to be_persisted
           end
 
-          it "redirects to the created record" do # , focus: true do
+          it "redirects to the created record" do #, focus: true do
             status, headers, body = controller_class.action(:create).call(get_env(env_create))
             @controller = body.request.env['action_controller.instance']
             expect(status).to be(302)
@@ -122,21 +122,25 @@ RSpec.shared_context "common", :a => :b do
 
         describe "with invalid params" do
           it "assigns a newly created but unsaved record as @mega_instance" do
-            status, headers, body = controller_class.action(:create).call(get_env(env_invalid_create))
-            @controller = body.request.env['action_controller.instance']
-            expect(assigns(:mega_instance)).to be_a_new(model_class)
+            if !skip_invalids
+              status, headers, body = controller_class.action(:create).call(get_env(env_invalid_create))
+              @controller = body.request.env['action_controller.instance']
+              expect(assigns(:mega_instance)).to be_a_new(model_class)
+            end
           end
           it "re-renders the 'new' template" do #, focus: true  do
-            status, headers, body = controller_class.action(:create).call(get_env(env_invalid_create))
-            @controller = body.request.env['action_controller.instance']
-            expect(response).to render_template('mega_bar.html.erb')
+            if !skip_invalids
+              status, headers, body = controller_class.action(:create).call(get_env(env_invalid_create))
+              @controller = body.request.env['action_controller.instance']
+              expect(response).to render_template('mega_bar.html.erb')
+            end
           end
         end
       end
 
       describe "PUT update" do
         describe "with valid params" do
-          it "updates the requested record" do # , focus: true do
+          it "updates the requested record", focus: true do
             record = model_class.first
             status, headers, body = controller_class.action(:update).call(get_env(env_update))
             record.reload
@@ -160,17 +164,21 @@ RSpec.shared_context "common", :a => :b do
 
         describe "with invalid params" do
           it "assigns the record as @mega_instance" do #, focus: true do
-            model = model_class.last
-            status, headers, body = controller_class.action(:update).call(get_env(env_invalid_update))
-            @controller = body.request.env['action_controller.instance']
-            expect(assigns(:mega_instance)).to eq(a_record)
+            if !skip_invalids
+              model = model_class.last
+              status, headers, body = controller_class.action(:update).call(get_env(env_invalid_update))
+              @controller = body.request.env['action_controller.instance']
+              expect(assigns(:mega_instance)).to eq(a_record)
+            end
           end
 
           it "re-renders the 'edit' template" do # , focus: true do
-            model = model_class.last
-            status, headers, body = controller_class.action(:update).call(get_env(env_invalid_update))
-            @controller = body.request.env['action_controller.instance']
-            expect(response).to render_template("mega_bar.html.erb")
+            if !skip_invalids
+              model = model_class.last
+              status, headers, body = controller_class.action(:update).call(get_env(env_invalid_update))
+              @controller = body.request.env['action_controller.instance']
+              expect(response).to render_template("mega_bar.html.erb")
+            end
           end
         end
       end

@@ -12,6 +12,7 @@ module MegaBar
     let(:model_and_page) { create(:model_with_page, classname: 'Block', tablename: 'mega_bar_blocks', name: 'Blocks') }
     let(:page_name) { 'Block Page' }
     let(:page_terms) { ['mega-bar', 'blocks'] }
+    let(:skip_invalids) { false }
     let(:spec_subject) { 'block' }
     let(:updated_attrs) { { 'name' => 'testing' } }
     let(:uri) { '/mega-bar/blocks' }

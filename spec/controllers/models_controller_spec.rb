@@ -10,6 +10,7 @@ module MegaBar
     let(:invalid_new) { {make_page: ''} }
     let(:page_name) { 'Models Page' }
     let(:page_terms) { ['mega-bar', 'models'] }
+    let(:skip_invalids) { false }
     let(:spec_subject) { 'model' }
     let(:updated_attrs) { { 'classname' => 'testing' } }
     let(:uri) { '/mega-bar/models' }

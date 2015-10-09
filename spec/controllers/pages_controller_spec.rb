@@ -12,6 +12,7 @@ module MegaBar
     let(:invalid_new) { {make_page: ''} }
     let(:page_name) { 'Page Page' }
     let(:page_terms) { ['mega-bar', 'pages'] }
+    let(:skip_invalids) { false }
     let(:spec_subject) { 'page' }
     let(:updated_attrs) { { 'name' => 'testing' } }
     let(:uri) { '/mega-bar/pages' }
