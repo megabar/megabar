@@ -76,7 +76,6 @@ namespace :mega_bar do
     end
     file = args[:file] || "../../db/mega_bar.seeds.rb"
     require_relative file #LOADS SEEDS INTO TMP TABLES
-
     # done resetting tmp tables.
     # start conflict detection
     mega_classes.each do |mc|
@@ -98,6 +97,9 @@ namespace :mega_bar do
     MegaBar::Field.skip_callback(       'save',   :after, :make_field_displays)
     MegaBar::FieldDisplay.skip_callback('save',   :after, :make_data_display)
     MegaBar::Model.skip_callback(       'create', :after, :make_all_files)
+    MegaBar::Model.skip_callback(       'create', :before, :standardize_modyule)
+    MegaBar::Model.skip_callback(       'create', :before, :standardize_classname)
+    MegaBar::Model.skip_callback(       'create', :before, :standardize_tablename)
     MegaBar::Model.skip_callback(       'create', :after, :make_page_for_model)
     MegaBar::ModelDisplay.skip_callback('save',   :after, :make_field_displays)
     MegaBar::Page.skip_callback(        'create', :after, :create_layout_for_page)
@@ -116,6 +118,19 @@ namespace :mega_bar do
     end
     # end of main function for loading data
     # important sub functions are below
+    MegaBar::Block.set_callback(       'save',   :after, :make_model_displays)
+    MegaBar::Field.set_callback(       'create', :after, :make_migration)
+    MegaBar::Field.set_callback(       'save',   :after, :make_field_displays)
+    MegaBar::FieldDisplay.set_callback('save',   :after, :make_data_display)
+    MegaBar::Model.set_callback(       'create', :after, :make_all_files)
+    MegaBar::Model.set_callback(       'create', :before, :standardize_modyule)
+    MegaBar::Model.set_callback(       'create', :before, :standardize_classname)
+    MegaBar::Model.set_callback(       'create', :before, :standardize_tablename)
+    MegaBar::Model.set_callback(       'create', :after, :make_page_for_model)
+    MegaBar::ModelDisplay.set_callback('save',   :after, :make_field_displays)
+    MegaBar::Page.set_callback(        'create', :after, :create_layout_for_page)
+    MegaBar::Layout.set_callback(      'create', :after, :create_block_for_layout)
+
     puts "Loaded Data"
   end
 

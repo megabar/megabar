@@ -11,9 +11,7 @@ module MegaBar
     scope :by_action, ->(action) { where(action: action) }
     scope :by_model_display_id, ->(model_display_id) { where(model_display_id: model_display_id) }
     def make_data_display
-      byebug
       return if self.format.to_s == 'off'
-
       Textbox.by_field_display_id(self.id).delete_all
       Textread.by_field_display_id(self.id).delete_all
       Select.by_field_display_id(self.id).delete_all

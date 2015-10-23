@@ -18,7 +18,6 @@ Combustion.initialize! :all do
   load File.expand_path("../../lib/tasks/mega_bar_tasks.rake", __FILE__)
   Rake::Task.define_task(:environment)
   Rake::Task['mega_bar:data_load'].invoke('../../db/mega_bar.seeds.rb', 'routes')
-
 end
 # after combustion has initialized the routes, we have to delete all the data
 # that the seeds added so that the tests run with empty databases.

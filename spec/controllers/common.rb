@@ -28,25 +28,10 @@ RSpec.shared_context "common", :a => :b do
 
   context 'with mega_env' do
     before(:each) do
-      MegaBar::Field.skip_callback("create",:after,:make_migration)
-      MegaBar::Model.skip_callback("create",:after,:make_all_files)
-      MegaBar::Model.set_callback("create", :after, :make_page_for_model)
-      MegaBar::Page.set_callback("create", :after, :create_layout_for_page)
-      MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
-      MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
-      MegaBar::Block.set_callback("create", :after, :make_model_displays)
-      model_and_page
-      fields_and_displays
-      a_record
-      model_display_format unless MegaBar::ModelDisplayFormat.first
-      model_display_format_2 unless MegaBar::ModelDisplayFormat.count > 1
+      test_setup
     end
     after(:each) do
-      MegaBar::Field.set_callback("create",:after,:make_migration)
-      MegaBar::Model.set_callback("create",:after,:make_all_files)
-      MegaBar::Model.destroy_all
-      MegaBar::Page.destroy_all
-      MegaBar::ModelDisplayFormat.destroy_all
+      test_teardown
     end
 
     context 'with callbacks disabled ' do
@@ -197,4 +182,25 @@ RSpec.shared_context "common", :a => :b do
       end
     end
   end
+  let (:test_setup) {
+    MegaBar::Field.skip_callback("create",:after,:make_migration)
+    MegaBar::Model.skip_callback("create",:after,:make_all_files)
+    MegaBar::Model.set_callback("create", :after, :make_page_for_model)
+    MegaBar::Page.set_callback("create", :after, :create_layout_for_page)
+    MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
+    MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
+    MegaBar::Block.set_callback("create", :after, :make_model_displays)
+    model_and_page
+    fields_and_displays
+    a_record
+    model_display_format unless MegaBar::ModelDisplayFormat.first
+    model_display_format_2 unless MegaBar::ModelDisplayFormat.count > 1
+  }
+  let (:test_teardown) {
+    MegaBar::Field.set_callback("create",:after,:make_migration)
+    MegaBar::Model.set_callback("create",:after,:make_all_files)
+    MegaBar::Model.destroy_all
+    MegaBar::Page.destroy_all
+    MegaBar::ModelDisplayFormat.destroy_all
+  }
 end
