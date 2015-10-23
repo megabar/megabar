@@ -20,7 +20,7 @@ module MegaBar
     let(:updated_attrs) { { 'header' => 'testing' } }
     let(:uri) { '/mega-bar/field_displays' }
     let(:valid_attributes) { { 'header' => "testing"  } }
-    let(:valid_new) { { header: 'new Field Display', model_display_id: '1', field_id: '1'} }
+    let(:valid_new) { { header: 'new Field Display', model_display_id: '14', field_id: '44'} }
     let(:valid_session) { {} }
 
     let(:fields_and_displays) {

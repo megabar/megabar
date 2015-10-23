@@ -83,7 +83,7 @@ RSpec.shared_context "common", :a => :b do
 
       describe "POST create" do
         describe "with valid params" do
-          it "creates a new record" do
+          it "creates a new record", focus: true do
             expect {
               status, headers, body = controller_class.action(:create).call(get_env(env_create))
               @controller = body.request.env['action_controller.instance']
