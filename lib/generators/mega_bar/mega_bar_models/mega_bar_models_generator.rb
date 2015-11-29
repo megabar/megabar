@@ -8,14 +8,11 @@ module MegaBar
     @@notices = []
 
     # in generators, all public methods are run. Weird, huh?
-
     def create_controller_file
-      byebug
       @@notices << "You will have to copy your controller manually over to the megabar gem" if gem_path == '' && modyule == 'MegaBar'
       template 'generic_controller.rb', "#{gem_path}#{the_controller_file_path}#{the_controller_file_name}.rb"
     end
     def create_model_file
-
       template 'generic_model.rb', "#{gem_path}#{the_model_file_path}#{the_model_file_name}.rb"
       @@notices <<  "You will have to copy your model files manually over to the megabar gem" if gem_path == '' && modyule == 'MegaBar'
       template "generic_model.rb", "#{gem_path}#{the_model_file_path}tmp_#{the_model_file_name}.rb" if modyule == 'MegaBar'
@@ -31,7 +28,6 @@ module MegaBar
     end
 
     def create_controller_spec_file
-      byebug
       template 'generic_controller_spec.rb', "#{gem_path}#{the_controller_spec_file_path}#{the_controller_spec_file_name}.rb"
       @@notices <<  "You will have to copy the spec file yourself manually to the megabar repo's spec/controllers directory" if gem_path == '' && modyule == 'MegaBar'
     end
