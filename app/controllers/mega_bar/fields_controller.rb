@@ -4,7 +4,10 @@ module MegaBar
 
     def get_options
       blocks = []
+      
+     # bad news, if the block doesn't have model_displays it doesnt show up in this menu 
       ModelDisplay.select(:block_id).distinct.pluck("block_id, model_id").each do |md| 
+
         blocks << ['id: ' + md[0].to_s + ', model: ' + Model.find(md[1]).name + ' (' + md[1].to_s + '), ' + Block.find(md[0]).name, md[0]]
       end
       @options[:mega_bar_fields] =  {
