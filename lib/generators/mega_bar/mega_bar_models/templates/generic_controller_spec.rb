@@ -31,6 +31,7 @@
     # let(:invalid_new) { {tbd: ''} }
     let(:model_and_page) { create(:model_with_page, classname: '<%=classname %>', tablename: '<%=the_table_name %>', name: '<%=classname %>') }
     let(:page_terms) { <%= the_module_array << the_route_path %>  }
+    let(:page_name) { <%= the_module_name + ' page' %>  }
     let(:skip_invalids) { true }
     let(:spec_subject) { '<%= the_model_file_name %>' }
     let(:updated_attrs) { { 'tbd' => 'tbd' } }
