@@ -15,6 +15,7 @@ module MegaBar
     end
 
     def add_route
+      return
       gem_path = ''
       line = '  ##### MEGABAR END'
       text = File.read(gem_path + 'config/routes.rb')
