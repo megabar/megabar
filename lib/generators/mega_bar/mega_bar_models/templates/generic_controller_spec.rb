@@ -26,10 +26,10 @@
     # 13 the_route_path: <%= the_route_path %>
 
 
-    let(:controlller) { '<%=the_controller_file_name %>' }
+    let(:controlller) { '<%=the_route_name %>' }
     # let(:invalid_attributes) { { 'tbd' => '' }  }
     # let(:invalid_new) { {tbd: ''} }
-    let(:model_and_page) { create(:model_with_page, classname: '<%=classname %>', tablename: '<%=the_table_name %>', name: '<%=classname %>') }
+    let(:model_and_page) { create(:model_with_page, classname: '<%=classname %>', tablename: '<%=the_table_name %>', name: '<%=classname %>', modyule: '<%= the_module_name %>' ) }
     let(:page_terms) { <%= the_module_array << the_route_path %>  }
     let(:page_name) { <%= the_module_name + ' page' %>  }
     let(:skip_invalids) { true }
