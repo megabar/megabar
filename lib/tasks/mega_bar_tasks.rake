@@ -280,11 +280,21 @@ namespace :mega_bar do
     ])
   end
 
-  task :truncate_all_test_data => :environment do
+  task :truncate_all_test_data_again => :environment do
+    truncate_etc
+  end
+
+  task :truncate_all_test_data_once => :environment do
+    truncate_etc
+  end
+
+  def truncate_etc 
     get_mega_classes.each do |mc|
       puts "delete from #{mc[:perm_class].table_name}"
       ActiveRecord::Base.connection.execute("delete from #{mc[:perm_class].table_name}")
       ActiveRecord::Base.connection.execute("DELETE FROM SQLITE_SEQUENCE WHERE name='#{mc[:perm_class].table_name}'")
+      ActiveRecord::Base.connection.execute("delete from #{mc[:tmp_class].table_name}")
+      ActiveRecord::Base.connection.execute("DELETE FROM SQLITE_SEQUENCE WHERE name='#{mc[:tmp_class].table_name}'")
     end
   end
   def prompt(conflict, callback)
