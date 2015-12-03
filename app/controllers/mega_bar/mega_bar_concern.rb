@@ -31,6 +31,9 @@ module MegaBar
       render @edit_view_template
     end
 
+    def test_create # $20 bounty for understanding why this is here and figuring out how to get rid of it! (hint: tests break without it)
+       create
+    end
     def create
       @mega_instance = @mega_class.new(_params)
       respond_to do |format|
