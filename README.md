@@ -61,8 +61,8 @@ Visit a megabar page at http://localhost:3000/mega-bar/models
 MegaBar will generate model, controller and migration files for you. It will also set your new models up to be tested with rspec. After you have run the engine_init task, from your myapp directory you should run 
 ```rails generate rspec:install```
 Also, then 
-```cp ../megabar/spec/host_spec_helper.rb spec/spec_helper.rb```
-(overwriting the existing spec_helper).
+```cp ../megabar/spec/host_spec_helper.rb spec/spec_helper.rb``` (overwriting the existing spec_helper).
+
 ---
 
 If you have additions to the 'core data' and would like them to be a part of the 'mega_bar seeds', run this command:
