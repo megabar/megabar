@@ -17,22 +17,14 @@ include FactoryGirl::Syntax::Methods
 Dir[File.join(MEGABAR_ROOT, "spec/internal/factories/*.rb")].each { |f| require f }
 Rake::Task.define_task(:environment)
 
-Rake::Task['mega_bar:truncate_all_test_data_once'].invoke()
-
 ActiveRecord::Migration.maintain_test_schema!
-Rake::Task['mega_bar:data_load'].invoke(MEGABAR_ROOT + 'db/mega_bar.seeds.rb', 'routes')
 
 Rails.application.routes.draw do
-  MegaBar::Engine.routes.draw do
-    MegaRoute.load('/mega-bar').each do |route|
-      # puts "#{route[:path]} => #{route[:controller]}##{route[:action]} via #{route[:method]} as: #{route[:as]}" if route[:path].include?('models') || route[:path].include?('survey')
-      # puts route;
-      match route[:path] => "#{route[:controller]}##{route[:action]}", via: route[:method], as: route[:as]
-    end
-  end
+
+
+   ##### MEGABAR END ##### 
 end
 
-Rake::Task['mega_bar:truncate_all_test_data_again'].invoke()
 
 
 
@@ -47,7 +39,7 @@ def get_env(args)
   env[:mega_rout] = args[:rout]
   env[:mega_env] = MegaEnv.new(blck, args[:rout], args[:page]).to_hash # added to env for use in controllers
   request = Rack::Request.new(env)
-  # request.session[:return_to] = url_for(uri);
+  request.session[:return_to] = uri;
   env
 end
 
