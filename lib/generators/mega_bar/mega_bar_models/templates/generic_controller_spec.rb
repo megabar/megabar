@@ -3,6 +3,10 @@
   require_relative 'common'
   require 'spec_helper'
 
+  Rails.application.routes.draw do
+    resources :<%= the_route_path %>
+  end
+
   RSpec.describe <% the_module_array.each do | m | %><%=m%>::<% end %><% if the_module_array.length %>::<% end %><%= the_controller_name %>, :type => :controller do
     include_context "common" #pretty important!
     let(:a_record) {
@@ -31,7 +35,7 @@
     # let(:invalid_new) { {tbd: ''} }
     let(:model_and_page) { create(:model_with_page, classname: '<%=classname %>', tablename: '<%=the_table_name %>', name: '<%=classname %>', modyule: '<%= the_module_name %>' ) }
     let(:page_terms) { <%= the_module_array << the_route_path %>  }
-    let(:page_name) { <%= the_module_name + ' page' %>  }
+    let(:page_name) { '<%= the_module_name %> page'   }
     let(:skip_invalids) { true }
     let(:spec_subject) { '<%= the_model_file_name %>' }
     let(:updated_attrs) { { 'tbd' => 'tbd' } }
