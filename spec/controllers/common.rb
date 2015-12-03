@@ -49,8 +49,7 @@ RSpec.shared_context "common", :a => :b do
       end
 
       describe "GET index"  do
-        it "assigns all records as @mega_instance", focus: true do
-# byebug
+        it "assigns all records as @mega_instance" do #, focus: true do
           status, headers, body = controller_class.action(:index).call(get_env(env_index))
           @controller = body.request.env['action_controller.instance']
           assigns(:mega_instance).each_with_index do | v, k |
@@ -84,22 +83,22 @@ RSpec.shared_context "common", :a => :b do
 
       describe "POST create" do
         describe "with valid params" do
-          it "creates a new record" do #, focus: true do
+          it "creates a new record" do # , focus: true do
             expect {
-              status, headers, body = controller_class.action(:create).call(get_env(env_create))
+              status, headers, body = controller_class.action(:test_create).call(get_env(env_create))
               @controller = body.request.env['action_controller.instance']
             }.to change(model_class, :count).by(1)
           end
 
           it "assigns a newly created record as @mega_instance" do
-            status, headers, body = controller_class.action(:create).call(get_env(env_create))
+            status, headers, body = controller_class.action(:test_create).call(get_env(env_create))
             @controller = body.request.env['action_controller.instance']
             expect(assigns(:mega_instance)).to be_a(model_class)
             expect(assigns(:mega_instance)).to be_persisted
           end
 
           it "redirects to the created record" do #, focus: true do
-            status, headers, body = controller_class.action(:create).call(get_env(env_create))
+            status, headers, body = controller_class.action(:test_create).call(get_env(env_create))
             @controller = body.request.env['action_controller.instance']
             expect(status).to be(302)
             expect(body.instance_variable_get(:@body).instance_variable_get(:@header)["Location"]).to include(uri) #almost good enough
@@ -176,7 +175,7 @@ RSpec.shared_context "common", :a => :b do
           }.to change(model_class, :count).by(-1)
         end
 
-        it "redirects to the index list" do
+        it "redirects to the index list", focus: true do 
           status, headers, body = controller_class.action(:destroy).call(get_env(env_destroy))
           expect(body.instance_variable_get(:@body).instance_variable_get(:@header)["Location"]).to include(uri) #almost good enough
         end
@@ -203,5 +202,6 @@ RSpec.shared_context "common", :a => :b do
     MegaBar::Model.destroy_all
     MegaBar::Page.destroy_all
     MegaBar::ModelDisplayFormat.destroy_all
+    model_class.destroy_all
   }
 end
