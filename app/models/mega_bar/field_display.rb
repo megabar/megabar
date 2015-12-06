@@ -6,13 +6,14 @@ module MegaBar
     has_many :textboxes, dependent: :destroy
     has_many :textreads, dependent: :destroy
     has_many :selects, dependent: :destroy
-    
+
     scope :by_fields, ->(fields) { where(field_id: fields) }
     scope :by_action, ->(action) { where(action: action) }
     scope :by_model_display_id, ->(model_display_id) { where(model_display_id: model_display_id) }
-    def make_data_display
-      return if self.format.to_s == 'off'
 
+    def make_data_display
+      byebug
+      return if self.format.to_s == 'off'
       Textbox.by_field_display_id(self.id).delete_all
       Textread.by_field_display_id(self.id).delete_all
       Select.by_field_display_id(self.id).delete_all
@@ -20,7 +21,7 @@ module MegaBar
       model_id = data_display_obj.get_model_id
       fields = Field.by_model(model_id)
       fields_defaults = {}
-      fields.each do |field| 
+      fields.each do |field|
         unless (field.default_value.nil? || field.default_value == 'off')
           fields_defaults[field.field.parameterize.underscore.to_sym] = field.default_value
         end

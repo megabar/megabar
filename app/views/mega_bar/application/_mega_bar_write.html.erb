@@ -1,21 +1,20 @@
 <h1><%= best_in_place @mega_display[:model_display], :header, path: @model_display_path %></h1>
-
 <%=@mf.record_wrapper.html_safe%>
 <% @mega_display[:displayable_fields].each do | displayable_field | %>
-  <% 
+  <%
     @field_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/field_displays', action: 'show', id: displayable_field[:field_display].id, :only_path=> true)
   %>
   <% if @mf.name == 'ProfileTable' %>
     <tr><th><%=  best_in_place displayable_field[:field_display], :header, path: @field_display_path %></th>
   <% end %>
   <%= @mf.field_wrapper.html_safe%>
-  <%   
+  <%
     instance_value = instance_variable_get("@" + displayable_field[:field].field)
     if instance_value.present? && (displayable_field[:field].field != 'field' and params[:action] == 'edit')
-      value = instance_value 
+      value = instance_value
     else
-      if params[:action] == 'edit' 
-        value= @mega_instance.read_attribute(displayable_field[:field].field) 
+      if params[:action] == 'edit' || params[:redo]
+        value= @mega_instance.read_attribute(displayable_field[:field].field)
       else
         value = displayable_field[:field].default_value
       end
@@ -25,4 +24,3 @@
   <%= @mf.field_wrapper_end.html_safe %>
 <%end %>
 <%= @mf.record_wrapper_end.html_safe%>
-

@@ -1,5 +1,3 @@
-<% #byebug %>
-
 <h1><%= best_in_place @mega_display[:model_display], :header, tabindex: "1", url: @model_display_path %> </h1>
 
 
@@ -41,11 +39,10 @@
     <% if @mf.name == 'GridHtml' %>
       <td>
         <%= link_to 'Show', link_path('show', mega_record.id) %>
-
-        <% #byebug %>
       </td>
       <td><%= link_to 'Edit', link_path('edit', mega_record.id) %></td>
       <td><%= link_to 'Destroy', mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+ 
     <% end %>
     <%= @mf.record_wrapper_end.html_safe%>
   <% end %>

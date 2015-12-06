@@ -6,9 +6,8 @@ module MegaBar
     argument :classname, type: :string
     argument :model_id, type: :string
     @@notices = []
-    
-    # in generators, all public methods are run. Weird, huh?
 
+    # in generators, all public methods are run. Weird, huh?
     def create_controller_file
       @@notices << "You will have to copy your controller manually over to the megabar gem" if gem_path == '' && modyule == 'MegaBar'
       template 'generic_controller.rb', "#{gem_path}#{the_controller_file_path}#{the_controller_file_name}.rb"
@@ -27,7 +26,7 @@ module MegaBar
         generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'
       end
     end
-   
+
     def create_controller_spec_file
       template 'generic_controller_spec.rb', "#{gem_path}#{the_controller_spec_file_path}#{the_controller_spec_file_name}.rb"
       @@notices <<  "You will have to copy the spec file yourself manually to the megabar repo's spec/controllers directory" if gem_path == '' && modyule == 'MegaBar'
@@ -62,10 +61,10 @@ module MegaBar
         'app/controllers/'
       end
     end
-     
+
     def the_controller_name
       classname.pluralize + 'Controller'
-    end 
+    end
 
     def the_controller_spec_file_name
       classname.pluralize.underscore + "_controller_spec"
@@ -78,7 +77,7 @@ module MegaBar
         'spec/controllers/'
       end
     end
-    
+
     def the_factory_file_path
       if the_module_name == 'MegaBar'
         'spec/internal/factories/'
@@ -100,7 +99,7 @@ module MegaBar
     end
 
     def the_module_array
-      the_module_name.nil? || the_module_name.empty? ? [] : the_module_name.split('::') 
+      the_module_name.nil? || the_module_name.empty? ? [] : the_module_name.split('::')
     end
 
     def the_module_name
@@ -126,7 +125,7 @@ module MegaBar
     end
 
     def use_route
-      return '' if the_module_name.nil? || the_module_name.empty? 
+      return '' if the_module_name.nil? || the_module_name.empty?
       the_module_name.split('::').size == 1 ? 'use_route: ' + the_module_name + ', ' : '' #else might could be improved for other modules.
     end
   end

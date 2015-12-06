@@ -1,4 +1,4 @@
-module MegaBar 
+module MegaBar
   class Layout < ActiveRecord::Base
     after_create    :create_block_for_layout
     attr_accessor :make_block, :block_text, :model_id, :base_name
@@ -6,6 +6,7 @@ module MegaBar
     has_many :blocks, dependent: :destroy
     scope :by_page, ->(page_id) { where(page_id: page_id) if page_id.present? }
     validates_uniqueness_of :name
+    validates_presence_of :page_id
 
 
     def create_block_for_layout
@@ -15,4 +16,4 @@ module MegaBar
     end
 
   end
-end 
+end
