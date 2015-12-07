@@ -44,6 +44,14 @@ Bundle Install
 
 ```bundle install```
 
+Generate Rspec Directory: 
+
+```rails generate rspec:install```
+
+Overwrite the existing spec_helper
+
+```cp ../megabar/spec/host_spec_helper.rb spec/spec_helper.rb``` 
+
 Run the init task:
 
 ```bundle exec rake mega_bar:engine_init```
