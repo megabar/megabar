@@ -42,7 +42,8 @@ class MegaRoute
           # puts "path: " + path
           if block.html?
             # p = block.path_base? ? block.path_base : pg.path
-            # routes << {path: p, method: 'get', controller: 'flats', action: 'index'}
+            # routes << {path: p, method: 'get', controller: 'flats', action: 'index', as: 'flats_' + block.id.to_s}
+            # puts 'block html path. ' + p.to_s
           else
             if MegaBar::ModelDisplay.by_block(block.id).size > 0
               # byebug if MegaBar::ModelDisplay.by_block(block.id).first.model_id == 3
@@ -51,7 +52,7 @@ class MegaRoute
               routes << {path: p + '/:id', method: 'patch', action: 'update', controller: controller}
               routes << {path: p, method: 'post', action: 'create', controller: controller}
               routes << {path: p.singularize, method: 'delete', action: 'destroy', controller: controller}
-              MegaBar::ModelDisplay.by_block(block.id).each do | md |
+              MegaBar::ModelDisplay.by_block(block.id).order(collection_or_member: :asc).each do | md | #order here becomes important todo
                 # puts "mid" + md.model_id.to_s
                 modle = MegaBar::Model.find(md.model_id)
                 pf = ''
@@ -59,10 +60,8 @@ class MegaRoute
                 case md.action
                 when 'show'
                   pf = p + '/:id'
-                  x = 'member'
                   as = path.singularize
                 when 'index'
-                  x = 'collection'
                   pf = p
                   as = path
                 when 'new'
@@ -70,15 +69,15 @@ class MegaRoute
                   as = 'new_' + path
                 when 'edit'
                   pf = p + '/:id/edit'
-                  x = 'member'
                   as = 'edit_' + path
                 else
-                  # pf = p + '/' + md.action
-
+                  pf = p.to_s + "/" + md.action.to_s
+                  puts 'custom action: ' + pf
                   # db should track whether custom model_display actions are on member or collection and if they have a special 'as' or anything.
                 end
                 route = {path: pf, method: 'get', action: md.action, controller: controller}
                 route = route.merge({as: as}) if as
+                # route = route.merge({on: x}) if x
                 routes << route
                 # puts route.inspect
                 # get "#{p}"
