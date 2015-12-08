@@ -29,4 +29,5 @@
 <% end %>
 
 <%= render partial: "mega_bar_help_links", :locals => {:links => block_help_links} %>
-<%= link_to 'Create New ' + @mega_model_properties.name.singularize, link_path('new') %>
+<%= link_to 'Create New ' + @mega_model_properties.name.singularize, link_path('new') %> | 
+<%if ['show'].include? params[:action] %><%= link_to 'Edit', link_path('edit', @mega_instance[0].id) %><% end %>
