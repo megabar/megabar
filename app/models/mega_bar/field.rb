@@ -37,10 +37,11 @@ module MegaBar
     def standardize_tablename
 
     end
+
     def make_migration
       return true if self.accessor == 'y'
       return if Model.connection.column_exists?(self.tablename,  self.field)
-      system 'rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + self.data_type
+      system 'bundle exec rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + self.data_type
       ActiveRecord::Migrator.migrate "db/migrate"
       system 'rake db:schema:dump'
     end
