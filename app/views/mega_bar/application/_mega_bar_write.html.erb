@@ -1,11 +1,11 @@
-<h1><%= best_in_place @mega_display[:model_display], :header, path: @model_display_path %></h1>
+<h1><%= best_in_place @mega_display[:model_display], :header, url: @model_display_path %></h1>
 <%=@mf.record_wrapper.html_safe%>
 <% @mega_display[:displayable_fields].each do | displayable_field | %>
   <%
     @field_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/field_displays', action: 'show', id: displayable_field[:field_display].id, :only_path=> true)
   %>
   <% if @mf.name == 'ProfileTable' %>
-    <tr><th><%=  best_in_place displayable_field[:field_display], :header, path: @field_display_path %></th>
+    <tr><th><%=  best_in_place displayable_field[:field_display], :header, url: @field_display_path %></th>
   <% end %>
   <%= @mf.field_wrapper.html_safe%>
   <%
