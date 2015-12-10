@@ -1,4 +1,3 @@
-byebug
 MegaBar::TmpModel.create!([
   {id: 1, modyule: "MegaBar", classname: "Model", schema: "sqlite", tablename: "mega_bar_models", name: "Model Test", default_sort_field: "id", created_at: "2014-05-05 17:27:28", updated_at: "2015-12-09 21:07:41"},
   {id: 2, modyule: "MegaBar", classname: "Field", schema: "sqliter", tablename: "mega_bar_fields", name: "Fields", default_sort_field: "id", created_at: "2014-05-05 17:28:21", updated_at: "2015-02-18 21:06:04"},
