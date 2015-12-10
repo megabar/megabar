@@ -192,9 +192,13 @@ namespace :mega_bar do
     MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id).update_all(model_display_id: new_obj.id)
   end
 
-  def fix_field_displays(c)
+  def fix_field_displays(cc)
+    #leave blank
+  end
+
+  def fix_display_class(c)
     new_obj = make_new_perm(c)
-    update_data_displays_with_new_field_display_id(c[:tmp].id, new_obj.id)
+    # update_data_displays_with_new_field_display_id(c[:tmp].id, new_obj.id)
     MegaBar::TmpTextbox.where(field_display_id: c[:tmp].id).each do |tb|
       tb.update(field_display_id: new_obj.id)
     end
