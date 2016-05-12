@@ -80,6 +80,10 @@ If you have additions to the 'core data' and would like them to be a part of the
 Then you'd copy that db/mega_bar.seeds.rb from your app over to the megabar repo and commit them to the megabar repo. 
 ```cp db/mega_bar.seeds.rb ../megabar/db/.```
 
+If you have an existing myapp and want to bring in seeds from megabar master, after you git pull in megabar directory, go to your myapp directory and enter
+
+```bundle exec rake  mega_bar:data_load```
+
 Some file changes that become a part of your app will also have to be copied over to the megabar repo if you want them to become a permanent part of megabar. If you really want to create a new core model, you'll need to create it and a mirror 'tmp' version of the model files and copy those and the migrations back over to the gem as well. Ask.
 
 Definitely consider creating a branch before making changes to the megabar gem repo and then submit a pull request.
