@@ -3,7 +3,6 @@ module MegaBar
     extend ActiveSupport::Concern
 
     def index
-byebug
       records = @mega_class.where(@conditions).where(@conditions_array).order(column_sorting)
       instance_variable_set("@" + env[:mega_env][:kontroller_inst].pluralize,  records)
       @mega_instance ||= instance_variable_get("@" + env[:mega_env][:kontroller_inst].pluralize);
