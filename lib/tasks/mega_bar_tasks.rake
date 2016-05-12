@@ -242,7 +242,7 @@ namespace :mega_bar do
     SeedDump.dump(MegaBar::Option.where(field_id: mega_bar_fields), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::ModelDisplayFormat, file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
-    mega_bar_page_ids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+    mega_bar_page_ids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
     # mega_bar_pages = MegaBar::Page.where(id: mega_bar_page_ids).pluck(:id, :path)
     mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).pluck(:id)
     mega_bar_block_ids = MegaBar::Block.where(layout_id: mega_bar_layout_ids).pluck(:id)
