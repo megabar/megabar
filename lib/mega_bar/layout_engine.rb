@@ -26,9 +26,6 @@ class LayoutEngine
       return  [@status, @headers, self]
     end
 
-
-
-
     @redirect = false
     request = Rack::Request.new(env)
     request.params # strangely this needs to be here for best_in_place updates.
@@ -64,6 +61,7 @@ class LayoutEngine
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
     final_layouts = []
     page_layouts = MegaBar::Layout.by_page(page_info[:page_id])
+
     page_layouts.each do | page_layout |
       env[:mega_layout] = page_layout
       blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(rout[:action])
@@ -90,12 +88,16 @@ class LayoutEngine
   end
 
   def set_page_info(rout, rout_terms)
+
     page_info = {}
     rout_terms ||= []
+    diff = 20
+    prev_diff = 21
     MegaBar::Page.all.order(' id desc').pluck(:id, :path, :name).each do | page |
       page_path_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
       next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
       next if (page_path_terms.empty? && !rout_terms.empty? ) # home page /
+      diff = (rout_terms - page_path_terms).size
       page_terms = page[1].split('/').reject! { |c| (c.nil? || c.empty?) }
       page_terms ||= []
       variable_segments = []
@@ -103,9 +105,8 @@ class LayoutEngine
         variable_segments << rout_terms[k] if page_terms[k].starts_with?(':')
       end
       variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
-      page_info = {page_id: page[0], page_path: page[1], terms: page_terms, vars: variable_segments, name: page[2]}
-
-      break
+      page_info = {page_id: page[0], page_path: page[1], terms: page_terms, vars: variable_segments, name: page[2]} if diff < prev_diff
+      prev_diff = diff
     end
     page_info
   end
@@ -113,6 +114,7 @@ class LayoutEngine
   def set_rout(request, env)
     request_path_info = request.path_info.dup
     rout = (Rails.application.routes.recognize_path request_path_info rescue {}) || {}
+    rout = (MegaBar::Engine.routes.recognize_path request_path_info rescue {}) || {}  if rout.empty? && request_path_info == '/mega-bar' #yeah, a special case for this one.
     rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', '') rescue {}) || {}  if rout.empty?
     rout[:action] = get_action(rout[:action], env['REQUEST_METHOD'], )
     rout

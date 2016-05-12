@@ -41,8 +41,8 @@ class MegaRoute
           # puts "new block: " + block.id.to_s
           # puts "path: " + path
           if block.html?
-            # p = block.path_base? ? block.path_base : pg.path
-            # routes << {path: p, method: 'get', controller: 'flats', action: 'index', as: 'flats_' + block.id.to_s}
+            p = block.path_base? ? block.path_base : pg.path
+            routes << {path: p, method: 'get', controller: 'flats', action: 'index', as: 'flats_' + block.id.to_s}
             # puts 'block html path. ' + p.to_s
           else
             if MegaBar::ModelDisplay.by_block(block.id).size > 0
@@ -72,7 +72,7 @@ class MegaRoute
                   as = 'edit_' + path
                 else
                   pf = p.to_s + "/" + md.action.to_s
-                  puts 'custom action: ' + pf
+                  # puts 'custom action: ' + pf
                   # db should track whether custom model_display actions are on member or collection and if they have a special 'as' or anything.
                 end
                 route = {path: pf, method: 'get', action: md.action, controller: controller}

@@ -15,8 +15,9 @@ module MegaBar
     end
 
     def add_route
-      # this now just adds it to the spec_helper.
       return if ENV['RAILS_ENV'] == 'test'
+      Rails.application.reload_routes! 
+      # this now just adds it to the spec_helper.
       gem_path = ''
       line = '  ##### MEGABAR END'
       text = File.read('spec/spec_helper.rb')
