@@ -3,6 +3,7 @@ module MegaBar
     extend ActiveSupport::Concern
 
     def index
+byebug
       records = @mega_class.where(@conditions).where(@conditions_array).order(column_sorting)
       instance_variable_set("@" + env[:mega_env][:kontroller_inst].pluralize,  records)
       @mega_instance ||= instance_variable_get("@" + env[:mega_env][:kontroller_inst].pluralize);
@@ -111,7 +112,7 @@ module MegaBar
       # nested as in nested resource routes.
       nested_instance_variables = []
       nested_class_infos.each_with_index do |info, idx|
-        puts 'make a instance var!'
+        # puts 'make a instance var!'
         if @nested_ids[idx]
           instance_variable_set("@" + info[1], info[0].constantize.find(@nested_ids[idx].map{|k,v|v}).first)
           nested_instance_variables << instance_variable_get("@" + info[1])
