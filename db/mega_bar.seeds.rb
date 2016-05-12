@@ -161,7 +161,8 @@ MegaBar::TmpPage.create!([
   {id: 14, name: "Page-Layouts-Blocks Page", path: "/mega-bar/pages/:page_id/layouts/:layout_id/blocks", created_at: "2015-02-25 03:32:02", updated_at: "2015-02-25 03:32:02"},
   {id: 15, name: "Page-Layouts-Blocks-Displays Page", path: "/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/model_displays", created_at: "2015-02-25 03:32:02", updated_at: "2015-03-24 00:52:23"},
   {id: 16, name: "Page-Layouts-Blocks-Displays-Fields Page", path: "/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/model_displays/:model_display_id/field_displays", created_at: "2015-02-25 03:32:02", updated_at: "2015-03-24 00:54:49"},
-  {id: 17, name: "Page-Layouts-Blocks-Displays-Fields-Data Page", path: "/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/displays/:model_display_id/field-displays/:field_display_id/data-displays", created_at: "2015-02-25 03:32:02", updated_at: "2015-02-25 03:32:02"}
+  {id: 17, name: "Page-Layouts-Blocks-Displays-Fields-Data Page", path: "/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/displays/:model_display_id/field-displays/:field_display_id/data-displays", created_at: "2015-02-25 03:32:02", updated_at: "2015-02-25 03:32:02"},
+  {id: 18, name: "Site customizer's home page", path: "/", created_at: "2016-05-12 16:14:33", updated_at: "2016-05-12 16:14:33"}
 ])
 MegaBar::TmpLayout.create!([
   {id: 1, page_id: 1, name: "Models Layout", created_at: "2015-02-18 05:20:21", updated_at: "2015-02-18 05:20:21"},
@@ -182,7 +183,8 @@ MegaBar::TmpLayout.create!([
   {id: 16, page_id: 1, name: "Just a faker layout", created_at: "2015-03-01 20:06:52", updated_at: "2015-03-01 20:06:52"},
   {id: 17, page_id: 14, name: "fun layout", created_at: "2015-03-02 02:11:36", updated_at: "2015-03-02 02:11:36"},
   {id: 18, page_id: 14, name: "another fun layout", created_at: "2015-03-02 02:14:08", updated_at: "2015-03-02 02:14:08"},
-  {id: 19, page_id: 14, name: "another fun layout 2", created_at: "2015-03-02 02:20:06", updated_at: "2015-03-02 02:20:06"}
+  {id: 19, page_id: 14, name: "another fun layout 2", created_at: "2015-03-02 02:20:06", updated_at: "2015-03-02 02:20:06"},
+  {id: 20, page_id: 18, name: "What is a base name? Layout", created_at: "2016-05-12 16:14:34", updated_at: "2016-05-12 16:14:34"}
 ])
 MegaBar::TmpBlock.create!([
   {id: 1, layout_id: 1, model_id: 1, name: "Models on Models Layout boo", actions: "current", html: "", nest_level_1: nil, nest_level_2: nil, path_base: "", created_at: "2015-02-18 05:20:43", updated_at: "2015-03-02 00:14:20", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
@@ -221,7 +223,8 @@ MegaBar::TmpBlock.create!([
   {id: 42, layout_id: 18, model_id: nil, name: " on another fun layout Block", actions: "sine", html: "with a fun block", nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2015-03-02 02:14:08", updated_at: "2015-03-02 02:14:08", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 43, layout_id: 19, model_id: nil, name: " on another fun layout 2 Block", actions: "sine", html: "with a fun block 2", nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2015-03-02 02:20:06", updated_at: "2015-03-02 02:20:06", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 50, layout_id: 14, model_id: nil, name: "Model Displays on Page-Layouts-Block layout", actions: "show", html: "", nest_level_1: 21, nest_level_2: 20, path_base: "/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/displays", created_at: "2015-03-20 20:19:32", updated_at: "2015-03-20 20:19:32", nest_level_3: 18, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
-  {id: 51, layout_id: 15, model_id: nil, name: "Field Displays on Page-Layouts-Blocks-Displays layout", actions: "show", html: "", nest_level_1: 3, nest_level_2: 21, path_base: "/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/model_displays/:model_display_id/field_displays", created_at: "2015-03-24 00:10:30", updated_at: "2015-03-24 00:45:48", nest_level_3: 20, nest_level_4: 18, nest_level_5: nil, nest_level_6: nil}
+  {id: 51, layout_id: 15, model_id: nil, name: "Field Displays on Page-Layouts-Blocks-Displays layout", actions: "show", html: "", nest_level_1: 3, nest_level_2: 21, path_base: "/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/model_displays/:model_display_id/field_displays", created_at: "2015-03-24 00:10:30", updated_at: "2015-03-24 00:45:48", nest_level_3: 20, nest_level_4: 18, nest_level_5: nil, nest_level_6: nil},
+  {id: 52, layout_id: 20, model_id: nil, name: "What is a base name? on What is a base name? Layout Block", actions: "current", html: "This is supposed to be whatever is in the \"block_text\" field", nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2016-05-12 16:14:34", updated_at: "2016-05-12 16:14:34", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil}
 ])
 MegaBar::TmpModelDisplay.create!([
   {id: 1, block_id: 1, model_id: 1, format: "1", action: "index", header: "Models", created_at: "2014-05-05 19:13:32", updated_at: "2015-12-09 20:26:19", collection_or_member: "collection"},
