@@ -61,7 +61,6 @@ namespace :mega_bar do
     #   and probably add a resolver function.
     puts "Loading Route Information..." if args[:model_set] == 'routes'
 
-
     mega_classes = get_mega_classes
     route_classes = [MegaBar::Page, MegaBar::Layout, MegaBar::Block, MegaBar::ModelDisplay, MegaBar::Model]
     mega_classes.delete_if { |x| not route_classes.include? x[:perm_class] } if args[:model_set] == 'routes'
@@ -88,9 +87,6 @@ namespace :mega_bar do
       end
     end
     # start conflict resolution
-    all_conflicts.each do |c|
-      method(c[:mc][:resolver]).call(c)
-    end
     # start loading tmp table data into real tables.
     MegaBar::Block.skip_callback(       'save',   :after, :make_model_displays)
     MegaBar::Field.skip_callback(       'create', :after, :make_migration)
@@ -105,6 +101,9 @@ namespace :mega_bar do
     MegaBar::Page.skip_callback(        'create', :after, :create_layout_for_page)
     MegaBar::Layout.skip_callback(      'create', :after, :create_block_for_layout)
 
+    all_conflicts.each do |c|
+      method(c[:mc][:resolver]).call(c)
+    end
     mega_classes.each do |mc|
       mc[:tmp_class].all.each do |tmp|
         # puts tmp.inspect #good debug point!
