@@ -3,8 +3,7 @@ module MegaBar
     include MegaBarConcern
 
     def index
-      admin_models = [21,20,18,17,15,14,7,6,4,3,2,1]
-      @mega_instance ||= Model.where(['id not in (?)', admin_models ]).order(column_sorting)
+      @mega_instance ||= Model.where.not(modyule: 'MegaBar').order(column_sorting)
       super.index
     end
     def all

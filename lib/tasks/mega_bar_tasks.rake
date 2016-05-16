@@ -79,7 +79,11 @@ namespace :mega_bar do
     # start conflict detection
     mega_classes.each do |mc|
       mc[:tmp_class].all.each do |tmp|
+        dupe_hash = {}
+        mc[:unique].each  { |u| dupe_hash[mc[:unique][0]] =  tmp[mc[:unique][0]] }
+        next if mc[:perm_class].where(dupe_hash) 
         perm = mc[:perm_class].find_by_id(tmp.id)
+        byebug if mc[:perm_class] == MegaBar::Page and tmp.id == 18
         next unless perm.present?
         unless eval(mc[:condition])
           all_conflicts << {tmp: tmp, perm: perm, mc: mc}
@@ -101,12 +105,15 @@ namespace :mega_bar do
     MegaBar::Page.skip_callback(        'create', :after, :create_layout_for_page)
     MegaBar::Layout.skip_callback(      'create', :after, :create_block_for_layout)
 
+    byebug
     all_conflicts.each do |c|
+      byebug
+      c[:tmp] = c[:mc][:tmp_class].find(c[:tmp][:id])
       method(c[:mc][:resolver]).call(c)
     end
     mega_classes.each do |mc|
       mc[:tmp_class].all.each do |tmp|
-        # puts tmp.inspect #good debug point!
+        puts tmp.inspect #good debug point!
         perm = mc[:perm_class].find_or_initialize_by(id: tmp.id)
         tmp.attributes.each do |attr|
           perm[attr[0].to_sym] = attr[1] unless attr[0] == 'id'
@@ -139,6 +146,7 @@ namespace :mega_bar do
   end
 
   def make_new_perm(c)
+byebug
     new_obj = c[:perm].class.new
     c[:tmp].attributes.each { |attr| new_obj[attr[0].to_sym] = attr[1] unless attr[0] == 'id' }
     new_obj.id = higher_plus_one(c[:tmp].class.maximum(:id), c[:perm].class.maximum(:id))
@@ -147,8 +155,9 @@ namespace :mega_bar do
     return new_obj
   end
   def fix_model(c)
+byebug
     new_obj = make_new_perm(c)
-    puts 'Incoming model ' + c[:tmp].id + ' with class ' + c[:tmp].classname + ' had to be issued a new id ' + new_obj.id + '.'
+    puts 'Incoming model ' + c[:tmp].id.to_s + ' with class ' + c[:tmp].classname + ' had to be issued a new id ' + new_obj.id.to_s + '.'
     ##### FIELDS
     MegaBar::TmpModelDisplay.where(model_id: c[:tmp].id).update_all(model_id: new_obj.id)
     MegaBar::TmpField.where(model_id: c[:tmp].id).each { |f| f.update(model_id: new_obj.id) }
@@ -172,12 +181,17 @@ namespace :mega_bar do
   end
 
   def fix_pages(c)
-    new_obj = make_new_perm(c)
-    MegaBar::Layout.where(page_id: c[:tmp].id).update_all(page_id: new_obj.id)
+#     already_exists = MegaBar::Page.where(path: c[:tmp]['path'])
+byebug
+#     unless already_exists
+      new_obj = make_new_perm(c)
+      MegaBar::TmpLayout.where(page_id: c[:tmp].id).update_all(page_id: new_obj.id)
+    # end
   end
 
   def fix_layouts(c)
      new_obj = make_new_perm(c)
+byebug
      MegaBar::TmpBlock.where(layout_id: c[:tmp].id).update_all(layout_id: new_obj.id)
   end
 
@@ -233,15 +247,16 @@ namespace :mega_bar do
 
 
   task :dump_seeds => :environment do
-    mega_bar_model_ids = [1,2,3,4,6,7,14,15,17,18,20,21]
-    mega_bar_classes = MegaBar::Model.where(id: mega_bar_model_ids).pluck(:classname)
+    # mega_bar_model_ids = [1,2,3,4,6,7,14,15,17,18,20,21]
+    mega_bar_model_ids = MegaBar::Model.where(modyule: 'MegaBar').pluck(:id)
     mega_bar_fields =  MegaBar::Field.where(model_id: mega_bar_model_ids).pluck(:id)
     SeedDump.dump(MegaBar::Model.where(id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [])
     SeedDump.dump(MegaBar::Field.where(model_id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Option.where(field_id: mega_bar_fields), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::ModelDisplayFormat, file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
-    mega_bar_page_ids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+    # mega_bar_page_ids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+    mega_bar_page_ids = MegaBar::Page.where(mega_page: 'mega')
     # mega_bar_pages = MegaBar::Page.where(id: mega_bar_page_ids).pluck(:id, :path)
     mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).pluck(:id)
     mega_bar_block_ids = MegaBar::Block.where(layout_id: mega_bar_layout_ids).pluck(:id)
