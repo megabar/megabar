@@ -1,4 +1,4 @@
-MegaBar::TmpModel.create!([
+MegaBar::TmpModel.create([
   {id: 1, modyule: "MegaBar", classname: "Model", schema: "sqlite", tablename: "mega_bar_models", name: "Model Test", default_sort_field: "id", created_at: "2014-05-05 17:27:28", updated_at: "2015-12-09 21:07:41", mega_model: "mega"},
   {id: 2, modyule: "MegaBar", classname: "Field", schema: "sqliter", tablename: "mega_bar_fields", name: "Fields", default_sort_field: "id", created_at: "2014-05-05 17:28:21", updated_at: "2015-02-18 21:06:04", mega_model: "mega"},
   {id: 3, modyule: "MegaBar", classname: "ModelDisplay", schema: "sqlite", tablename: "mega_bar_model_displays", name: "Model Displays", default_sort_field: "model_id", created_at: "2014-05-05 18:12:24", updated_at: "2015-02-06 23:56:18", mega_model: "mega"},
@@ -12,7 +12,7 @@ MegaBar::TmpModel.create!([
   {id: 20, modyule: "MegaBar", classname: "Layout", schema: "sqlite", tablename: "mega_bar_layouts", name: "Layouts", default_sort_field: "id", created_at: "2015-02-18 03:10:38", updated_at: "2015-02-18 03:10:38", mega_model: "mega"},
   {id: 21, modyule: "MegaBar", classname: "Block", schema: "sqlite", tablename: "mega_bar_blocks", name: "Blocks", default_sort_field: "id", created_at: "2015-02-18 03:47:38", updated_at: "2015-02-18 03:47:38", mega_model: "mega"}
 ])
-MegaBar::TmpField.create!([
+MegaBar::TmpField.create([
   {id: 1, model_id: 1, schema: "sqlite", tablename: "mega_bar_models", field: "id", data_type: nil, accessor: "", default_value: "", default_data_format: "off", default_data_format_edit: "textread", created_at: "2014-05-05 17:31:12", updated_at: "2015-02-08 07:32:31"},
   {id: 2, model_id: 1, schema: "sqlite", tablename: "mega_bar_models", field: "classname", data_type: nil, accessor: "", default_value: "", default_data_format: "textbox", default_data_format_edit: "textread", created_at: "2014-05-05 17:35:44", updated_at: "2015-02-08 07:32:43"},
   {id: 3, model_id: 1, schema: "sqlite", tablename: "mega_bar_models", field: "schema", data_type: nil, accessor: "", default_value: "sqlite", default_data_format: "textbox", default_data_format_edit: "textbox", created_at: "2014-05-05 17:39:45", updated_at: "2015-02-08 07:32:51"},
@@ -108,7 +108,7 @@ MegaBar::TmpField.create!([
   {id: 124, model_id: 18, schema: "sqlite", tablename: "mega_bar_pages", field: "mega_page", data_type: "string", accessor: "", default_value: "", default_data_format: "select", default_data_format_edit: "select", created_at: "2016-05-14 17:02:55", updated_at: "2016-05-14 17:02:55"},
   {id: 125, model_id: 1, schema: "sqlite", tablename: "mega_bar_models", field: "mega_model", data_type: "string", accessor: "", default_value: "", default_data_format: "select", default_data_format_edit: "select", created_at: "2016-05-14 17:14:56", updated_at: "2016-05-14 17:14:56"}
 ])
-MegaBar::TmpOption.create!([
+MegaBar::TmpOption.create([
   {id: 3, field_id: 19, text: "Textbox", value: "textbox", created_at: "2015-02-12 05:14:39", updated_at: "2015-02-12 05:14:39"},
   {id: 4, field_id: 19, text: "Read Only", value: "textread", created_at: "2015-02-12 05:14:56", updated_at: "2015-02-12 05:14:56"},
   {id: 5, field_id: 19, text: "Select", value: "select", created_at: "2015-02-12 05:15:11", updated_at: "2015-02-12 05:15:11"},
@@ -146,11 +146,11 @@ MegaBar::TmpOption.create!([
   {id: 42, field_id: 125, text: "Core Mega Bar Model", value: "mega", created_at: "2016-05-14 17:17:13", updated_at: "2016-05-14 17:17:13"},
   {id: 43, field_id: 125, text: "Regular Model", value: "regular", created_at: "2016-05-14 17:18:28", updated_at: "2016-05-14 17:18:28"}
 ])
-MegaBar::TmpModelDisplayFormat.create!([
+MegaBar::TmpModelDisplayFormat.create([
   {id: 1, name: "GridHtml", app_wrapper: "<table>", app_wrapper_end: "</table>", field_header_wrapper: "<th>", field_header_wrapper_end: "</th>", record_wrapper: "<tr>", record_wrapper_end: "</tr>", field_wrapper: "<td>", field_wrapper_end: "</td>", separate_header_row: "true", created_at: "2015-02-08 18:52:01", updated_at: "2015-02-10 00:38:59"},
   {id: 2, name: "ProfileTable", app_wrapper: "<table>", app_wrapper_end: "</table>", field_header_wrapper: "<th>", field_header_wrapper_end: "</th>", record_wrapper: "<tr>", record_wrapper_end: "</tr>", field_wrapper: "<td>", field_wrapper_end: "<td>", separate_header_row: "false", created_at: "2015-02-08 18:53:29", updated_at: "2015-02-10 00:38:18"}
 ])
-MegaBar::TmpPage.create!([
+MegaBar::TmpPage.create([
   {id: 1, name: "Models Page", path: "/mega-bar/models", created_at: "2015-02-18 05:17:46", updated_at: "2015-02-23 00:21:55", mega_page: "mega"},
   {id: 2, name: "Fields Page", path: "/mega-bar/fields", created_at: "2015-02-25 03:32:02", updated_at: "2015-03-02 00:59:15", mega_page: "mega"},
   {id: 3, name: "Model Displays Page Wu107", path: "/mega-bar/model_displays", created_at: "2015-02-25 03:32:02", updated_at: "2015-02-21 23:03:46", mega_page: "mega"},
@@ -170,7 +170,7 @@ MegaBar::TmpPage.create!([
   {id: 17, name: "Page-Layouts-Blocks-Displays-Fields-Data Page", path: "/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/displays/:model_display_id/field-displays/:field_display_id/data-displays", created_at: "2015-02-25 03:32:02", updated_at: "2015-02-25 03:32:02", mega_page: "mega"},
   {id: 18, name: "Site customizer's home page", path: "/", created_at: "2016-05-12 16:14:33", updated_at: "2016-05-12 16:14:33", mega_page: "mega"}
 ])
-MegaBar::TmpLayout.create!([
+MegaBar::TmpLayout.create([
   {id: 1, page_id: 1, name: "Models Layout", created_at: "2015-02-18 05:20:21", updated_at: "2015-02-18 05:20:21"},
   {id: 2, page_id: 2, name: "Fields Layout", created_at: "2015-02-25 03:32:02", updated_at: "2015-02-25 03:32:02"},
   {id: 3, page_id: 3, name: "Model Displays Layout", created_at: "2015-02-25 03:32:02", updated_at: "2015-02-25 03:32:02"},
@@ -192,7 +192,7 @@ MegaBar::TmpLayout.create!([
   {id: 19, page_id: 14, name: "another fun layout 2", created_at: "2015-03-02 02:20:06", updated_at: "2015-03-02 02:20:06"},
   {id: 20, page_id: 18, name: "What is a base name? Layout", created_at: "2016-05-12 16:14:34", updated_at: "2016-05-12 16:14:34"}
 ])
-MegaBar::TmpBlock.create!([
+MegaBar::TmpBlock.create([
   {id: 1, layout_id: 1, model_id: 1, name: "Models on Models Layout boo", actions: "current", html: "", nest_level_1: nil, nest_level_2: nil, path_base: "", created_at: "2015-02-18 05:20:43", updated_at: "2015-03-02 00:14:20", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 4, layout_id: 2, model_id: nil, name: "Fields on Fields", actions: "current", html: nil, nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2015-02-25 03:32:02", updated_at: "2015-02-25 03:32:02", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 5, layout_id: 3, model_id: nil, name: "Model_Displays on Model_Displays", actions: "current", html: nil, nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2015-02-25 03:32:02", updated_at: "2015-02-25 03:32:02", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
@@ -232,7 +232,7 @@ MegaBar::TmpBlock.create!([
   {id: 51, layout_id: 15, model_id: nil, name: "Field Displays on Page-Layouts-Blocks-Displays layout", actions: "show", html: "", nest_level_1: 3, nest_level_2: 21, path_base: "/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/model_displays/:model_display_id/field_displays", created_at: "2015-03-24 00:10:30", updated_at: "2015-03-24 00:45:48", nest_level_3: 20, nest_level_4: 18, nest_level_5: nil, nest_level_6: nil},
   {id: 52, layout_id: 20, model_id: nil, name: "What is a base name? on What is a base name? Layout Block", actions: "current", html: "This is supposed to be whatever is in the \"block_text\" field", nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2016-05-12 16:14:34", updated_at: "2016-05-12 16:14:34", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil}
 ])
-MegaBar::TmpModelDisplay.create!([
+MegaBar::TmpModelDisplay.create([
   {id: 1, block_id: 1, model_id: 1, format: "1", action: "index", header: "Models", created_at: "2014-05-05 19:13:32", updated_at: "2015-12-09 20:26:19", collection_or_member: "collection"},
   {id: 2, block_id: 4, model_id: 2, format: "1", action: "index", header: "Fields", created_at: "2014-05-05 19:18:36", updated_at: "2014-05-21 23:10:49", collection_or_member: nil},
   {id: 3, block_id: 5, model_id: 3, format: "1", action: "index", header: "Model Displays (model 3)", created_at: "2014-05-05 19:38:56", updated_at: "2015-02-20 06:17:02", collection_or_member: nil},
@@ -315,7 +315,10 @@ MegaBar::TmpModelDisplay.create!([
   {id: 180, block_id: 11, model_id: 18, format: "1", action: "all", header: "Page List", created_at: "2015-04-23 19:28:47", updated_at: "2015-12-08 03:40:23", collection_or_member: "collection"},
   {id: 181, block_id: 1, model_id: 1, format: "1", action: "all", header: "All Models", created_at: "2015-12-08 03:59:42", updated_at: "2015-12-08 03:59:42", collection_or_member: "collection"}
 ])
-MegaBar::TmpFieldDisplay.create!([
+MegaBar::TmpModelDisplay.update_all(series: 1)
+MegaBar::TmpModelDisplay.find(51).update(series: 2)
+
+MegaBar::TmpFieldDisplay.create([
   {id: 2, model_display_id: 1, field_id: 5, format: "textread", action: "index", header: "Model Name", link_type: nil, created_at: "2014-05-05 20:04:39", updated_at: "2015-02-08 08:23:30"},
   {id: 3, model_display_id: 6, field_id: 4, format: "textread", action: "edit", header: "The Table Name", link_type: nil, created_at: "2014-05-08 19:38:36", updated_at: "2015-02-08 02:04:12"},
   {id: 4, model_display_id: 6, field_id: 1, format: "textread", action: "edit", header: "the id (readonly)", link_type: nil, created_at: "2014-05-08 19:52:46", updated_at: "2015-01-21 18:57:05"},
@@ -877,7 +880,7 @@ MegaBar::TmpFieldDisplay.create!([
   {id: 892, model_display_id: 8, field_id: 125, format: "select", action: nil, header: "Mega model", link_type: nil, created_at: "2016-05-14 17:15:01", updated_at: "2016-05-14 17:15:01"},
   {id: 893, model_display_id: 51, field_id: 125, format: "select", action: nil, header: "Mega model", link_type: nil, created_at: "2016-05-14 17:15:01", updated_at: "2016-05-14 17:15:01"}
 ])
-MegaBar::TmpSelect.create!([
+MegaBar::TmpSelect.create([
   {id: 1, field_display_id: 15, created_at: "2015-02-13 01:16:05", updated_at: "2015-02-13 01:16:05"},
   {id: 2, field_display_id: 33, created_at: "2015-02-12 05:14:08", updated_at: "2015-02-12 05:14:08"},
   {id: 3, field_display_id: 34, created_at: "2015-02-12 05:15:51", updated_at: "2015-02-12 05:15:51"},
@@ -964,7 +967,7 @@ MegaBar::TmpSelect.create!([
   {id: 87, field_display_id: 892, created_at: "2016-05-14 17:15:01", updated_at: "2016-05-14 17:15:01"},
   {id: 88, field_display_id: 893, created_at: "2016-05-14 17:15:01", updated_at: "2016-05-14 17:15:01"}
 ])
-MegaBar::TmpTextbox.create!([
+MegaBar::TmpTextbox.create([
   {id: 1, field_display_id: 5, size: 42, created_at: "2015-02-25 03:32:05", updated_at: "2015-02-25 03:32:05"},
   {id: 2, field_display_id: 7, size: 42, created_at: "2015-02-25 03:32:05", updated_at: "2015-02-25 03:32:05"},
   {id: 3, field_display_id: 9, size: 42, created_at: "2015-02-25 03:32:05", updated_at: "2015-02-25 03:32:05"},
@@ -1208,7 +1211,7 @@ MegaBar::TmpTextbox.create!([
   {id: 714, field_display_id: 882, size: 42, created_at: "2015-12-09 20:33:23", updated_at: "2015-12-09 20:33:23"},
   {id: 715, field_display_id: 884, size: 42, created_at: "2015-12-09 20:33:23", updated_at: "2015-12-09 20:33:23"}
 ])
-MegaBar::TmpTextread.create!([
+MegaBar::TmpTextread.create([
   {id: 1, field_display_id: 2, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-02-25 03:32:05", updated_at: "2015-02-25 03:32:05"},
   {id: 2, field_display_id: 3, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-02-25 03:32:05", updated_at: "2015-02-25 03:32:05"},
   {id: 3, field_display_id: 4, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-02-25 03:32:05", updated_at: "2015-02-25 03:32:05"},

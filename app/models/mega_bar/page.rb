@@ -6,6 +6,7 @@ module MegaBar
     after_create :create_layout_for_page
     after_create :add_route
     validates_presence_of :path, :name
+    validates_uniqueness_of :path
 
     def create_layout_for_page
       base_name = (self.base_name.nil? || self.base_name.empty?) ? self.name : self.base_name

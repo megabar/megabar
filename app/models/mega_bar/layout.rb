@@ -5,7 +5,7 @@ module MegaBar
     belongs_to :page
     has_many :blocks, dependent: :destroy
     scope :by_page, ->(page_id) { where(page_id: page_id) if page_id.present? }
-    validates_uniqueness_of :name
+    validates_uniqueness_of :name, scope: :page_id,  message: "dupe layout name for this page"
     validates_presence_of :page_id
 
 
