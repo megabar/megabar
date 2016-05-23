@@ -11,6 +11,7 @@ module MegaBar
     validate      :table_exists, on: :create unless Rails.env.test?
     validates_format_of :tablename, on: [:create, :update], :multiline => true, allow_nil: false, with: /[a-z]+/, message: 'no caps'
     validates_presence_of :model_id, :tablename, :field, :default_data_format, :default_data_format_edit
+    validates_uniqueness_of :field, scope: :model_id,  message: "dupe field for this model"
 
     private
 

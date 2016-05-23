@@ -10,6 +10,7 @@ module MegaBar
     scope :by_fields, ->(fields) { where(field_id: fields) }
     scope :by_action, ->(action) { where(action: action) }
     scope :by_model_display_id, ->(model_display_id) { where(model_display_id: model_display_id) }
+    validates_uniqueness_of :field_id, scope: :model_display_id
 
     def make_data_display
       return if self.format.to_s == 'off'

@@ -75,19 +75,7 @@ namespace :mega_bar do
     end
     file = args[:file] || "../../db/mega_bar.seeds.rb"
     require_relative file #LOADS SEEDS INTO TMP TABLES
-    # done resetting tmp tables.
-    # start conflict detection
-    mega_classes.each do |mc|
-      mc[:tmp_class].all.each do |tmp|
-        perm = mc[:perm_class].find_by_id(tmp.id)
-        next unless perm.present?
-        unless eval(mc[:condition])
-          all_conflicts << {tmp: tmp, perm: perm, mc: mc}
-        end
-      end
-    end
     # start conflict resolution
-    # start loading tmp table data into real tables.
     MegaBar::Block.skip_callback(       'save',   :after, :make_model_displays)
     MegaBar::Field.skip_callback(       'create', :after, :make_migration)
     MegaBar::Field.skip_callback(       'save',   :after, :make_field_displays)
@@ -100,21 +88,34 @@ namespace :mega_bar do
     MegaBar::ModelDisplay.skip_callback('save',   :after, :make_field_displays)
     MegaBar::Page.skip_callback(        'create', :after, :create_layout_for_page)
     MegaBar::Layout.skip_callback(      'create', :after, :create_block_for_layout)
+    # start conflict detection
+    @@prex_all = []
 
-    all_conflicts.each do |c|
-      method(c[:mc][:resolver]).call(c)
-    end
     mega_classes.each do |mc|
       mc[:tmp_class].all.each do |tmp|
-        # puts tmp.inspect #good debug point!
-        perm = mc[:perm_class].find_or_initialize_by(id: tmp.id)
-        tmp.attributes.each do |attr|
-          perm[attr[0].to_sym] = attr[1] unless attr[0] == 'id'
+        # byebug if MegaBar::TmpModelDisplay == mc[:tmp_class]
+        dupe_hash = {}
+        tmp.reload
+        mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] } 
+        obj = mc[:perm_class].find_or_initialize_by(dupe_hash)
+        attributes = tmp.attributes.select { |attr, value|  mc[:tmp_class].column_names.include?(attr.to_s) }
+        attributes.delete("id")
+        obj.assign_attributes(attributes)
+        
+        obj.save
+        if obj.id != tmp.id 
+          # update tmplayouts set page_id to bob.id
+          c = {tmp: tmp, perm: obj, mc: mc}
+          # puts "there was a lil thing. "
+          # puts c.inspect
+          # puts "---------------------------------"
+          @@prex_all << method(mc[:resolver]).call(c)
         end
-        perm.save # written 141231
+        
       end
-      puts 'loaded ' + mc[:perm_class].to_s
+      puts 'finished ' + mc[:perm_class].to_s 
     end
+
     MegaBar::Block.set_callback(       'save',   :after, :make_model_displays)
     MegaBar::Field.set_callback(       'create', :after, :make_migration)
     MegaBar::Field.set_callback(       'save',   :after, :make_field_displays)
@@ -138,75 +139,75 @@ namespace :mega_bar do
     c = a >= b ? a+1 : b+1
   end
 
-  def make_new_perm(c)
-    new_obj = c[:perm].class.new
-    c[:tmp].attributes.each { |attr| new_obj[attr[0].to_sym] = attr[1] unless attr[0] == 'id' }
-    new_obj.id = higher_plus_one(c[:tmp].class.maximum(:id), c[:perm].class.maximum(:id))
-    new_obj.save # now we have a new model record in the real db
-    c[:tmp].class.find(c[:tmp].id).update(id: new_obj.id) # so take the tmp one. #and give it the new one's id.
-    return new_obj
-  end
+  
   def fix_model(c)
-    new_obj = make_new_perm(c)
-    puts 'Incoming model ' + c[:tmp].id + ' with class ' + c[:tmp].classname + ' had to be issued a new id ' + new_obj.id + '.'
+    # puts 'Incoming model ' + c[:tmp].id.to_s + ' with class ' + c[:tmp].classname + ' had to be issued a new id ' + c[:perm].id.to_s + '.'
     ##### FIELDS
-    MegaBar::TmpModelDisplay.where(model_id: c[:tmp].id).update_all(model_id: new_obj.id)
-    MegaBar::TmpField.where(model_id: c[:tmp].id).each { |f| f.update(model_id: new_obj.id) }
-    MegaBar::TmpBlock.where(nest_level_1: c[:tmp].id).each { |f| f.update(nest_level_1: new_obj.id) }
-    MegaBar::TmpBlock.where(nest_level_2: c[:tmp].id).each { |f| f.update(nest_level_2: new_obj.id) }
+   
+    MegaBar::TmpModelDisplay.where(model_id: c[:tmp].id).update_all(model_id: c[:perm].id)
+    MegaBar::TmpField.where(model_id: c[:tmp].id).each { |f| f.update(model_id: c[:perm].id) }
+    MegaBar::TmpBlock.where(nest_level_1: c[:tmp].id).each { |f| f.update(nest_level_1: c[:perm].id) }
+    MegaBar::TmpBlock.where(nest_level_2: c[:tmp].id).each { |f| f.update(nest_level_2: c[:perm].id) }
+    MegaBar::TmpBlock.where(nest_level_3: c[:tmp].id).each { |f| f.update(nest_level_3: c[:perm].id) }
+    MegaBar::TmpBlock.where(nest_level_4: c[:tmp].id).each { |f| f.update(nest_level_4: c[:perm].id) }
+    MegaBar::TmpBlock.where(nest_level_5: c[:tmp].id).each { |f| f.update(nest_level_5: c[:perm].id) }
+    MegaBar::TmpBlock.where(nest_level_6: c[:tmp].id).each { |f| f.update(nest_level_6: c[:perm].id) }
   end
   # end of model stuff
 
   def fix_fields(c)
-    new_obj = make_new_perm(c)
-    MegaBar::TmpFieldDisplay.where(field_id: c[:tmp].id).update_all(field_id: new_obj.id)
-    MegaBar::TmpOption.where(field_id: c[:tmp].id).update_all(field_id: new_obj.id)
+    MegaBar::TmpFieldDisplay.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
+    MegaBar::TmpOption.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
   end
 
   def fix_model_display_format(c)
-    new_obj = make_new_perm(c)
   end
 
   def fix_options(c)
-    new_obj = make_new_perm(c)
   end
 
   def fix_pages(c)
-    new_obj = make_new_perm(c)
-    MegaBar::Layout.where(page_id: c[:tmp].id).update_all(page_id: new_obj.id)
+    MegaBar::TmpLayout.where(page_id: c[:tmp].id).update_all(page_id: c[:perm].id)
   end
 
   def fix_layouts(c)
-     new_obj = make_new_perm(c)
-     MegaBar::TmpBlock.where(layout_id: c[:tmp].id).update_all(layout_id: new_obj.id)
+    MegaBar::TmpBlock.where(layout_id: c[:tmp].id).update_all(layout_id: c[:perm].id)
   end
 
   def fix_blocks(c)
-     new_obj = make_new_perm(c)
-     MegaBar::TmpModelDisplay.where(block_id: c[:tmp].id).update_all(block_id: new_obj.id)
+    # byebug if MegaBar::TmpModelDisplay(c[:tmp].header == 'Edit Part 2'
+    MegaBar::TmpModelDisplay.where(block_id: c[:tmp].id).update_all(block_id: c[:perm].id)
   end
 
   def fix_model_displays(c)
-    new_obj = make_new_perm(c)
-    MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id).update_all(model_display_id: new_obj.id)
+#     pprex = {}
+# #     pprex[c[:tmp].class.to_s] = {c[:perm].id => MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id)}
+# # byebug if pprex.present?
+#     if !MegaBar::TmpFieldDisplay.where(model_display_id: c[:perm].id).blank?
+#       pprex[c[:tmp].class.to_s] = {c[:tmp].id => MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id)}
+#       # MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id).delete_all
+#     end
+    MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id).update_all(model_display_id: c[:perm].id)
+    # pprex
   end
 
-  def fix_field_displays(cc)
-    #leave blank
+  def fix_field_displays(c)
+    MegaBar::TmpTextbox.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    MegaBar::TmpTextread.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    MegaBar::TmpSelect.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
   end
 
   def fix_display_class(c)
-    new_obj = make_new_perm(c)
-    # update_data_displays_with_new_field_display_id(c[:tmp].id, new_obj.id)
-    MegaBar::TmpTextbox.where(field_display_id: c[:tmp].id).each do |tb|
-      tb.update(field_display_id: new_obj.id)
-    end
-    MegaBar::TmpTextread.where(field_display_id: c[:tmp].id).each do |tb|
-      tb.update(field_display_id: new_obj.id)
-    end
-    MegaBar::TmpSelect.where(field_display_id: c[:tmp].id).each do |tb|
-      tb.update(field_display_id: new_obj.id)
-    end
+    # # update_data_displays_with_new_field_display_id(c[:tmp].id, c[:perm].id)
+    # MegaBar::TmpTextbox.where(field_display_id: c[:tmp].id).each do |tb|
+    #   tb.update(field_display_id: c[:perm].id)
+    # end
+    # MegaBar::TmpTextread.where(field_display_id: c[:tmp].id).each do |tb|
+    #   tb.update(field_display_id: c[:perm].id)
+    # end
+    # MegaBar::TmpSelect.where(field_display_id: c[:tmp].id).each do |tb|
+    #   tb.update(field_display_id: c[:perm].id)
+    # end
   end
 
 
@@ -219,8 +220,8 @@ namespace :mega_bar do
     mega_classes << {id: 18, tmp_class: MegaBar::TmpPage, perm_class: MegaBar::Page, unique: [:path], resolver: 'fix_pages', condition: 'tmp.path == perm.path'}
     mega_classes << {id: 20, tmp_class: MegaBar::TmpLayout, perm_class: MegaBar::Layout, unique: [:page_id, :name], resolver: 'fix_layouts', condition: 'tmp.page_id == perm.page_id && tmp.name == perm.name'}
     mega_classes << {id: 21, tmp_class: MegaBar::TmpBlock, perm_class: MegaBar::Block, unique: [:layout_id, :name], resolver: 'fix_blocks', condition: 'tmp.layout_id == perm.layout_id && tmp.name == perm.name'}
-    mega_classes << {id: 3, tmp_class: MegaBar::TmpModelDisplay, perm_class: MegaBar::ModelDisplay, unique: [:block_id, :action], resolver: 'fix_model_displays', condition: 'tmp.block_id == perm.block_id && tmp.action == perm.action'}
-    mega_classes << {id: 4, tmp_class: MegaBar::TmpFieldDisplay, perm_class: MegaBar::FieldDisplay, unique: [:model_display_id, :field_id, :format], resolver: 'fix_field_displays', condition: 'tmp.model_display_id == perm.model_display_id && tmp.field_id == perm.field_id && tmp.format == perm.format'}
+    mega_classes << {id: 3, tmp_class: MegaBar::TmpModelDisplay, perm_class: MegaBar::ModelDisplay, unique: [:block_id, :action, :series], resolver: 'fix_model_displays', condition: 'tmp.block_id == perm.block_id && tmp.action == perm.action'}
+    mega_classes << {id: 4, tmp_class: MegaBar::TmpFieldDisplay, perm_class: MegaBar::FieldDisplay, unique: [:model_display_id, :field_id], resolver: 'fix_field_displays', condition: 'tmp.model_display_id == perm.model_display_id && tmp.field_id == perm.field_id && tmp.format == perm.format'}
 
     mega_classes << {id: 6, tmp_class: MegaBar::TmpTextbox, perm_class: MegaBar::Textbox, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {id: 7, tmp_class: MegaBar::TmpTextread, perm_class: MegaBar::Textread, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
@@ -233,15 +234,16 @@ namespace :mega_bar do
 
 
   task :dump_seeds => :environment do
-    mega_bar_model_ids = [1,2,3,4,6,7,14,15,17,18,20,21]
-    mega_bar_classes = MegaBar::Model.where(id: mega_bar_model_ids).pluck(:classname)
+    # mega_bar_model_ids = [1,2,3,4,6,7,14,15,17,18,20,21]
+    mega_bar_model_ids = MegaBar::Model.where(modyule: 'MegaBar').pluck(:id)
     mega_bar_fields =  MegaBar::Field.where(model_id: mega_bar_model_ids).pluck(:id)
     SeedDump.dump(MegaBar::Model.where(id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [])
     SeedDump.dump(MegaBar::Field.where(model_id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Option.where(field_id: mega_bar_fields), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::ModelDisplayFormat, file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
-    mega_bar_page_ids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+    # mega_bar_page_ids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
+    mega_bar_page_ids = MegaBar::Page.where(mega_page: 'mega')
     # mega_bar_pages = MegaBar::Page.where(id: mega_bar_page_ids).pluck(:id, :path)
     mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).pluck(:id)
     mega_bar_block_ids = MegaBar::Block.where(layout_id: mega_bar_layout_ids).pluck(:id)

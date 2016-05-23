@@ -5,7 +5,9 @@ module MegaBar
     validates_presence_of :block_id, :model_id, :action, :format
     attr_accessor :new_field_display, :edit_field_display, :index_field_display, :show_field_display
     after_save    :make_field_displays
-    
+    validates :series, uniqueness: { scope: [:action, :block_id] }
+
+
     scope :by_model, ->(model_id) { where(model_id: model_id) if model_id.present? }
     scope :by_action, ->(action) { where(action: action) if action.present? }
     scope :by_block, ->(block_id) { where(block_id: block_id) if block_id.present? }
