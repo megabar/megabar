@@ -82,17 +82,6 @@ class MegaRoute
                 route = route.merge({as: as}) if as
                 # route = route.merge({on: x}) if x
                 routes << route
-                if [10].include? pg.id
-
-                  puts block.id
-                  puts route.inspect
-                  puts as.to_s
-                  puts "#{p}"
-                  puts pf + ": " + controller + " -- " + md.action  + ' | ' + as.to_s
-                  # byebug
-                  puts '--------'
-                   
-                end
               end
             end
           end

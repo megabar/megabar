@@ -96,8 +96,7 @@ namespace :mega_bar do
         # byebug if MegaBar::TmpModelDisplay == mc[:tmp_class]
         dupe_hash = {}
         tmp.reload
-        mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] }
-        puts 'hi' 
+        mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] } 
         obj = mc[:perm_class].find_or_initialize_by(dupe_hash)
         attributes = tmp.attributes.select { |attr, value|  mc[:tmp_class].column_names.include?(attr.to_s) }
         attributes.delete("id")
@@ -107,9 +106,9 @@ namespace :mega_bar do
         if obj.id != tmp.id 
           # update tmplayouts set page_id to bob.id
           c = {tmp: tmp, perm: obj, mc: mc}
-          puts "there was a lil thing. "
-          puts c.inspect
-          puts "---------------------------------"
+          # puts "there was a lil thing. "
+          # puts c.inspect
+          # puts "---------------------------------"
           @@prex_all << method(mc[:resolver]).call(c)
         end
         
@@ -142,7 +141,7 @@ namespace :mega_bar do
 
   
   def fix_model(c)
-    puts 'Incoming model ' + c[:tmp].id.to_s + ' with class ' + c[:tmp].classname + ' had to be issued a new id ' + c[:perm].id.to_s + '.'
+    # puts 'Incoming model ' + c[:tmp].id.to_s + ' with class ' + c[:tmp].classname + ' had to be issued a new id ' + c[:perm].id.to_s + '.'
     ##### FIELDS
    
     MegaBar::TmpModelDisplay.where(model_id: c[:tmp].id).update_all(model_id: c[:perm].id)
