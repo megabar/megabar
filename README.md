@@ -19,11 +19,7 @@ Create a new app (you can also just add the gem to an existing app)
 
 ```cd myapp```
 
-Add MegaBar to your Gemfile so that it uses your local copy of the gem:
-
-```gem 'mega_bar', :path => '../megabar/' ```
-
-Actually add all of this for now: 
+Aadd all of this to your gemfile: 
 ```
 gem 'mega_bar', :path => '../megabar/'
 
@@ -37,9 +33,9 @@ gem 'best_in_place'
 
 gem 'jquery-ui-rails'
 ```
+Also, remove Spring as a gem from your Gemfile. 
 
-(if you will not be contributing to the gem, you can omit the 'path' segment.)
-
+Then continue from the command line.
 Bundle Install
 
 ```bundle install```
@@ -63,6 +59,12 @@ Start your server
 ```rails s```
 
 Visit a megabar page at http://localhost:3000/mega-bar/models
+
+I have a one line shortcut command for all those things once you've edited your Gemfile:
+```So then run these from the command line: 
+
+```rbenv local 2.3.0; bundle install; rails generate rspec:install; cp ../megabar/spec/host_spec_helper.rb spec/spec_helper.rb; bundle exec rake mega_bar:engine_init; rails s;```
+```
 
 
 If you have additions to the 'core data' and would like them to be a part of the 'mega_bar seeds', run this command:
