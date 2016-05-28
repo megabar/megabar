@@ -1,6 +1,12 @@
+<%= byebug  %>
 <%= 
-options =  (!@options[displayable_field[:field].tablename.to_sym].nil? && !@options[displayable_field[:field].tablename.to_sym][displayable_field[:field].field.to_sym].nil?) ? @options[displayable_field[:field].tablename.to_sym][displayable_field[:field].field.to_sym] : displayable_field[:options]
 
+ # 
+if displayable_field[:field].option_borrow.nil?
+  options =  (!@options[displayable_field[:field].tablename.to_sym].nil? && !@options[displayable_field[:field].tablename.to_sym][displayable_field[:field].field.to_sym].nil?) ? @options[displayable_field[:field].tablename.to_sym][displayable_field[:field].field.to_sym] : displayable_field[:options]
+ else
+   options = MegaBar::Option.where(field_id: 19).pluck(:text, :value)
+end
 select(
   param_from_tablename(@mega_model_properties, displayable_field[:field].tablename),
   displayable_field[:field].field, 
