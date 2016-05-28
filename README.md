@@ -61,10 +61,8 @@ Start your server
 Visit a megabar page at http://localhost:3000/mega-bar/models
 
 I have a one line shortcut command for all those things once you've edited your Gemfile:
-```So then run these from the command line: 
 
 ```rbenv local 2.3.0; bundle install; rails generate rspec:install; cp ../megabar/spec/host_spec_helper.rb spec/spec_helper.rb; bundle exec rake mega_bar:engine_init; rails s;```
-```
 
 
 If you have additions to the 'core data' and would like them to be a part of the 'mega_bar seeds', run this command:
