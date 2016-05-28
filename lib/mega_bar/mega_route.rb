@@ -15,7 +15,9 @@ class MegaRoute
       # puts 'new page '
       MegaBar::Layout.by_page(pg.id).each do |llayout|
         # puts 'new layout'
+       # byebug if pg.id == 10
         MegaBar::Block.by_layout(llayout.id).each do | block |
+          # byebug if :mc=>{:id=llayout.id == 9
           p = block.path_base? ? block.path_base : pg.path
           if context.kind_of?(Array)
             exclude = false
@@ -30,7 +32,7 @@ class MegaRoute
               next
             end
           end
-
+          # byebug if pg.id == 10
           path = ''
           p1 = p.split('/')
           p1.each do | seg |
@@ -46,6 +48,7 @@ class MegaRoute
             # puts 'block html path. ' + p.to_s
           else
             if MegaBar::ModelDisplay.by_block(block.id).size > 0
+             # byebug if pg.id ==10
               # byebug if MegaBar::ModelDisplay.by_block(block.id).first.model_id == 3
               controller = MegaRoute.controller_from_block(context, block)
               # puts "controller ---- " + controller + ", path: " + p
@@ -79,9 +82,6 @@ class MegaRoute
                 route = route.merge({as: as}) if as
                 # route = route.merge({on: x}) if x
                 routes << route
-                # puts route.inspect
-                # get "#{p}"
-                # puts pf + ": " + controller + " -- " + md.action  + ' | ' + as.to_s
               end
             end
           end

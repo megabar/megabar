@@ -1,5 +1,5 @@
 module MegaBar
   class TmpModelDisplay < ActiveRecord::Base
-    
-  end
+    validates :series, uniqueness: { scope: [:action, :block_id] }
+ end
 end

@@ -248,11 +248,16 @@ class MegaEnv
     params_hash_arr = []
     nested_ids = []
     nested_classes = []
+    puts "================="
+    puts blck, rout, page_info
+
     if blck.path_base
       if page_info[:page_path].starts_with?(blck.path_base) || blck.path_base.starts_with?(page_info[:page_path])
         block_path_vars = blck.path_base.split('/').map{ | m | m if m[0] == ':'} - ["", nil]
         depth = 0
+        puts 'bpv' + block_path_vars.to_s
         until depth == block_path_vars.size + 1
+          # puts MegaBar::Model.find(blck.send("nest_level_#{depth}"))
           blck_model = depth == 0 ? modle :  MegaBar::Model.find(blck.send("nest_level_#{depth}"))
           fk_field =  depth == 0 ? 'id' : blck_model.classname.underscore.downcase +  '_id'
           new_hash = {fk_field => page_info[:vars][block_path_vars.size - depth]}
