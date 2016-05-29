@@ -213,21 +213,21 @@ namespace :mega_bar do
 
   def get_mega_classes
     mega_classes = []
-    mega_classes << {id: 1, tmp_class: MegaBar::TmpModel, perm_class: MegaBar::Model, unique: [:classname], resolver: 'fix_model', condition: 'tmp.classname == perm.classname'}
-    mega_classes << {id: 2, tmp_class: MegaBar::TmpField, perm_class: MegaBar::Field, unique: [:model_id, :field], resolver: 'fix_fields', condition: 'tmp.model_id == perm.model_id && tmp.field == perm.field'}
-    mega_classes << {id: 17, tmp_class: MegaBar::TmpOption, perm_class: MegaBar::Option, unique: [:field_id, :value], resolver: 'fix_options', condition: 'tmp.field_id == perm.field_id && tmp.value == perm.value'}
+    mega_classes << {tmp_class: MegaBar::TmpModel, perm_class: MegaBar::Model, unique: [:classname], resolver: 'fix_model', condition: 'tmp.classname == perm.classname'}
+    mega_classes << {tmp_class: MegaBar::TmpField, perm_class: MegaBar::Field, unique: [:model_id, :field], resolver: 'fix_fields', condition: 'tmp.model_id == perm.model_id && tmp.field == perm.field'}
+    mega_classes << {tmp_class: MegaBar::TmpOption, perm_class: MegaBar::Option, unique: [:field_id, :value], resolver: 'fix_options', condition: 'tmp.field_id == perm.field_id && tmp.value == perm.value'}
 
-    mega_classes << {id: 18, tmp_class: MegaBar::TmpPage, perm_class: MegaBar::Page, unique: [:path], resolver: 'fix_pages', condition: 'tmp.path == perm.path'}
-    mega_classes << {id: 20, tmp_class: MegaBar::TmpLayout, perm_class: MegaBar::Layout, unique: [:page_id, :name], resolver: 'fix_layouts', condition: 'tmp.page_id == perm.page_id && tmp.name == perm.name'}
-    mega_classes << {id: 21, tmp_class: MegaBar::TmpBlock, perm_class: MegaBar::Block, unique: [:layout_id, :name], resolver: 'fix_blocks', condition: 'tmp.layout_id == perm.layout_id && tmp.name == perm.name'}
-    mega_classes << {id: 3, tmp_class: MegaBar::TmpModelDisplay, perm_class: MegaBar::ModelDisplay, unique: [:block_id, :action, :series], resolver: 'fix_model_displays', condition: 'tmp.block_id == perm.block_id && tmp.action == perm.action'}
-    mega_classes << {id: 4, tmp_class: MegaBar::TmpFieldDisplay, perm_class: MegaBar::FieldDisplay, unique: [:model_display_id, :field_id], resolver: 'fix_field_displays', condition: 'tmp.model_display_id == perm.model_display_id && tmp.field_id == perm.field_id && tmp.format == perm.format'}
+    mega_classes << {tmp_class: MegaBar::TmpPage, perm_class: MegaBar::Page, unique: [:path], resolver: 'fix_pages', condition: 'tmp.path == perm.path'}
+    mega_classes << {tmp_class: MegaBar::TmpLayout, perm_class: MegaBar::Layout, unique: [:page_id, :name], resolver: 'fix_layouts', condition: 'tmp.page_id == perm.page_id && tmp.name == perm.name'}
+    mega_classes << {tmp_class: MegaBar::TmpBlock, perm_class: MegaBar::Block, unique: [:layout_id, :name], resolver: 'fix_blocks', condition: 'tmp.layout_id == perm.layout_id && tmp.name == perm.name'}
+    mega_classes << {tmp_class: MegaBar::TmpModelDisplay, perm_class: MegaBar::ModelDisplay, unique: [:block_id, :action, :series], resolver: 'fix_model_displays', condition: 'tmp.block_id == perm.block_id && tmp.action == perm.action'}
+    mega_classes << {tmp_class: MegaBar::TmpFieldDisplay, perm_class: MegaBar::FieldDisplay, unique: [:model_display_id, :field_id], resolver: 'fix_field_displays', condition: 'tmp.model_display_id == perm.model_display_id && tmp.field_id == perm.field_id && tmp.format == perm.format'}
 
-    mega_classes << {id: 6, tmp_class: MegaBar::TmpTextbox, perm_class: MegaBar::Textbox, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
-    mega_classes << {id: 7, tmp_class: MegaBar::TmpTextread, perm_class: MegaBar::Textread, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
-    mega_classes << {id: 14, tmp_class: MegaBar::TmpSelect, perm_class: MegaBar::Select, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
+    mega_classes << {tmp_class: MegaBar::TmpTextbox, perm_class: MegaBar::Textbox, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
+    mega_classes << {tmp_class: MegaBar::TmpTextread, perm_class: MegaBar::Textread, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
+    mega_classes << {tmp_class: MegaBar::TmpSelect, perm_class: MegaBar::Select, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
 
-    mega_classes << {id: 15, tmp_class: MegaBar::TmpModelDisplayFormat, perm_class: MegaBar::ModelDisplayFormat, unique: [:name], resolver: 'fix_model_display_format', condition: 'tmp.name == perm.name'}
+    mega_classes << {tmp_class: MegaBar::TmpModelDisplayFormat, perm_class: MegaBar::ModelDisplayFormat, unique: [:name], resolver: 'fix_model_display_format', condition: 'tmp.name == perm.name'}
 
     return mega_classes
   end
