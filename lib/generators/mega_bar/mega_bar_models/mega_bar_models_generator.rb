@@ -15,7 +15,7 @@ module MegaBar
     def create_model_file
       template 'generic_model.rb', "#{gem_path}#{the_model_file_path}#{the_model_file_name}.rb"
       @@notices <<  "You will have to copy your model files manually over to the megabar gem" if gem_path == '' && modyule == 'MegaBar'
-      template "generic_model.rb", "#{gem_path}#{the_model_file_path}tmp_#{the_model_file_name}.rb" if modyule == 'MegaBar'
+      template "generic_tmp_model.rb", "#{gem_path}#{the_model_file_path}tmp_#{the_model_file_name}.rb" if modyule == 'MegaBar'
     end
     def generate_migration
       if the_module_name
