@@ -1,4 +1,6 @@
 <h1><%= best_in_place @mega_display[:model_display], :header, url: @model_display_path %></h1>
+<div><%= best_in_place @mega_display[:model_display], :instructions, url: @model_display_path, as: :textarea %></div>
+
 <%=@mf.record_wrapper.html_safe%>
 <% @mega_display[:displayable_fields].each do | displayable_field | %>
   <%
