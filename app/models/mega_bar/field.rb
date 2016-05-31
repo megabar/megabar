@@ -3,7 +3,7 @@ module MegaBar
     after_create  :make_migration #, :only => [:create] #add update.
     after_destroy :delete_field_displays
     after_save    :make_field_displays_for_fields
-    attr_accessor :new_field_display, :edit_field_display, :index_field_display, :show_field_display, :block_id
+    attr_accessor :model_display_ids, :new_field_display, :edit_field_display, :index_field_display, :show_field_display, :block_id
     before_create :standardize_tablename
     belongs_to    :model
     has_many      :options, dependent: :destroy

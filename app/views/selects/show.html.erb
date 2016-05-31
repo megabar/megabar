@@ -6,11 +6,12 @@ if displayable_field[:field].option_borrow.nil?
  else
    options = MegaBar::Option.where(field_id: 19).pluck(:text, :value)
 end
+include_blank = displayable_field[:data_format].multiple == true ? false : "Select " + displayable_field[:field_display].header
 select(
   param_from_tablename(@mega_model_properties, displayable_field[:field].tablename),
   displayable_field[:field].field, 
-  options, 
-  { include_blank: true }
+  options,  {include_blank: include_blank },
+  {multiple: displayable_field[:data_format].multiple}
 
 )%>
 
