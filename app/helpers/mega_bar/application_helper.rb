@@ -76,7 +76,7 @@ module MegaBar
     end
     def field_help_links(field)
       links = []
-      links << ['/mega-bar/models/' + field[:field].model_id.to_s + '/fields/' + field[:field].id.to_s + '/edit', 'Edit Field']
+      links << ['/mega-bar/fields/' + field[:field].id.to_s + '/edit', 'Edit Field']
       links << ['/mega-bar/field_displays/' + field[:field_display].id.to_s + '/edit/', 'Field Display']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
