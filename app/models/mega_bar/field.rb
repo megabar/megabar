@@ -26,7 +26,8 @@ module MegaBar
     end
 
     def make_field_displays_for_fields
-      mds = ModelDisplay.by_model(self.model_id)
+byebug
+      mds = ModelDisplay.find(self.model_display_ids)
       mds.each do | md |
         data_display = ['new', 'edit'].include?(md.action) ? self.default_data_format_edit :  self.default_data_format
         FieldDisplay.create(model_display_id: md.id, field_id: self.id, format:data_display, header: self.field.humanize)

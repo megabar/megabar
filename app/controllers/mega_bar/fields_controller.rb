@@ -17,13 +17,13 @@ module MegaBar
         block_id: blocks
         
       }
-      md_opts = []
-      ModelDisplay.by_model(env[:mega_env][:nested_ids][0]["model_id"]).each do | m|
-        md_opts << [m[:id].to_s + ": " + m[:header], m[:id]]
-      end
-
-      @options[:mega_bar_fields][:model_display_ids] =  md_opts unless env[:mega_env][:nested_ids].blank?
-      
+      unless env[:mega_env][:nested_ids].blank?
+        md_opts = []
+        ModelDisplay.by_model(env[:mega_env][:nested_ids][0]["model_id"]).each do | m|
+          md_opts << [m[:id].to_s + ": " + m[:header], m[:id]]
+        end
+        @options[:mega_bar_fields][:model_display_ids] =  md_opts 
+      end    
     end
   end
 end
