@@ -26,7 +26,7 @@ module MegaBar
     end
 
     def make_field_displays_for_fields
-byebug
+      self.model_display_ids = self.model_display_ids.reject!(&:blank?)
       mds = ModelDisplay.find(self.model_display_ids)
       mds.each do | md |
         data_display = ['new', 'edit'].include?(md.action) ? self.default_data_format_edit :  self.default_data_format
