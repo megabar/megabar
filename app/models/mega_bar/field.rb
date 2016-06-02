@@ -2,7 +2,7 @@ module MegaBar
   class Field < ActiveRecord::Base
     after_create  :make_migration #, :only => [:create] #add update.
     after_destroy :delete_field_displays
-    after_save    :make_field_displays_for_fields
+    after_save    :make_field_displays
     attr_accessor :model_display_ids, :new_field_display, :edit_field_display, :index_field_display, :show_field_display, :block_id
     before_create :standardize_tablename
     belongs_to    :model
@@ -25,7 +25,7 @@ module MegaBar
       return false
     end
 
-    def make_field_displays_for_fields
+    def make_field_displays
       self.model_display_ids = self.model_display_ids.reject!(&:blank?)
       mds = ModelDisplay.find(self.model_display_ids)
       mds.each do | md |
