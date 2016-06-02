@@ -14,11 +14,10 @@ module MegaBar
         case att.data_type
         when 'array'
           permits << { att.field => [] }
-        else 
+        else
           permits << att.field unless ['id', 'created_at', 'updated_at'].include?(att)
         end
       end
-      byebug
       params.require(controller_name.singularize).permit(permits)
     end
   end

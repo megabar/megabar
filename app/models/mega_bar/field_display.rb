@@ -13,7 +13,6 @@ module MegaBar
     validates_uniqueness_of :field_id, scope: :model_display_id
 
     def make_data_display
-byebug
       return if self.format.to_s == 'off'
       Textbox.by_field_display_id(self.id).delete_all
       Textread.by_field_display_id(self.id).delete_all
