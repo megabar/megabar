@@ -5,10 +5,14 @@
     @field_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/field_displays', action: 'show', id: displayable_field[:field_display].id, :only_path=> true)
   %>
   <% if @mf.name == 'ProfileTable' %>
-    <tr><th><%=  best_in_place displayable_field[:field_display], :header, url: @field_display_path %></th>
+    <tr><th><%=  best_in_place displayable_field[:field_display], :header, url: @field_display_path %><br>
+      <br><%= render partial: "mega_bar_help_links", :locals => {:links => field_help_links(displayable_field)} %>
+
+
+</th>
   <% end %>
   <%= @mf.field_wrapper.html_safe%>
-  <%
+  <% # figure out the value of the thing we are trying to display
     instance_value = instance_variable_get("@" + displayable_field[:field].field)
     if instance_value.present? && (displayable_field[:field].field != 'field' and params[:action] == 'edit')
       value = instance_value
@@ -21,6 +25,8 @@
     end
   %>
   <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: @mega_instance, mega_bar: @mega_display, value: value} %>
+   <%= render partial: "mega_bar_help_links", :locals => {:links => data_display_help_links(displayable_field)} %>
+
   <%= @mf.field_wrapper_end.html_safe %>
 <%end %>
 <%= @mf.record_wrapper_end.html_safe%>

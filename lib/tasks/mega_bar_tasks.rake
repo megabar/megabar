@@ -96,14 +96,14 @@ namespace :mega_bar do
         # byebug if MegaBar::TmpModelDisplay == mc[:tmp_class]
         dupe_hash = {}
         tmp.reload
-        mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] } 
+        mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] }
         obj = mc[:perm_class].find_or_initialize_by(dupe_hash)
         attributes = tmp.attributes.select { |attr, value|  mc[:tmp_class].column_names.include?(attr.to_s) }
         attributes.delete("id")
         obj.assign_attributes(attributes)
-        
+
         obj.save
-        if obj.id != tmp.id 
+        if obj.id != tmp.id
           # update tmplayouts set page_id to bob.id
           c = {tmp: tmp, perm: obj, mc: mc}
           # puts "there was a lil thing. "
@@ -111,9 +111,9 @@ namespace :mega_bar do
           # puts "---------------------------------"
           @@prex_all << method(mc[:resolver]).call(c)
         end
-        
+
       end
-      puts 'finished ' + mc[:perm_class].to_s 
+      puts 'finished ' + mc[:perm_class].to_s
     end
 
     MegaBar::Block.set_callback(       'save',   :after, :make_model_displays)
@@ -139,11 +139,11 @@ namespace :mega_bar do
     c = a >= b ? a+1 : b+1
   end
 
-  
+
   def fix_model(c)
     # puts 'Incoming model ' + c[:tmp].id.to_s + ' with class ' + c[:tmp].classname + ' had to be issued a new id ' + c[:perm].id.to_s + '.'
     ##### FIELDS
-   
+
     MegaBar::TmpModelDisplay.where(model_id: c[:tmp].id).update_all(model_id: c[:perm].id)
     MegaBar::TmpField.where(model_id: c[:tmp].id).each { |f| f.update(model_id: c[:perm].id) }
     MegaBar::TmpBlock.where(nest_level_1: c[:tmp].id).each { |f| f.update(nest_level_1: c[:perm].id) }
@@ -293,7 +293,7 @@ namespace :mega_bar do
     truncate_etc
   end
 
-  def truncate_etc 
+  def truncate_etc
     get_mega_classes.each do |mc|
       puts "delete from #{mc[:perm_class].table_name}"
       ActiveRecord::Base.connection.execute("delete from #{mc[:perm_class].table_name}")

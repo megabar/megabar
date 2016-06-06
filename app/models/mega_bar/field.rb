@@ -3,7 +3,7 @@ module MegaBar
     after_create  :make_migration #, :only => [:create] #add update.
     after_destroy :delete_field_displays
     after_save    :make_field_displays
-    attr_accessor :new_field_display, :edit_field_display, :index_field_display, :show_field_display, :block_id
+    attr_accessor :model_display_ids, :new_field_display, :edit_field_display, :index_field_display, :show_field_display, :block_id
     before_create :standardize_tablename
     belongs_to    :model
     has_many      :options, dependent: :destroy
@@ -24,17 +24,16 @@ module MegaBar
       errors.add(:base, 'That table does not exist')
       return false
     end
+
     def make_field_displays
-      model_displays = mds = ModelDisplay.by_block(self.block_id)
-      actions = []
-      actions << {format: 'textread', model_display_id: mds.by_action('index').last.id,  header: self.field.humanize} if (!mds.by_action('index').last.nil? && !FieldDisplay.by_model_display_id(mds.by_action('index').last.id).by_fields(self.id).present? && @index_field_display == 'y')
-      actions << {format: 'textread', model_display_id: mds.by_action('show').last.id,  header: self.field.humanize} if (!mds.by_action('show').last.nil? && !FieldDisplay.by_model_display_id(mds.by_action('show').last.id).by_fields(self.id).present? && @show_field_display == 'y')
-      actions << {format: self.default_data_format, model_display_id: mds.by_action('new').last.id, header:self.field.humanize} if (!mds.by_action('new').last.nil? && !FieldDisplay.by_model_display_id(mds.by_action('new').last.id).by_fields(self.id).present? && @new_field_display == 'y')
-      actions << {format: self.default_data_format_edit, model_display_id: mds.by_action('edit').last.id, header: self.field.humanize} if (!mds.by_action('edit').last.nil? && !FieldDisplay.by_model_display_id(mds.by_action('edit').last.id).by_fields(self.id).present? && @edit_field_display == 'y')
-      actions.each do | action |
-        FieldDisplay.create(model_display_id: action[:model_display_id], field_id: self.id, format:action[:format], header: action[:header])
+      self.model_display_ids = self.model_display_ids.reject!(&:blank?)
+      mds = ModelDisplay.find(self.model_display_ids)
+      mds.each do | md |
+        data_display = ['new', 'edit'].include?(md.action) ? self.default_data_format_edit :  self.default_data_format
+        FieldDisplay.create(model_display_id: md.id, field_id: self.id, format:data_display, header: self.field.humanize)
       end
     end
+
     def standardize_tablename
 
     end

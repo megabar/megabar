@@ -10,8 +10,13 @@ module MegaBar
 
     def _params
       permits = []
-      MegaBar::Field.by_model(env[:mega_env][:model_id]).pluck(:field).each do |att|
-        permits << att unless ['id', 'created_at', 'updated_at'].include?(att)
+      MegaBar::Field.by_model(env[:mega_env][:model_id]).order('data_type desc').each do |att|
+        case att.data_type
+        when 'array'
+          permits << { att.field => [] }
+        else
+          permits << att.field unless ['id', 'created_at', 'updated_at'].include?(att)
+        end
       end
       params.require(controller_name.singularize).permit(permits)
     end
