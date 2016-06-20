@@ -43,9 +43,14 @@ module MegaBar
           @nested_ids.each do |param|
             param_hash = param_hash.merge(param)
           end
-          param_hash[:action] = 'index'
           param_hash[:controller] = params["controller"]
-          param_hash[:id] = @mega_instance.id if @mega_instance.id #danger.. added during testing.
+          if @mega_instance.id
+            # todo: add configuration to model_display for where to go after insert.
+            param_hash[:id] = @mega_instance.id if @mega_instance.id #danger.. added during testing.
+            param_hash[:action] = 'show'
+          else
+            param_hash[:action] = 'index'
+          end
           param_hash[:only_path] = true
           format.html { redirect_to url_for(param_hash), notice: 'It was successfully created.' }
           format.json { render action: 'show', status: :created, location: @mega_instance }
