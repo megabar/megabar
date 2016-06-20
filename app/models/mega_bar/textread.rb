@@ -6,6 +6,9 @@ module MegaBar
     def get_model_id
       6
     end
+    def controller_name
+      'mega_bar/textreads'
+    end
 
   end
 end

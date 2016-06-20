@@ -6,5 +6,8 @@ module MegaBar
     def get_model_id
       7
     end
+    def controller_name
+      'mega_bar/selects'
+    end
   end
 end
