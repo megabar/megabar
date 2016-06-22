@@ -82,7 +82,8 @@ module MegaBar
     end
     def data_display_help_links(field)
       links = []
-      links << [url_for(field[:data_format]) + '/edit', field[:field_display].format.capitalize + ' settings' ]
+      links << [MegaBar::Engine.routes.url_for(controller: '/mega_bar/' + field[:field_display].format.pluralize, action: 'edit', id: field[:data_format].id, :only_path=> true), 'Edit ' + field[:field_display].format.capitalize]
+      # links << [url_for(field[:data_format]) + '/edit', field[:field_display].format.capitalize + ' settings' ]
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
   end

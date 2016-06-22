@@ -24,9 +24,9 @@ module MegaBar
     let(:valid_session) { {} }
 
     let(:fields_and_displays) {
-      create(:field_with_displays, field: 'header', tablename: 'mega_bar_field_displays')
-      create(:field_with_displays, field: 'model_display_id', tablename: 'mega_bar_field_displays' )
-      create(:field_with_displays, field: 'field_id', tablename: 'mega_bar_field_displays' )
+      create(:field_with_displays, field: 'header', tablename: 'mega_bar_field_displays', model_display_ids: model_model_display_ids)
+      create(:field_with_displays, field: 'model_display_id', tablename: 'mega_bar_field_displays', model_display_ids: model_model_display_ids )
+      create(:field_with_displays, field: 'field_id', tablename: 'mega_bar_field_displays', model_display_ids: model_model_display_ids )
     }
 
     let(:valid_attributes) {

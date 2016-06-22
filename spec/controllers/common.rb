@@ -11,6 +11,7 @@ RSpec.shared_context "common", :a => :b do
   let(:env_invalid_update) { {uri: uri, params: params_for_invalid_update, page: page_info_for_show, rout: rout_for_member}  }
   let(:model_display_format_2) { create(:model_display_format_2) }
   let(:model_display_format) { create(:model_display_format) }
+  let(:model_model_display_ids) { MegaBar::ModelDisplay.by_model(1).pluck(:id).map{ |m| m.to_s } }
   let(:page_info_for_show) { {page_id: 1, page_path: uri, terms: page_terms, vars: [23], name: page_name} }
   let(:page_info) { {page_id: 1, page_path: uri, terms: page_terms, vars: [], name: page_name} }
   let(:params_for_create) { {id: nil, action: 'create', controller: controlller, spec_subject => valid_new } }
@@ -59,7 +60,7 @@ RSpec.shared_context "common", :a => :b do
       end
 
       describe "GET show" do
-        it "assigns the requested record as @mega_instance" do # , focus: true do
+        it "assigns the requested record as @mega_instance", focus: true do
           status, headers, body = controller_class.action(:show).call(get_env(env_show))
           @controller = body.request.env['action_controller.instance']
           expect(assigns(:mega_instance)).to eq([a_record])
@@ -175,7 +176,7 @@ RSpec.shared_context "common", :a => :b do
           }.to change(model_class, :count).by(-1)
         end
 
-        it "redirects to the index list", focus: true do 
+        it "redirects to the index list" do #, focus: true do 
           status, headers, body = controller_class.action(:destroy).call(get_env(env_destroy))
           expect(body.instance_variable_get(:@body).instance_variable_get(:@header)["Location"]).to include(uri) #almost good enough
         end

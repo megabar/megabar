@@ -26,7 +26,7 @@ module MegaBar
     let(:valid_session) { {} }
 
     let(:fields_and_displays) {
-      create(:field_with_displays, field: 'field_display_id', tablename: 'mega_bar_selects' )
+      create(:field_with_displays, field: 'field_display_id', tablename: 'mega_bar_selects', model_display_ids: model_model_display_ids )
     }
   end
 

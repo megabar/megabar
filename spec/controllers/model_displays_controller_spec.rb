@@ -24,11 +24,11 @@ module MegaBar
     let(:valid_session) { {} }
 
     let(:fields_and_displays) {
-      create(:field_with_displays, field: 'header', tablename: 'mega_bar_model_displays')
-      create(:field_with_displays, field: 'block_id', tablename: 'mega_bar_model_displays' )
-      create(:field_with_displays, field: 'action', tablename: 'mega_bar_model_displays' )
-      create(:field_with_displays, field: 'format', tablename: 'mega_bar_model_displays' )
-      create(:field_with_displays, field: 'model_id', tablename: 'mega_bar_model_displays' )
+      create(:field_with_displays, field: 'header', tablename: 'mega_bar_model_displays', model_display_ids: model_model_display_ids)
+      create(:field_with_displays, field: 'block_id', tablename: 'mega_bar_model_displays', model_display_ids: model_model_display_ids )
+      create(:field_with_displays, field: 'action', tablename: 'mega_bar_model_displays', model_display_ids: model_model_display_ids )
+      create(:field_with_displays, field: 'format', tablename: 'mega_bar_model_displays', model_display_ids: model_model_display_ids )
+      create(:field_with_displays, field: 'model_id', tablename: 'mega_bar_model_displays', model_display_ids: model_model_display_ids )
     }
     let(:invalid_attributes) {
       f = build(:model_display)

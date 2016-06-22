@@ -11,7 +11,7 @@
     let(:updated_attrs) { { 'tbd' => 'tbd' } }
     let(:valid_attributes) {{ 'tbd' => "tbd" } }
     let(:valid_new) { { tbd: 'tbd'} }
-    let(:fields_and_displays) {  create(:field_with_displays, field: 'tbd', tablename: '<%=the_table_name%>') }
+    let(:fields_and_displays) {  create(:field_with_displays, field: 'tbd', tablename: '<%=the_table_name%>', model_display_ids: model_model_display_ids) }
     # Megabar says, If you want to test invalid data, modify these: 
     let(:skip_invalids) { true }
     let(:invalid_new) { {tbd: ''} }

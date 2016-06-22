@@ -20,10 +20,10 @@ module MegaBar
     let(:model_and_page) { create(:model_with_page) }
 
     let(:fields_and_displays) { #have to at least have the required model fields.
-      create(:field_with_displays)
-      create(:field_with_displays, field: 'tablename' )
-      create(:field_with_displays, field: 'default_sort_field')
-      create(:field_with_displays, field: 'name')
+      create(:field_with_displays, model_display_ids: model_model_display_ids)
+      create(:field_with_displays, field: 'tablename', model_display_ids: model_model_display_ids )
+      create(:field_with_displays, field: 'default_sort_field', model_display_ids: model_model_display_ids)
+      create(:field_with_displays, field: 'name', model_display_ids: model_model_display_ids)
     }
     let(:a_record) {
       model_class.first
