@@ -21,7 +21,6 @@ Combustion.initialize! :all do
 end
 # after combustion has initialized the routes, we have to delete all the data
 # that the seeds added so that the tests run with empty databases.
-
 MegaBar::Page.connection.execute('delete from mega_bar_pages')
 MegaBar::Page.connection.execute('delete from sqlite_sequence where name="mega_bar_pages"')
 MegaBar::Layout.connection.execute('delete from mega_bar_layouts')

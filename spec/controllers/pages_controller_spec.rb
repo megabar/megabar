@@ -24,9 +24,9 @@ module MegaBar
     let(:model_and_page) { create(:model_with_page, classname: 'Page', tablename: 'mega_bar_pages', name: 'Pages') }
 
     let(:fields_and_displays) { #have to at least have the required model fields.
-      create(:field_with_displays, tablename: 'mega_bar_layouts')
-      create(:field_with_displays, field: 'name' )
-      create(:field_with_displays, field: 'path')
+      create(:field_with_displays, tablename: 'mega_bar_layouts', model_display_ids: model_model_display_ids)
+      create(:field_with_displays, field: 'name', model_display_ids: model_model_display_ids )
+      create(:field_with_displays, field: 'path', model_display_ids: model_model_display_ids)
     }
     let(:a_record) {
       model_class.first

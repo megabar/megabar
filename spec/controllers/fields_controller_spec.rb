@@ -12,7 +12,6 @@ module MegaBar
     let(:page_terms) { ['mega-bar', 'fields'] }
     let(:skip_invalids) { false }
     let(:spec_subject) { 'field' }
-
     let(:updated_attrs) { { 'default_data_format_edit' => 'sselect' } }
     let(:uri) { '/mega-bar/fields' }
     let(:valid_new) { { model_id: '1', tablename: 'mega_bar_fields', field: 'whatever', default_data_format: 'text', default_data_format_edit: 'textbox', make_field_displays: ''} }
@@ -23,11 +22,11 @@ module MegaBar
 
     let(:model_and_page) { create(:model_with_page, classname: 'Field', tablename: 'mega_bar_fields', name: 'Fields') }
     let(:fields_and_displays) { #have to at least have the required model fields.
-      create(:field_with_displays, field: 'model_id' )
-      create(:field_with_displays, field: 'tablename' )
-      create(:field_with_displays, field: 'field')
-      create(:field_with_displays, field: 'default_data_format_edit')
-      create(:field_with_displays, field: 'default_data_format')
+      create(:field_with_displays, field: 'model_id', model_display_ids: model_model_display_ids)
+      create(:field_with_displays, field: 'tablename', model_display_ids: model_model_display_ids )
+      create(:field_with_displays, field: 'field', model_display_ids: model_model_display_ids)
+      create(:field_with_displays, field: 'default_data_format_edit', model_display_ids: model_model_display_ids)
+      create(:field_with_displays, field: 'default_data_format', model_display_ids: model_model_display_ids)
 
     }
     let(:a_record) {
