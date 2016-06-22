@@ -27,7 +27,7 @@ module MegaBar
 
     def make_field_displays
       # return unless self.model_display_ids.present?
-      self.model_display_ids = self.model_display_ids.reject(&:blank?) 
+      self.model_display_ids = self.model_display_ids.reject(&:blank?)
       mds = ModelDisplay.find(self.model_display_ids) if self.model_display_ids.present?
       mds.each do | md |
         data_display = ['new', 'edit'].include?(md.action) ? self.default_data_format_edit :  self.default_data_format

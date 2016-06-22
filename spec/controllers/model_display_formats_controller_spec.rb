@@ -23,7 +23,7 @@ module MegaBar
     let(:valid_new) { { name: 'new Model Display Format'} }
     let(:valid_session) { {} }
     let(:fields_and_displays) {
-      create(:field_with_displays, field: 'name', tablename: 'mega_bar_model_display_formats')
+      create(:field_with_displays, field: 'name', tablename: 'mega_bar_model_display_formats', model_display_ids: model_model_display_ids)
     }
     let(:invalid_attributes) {
       { 'name' => 'boink'}

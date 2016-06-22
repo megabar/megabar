@@ -21,7 +21,7 @@ module MegaBar
     let(:updated_attrs) { { 'field_display_id' =>  2 } }
     let(:uri) { '/mega-bar/textreads' }
     let(:valid_attributes) {{ 'field_display_id' => '2' } }
-    let(:valid_new) { { field_display_id: '1' } }
+    let(:valid_new) { { field_display_id: '5' } }
     let(:valid_session) { {} }
 
     let(:fields_and_displays) {
