@@ -84,9 +84,11 @@ module MegaBar
     def destroy
       instance_variable_set("@" + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);
+      session[:return_to] ||= request.referer
+
       @mega_instance.destroy
       respond_to do |format|
-        format.html { redirect_to eval(env[:mega_env][:kontroller_inst].pluralize + '_url') }
+        format.html {  redirect_to session.delete(:return_to), notice: 'You nuked it properly.' }
         format.json { head :no_content }
       end
     end
