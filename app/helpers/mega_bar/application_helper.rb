@@ -46,44 +46,44 @@ module MegaBar
 
     def model_display_help_links
       links = []
-      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '/model_displays/' + @mega_display[:model_display].id.to_s, 'Field Displays for the "' + @mega_display[:model_display].header.to_s +  '" model display']
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '/model_displays/' + @mega_display[:model_display].id.to_s  + '?return_to=' + request.env['PATH_INFO'], 'Field Displays for the "' + @mega_display[:model_display].header.to_s +  '" model display']
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '/model_displays/' + @mega_display[:model_display].id.to_s  + '/edit' , 'Edit Model Display']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
     def block_help_links
       links = []
-      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s, 'Model Displays for the "' + @block.name + '" Block'] if @block.name
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '?return_to=' + request.env['PATH_INFO'], 'Model Displays for the "' + @block.name + '" Block'] if @block.name
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '/edit', 'Edit Block']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
     def layout_help_links
       links = []
-      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s, 'List Model Displays for the ' + @block.name + ' Block']
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '?return_to=' + request.env['PATH_INFO'], 'List Model Displays for the ' + @block.name + ' Block']
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '/edit', 'Edit Block']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
     def layout_help_links
       links = []
-      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s , 'Blocks on the "' + @mega_layout.name + '" Layout']
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '?return_to=' + request.env['PATH_INFO'], 'Blocks on the "' + @mega_layout.name + '" Layout']
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/edit', 'Edit Layout']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
     def page_help_links
       links = []
-      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s, 'Layouts on the "' + @mega_page[:name] + '" Page']
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '?return_to=' + request.env['PATH_INFO'], 'Layouts on the "' + @mega_page[:name] + '" Page']
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/edit/', 'Edit Page']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
     def field_help_links(field)
       links = []
-      links << ['/mega-bar/models/' + field[:field].model_id.to_s + '/fields/' + field[:field].id.to_s, 'Field']
+      links << ['/mega-bar/models/' + field[:field].model_id.to_s + '/fields/' + field[:field].id.to_s + '?return_to=' + request.env['PATH_INFO'], 'Field']
       links << ['/mega-bar/field_displays/' + field[:field_display].id.to_s, 'Field Display']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
     def data_display_help_links(field)
       links = []
 
-      links << [MegaBar::Engine.routes.url_for(controller: field[:data_format].controller_name, action: 'edit', id: field[:data_format].id, only_path: true), field[:field_display].format.capitalize + ' settings' ]
+      links << [MegaBar::Engine.routes.url_for(controller: field[:data_format].controller_name, action: 'edit', id: field[:data_format].id, only_path: true)  + '?return_to=' + request.env['PATH_INFO'], field[:field_display].format.capitalize + ' settings' ]
        # links << [MegaBar::Engine.routes.url_for(controller: '/mega_bar/' + field[:field_display].format.pluralize, action: 'edit', id: field[:data_format].id, :only_path=> true), 'Edit ' + field[:field_display].format.capitalize]
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
