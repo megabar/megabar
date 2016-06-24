@@ -42,6 +42,7 @@ class LayoutEngine
     # the general strategy is..
     # have rails recognize the path_info..
     # tbcontinued.
+    request.session[:return_to] = env['rack.request.query_hash']['return_to'] unless env['rack.request.query_hash']['return_to'].blank?
     rout = set_rout(request, env) #set below via 'recognize_path'
     rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
     page_info = set_page_info(rout, rout_terms)
