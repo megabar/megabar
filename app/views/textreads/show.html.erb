@@ -1,1 +1,2 @@
-<%= obj.read_attribute(displayable_field[:field].field) %>
+<%=
+obj.read_attribute(displayable_field[:field].field).to_s.truncate(displayable_field[:data_format][:truncation].to_i, {omission: displayable_field[:data_format][:truncation_format]}) %>
