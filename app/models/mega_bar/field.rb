@@ -27,7 +27,6 @@ module MegaBar
 
     def make_field_displays
       # return unless self.model_display_ids.present?
-      byebug
       self.model_display_ids = self.model_display_ids.reject(&:blank?)
       mds = ModelDisplay.find(self.model_display_ids) if self.model_display_ids.present?
       mds.each do | md |
