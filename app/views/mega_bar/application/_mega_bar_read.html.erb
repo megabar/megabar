@@ -21,8 +21,12 @@
         <tr><th><%=  best_in_place displayable_field[:field_display], :header, path:  @field_display_path %></th><td>
       <% end %>
       <%= @mf.field_wrapper.html_safe%>
+      <%
+        locals = {obj: mega_record, displayable_field: displayable_field, field: displayable_field[:field], field_display: displayable_field[:field_display], options: displayable_field[:options] }
+        locals[displayable_field[:data_format].class.name.downcase.sub('::', '_').sub('megabar_', '').to_sym] = displayable_field[:data_format]
+        data = render template: displayable_field[:field_display].format.tableize + "/show", locals: locals
+      %>
 
-      <% data = render template: displayable_field[:field_display].format.tableize + "/show", locals: {displayable_field: displayable_field, obj: mega_record} %>
 
       <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
          <a href='<%=data%>'>
@@ -43,7 +47,7 @@
       </td>
       <td><%= link_to 'Edit', link_path('edit', mega_record.id) %></td>
       <td><%= link_to 'Destroy', mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
- 
+
     <% end %>
     <%= @mf.record_wrapper_end.html_safe%>
   <% end %>

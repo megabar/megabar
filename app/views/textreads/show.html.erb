@@ -1,2 +1,3 @@
 <%=
-obj.read_attribute(displayable_field[:field].field).to_s.truncate(displayable_field[:data_format][:truncation].to_i, {omission: displayable_field[:data_format][:truncation_format]}) %>
+textread[:truncation].to_i == 0 ? obj.read_attribute(displayable_field[:field].field).to_s :
+ obj.read_attribute(displayable_field[:field].field).to_s.truncate(textread[:truncation].to_i, {omission: textread[:truncation_format], separator: textread[:truncation_separator]}) %>
