@@ -142,7 +142,9 @@ MegaBar::TmpOption.create!([
   {id: 31, field_id: 89, text: "Regular Model", value: "regular", created_at: "2016-05-14 17:18:28", updated_at: "2016-05-14 17:18:28"},
   {id: 32, field_id: 92, text: "True", value: "true", created_at: "2016-05-31 03:40:41", updated_at: "2016-05-31 03:40:41"},
   {id: 33, field_id: 92, text: "False", value: "false", created_at: "2016-05-31 03:40:54", updated_at: "2016-05-31 03:40:54"},
-  {id: 34, field_id: 78, text: "Array (accessors only)", value: "array", created_at: "2016-06-02 04:19:14", updated_at: "2016-06-02 04:19:42"}
+  {id: 34, field_id: 78, text: "Array (accessors only)", value: "array", created_at: "2016-06-02 04:19:14", updated_at: "2016-06-02 04:19:42"},
+  {id: 35, field_id: 94, text: "Space ", value: " ", created_at: "2016-07-14 15:25:05", updated_at: "2016-07-14 15:26:30"},
+  {id: 36, field_id: 94, text: "Slash", value: "/", created_at: "2016-07-14 15:26:14", updated_at: "2016-07-14 15:26:14"}
 ])
 MegaBar::TmpModelDisplayFormat.create!([
   {id: 1, name: "GridHtml", app_wrapper: "<table>", app_wrapper_end: "</table>", field_header_wrapper: "<th>", field_header_wrapper_end: "</th>", record_wrapper: "<tr>", record_wrapper_end: "</tr>", field_wrapper: "<td>", field_wrapper_end: "</td>", separate_header_row: "true", created_at: "2015-02-08 18:52:01", updated_at: "2015-02-10 00:38:59"},
