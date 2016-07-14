@@ -22,9 +22,7 @@
       <% end %>
       <%= @mf.field_wrapper.html_safe%>
       <%
-        locals = {obj: mega_record, displayable_field: displayable_field, field: displayable_field[:field], field_display: displayable_field[:field_display], options: displayable_field[:options] }
-        locals[displayable_field[:data_format].class.name.downcase.sub('::', '_').sub('megabar_', '').to_sym] = displayable_field[:data_format]
-        data = render template: displayable_field[:field_display].format.tableize + "/show", locals: locals
+        data = render template: displayable_field[:field_display].format.tableize + "/show", locals: data_format_locals(mega_record, displayable_field)
       %>
 
 
