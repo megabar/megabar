@@ -82,7 +82,7 @@ Definitely consider creating a branch before making changes to the megabar gem r
 
 ```git checkout -b feature/my_new_feature```
 
-build feature.
+build feature.....
 
 ```git commit -am "built a feature ```
 
