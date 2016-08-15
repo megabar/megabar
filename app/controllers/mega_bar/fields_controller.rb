@@ -3,8 +3,8 @@ module MegaBar
     include MegaBarConcern
 
     def new
-      @default_options[:tablename] = @nested_instance_variables[0].tablename
       @default_options[:model_id] = @nested_instance_variables[0].id
+      @default_options[:tablename] = @nested_instance_variables[0].tablename
       super
     end
 

@@ -20,10 +20,11 @@
       if params[:action] == 'edit' || params[:redo]
         value= @mega_instance.read_attribute(displayable_field[:field].field)
       else
-        value = displayable_field[:field].default_value
+        value = instance_value.blank? ? displayable_field[:field].default_value : instance_value
       end
     end
   %>
+
   <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: data_format_locals(@mega_instance, displayable_field, value, @mega_display)
 
   # {displayable_field: displayable_field, obj: @mega_instance, mega_bar: @mega_display, value: value}
