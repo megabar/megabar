@@ -2,9 +2,14 @@ module MegaBar
   class FieldsController < ApplicationController
     include MegaBarConcern
 
+    def new
+      @default_options[:tablename] = @nested_instance_variables[0].tablename
+      @default_options[:model_id] = @nested_instance_variables[0].id
+      super
+    end
+
     def get_options
       blocks = []
-      
      # bad news, if the block doesn't have model_displays it doesnt show up in this menu 
       ModelDisplay.select(:block_id).distinct.pluck("block_id, model_id").each do |md| 
 
