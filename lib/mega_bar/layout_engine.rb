@@ -183,7 +183,7 @@ end
 
 class MegaEnv
   attr_writer :mega_model_properties, :mega_displays, :nested_ids
-  attr_reader :block, :modle, :model_id, :mega_model_properties, :klass, :kontroller_inst, :kontroller_path, :kontroller_klass, :mega_displays, :nested_ids, :block_action, :params_hash_arr, :nested_class_info
+  attr_reader :block, :modle, :modle_id, :mega_model_properties, :klass, :kontroller_inst, :kontroller_path, :kontroller_klass, :mega_displays, :nested_ids, :block_action, :params_hash_arr, :nested_class_info
 
   def initialize(blck, rout, page_info)
 
@@ -192,7 +192,7 @@ class MegaEnv
     @block_action = @displays.empty? ? rout[:action] : @displays.first.action
 
     @modle = MegaBar::Model.by_model(@block_model_displays.first.model_id).first
-    @model_id = @modle.id
+    @modle_id = @modle.id
     @modyule = @modle.modyule.empty? ? '' : @modle.modyule + '::'
     @kontroller_klass = @modyule + @modle.classname.classify.pluralize + "Controller"
     @kontroller_path = @modle.modyule.nil? || @modle.modyule.empty? ?   @modle.classname.pluralize.underscore :  @modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + @modle.classname.pluralize.underscore

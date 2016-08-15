@@ -1,86 +1,66 @@
 ENV['RAILS_ENV'] ||= 'test'
-require 'byebug'
-require 'rubygems'
+MEGABAR_ROOT=File.join(File.dirname(__FILE__), '../../megabar/') #feel free to modify for your environment.
 require 'bundler/setup'
-require 'pry'
-require 'combustion'
-require 'capybara/rspec'
-require 'simplecov'
-require 'rake'
-require 'rails/all'
-
-SimpleCov.start
-Combustion.initialize! :all do
-  # Megabar dyamically generates routes based on data in the db.
-  # So we'll load all the data here so the routes are generated properly
-  # but then we'll have to delete all the data so the tests run on an empty db
-  # like a normal test suite would.
-  load File.expand_path("../../lib/tasks/mega_bar_tasks.rake", __FILE__)
-  Rake::Task.define_task(:environment)
-  Rake::Task['mega_bar:data_load'].invoke('../../db/mega_bar.seeds.rb', 'routes')
-end
-# after combustion has initialized the routes, we have to delete all the data
-# that the seeds added so that the tests run with empty databases.
-MegaBar::Page.connection.execute('delete from mega_bar_pages')
-MegaBar::Page.connection.execute('delete from sqlite_sequence where name="mega_bar_pages"')
-MegaBar::Layout.connection.execute('delete from mega_bar_layouts')
-MegaBar::Layout.connection.execute('delete from sqlite_sequence where name="mega_bar_layouts"')
-MegaBar::Block.connection.execute('delete from mega_bar_blocks')
-MegaBar::Block.connection.execute('delete from sqlite_sequence where name="mega_bar_blocks"')
-MegaBar::ModelDisplay.connection.execute('delete from mega_bar_model_displays')
-MegaBar::ModelDisplay.connection.execute('delete from sqlite_sequence where name="mega_bar_model_displays"')
-MegaBar::Model.connection.execute('delete from mega_bar_models')
-MegaBar::Model.connection.execute('delete from sqlite_sequence where name="mega_bar_models"')
-
-require 'rspec/rails'
-require 'capybara/rails'
+require 'byebug'
 require 'factory_girl_rails'
+require 'rails/all'
+require 'rake'
+require 'rspec/rails'
+
+require MEGABAR_ROOT + 'spec/controllers/common'
+
+require File.expand_path("../../config/environment", __FILE__)
+
+require 'rubygems'
+load File.expand_path(MEGABAR_ROOT + "lib/tasks/mega_bar_tasks.rake", __FILE__)
+include FactoryGirl::Syntax::Methods
+Dir[File.join(MEGABAR_ROOT, "spec/internal/factories/*.rb")].each { |f| require f }
+Rake::Task.define_task(:environment)
+
+ActiveRecord::Migration.maintain_test_schema!
+
+Rails.application.routes.draw do
 
 
-Rails.backtrace_cleaner.remove_silencers!
-# Load support files
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
-RSpec.configure do |config|
-  config.mock_with :rspec
-  config.use_transactional_fixtures = true
-  config.infer_base_class_for_anonymous_controllers = false
-  config.order = "random"
-  config.include FactoryGirl::Syntax::Methods
+ get '/mega-bar/models', to: 'flats#index'
+ get '/mega-bar/fields', to: 'flats#index'
+ get '/mega-bar/model_displays', to: 'flats#index'
+ get '/mega-bar/field_displays', to: 'flats#index'
+ get '/mega-bar/textboxes', to: 'flats#index'
+ get '/mega-bar/textreads', to: 'flats#index'
+ get '/mega-bar/selects', to: 'flats#index'
+ get '/mega-bar/model-display-formats', to: 'flats#index'
+ get '/mega-bar/options', to: 'flats#index'
+ get '/mega-bar/pages', to: 'flats#index'
+ get '/mega-bar/layouts', to: 'flats#index'
+ get '/mega-bar/blocks', to: 'flats#index'
+ get '/mega-bar/pages/:page_id/layouts', to: 'flats#index'
+ get '/mega-bar/pages/:page_id/layouts/:layout_id/blocks', to: 'flats#index'
+ get '/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/model_displays', to: 'flats#index'
+ get '/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/model_displays/:model_display_id/field_displays', to: 'flats#index'
+ get '/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/displays/:model_display_id/field-displays/:field_display_id/data-displays', to: 'flats#index'
+ get '/', to: 'flats#index'
+ get '/mega-bar/models/:model_id/fields/', to: 'flats#index'
+ get '/mega-bar/models/:model_id/fields/:field_id/options', to: 'flats#index'
+  resources :textareas, path: '/mega-bar/textareas'
+   ##### MEGABAR END ##### 
 end
 
-def hello_bob
-  'hello bob'
-end
-# binding.pry
-#require 'rake'
-#load File.expand_path("../../lib/tasks/mega_bar_tasks.rake", __FILE__)
-#Rake::Task.define_task(:environment)
-#Rake::Task['mega_bar:data_load'].invoke('../../db/mega_bar.seeds.rb')
 
-=begin
-ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
 
-ActiveRecord::Schema.define(:version => 1) do
-  create_table :mega_bar_field_displays do |t|
-    t.integer :field_id
-    t.string :format
-    t.string :action
-    t.string :header
-  end
-end
-=end
 
 def blck
-  MegaBar::Block.find(1)
+  MegaBar::Block.first
 end
 
 def get_env(args)
+
   env = Rack::MockRequest.env_for(args[:uri], params: args[:params])
   env[:mega_page] = args[:page]
   env[:mega_rout] = args[:rout]
   env[:mega_env] = MegaEnv.new(blck, args[:rout], args[:page]).to_hash # added to env for use in controllers
   request = Rack::Request.new(env)
-  request.session[:return_to] = url_for(uri);
+  request.session[:return_to] = uri;
   env
 end
 

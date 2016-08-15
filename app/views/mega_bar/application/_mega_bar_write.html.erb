@@ -1,4 +1,7 @@
 <h1><%= best_in_place @mega_display[:model_display], :header, url: @model_display_path %></h1>
+<div class="model_display_instructions"><%= best_in_place @mega_display[:model_display], :instructions, url: @model_display_path, as: :textarea %></div>
+
+
 <%=@mf.record_wrapper.html_safe%>
 <% @mega_display[:displayable_fields].each do | displayable_field | %>
   <%
@@ -13,7 +16,7 @@
   <% end %>
   <%= @mf.field_wrapper.html_safe%>
   <% # figure out the value of the thing we are trying to display
-    instance_value = instance_variable_get("@" + displayable_field[:field].field) if instance_variable_get("@" + displayable_field[:field].field).is_a? String
+    instance_value = instance_variable_get("@" + displayable_field[:field].field) if (instance_variable_get("@" + displayable_field[:field].field).is_a?(String))
     if instance_value.present? && (displayable_field[:field].field != 'field' and params[:action] == 'edit')
       value = instance_value
     else
