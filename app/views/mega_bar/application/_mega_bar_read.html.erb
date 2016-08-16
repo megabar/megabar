@@ -1,5 +1,5 @@
 <h1><%= best_in_place @mega_display[:model_display], :header, tabindex: "1", url: @model_display_path %> </h1>
-
+<div class='model_display_instructions'><%= best_in_place @mega_display[:model_display], :instructions, url: @model_display_path, as: :textarea %> </div>
 
 <%= form_tag @mega_display[:form_path] do |f| %>
   <%=@mf.app_wrapper.html_safe%>

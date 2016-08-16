@@ -1,0 +1,5 @@
+<br>
+<%=text_area_tag(
+	param_from_tablename(@mega_model_properties, field.tablename) + "[" + field.field + "]",
+	value, rows: textarea.rows, cols: textarea.cols
+	) if textarea %>

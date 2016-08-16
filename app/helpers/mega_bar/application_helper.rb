@@ -92,7 +92,6 @@ module MegaBar
       local = {obj: mega_record, displayable_field: displayable_field, field: displayable_field[:field], field_display: displayable_field[:field_display], options: displayable_field[:options], mega_bar: mega_bar, value: value }
       local[displayable_field[:data_format].class.name.downcase.sub('::', '_').sub('megabar_', '').to_sym] = displayable_field[:data_format]
       local
-
     end
 
   end

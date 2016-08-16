@@ -10,7 +10,7 @@ module MegaBar
 
     def _params
       permits = []
-      MegaBar::Field.by_model(env[:mega_env][:model_id]).order('data_type desc').each do |att|
+      MegaBar::Field.by_model(env[:mega_env][:modle_id]).order('data_type desc').each do |att|
         case att.data_type
         when 'array'
           permits << { att.field => [] }

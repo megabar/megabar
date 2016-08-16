@@ -98,6 +98,7 @@ module MegaBar
       @conditions_array =  []; self.try(:conditions_array)
       @options = {}; self.try(:get_options) # allows for queries to populate menus
       env[:mega_env] = add_form_path_to_mega_displays(env[:mega_env])
+      @default_options = {}
       @mega_displays = env[:mega_env][:mega_displays]
     end
 
