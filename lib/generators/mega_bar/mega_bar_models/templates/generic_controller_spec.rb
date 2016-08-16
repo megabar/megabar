@@ -1,8 +1,7 @@
 <% the_module_array.each do | m | %>module <%=m %><% end %>
   require 'spec_helper'
 
-
-  RSpec.describe <% the_module_array.each do | m | %><%=m%>::<% end %><% if the_module_array.length %>::<% end %><%= the_controller_name %>, :type => :controller do
+  RSpec.describe <% the_module_array.each do | m | %><%=m%>::<% end %><%= the_controller_name %>, :type => :controller do
     include_context "common" #pretty important!
 
     # MEGABAR almost gets you started with testing.. 
