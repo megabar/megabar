@@ -17,6 +17,9 @@ module MegaBar
       Textbox.by_field_display_id(self.id).delete_all
       Textread.by_field_display_id(self.id).delete_all
       Select.by_field_display_id(self.id).delete_all
+      Textarea.by_field_display_id(self.id).delete_all
+      Checkbox.by_field_display_id(self.id).delete_all
+byebug
       data_display_obj = ("MegaBar::" + self.format.to_s.classify).constantize.new
       model_id = data_display_obj.get_model_id
       fields = Field.by_model(model_id)
@@ -27,6 +30,8 @@ module MegaBar
         end
       end
       fields_defaults[:field_display_id] = self.id
+      fields_defaults[:checked] = 'false' if self.format == 'checkbox'
+byebug
        ("MegaBar::" + self.format.to_s.classify).constantize.where(:field_display_id => self.id).first_or_create(fields_defaults)
       f = Field.where(id: self.field_id)
 
