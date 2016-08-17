@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class LayoutEngine - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/darkfish.js"></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="Object.html">Object</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-new">::new</a>
+    
+    <li ><a href="#method-i-_call">#_call</a>
+    
+    <li ><a href="#method-i-action_from_path">#action_from_path</a>
+    
+    <li ><a href="#method-i-call">#call</a>
+    
+    <li ><a href="#method-i-each">#each</a>
+    
+    <li ><a href="#method-i-get_action">#get_action</a>
+    
+    <li ><a href="#method-i-process_block">#process_block</a>
+    
+    <li ><a href="#method-i-set_page_info">#set_page_info</a>
+    
+    <li ><a href="#method-i-set_rout">#set_rout</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-LayoutEngine">
+  <h1 id="class-LayoutEngine" class="class">
+    class LayoutEngine
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(app, message = "Response Time")</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>honestly, this is a hugely important file, but there shouldn&#39;t be
+anything in this file that concerns regular developers or users. Here we
+figure out which is the current page, then collect which blocks go on a
+layout and which layouts go on a page. For each block, if it holds a
+model_display, we&#39;ll call the controller for that model. treat your
+controllers and models like you would in a normal rails app. this does set
+some environment variables that are then used in your controllers, but
+inspect them there. if you&#39;ve set up your
+page-&gt;layouts-&gt;blocks-&gt;model_displays-&gt;field_displays properly
+this should just work. if you&#39;ve created a page using the gui and its
+not working.. check it&#39;s path setting and check your routes file to see
+that they are looking right.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File lib/mega_bar/layout_engine.rb, line 13</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">message</span> = <span class="ruby-string">&quot;Response Time&quot;</span>)
+  <span class="ruby-ivar">@app</span> = <span class="ruby-identifier">app</span>
+  <span class="ruby-ivar">@message</span> = <span class="ruby-identifier">message</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-_call" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">_call</span><span
+            class="method-args">(env)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="_call-source">
+            <pre><span class="ruby-comment"># File lib/mega_bar/layout_engine.rb, line 22</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">_call</span>(<span class="ruby-identifier">env</span>)
+  <span class="ruby-comment"># so.. a lot does go on here... I&#39;ll have to write a white paper.</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;PATH_INFO&#39;</span>].<span class="ruby-identifier">end_with?</span>(<span class="ruby-string">&#39;.css&#39;</span>)  <span class="ruby-operator">||</span> <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;PATH_INFO&#39;</span>].<span class="ruby-identifier">end_with?</span>(<span class="ruby-string">&#39;.js&#39;</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;PATH_INFO&#39;</span>].<span class="ruby-identifier">end_with?</span>(<span class="ruby-string">&#39;.jpeg&#39;</span>)
+    <span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@headers</span>, <span class="ruby-ivar">@response</span> = <span class="ruby-ivar">@app</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">env</span>)
+    <span class="ruby-keyword">return</span>  [<span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@headers</span>, <span class="ruby-keyword">self</span>]
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-ivar">@redirect</span> = <span class="ruby-keyword">false</span>
+  <span class="ruby-identifier">request</span> = <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Request</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">env</span>)
+  <span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span> <span class="ruby-comment"># strangely this needs to be here for best_in_place updates.</span>
+
+  <span class="ruby-comment"># MegaBar::Engine.routes.routes.named_routes.values.map do |route|</span>
+
+  <span class="ruby-comment">#   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + &quot;#{route.defaults[:controller]}##{route.defaults[:action]}&quot;</span>
+  <span class="ruby-comment"># end #vs. Rails.application.routes.routes.named_routes.values.map</span>
+  <span class="ruby-comment"># Rails.application.routes.routes.named_routes.values.map do |route|</span>
+  <span class="ruby-comment">#   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + &quot;#{route.defaults[:controller]}##{route.defaults[:action]}&quot;</span>
+  <span class="ruby-comment"># end #vs. Rails.application.routes.routes.named_routes.values.map</span>
+  <span class="ruby-comment">################################</span>
+  <span class="ruby-comment">## figure out what page it is</span>
+  <span class="ruby-comment"># the general strategy is..</span>
+  <span class="ruby-comment"># have rails recognize the path_info..</span>
+  <span class="ruby-comment"># tbcontinued.</span>
+  <span class="ruby-identifier">request</span>.<span class="ruby-identifier">session</span>[<span class="ruby-value">:return_to</span>] = <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.request.query_hash&#39;</span>][<span class="ruby-string">&#39;return_to&#39;</span>] <span class="ruby-keyword">unless</span> <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.request.query_hash&#39;</span>][<span class="ruby-string">&#39;return_to&#39;</span>].<span class="ruby-identifier">blank?</span>
+  <span class="ruby-identifier">rout</span> = <span class="ruby-identifier">set_rout</span>(<span class="ruby-identifier">request</span>, <span class="ruby-identifier">env</span>) <span class="ruby-comment">#set below via &#39;recognize_path&#39;</span>
+  <span class="ruby-identifier">rout_terms</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">path_info</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;/&#39;</span>).<span class="ruby-identifier">reject!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> (<span class="ruby-identifier">c</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">empty?</span>) }
+  <span class="ruby-identifier">page_info</span> = <span class="ruby-identifier">set_page_info</span>(<span class="ruby-identifier">rout</span>, <span class="ruby-identifier">rout_terms</span>)
+  <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_page</span>] = <span class="ruby-identifier">page_info</span>
+  <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_rout</span>] = <span class="ruby-identifier">rout</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">page_info</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-comment">#non megabar pages.</span>
+    <span class="ruby-identifier">gotta_be_an_array</span> = []
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">rout</span>[<span class="ruby-value">:controller</span>].<span class="ruby-identifier">nil?</span>
+      <span class="ruby-identifier">rout</span>[<span class="ruby-value">:controller</span>] = <span class="ruby-string">&#39;flats&#39;</span>
+      <span class="ruby-identifier">rout</span>[<span class="ruby-value">:action</span>] = <span class="ruby-string">&#39;index&#39;</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@headers</span>, <span class="ruby-ivar">@page</span> = (<span class="ruby-identifier">rout</span>[<span class="ruby-value">:controller</span>].<span class="ruby-identifier">classify</span>.<span class="ruby-identifier">pluralize</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;Controller&quot;</span>).<span class="ruby-identifier">constantize</span>.<span class="ruby-identifier">action</span>(<span class="ruby-identifier">rout</span>[<span class="ruby-value">:action</span>]).<span class="ruby-identifier">call</span>(<span class="ruby-identifier">env</span>)
+    <span class="ruby-identifier">gotta_be_an_array</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">page</span> = <span class="ruby-ivar">@page</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@page</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">html_safe</span>
+    <span class="ruby-keyword">return</span> <span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@headers</span>, <span class="ruby-identifier">gotta_be_an_array</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-comment">################################</span>
+  <span class="ruby-identifier">orig_query_hash</span> = <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">parse_nested_query</span>(<span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;QUERY_STRING&#39;</span>])
+  <span class="ruby-identifier">final_layouts</span> = []
+  <span class="ruby-identifier">page_layouts</span> = <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">Layout</span>.<span class="ruby-identifier">by_page</span>(<span class="ruby-identifier">page_info</span>[<span class="ruby-value">:page_id</span>])
+
+  <span class="ruby-identifier">page_layouts</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">page_layout</span> <span class="ruby-operator">|</span>
+    <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_layout</span>] = <span class="ruby-identifier">page_layout</span>
+    <span class="ruby-identifier">blocks</span> = <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">Block</span>.<span class="ruby-identifier">by_layout</span>(<span class="ruby-identifier">page_layout</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">by_actions</span>(<span class="ruby-identifier">rout</span>[<span class="ruby-value">:action</span>])
+    <span class="ruby-identifier">final_blocks</span> = []
+    <span class="ruby-identifier">blocks</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">blck</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">final_blocks</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">process_block</span>(<span class="ruby-identifier">blck</span>, <span class="ruby-identifier">page_info</span>, <span class="ruby-identifier">rout</span>, <span class="ruby-identifier">orig_query_hash</span>, <span class="ruby-identifier">env</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;mega_final_blocks&#39;</span>] = <span class="ruby-identifier">final_blocks</span> <span class="ruby-comment">#used in master_layouts_controller</span>
+    <span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@headers</span>, <span class="ruby-ivar">@layouts</span> = <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">MasterLayoutsController</span>.<span class="ruby-identifier">action</span>(<span class="ruby-value">:render_layout_with_blocks</span>).<span class="ruby-identifier">call</span>(<span class="ruby-identifier">env</span>)
+    <span class="ruby-identifier">final_layouts</span> <span class="ruby-operator">&lt;&lt;</span>  <span class="ruby-identifier">l</span> = <span class="ruby-ivar">@layouts</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@layouts</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">html_safe</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;mega_final_layouts&#39;</span>] = <span class="ruby-identifier">final_layouts</span>
+  <span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@headers</span>, <span class="ruby-ivar">@page</span> = <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">MasterPagesController</span>.<span class="ruby-identifier">action</span>(<span class="ruby-value">:render_page</span>).<span class="ruby-identifier">call</span>(<span class="ruby-identifier">env</span>)
+  <span class="ruby-identifier">final_page</span> = []
+  <span class="ruby-identifier">final_page_content</span> = <span class="ruby-ivar">@page</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@page</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">html_safe</span>
+  <span class="ruby-comment"># final_page_content = @page.instance_variable_get(:@response).nil? ? @page.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @page.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]</span>
+  <span class="ruby-identifier">final_page</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">final_page_content</span>
+  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@redirect</span> <span class="ruby-operator">?</span> [<span class="ruby-ivar">@redirect</span>[<span class="ruby-value">0</span>], <span class="ruby-ivar">@redirect</span>[<span class="ruby-value">1</span>], [<span class="ruby-string">&#39;you are being redirected&#39;</span>]] <span class="ruby-operator">:</span> [<span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@headers</span>, <span class="ruby-identifier">final_page</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-action_from_path" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">action_from_path</span><span
+            class="method-args">(path, method, path_segments)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="action_from_path-source">
+            <pre><span class="ruby-comment"># File lib/mega_bar/layout_engine.rb, line 163</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">action_from_path</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">method</span>, <span class="ruby-identifier">path_segments</span>)
+  <span class="ruby-identifier">path_array</span> = <span class="ruby-identifier">path</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;/&#39;</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">method</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;GET&#39;</span>
+    <span class="ruby-keyword">if</span> [<span class="ruby-string">&#39;edit&#39;</span>, <span class="ruby-string">&#39;new&#39;</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">path_array</span>.<span class="ruby-identifier">last</span>)
+      <span class="ruby-identifier">path_array</span>.<span class="ruby-identifier">last</span>
+    <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">path</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d)+$/</span>)
+      <span class="ruby-string">&#39;show&#39;</span>
+    <span class="ruby-keyword">elsif</span>  <span class="ruby-identifier">path_segments</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">path_array</span>.<span class="ruby-identifier">last</span>)
+      <span class="ruby-string">&#39;index&#39;</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">path_array</span>.<span class="ruby-identifier">last</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">elsif</span> [<span class="ruby-string">&#39;POST&#39;</span>, <span class="ruby-string">&#39;PUT&#39;</span>, <span class="ruby-string">&#39;PATCH&#39;</span>].<span class="ruby-identifier">include?</span> <span class="ruby-identifier">method</span>
+    <span class="ruby-identifier">path</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">match</span>(<span class="ruby-regexp">/^(\d)+$/</span>) <span class="ruby-operator">?</span> <span class="ruby-string">&#39;update&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;create&#39;</span>
+  <span class="ruby-keyword">elsif</span> [<span class="ruby-string">&#39;DELETE&#39;</span>].<span class="ruby-identifier">include?</span> <span class="ruby-identifier">method</span>
+    <span class="ruby-string">&#39;delete&#39;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-call" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">call</span><span
+            class="method-args">(env)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="call-source">
+            <pre><span class="ruby-comment"># File lib/mega_bar/layout_engine.rb, line 18</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">env</span>)
+  <span class="ruby-identifier">dup</span>.<span class="ruby-identifier">_call</span>(<span class="ruby-identifier">env</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-each" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">each</span><span
+            class="method-args">(&display)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="each-source">
+            <pre><span class="ruby-comment"># File lib/mega_bar/layout_engine.rb, line 86</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">each</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">display</span>)
+  <span class="ruby-identifier">display</span>.<span class="ruby-identifier">call</span>(<span class="ruby-node">&quot;&lt;!-- #{@message}: #{@stop - @start} --&gt;\n&quot;</span>) <span class="ruby-keyword">if</span> (<span class="ruby-operator">!</span><span class="ruby-ivar">@headers</span>[<span class="ruby-string">&#39;Content-Type&#39;</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-ivar">@headers</span>[<span class="ruby-string">&quot;Content-Type&quot;</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-string">&quot;text/html&quot;</span>))
+  <span class="ruby-ivar">@response</span>.<span class="ruby-identifier">each</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">display</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-get_action" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_action</span><span
+            class="method-args">(action, method)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_action-source">
+            <pre><span class="ruby-comment"># File lib/mega_bar/layout_engine.rb, line 124</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_action</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">method</span>)
+  <span class="ruby-keyword">case</span> <span class="ruby-identifier">method</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;PATCH&#39;</span>, <span class="ruby-string">&#39;PUT&#39;</span>, <span class="ruby-string">&#39;POST&#39;</span>
+    <span class="ruby-identifier">action</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;show&#39;</span>  <span class="ruby-operator">?</span> <span class="ruby-string">&#39;update&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;create&#39;</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;DELETE&#39;</span>
+    <span class="ruby-string">&#39;destroy&#39;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">action</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-process_block" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">process_block</span><span
+            class="method-args">(blck, page_info, rout, orig_query_hash, env)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="process_block-source">
+            <pre><span class="ruby-comment"># File lib/mega_bar/layout_engine.rb, line 135</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">process_block</span>(<span class="ruby-identifier">blck</span>, <span class="ruby-identifier">page_info</span>, <span class="ruby-identifier">rout</span>, <span class="ruby-identifier">orig_query_hash</span>, <span class="ruby-identifier">env</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span> <span class="ruby-identifier">blck</span>.<span class="ruby-identifier">html</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span> <span class="ruby-identifier">blck</span>.<span class="ruby-identifier">html</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-identifier">blck</span>.<span class="ruby-identifier">html</span>.<span class="ruby-identifier">html_safe</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">params_hash</span> = {} <span class="ruby-comment"># used to set params var for controllers</span>
+    <span class="ruby-identifier">params_hash_arr</span> = [] <span class="ruby-comment">#used to collect &#39;params_hash&#39; pieces</span>
+
+    <span class="ruby-identifier">mega_env</span> = <span class="ruby-constant">MegaEnv</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">blck</span>, <span class="ruby-identifier">rout</span>, <span class="ruby-identifier">page_info</span>) <span class="ruby-comment"># added to env for use in controllers</span>
+
+    <span class="ruby-identifier">params_hash_arr</span> = <span class="ruby-identifier">mega_env</span>.<span class="ruby-identifier">params_hash_arr</span>
+    <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>] = <span class="ruby-identifier">mega_env</span>.<span class="ruby-identifier">to_hash</span>
+
+    <span class="ruby-identifier">params_hash_arr</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-identifier">action</span><span class="ruby-operator">:</span> <span class="ruby-identifier">mega_env</span>.<span class="ruby-identifier">block_action</span>}
+    <span class="ruby-identifier">params_hash_arr</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-identifier">controller</span><span class="ruby-operator">:</span> <span class="ruby-identifier">mega_env</span>.<span class="ruby-identifier">kontroller_path</span>}
+    <span class="ruby-identifier">params_hash_arr</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">param</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">params_hash</span> = <span class="ruby-identifier">params_hash</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">param</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">params_hash</span> = <span class="ruby-identifier">params_hash</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">orig_query_hash</span>)
+    <span class="ruby-identifier">params_hash</span> = <span class="ruby-identifier">params_hash</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.request.form_hash&#39;</span>]) <span class="ruby-keyword">if</span> (<span class="ruby-identifier">mega_env</span>.<span class="ruby-identifier">block_action</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;update&#39;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">mega_env</span>.<span class="ruby-identifier">block_action</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;create&#39;</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.request.form_hash&#39;</span>].<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;QUERY_STRING&#39;</span>] = <span class="ruby-identifier">params_hash</span>.<span class="ruby-identifier">to_param</span> <span class="ruby-comment"># 150221!</span>
+    <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;action_dispatch.request.parameters&#39;</span>] = <span class="ruby-identifier">params_hash</span>
+
+    <span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@headers</span>, <span class="ruby-ivar">@disp_body</span> = <span class="ruby-identifier">mega_env</span>.<span class="ruby-identifier">kontroller_klass</span>.<span class="ruby-identifier">constantize</span>.<span class="ruby-identifier">action</span>(<span class="ruby-identifier">mega_env</span>.<span class="ruby-identifier">block_action</span>).<span class="ruby-identifier">call</span>(<span class="ruby-identifier">env</span>)
+    <span class="ruby-ivar">@redirect</span> = [<span class="ruby-ivar">@status</span>, <span class="ruby-ivar">@headers</span>, <span class="ruby-ivar">@disp_body</span>] <span class="ruby-keyword">if</span> <span class="ruby-ivar">@status</span> <span class="ruby-operator">==</span> <span class="ruby-value">302</span>
+    <span class="ruby-identifier">block_body</span> = <span class="ruby-ivar">@disp_body</span>.<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@disp_body</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">html_safe</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-set_page_info" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_page_info</span><span
+            class="method-args">(rout, rout_terms)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_page_info-source">
+            <pre><span class="ruby-comment"># File lib/mega_bar/layout_engine.rb, line 91</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_page_info</span>(<span class="ruby-identifier">rout</span>, <span class="ruby-identifier">rout_terms</span>)
+
+  <span class="ruby-identifier">page_info</span> = {}
+  <span class="ruby-identifier">rout_terms</span> <span class="ruby-operator">||=</span> []
+  <span class="ruby-identifier">diff</span> = <span class="ruby-value">20</span>
+  <span class="ruby-identifier">prev_diff</span> = <span class="ruby-value">21</span>
+  <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">Page</span>.<span class="ruby-identifier">all</span>.<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39; id desc&#39;</span>).<span class="ruby-identifier">pluck</span>(<span class="ruby-value">:id</span>, <span class="ruby-value">:path</span>, <span class="ruby-value">:name</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">page</span> <span class="ruby-operator">|</span>
+    <span class="ruby-identifier">page_path_terms</span> = <span class="ruby-identifier">page</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;/&#39;</span>).<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span> <span class="ruby-identifier">m</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">m</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">!=</span> <span class="ruby-string">&#39;:&#39;</span>} <span class="ruby-operator">-</span> [<span class="ruby-string">&quot;&quot;</span>, <span class="ruby-keyword">nil</span>]
+    <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">rout_terms</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">page_path_terms</span>).<span class="ruby-identifier">size</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">rout_terms</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">page_path_terms</span>.<span class="ruby-identifier">size</span>
+    <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">page_path_terms</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">rout_terms</span>.<span class="ruby-identifier">empty?</span> ) <span class="ruby-comment"># home page /</span>
+    <span class="ruby-identifier">diff</span> = (<span class="ruby-identifier">rout_terms</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">page_path_terms</span>).<span class="ruby-identifier">size</span>
+    <span class="ruby-identifier">page_terms</span> = <span class="ruby-identifier">page</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;/&#39;</span>).<span class="ruby-identifier">reject!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> (<span class="ruby-identifier">c</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">empty?</span>) }
+    <span class="ruby-identifier">page_terms</span> <span class="ruby-operator">||=</span> []
+    <span class="ruby-identifier">variable_segments</span> = []
+    <span class="ruby-identifier">page_terms</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">v</span>, <span class="ruby-identifier">k</span> <span class="ruby-operator">|</span>
+      <span class="ruby-identifier">variable_segments</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rout_terms</span>[<span class="ruby-identifier">k</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">page_terms</span>[<span class="ruby-identifier">k</span>].<span class="ruby-identifier">starts_with?</span>(<span class="ruby-string">&#39;:&#39;</span>)
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">variable_segments</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rout_terms</span>[<span class="ruby-identifier">page_terms</span>.<span class="ruby-identifier">size</span>] <span class="ruby-keyword">if</span> <span class="ruby-constant">Integer</span>(<span class="ruby-identifier">rout_terms</span>[<span class="ruby-identifier">page_terms</span>.<span class="ruby-identifier">size</span>]) <span class="ruby-keyword">rescue</span> <span class="ruby-keyword">false</span>
+    <span class="ruby-identifier">page_info</span> = {<span class="ruby-identifier">page_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">page</span>[<span class="ruby-value">0</span>], <span class="ruby-identifier">page_path</span><span class="ruby-operator">:</span> <span class="ruby-identifier">page</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">terms</span><span class="ruby-operator">:</span> <span class="ruby-identifier">page_terms</span>, <span class="ruby-identifier">vars</span><span class="ruby-operator">:</span> <span class="ruby-identifier">variable_segments</span>, <span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-identifier">page</span>[<span class="ruby-value">2</span>]} <span class="ruby-keyword">if</span> <span class="ruby-identifier">diff</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">prev_diff</span>
+    <span class="ruby-identifier">prev_diff</span> = <span class="ruby-identifier">diff</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">page_info</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-set_rout" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_rout</span><span
+            class="method-args">(request, env)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_rout-source">
+            <pre><span class="ruby-comment"># File lib/mega_bar/layout_engine.rb, line 115</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_rout</span>(<span class="ruby-identifier">request</span>, <span class="ruby-identifier">env</span>)
+  <span class="ruby-identifier">request_path_info</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">path_info</span>.<span class="ruby-identifier">dup</span>
+  <span class="ruby-identifier">rout</span> = (<span class="ruby-constant">Rails</span>.<span class="ruby-identifier">application</span>.<span class="ruby-identifier">routes</span>.<span class="ruby-identifier">recognize_path</span> <span class="ruby-identifier">request_path_info</span> <span class="ruby-keyword">rescue</span> {}) <span class="ruby-operator">||</span> {}
+  <span class="ruby-identifier">rout</span> = (<span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">Engine</span>.<span class="ruby-identifier">routes</span>.<span class="ruby-identifier">recognize_path</span> <span class="ruby-identifier">request_path_info</span> <span class="ruby-keyword">rescue</span> {}) <span class="ruby-operator">||</span> {}  <span class="ruby-keyword">if</span> <span class="ruby-identifier">rout</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">request_path_info</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;/mega-bar&#39;</span> <span class="ruby-comment">#yeah, a special case for this one.</span>
+  <span class="ruby-identifier">rout</span> = (<span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">Engine</span>.<span class="ruby-identifier">routes</span>.<span class="ruby-identifier">recognize_path</span> <span class="ruby-identifier">request_path_info</span>.<span class="ruby-identifier">sub!</span>(<span class="ruby-string">&#39;/mega-bar/&#39;</span>, <span class="ruby-string">&#39;&#39;</span>) <span class="ruby-keyword">rescue</span> {}) <span class="ruby-operator">||</span> {}  <span class="ruby-keyword">if</span> <span class="ruby-identifier">rout</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-identifier">rout</span>[<span class="ruby-value">:action</span>] = <span class="ruby-identifier">get_action</span>(<span class="ruby-identifier">rout</span>[<span class="ruby-value">:action</span>], <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;REQUEST_METHOD&#39;</span>], )
+  <span class="ruby-identifier">rout</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

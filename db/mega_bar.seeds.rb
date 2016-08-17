@@ -11,7 +11,8 @@ MegaBar::TmpModel.create!([
   {id: 10, modyule: "MegaBar", classname: "Page", schema: "sqlite", tablename: "mega_bar_pages", name: "Pages", default_sort_field: "id", created_at: "2015-02-13 01:16:38", updated_at: "2015-02-13 01:16:38", mega_model: "mega"},
   {id: 11, modyule: "MegaBar", classname: "Layout", schema: "sqlite", tablename: "mega_bar_layouts", name: "Layouts", default_sort_field: "id", created_at: "2015-02-18 03:10:38", updated_at: "2015-02-18 03:10:38", mega_model: "mega"},
   {id: 12, modyule: "MegaBar", classname: "Block", schema: "sqlite", tablename: "mega_bar_blocks", name: "Blocks", default_sort_field: "id", created_at: "2015-02-18 03:47:38", updated_at: "2015-02-18 03:47:38", mega_model: "mega"},
-  {id: 13, modyule: "MegaBar", classname: "Textarea", schema: "sqlite", tablename: "mega_bar_textareas", name: "Textareas", default_sort_field: "id", created_at: "2016-08-15 13:19:06", updated_at: "2016-08-15 13:19:06", mega_model: "mega"}
+  {id: 13, modyule: "MegaBar", classname: "Textarea", schema: "sqlite", tablename: "mega_bar_textareas", name: "Textareas", default_sort_field: "id", created_at: "2016-08-15 13:19:06", updated_at: "2016-08-15 13:19:06", mega_model: "mega"},
+  {id: 14, modyule: "MegaBar", classname: "Checkbox", schema: "sqlite", tablename: "mega_bar_checkboxes", name: "Checkboxes", default_sort_field: "id", created_at: "2016-08-16 18:14:42", updated_at: "2016-08-16 18:14:42", mega_model: "mega"}
 ])
 MegaBar::TmpField.create!([
   {id: 1, model_id: 1, schema: "sqlite", tablename: "mega_bar_models", field: "id", data_type: nil, accessor: "", default_value: "", default_data_format: "off", default_data_format_edit: "textread", created_at: "2014-05-05 17:31:12", updated_at: "2015-02-08 07:32:31", option_borrow: nil},
@@ -111,7 +112,9 @@ MegaBar::TmpField.create!([
   {id: 95, model_id: 13, schema: "sqlite", tablename: "mega_bar_textareas", field: "field_display_id", data_type: "integer", accessor: "", default_value: "", default_data_format: "textread", default_data_format_edit: "textbox", created_at: "2016-08-15 14:06:39", updated_at: "2016-08-15 14:06:39", option_borrow: nil},
   {id: 96, model_id: 13, schema: "sqlite", tablename: "mega_bar_textareas", field: "rows", data_type: "integer", accessor: "", default_value: "", default_data_format: "textread", default_data_format_edit: "textbox", created_at: "2016-08-15 14:11:13", updated_at: "2016-08-15 14:11:13", option_borrow: nil},
   {id: 97, model_id: 13, schema: "sqlite", tablename: "mega_bar_textareas", field: "cols", data_type: "integer", accessor: "", default_value: "", default_data_format: "textread", default_data_format_edit: "textbox", created_at: "2016-08-15 14:11:55", updated_at: "2016-08-15 14:11:55", option_borrow: nil},
-  {id: 98, model_id: 3, schema: "sqlite", tablename: "mega_bar_model_displays", field: "instructions", data_type: "text", accessor: "", default_value: "", default_data_format: "textread", default_data_format_edit: "textarea", created_at: "2016-08-15 16:28:48", updated_at: "2016-08-15 16:28:48", option_borrow: nil}
+  {id: 98, model_id: 3, schema: "sqlite", tablename: "mega_bar_model_displays", field: "instructions", data_type: "text", accessor: "", default_value: "", default_data_format: "textread", default_data_format_edit: "textarea", created_at: "2016-08-15 16:28:48", updated_at: "2016-08-15 16:28:48", option_borrow: nil},
+  {id: 99, model_id: 14, schema: "sqlite", tablename: "mega_bar_checkboxes", field: "field_display_id", data_type: "integer", accessor: "", default_value: "", default_data_format: "textread", default_data_format_edit: "textbox", created_at: "2016-08-16 18:21:52", updated_at: "2016-08-16 18:21:52", option_borrow: nil},
+  {id: 100, model_id: 14, schema: "sqlite", tablename: "mega_bar_checkboxes", field: "checked", data_type: "boolean", accessor: "", default_value: "", default_data_format: "textread", default_data_format_edit: "checkbox", created_at: "2016-08-16 21:34:29", updated_at: "2016-08-16 21:34:29", option_borrow: nil}
 ])
 MegaBar::TmpOption.create!([
   {id: 1, field_id: 19, text: "Textbox", value: "textbox", created_at: "2015-02-12 05:14:39", updated_at: "2015-02-12 05:14:39"},
@@ -149,7 +152,8 @@ MegaBar::TmpOption.create!([
   {id: 33, field_id: 92, text: "False", value: "false", created_at: "2016-05-31 03:40:54", updated_at: "2016-05-31 03:40:54"},
   {id: 34, field_id: 78, text: "Array (accessors only)", value: "array", created_at: "2016-06-02 04:19:14", updated_at: "2016-06-02 04:19:42"},
   {id: 35, field_id: 94, text: "Slash", value: "/", created_at: "2016-07-14 15:26:14", updated_at: "2016-07-14 15:26:14"},
-  {id: 36, field_id: 19, text: "Textarea", value: "textarea", created_at: "2016-08-15 16:07:37", updated_at: "2016-08-15 16:07:37"}
+  {id: 36, field_id: 19, text: "Textarea", value: "textarea", created_at: "2016-08-15 16:07:37", updated_at: "2016-08-15 16:07:37"},
+  {id: 37, field_id: 19, text: "Checkbox", value: "checkbox", created_at: "2016-08-16 18:23:10", updated_at: "2016-08-16 18:23:10"}
 ])
 MegaBar::TmpModelDisplayFormat.create!([
   {id: 1, name: "GridHtml", app_wrapper: "<table>", app_wrapper_end: "</table>", field_header_wrapper: "<th>", field_header_wrapper_end: "</th>", record_wrapper: "<tr>", record_wrapper_end: "</tr>", field_wrapper: "<td>", field_wrapper_end: "</td>", separate_header_row: "true", created_at: "2015-02-08 18:52:01", updated_at: "2015-02-10 00:38:59"},
@@ -176,7 +180,8 @@ MegaBar::TmpPage.create!([
   {id: 18, name: "Site customizer's home page", path: "/", created_at: "2016-05-12 16:14:33", updated_at: "2016-05-12 16:14:33", mega_page: "mega"},
   {id: 19, name: "Model-Fields page", path: "/mega-bar/models/:model_id/fields/", created_at: "2016-05-31 01:21:13", updated_at: "2016-05-31 01:21:13", mega_page: "mega"},
   {id: 20, name: "Models-Fields-Options Page", path: "/mega-bar/models/:model_id/fields/:field_id/options", created_at: "2016-05-31 03:09:08", updated_at: "2016-05-31 03:09:08", mega_page: "mega"},
-  {id: 21, name: "Textareas Model Page", path: "/mega-bar/textareas", created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12", mega_page: "mega"}
+  {id: 21, name: "Textareas Model Page", path: "/mega-bar/textareas", created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12", mega_page: "mega"},
+  {id: 22, name: "Checkboxes Model Page", path: "/mega-bar/checkboxes", created_at: "2016-08-16 18:14:49", updated_at: "2016-08-16 18:15:10", mega_page: "mega"}
 ])
 MegaBar::TmpLayout.create!([
   {id: 1, page_id: 1, name: "Models Layout", created_at: "2015-02-18 05:20:21", updated_at: "2015-02-18 05:20:21"},
@@ -201,7 +206,8 @@ MegaBar::TmpLayout.create!([
   {id: 20, page_id: 18, name: "What is a base name? Layout", created_at: "2016-05-12 16:14:34", updated_at: "2016-05-12 16:14:34"},
   {id: 21, page_id: 19, name: "Models on models-fields page Layout", created_at: "2016-05-31 01:21:13", updated_at: "2016-05-31 01:21:13"},
   {id: 22, page_id: 20, name: "Models on models-fields-options Layout", created_at: "2016-05-31 03:09:08", updated_at: "2016-05-31 03:09:08"},
-  {id: 23, page_id: 21, name: "Textareas Layout", created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12"}
+  {id: 23, page_id: 21, name: "Textareas Layout", created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12"},
+  {id: 24, page_id: 22, name: "Checkboxes Layouttt", created_at: "2016-08-16 18:14:49", updated_at: "2016-08-16 21:52:46"}
 ])
 MegaBar::TmpBlock.create!([
   {id: 1, layout_id: 1, model_id: nil, name: "Models on Models Layout boo", actions: "current", html: "", nest_level_1: nil, nest_level_2: nil, path_base: "", created_at: "2015-02-18 05:20:43", updated_at: "2015-03-02 00:14:20", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
@@ -248,7 +254,10 @@ MegaBar::TmpBlock.create!([
   {id: 42, layout_id: 22, model_id: nil, name: "Models on models-fields-options on Models on models-fields-options Layout Block", actions: "sine", html: "", nest_level_1: nil, nest_level_2: nil, path_base: "/mega-bar/models", created_at: "2016-05-31 03:09:08", updated_at: "2016-05-31 03:26:38", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 43, layout_id: 22, model_id: nil, name: "Fields on Model-Field-Options", actions: "sine", html: "", nest_level_1: 1, nest_level_2: nil, path_base: "/mega-bar/models/:model_id/fields", created_at: "2016-05-31 03:13:55", updated_at: "2016-05-31 03:16:16", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 44, layout_id: 22, model_id: nil, name: "Options on Models-Fields-Options", actions: "current", html: "", nest_level_1: 2, nest_level_2: 1, path_base: "/mega-bar/models/:model_id/fields/:field_id/options", created_at: "2016-05-31 03:17:20", updated_at: "2016-05-31 03:17:20", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
-  {id: 45, layout_id: 23, model_id: nil, name: "Textareas on Textareas Layout Block", actions: "current", html: nil, nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil}
+  {id: 45, layout_id: 23, model_id: nil, name: "Textareas on Textareas Layout Block", actions: "current", html: nil, nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
+  {id: 46, layout_id: 24, model_id: nil, name: "Checkboxes on Checkboxes Layout Block", actions: "current", html: nil, nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2016-08-16 18:14:49", updated_at: "2016-08-16 18:14:49", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
+  {id: 47, layout_id: 4, model_id: nil, name: "Textareas on Field Displays Layout", actions: "show", html: "", nest_level_1: 4, nest_level_2: nil, path_base: "/mega-bar/field_displays/:field_display_id/textareas", created_at: "2016-08-16 18:26:41", updated_at: "2016-08-16 18:26:41", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
+  {id: 48, layout_id: 4, model_id: nil, name: "Checkboxes for a Field Display", actions: "show", html: "", nest_level_1: 4, nest_level_2: nil, path_base: "/mega-bar/field_displays/:field_display_id/checkboxes", created_at: "2016-08-16 18:34:43", updated_at: "2016-08-16 18:34:43", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil}
 ])
 MegaBar::TmpModelDisplay.create!([
   {id: 1, block_id: 1, model_id: 1, format: "1", action: "index", header: "Models", created_at: "2014-05-05 19:13:32", updated_at: "2015-12-09 20:26:19", collection_or_member: "collection", series: 1, instructions: nil},
@@ -347,7 +356,13 @@ MegaBar::TmpModelDisplay.create!([
   {id: 94, block_id: 45, model_id: 13, format: "2", action: "new", header: "Create Textarea", created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12", collection_or_member: nil, series: nil, instructions: nil},
   {id: 95, block_id: 45, model_id: 13, format: "2", action: "edit", header: "Edit Textarea", created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12", collection_or_member: nil, series: nil, instructions: nil},
   {id: 96, block_id: 45, model_id: 13, format: "1", action: "index", header: "Textareas", created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12", collection_or_member: nil, series: nil, instructions: nil},
-  {id: 97, block_id: 45, model_id: 13, format: "2", action: "show", header: "Textarea", created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12", collection_or_member: nil, series: nil, instructions: nil}
+  {id: 97, block_id: 45, model_id: 13, format: "2", action: "show", header: "Textarea", created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12", collection_or_member: nil, series: nil, instructions: nil},
+  {id: 98, block_id: 46, model_id: 14, format: "2", action: "new", header: "Create Checkbox", created_at: "2016-08-16 18:14:49", updated_at: "2016-08-16 18:14:49", collection_or_member: nil, series: nil, instructions: nil},
+  {id: 99, block_id: 46, model_id: 14, format: "2", action: "edit", header: "Edit Checkbox", created_at: "2016-08-16 18:14:49", updated_at: "2016-08-16 18:14:49", collection_or_member: nil, series: nil, instructions: nil},
+  {id: 100, block_id: 46, model_id: 14, format: "1", action: "index", header: "Checkboxes", created_at: "2016-08-16 18:14:49", updated_at: "2016-08-16 18:14:49", collection_or_member: nil, series: nil, instructions: nil},
+  {id: 101, block_id: 46, model_id: 14, format: "2", action: "show", header: "Checkbox", created_at: "2016-08-16 18:14:49", updated_at: "2016-08-16 18:14:49", collection_or_member: nil, series: nil, instructions: nil},
+  {id: 104, block_id: 47, model_id: 13, format: "1", action: "index", header: "Textareas", created_at: "2016-08-16 18:26:42", updated_at: "2016-08-16 18:26:42", collection_or_member: nil, series: nil, instructions: nil},
+  {id: 108, block_id: 48, model_id: 14, format: "1", action: "index", header: "Checkboxes", created_at: "2016-08-16 18:34:43", updated_at: "2016-08-16 18:34:43", collection_or_member: nil, series: nil, instructions: nil}
 ])
 MegaBar::TmpFieldDisplay.create!([
   {id: 1, model_display_id: 1, field_id: 5, format: "textread", action: "index", header: "Model Name", link_type: nil, created_at: "2014-05-05 20:04:39", updated_at: "2015-02-08 08:23:30"},
@@ -582,7 +597,7 @@ MegaBar::TmpFieldDisplay.create!([
   {id: 230, model_display_id: 38, field_id: 71, format: "textbox", action: nil, header: "block_text", link_type: nil, created_at: "2015-02-22 16:42:19", updated_at: "2015-02-22 16:47:58"},
   {id: 231, model_display_id: 42, field_id: 72, format: "select", action: nil, header: "make_block", link_type: nil, created_at: "2015-02-22 17:06:22", updated_at: "2015-02-22 17:06:22"},
   {id: 232, model_display_id: 42, field_id: 73, format: "textbox", action: nil, header: "block_text", link_type: nil, created_at: "2015-02-22 17:15:11", updated_at: "2015-02-22 17:15:11"},
-  {id: 233, model_display_id: 6, field_id: 75, format: "select", action: nil, header: "make_page", link_type: nil, created_at: "2015-02-22 17:56:18", updated_at: "2015-02-22 17:56:18"},
+  {id: 233, model_display_id: 6, field_id: 75, format: "select", action: nil, header: "make_page", link_type: "", created_at: "2015-02-22 17:56:18", updated_at: "2016-08-16 21:26:13"},
   {id: 234, model_display_id: 46, field_id: 77, format: "select", action: nil, header: "model_id", link_type: nil, created_at: "2015-02-22 18:09:03", updated_at: "2015-02-22 18:09:03"},
   {id: 235, model_display_id: 47, field_id: 77, format: "select", action: nil, header: "model_id", link_type: nil, created_at: "2015-02-22 18:09:03", updated_at: "2015-02-22 18:09:03"},
   {id: 236, model_display_id: 1, field_id: 1, format: "textread", action: nil, header: "Id", link_type: nil, created_at: "2015-02-22 19:52:29", updated_at: "2015-02-22 19:52:29"},
@@ -1004,7 +1019,23 @@ MegaBar::TmpFieldDisplay.create!([
   {id: 652, model_display_id: 15, field_id: 98, format: "textarea", action: nil, header: "Instructions", link_type: nil, created_at: "2016-08-15 16:28:56", updated_at: "2016-08-15 16:28:56"},
   {id: 653, model_display_id: 73, field_id: 98, format: "textarea", action: nil, header: "Instructions", link_type: nil, created_at: "2016-08-15 16:28:56", updated_at: "2016-08-15 16:28:56"},
   {id: 654, model_display_id: 74, field_id: 98, format: "textarea", action: nil, header: "Instructions", link_type: nil, created_at: "2016-08-15 16:28:56", updated_at: "2016-08-15 16:28:56"},
-  {id: 655, model_display_id: 5, field_id: 89, format: "select", action: nil, header: "Mega model", link_type: nil, created_at: "2016-08-15 17:25:39", updated_at: "2016-08-15 17:25:39"}
+  {id: 655, model_display_id: 5, field_id: 89, format: "select", action: nil, header: "Mega model", link_type: nil, created_at: "2016-08-15 17:25:39", updated_at: "2016-08-15 17:25:39"},
+  {id: 656, model_display_id: 98, field_id: 99, format: "textbox", action: nil, header: "Field display", link_type: nil, created_at: "2016-08-16 18:22:01", updated_at: "2016-08-16 18:22:01"},
+  {id: 657, model_display_id: 99, field_id: 99, format: "textbox", action: nil, header: "Field display", link_type: nil, created_at: "2016-08-16 18:22:01", updated_at: "2016-08-16 18:22:01"},
+  {id: 658, model_display_id: 100, field_id: 99, format: "textread", action: nil, header: "Field display", link_type: nil, created_at: "2016-08-16 18:22:01", updated_at: "2016-08-16 18:22:01"},
+  {id: 659, model_display_id: 101, field_id: 99, format: "textread", action: nil, header: "Field display", link_type: nil, created_at: "2016-08-16 18:22:01", updated_at: "2016-08-16 18:22:01"},
+  {id: 666, model_display_id: 104, field_id: 95, format: "textread", action: nil, header: "Field display", link_type: nil, created_at: "2016-08-16 18:26:42", updated_at: "2016-08-16 18:26:42"},
+  {id: 667, model_display_id: 104, field_id: 96, format: "textread", action: nil, header: "Rows", link_type: nil, created_at: "2016-08-16 18:26:42", updated_at: "2016-08-16 18:26:42"},
+  {id: 668, model_display_id: 104, field_id: 97, format: "textread", action: nil, header: "Cols", link_type: nil, created_at: "2016-08-16 18:26:42", updated_at: "2016-08-16 18:26:42"},
+  {id: 674, model_display_id: 108, field_id: 99, format: "textread", action: nil, header: "Field display", link_type: nil, created_at: "2016-08-16 18:34:43", updated_at: "2016-08-16 18:34:43"},
+  {id: 676, model_display_id: 99, field_id: 100, format: "checkbox", action: nil, header: "Checked", link_type: nil, created_at: "2016-08-16 21:34:29", updated_at: "2016-08-16 21:34:29"},
+  {id: 677, model_display_id: 100, field_id: 100, format: "textread", action: nil, header: "Checked", link_type: nil, created_at: "2016-08-16 21:34:29", updated_at: "2016-08-16 21:34:29"},
+  {id: 678, model_display_id: 101, field_id: 100, format: "textread", action: nil, header: "Checked", link_type: nil, created_at: "2016-08-16 21:34:29", updated_at: "2016-08-16 21:34:29"},
+  {id: 679, model_display_id: 108, field_id: 100, format: "textread", action: nil, header: "Checked", link_type: nil, created_at: "2016-08-16 21:34:29", updated_at: "2016-08-16 21:34:29"}
+])
+MegaBar::TmpCheckbox.create!([
+  {id: 1, created_at: "2016-08-16 18:46:49", updated_at: "2016-08-16 18:46:49", field_display_id: 233, checked: true},
+  {id: 2, created_at: "2016-08-16 21:34:29", updated_at: "2016-08-17 01:27:50", field_display_id: 676, checked: false}
 ])
 MegaBar::TmpSelect.create!([
   {id: 1, field_display_id: 12, created_at: "2015-02-13 01:16:05", updated_at: "2015-02-13 01:16:05", multiple: nil},
@@ -1036,7 +1067,6 @@ MegaBar::TmpSelect.create!([
   {id: 27, field_display_id: 231, created_at: "2015-02-22 17:06:22", updated_at: "2015-02-22 17:06:22", multiple: nil},
   {id: 28, field_display_id: 181, created_at: "2015-02-22 17:10:44", updated_at: "2015-02-22 17:10:44", multiple: nil},
   {id: 29, field_display_id: 182, created_at: "2015-02-22 17:10:50", updated_at: "2015-02-22 17:10:50", multiple: nil},
-  {id: 30, field_display_id: 233, created_at: "2015-02-22 17:56:18", updated_at: "2015-02-22 17:56:18", multiple: nil},
   {id: 31, field_display_id: 234, created_at: "2015-02-22 18:09:03", updated_at: "2015-02-22 18:09:03", multiple: nil},
   {id: 32, field_display_id: 235, created_at: "2015-02-22 18:09:03", updated_at: "2015-02-22 18:09:03", multiple: nil},
   {id: 33, field_display_id: 250, created_at: "2015-02-25 03:32:07", updated_at: "2015-02-25 03:32:07", multiple: nil},
@@ -1097,7 +1127,8 @@ MegaBar::TmpSelect.create!([
   {id: 88, field_display_id: 632, created_at: "2016-05-31 04:09:33", updated_at: "2016-05-31 04:14:12", multiple: true},
   {id: 89, field_display_id: 637, created_at: "2016-07-14 15:18:19", updated_at: "2016-07-14 15:18:19", multiple: false},
   {id: 90, field_display_id: 638, created_at: "2016-07-14 15:18:19", updated_at: "2016-07-14 15:18:19", multiple: false},
-  {id: 91, field_display_id: 655, created_at: "2016-08-15 17:25:39", updated_at: "2016-08-15 17:25:39", multiple: false}
+  {id: 91, field_display_id: 655, created_at: "2016-08-15 17:25:39", updated_at: "2016-08-15 17:25:39", multiple: false},
+  {id: 92, field_display_id: 233, created_at: "2016-08-16 21:26:13", updated_at: "2016-08-16 21:26:13", multiple: false}
 ])
 MegaBar::TmpTextarea.create!([
   {id: 1, created_at: "2016-08-15 16:28:56", updated_at: "2016-08-15 16:28:56", field_display_id: 651, rows: nil, cols: nil},
@@ -1276,7 +1307,9 @@ MegaBar::TmpTextbox.create!([
   {id: 168, field_display_id: 643, size: 42, created_at: "2016-08-15 14:11:22", updated_at: "2016-08-15 14:11:22"},
   {id: 169, field_display_id: 644, size: 42, created_at: "2016-08-15 14:11:22", updated_at: "2016-08-15 14:11:22"},
   {id: 170, field_display_id: 647, size: 42, created_at: "2016-08-15 14:12:03", updated_at: "2016-08-15 14:12:03"},
-  {id: 171, field_display_id: 648, size: 42, created_at: "2016-08-15 14:12:03", updated_at: "2016-08-15 14:12:03"}
+  {id: 171, field_display_id: 648, size: 42, created_at: "2016-08-15 14:12:03", updated_at: "2016-08-15 14:12:03"},
+  {id: 172, field_display_id: 656, size: 42, created_at: "2016-08-16 18:22:01", updated_at: "2016-08-16 18:22:01"},
+  {id: 173, field_display_id: 657, size: 42, created_at: "2016-08-16 18:22:01", updated_at: "2016-08-16 18:22:01"}
 ])
 MegaBar::TmpTextread.create!([
   {id: 1, field_display_id: 1, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-02-25 03:32:05", updated_at: "2015-02-25 03:32:05", truncation_separator: nil},
@@ -1666,5 +1699,14 @@ MegaBar::TmpTextread.create!([
   {id: 385, field_display_id: 645, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-15 14:11:22", updated_at: "2016-08-15 14:11:22", truncation_separator: " "},
   {id: 386, field_display_id: 646, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-15 14:11:22", updated_at: "2016-08-15 14:11:22", truncation_separator: " "},
   {id: 387, field_display_id: 649, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-15 14:12:03", updated_at: "2016-08-15 14:12:03", truncation_separator: " "},
-  {id: 388, field_display_id: 650, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-15 14:12:03", updated_at: "2016-08-15 14:12:03", truncation_separator: " "}
+  {id: 388, field_display_id: 650, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-15 14:12:03", updated_at: "2016-08-15 14:12:03", truncation_separator: " "},
+  {id: 389, field_display_id: 658, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-16 18:22:01", updated_at: "2016-08-16 18:22:01", truncation_separator: " "},
+  {id: 390, field_display_id: 659, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-16 18:22:01", updated_at: "2016-08-16 18:22:01", truncation_separator: " "},
+  {id: 394, field_display_id: 666, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-16 18:26:42", updated_at: "2016-08-16 18:26:42", truncation_separator: " "},
+  {id: 395, field_display_id: 667, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-16 18:26:42", updated_at: "2016-08-16 18:26:42", truncation_separator: " "},
+  {id: 396, field_display_id: 668, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-16 18:26:42", updated_at: "2016-08-16 18:26:42", truncation_separator: " "},
+  {id: 401, field_display_id: 674, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-16 18:34:43", updated_at: "2016-08-16 18:34:43", truncation_separator: " "},
+  {id: 403, field_display_id: 677, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-16 21:34:29", updated_at: "2016-08-16 21:34:29", truncation_separator: " "},
+  {id: 404, field_display_id: 678, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-16 21:34:29", updated_at: "2016-08-16 21:34:29", truncation_separator: " "},
+  {id: 405, field_display_id: 679, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-16 21:34:29", updated_at: "2016-08-16 21:34:29", truncation_separator: " "}
 ])

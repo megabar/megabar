@@ -207,7 +207,7 @@ class MegaEnv
   def to_hash
     {
       block: @block,
-      model_id: @model_id,
+      modle_id: @modle_id,
       mega_model_properties: @modle,
       klass: @klass,
       kontroller_inst: @kontroller_inst,

@@ -19,7 +19,7 @@ module MegaBar
     def new
       instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.new)
       @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst]);
-      @form_instance_vars = @nested_instance_variables  + [@mega_instance]
+@form_instance_vars = @nested_instance_variables  + [@mega_instance]
       render @new_view_template
     end
 

@@ -27,7 +27,8 @@
       end
     end
   %>
-
+ <% 
+puts displayable_field[:field_display].format.tableize  %>
   <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: data_format_locals(@mega_instance, displayable_field, value, @mega_display)
 
   # {displayable_field: displayable_field, obj: @mega_instance, mega_bar: @mega_display, value: value}

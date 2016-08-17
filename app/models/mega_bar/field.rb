@@ -42,7 +42,8 @@ module MegaBar
     def make_migration
       return true if self.accessor == 'y'
       return if Model.connection.column_exists?(self.tablename,  self.field)
-      system 'bundle exec rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + self.data_type
+      boolean =   self.data_type == 'boolean' ? ' null: false, default: false' : '' #todo allow default true.
+      system 'bundle exec rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + self.data_type + boolean
       ActiveRecord::Migrator.migrate "db/migrate"
       system 'rake db:schema:dump'
     end

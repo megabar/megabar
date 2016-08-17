@@ -1,6 +1,6 @@
 <% the_module_array.each do | m | %>module <%=m %><% end %>
   require 'spec_helper'
-
+  require_relative 'common'
   RSpec.describe <% the_module_array.each do | m | %><%=m%>::<% end %><%= the_controller_name %>, :type => :controller do
     include_context "common" #pretty important!
 
@@ -18,11 +18,12 @@
       f = build(:<%=the_model_file_name%>)
       { tbd: f[:tbd] }
     }
+    let(:controlller) { '<%=the_route_name %>' } #might need editing!
 
     # the rest of these you shouldn't have to mess with.
     let(:controller_class) { <% if the_module_name %><%=the_module_name%>::<% end %><%= the_controller_name %> }
     let(:model_class) { <% if the_module_name %><%=the_module_name%>::<% end %><%= classname %> }
-    let(:controlller) { '<%=the_route_name %>' }
+    
     let(:model_and_page) { create(:model_with_page, classname: '<%=classname %>', tablename: '<%=the_table_name %>', name: '<%=classname %>', modyule: '<%= the_module_name %>' ) }
     let(:page_terms) { <%= the_module_array << the_route_path %>  }
     let(:page_name) { '<%= the_module_name %> page'   }

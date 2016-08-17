@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>module MegaBar::MegaBarConcern - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+</script>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/darkfish.js"></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="module">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    
+    
+    <div id="extends-section" class="nav-section">
+  <h3>Extended With Modules</h3>
+
+  <ul class="link-list">
+    
+  
+    <li><span class="extend">ActiveSupport::Concern</span>
+  
+  
+  </ul>
+</div>
+
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-i-add_form_path_to_mega_displays">#add_form_path_to_mega_displays</a>
+    
+    <li ><a href="#method-i-column_sorting">#column_sorting</a>
+    
+    <li ><a href="#method-i-conditions">#conditions</a>
+    
+    <li ><a href="#method-i-constant_from_controller">#constant_from_controller</a>
+    
+    <li ><a href="#method-i-create">#create</a>
+    
+    <li ><a href="#method-i-destroy">#destroy</a>
+    
+    <li ><a href="#method-i-edit">#edit</a>
+    
+    <li ><a href="#method-i-form_path">#form_path</a>
+    
+    <li ><a href="#method-i-index">#index</a>
+    
+    <li ><a href="#method-i-is_displayable-3F">#is_displayable?</a>
+    
+    <li ><a href="#method-i-new">#new</a>
+    
+    <li ><a href="#method-i-redo_setup">#redo_setup</a>
+    
+    <li ><a href="#method-i-set_vars_for_all">#set_vars_for_all</a>
+    
+    <li ><a href="#method-i-set_vars_for_displays">#set_vars_for_displays</a>
+    
+    <li ><a href="#method-i-show">#show</a>
+    
+    <li ><a href="#method-i-sort_column">#sort_column</a>
+    
+    <li ><a href="#method-i-sort_direction">#sort_direction</a>
+    
+    <li ><a href="#method-i-test_create">#test_create</a>
+    
+    <li ><a href="#method-i-unpack_nested_classes">#unpack_nested_classes</a>
+    
+    <li ><a href="#method-i-update">#update</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="module-MegaBar::MegaBarConcern">
+  <h1 id="module-MegaBar::MegaBarConcern" class="module">
+    module MegaBar::MegaBarConcern
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-add_form_path_to_mega_displays" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">add_form_path_to_mega_displays</span><span
+            class="method-args">(mega_env)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="add_form_path_to_mega_displays-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 133</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_form_path_to_mega_displays</span>(<span class="ruby-identifier">mega_env</span>)
+  <span class="ruby-identifier">mega_env</span>[<span class="ruby-value">:mega_displays</span>].<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">mega_display</span>, <span class="ruby-identifier">index</span> <span class="ruby-operator">|</span>
+    <span class="ruby-identifier">mega_env</span>[<span class="ruby-value">:mega_displays</span>][<span class="ruby-identifier">index</span>][<span class="ruby-value">:form_path</span>] = <span class="ruby-identifier">form_path</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:action</span>], <span class="ruby-identifier">mega_env</span>[<span class="ruby-value">:kontroller_path</span>], <span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>])
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">mega_env</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-column_sorting" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">column_sorting</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="column_sorting-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 179</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">column_sorting</span>
+  <span class="ruby-identifier">sort_column</span>(<span class="ruby-ivar">@mega_class</span>, <span class="ruby-ivar">@mega_model_properties</span>, <span class="ruby-identifier">params</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&quot; &quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">sort_direction</span>(<span class="ruby-identifier">params</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-conditions" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">conditions</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="conditions-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 130</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">conditions</span>
+   <span class="ruby-ivar">@conditions</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:nested_ids</span>][<span class="ruby-value">0</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:nested_ids</span>][<span class="ruby-value">0</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-constant_from_controller" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">constant_from_controller</span><span
+            class="method-args">(str)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="constant_from_controller-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 170</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">constant_from_controller</span>(<span class="ruby-identifier">str</span>)
+  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-string">&quot;str::::&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">str</span>)
+  <span class="ruby-identifier">constant_string</span> = <span class="ruby-string">&#39;&#39;</span>
+  <span class="ruby-identifier">str</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;/&#39;</span>).<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">seg</span>, <span class="ruby-identifier">i</span> <span class="ruby-operator">|</span>
+    <span class="ruby-identifier">constant_string</span> <span class="ruby-operator">+=</span>  <span class="ruby-identifier">i</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;/&#39;</span>).<span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">seg</span>.<span class="ruby-identifier">classify</span> <span class="ruby-operator">+</span> <span class="ruby-string">&#39;::&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">seg</span>.<span class="ruby-identifier">classify</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">info</span>(<span class="ruby-string">&quot;constant string&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">constant_string</span>)
+  <span class="ruby-identifier">constant_string</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-create" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">create</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="create-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 37</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
+  <span class="ruby-ivar">@mega_instance</span> = <span class="ruby-ivar">@mega_class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">_params</span>)
+  <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@mega_instance</span>.<span class="ruby-identifier">save</span>
+      <span class="ruby-constant">MegaBar</span>.<span class="ruby-identifier">call_rake</span>(<span class="ruby-string">&#39;db:schema:dump&#39;</span>) <span class="ruby-keyword">if</span> [<span class="ruby-value">1</span>,<span class="ruby-value">2</span>].<span class="ruby-identifier">include?</span> <span class="ruby-ivar">@model_id</span> <span class="ruby-keyword">and</span> <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">env</span> <span class="ruby-operator">!=</span> <span class="ruby-string">&#39;test&#39;</span><span class="ruby-comment"># gets new models into schema</span>
+      <span class="ruby-identifier">param_hash</span> = {}
+      <span class="ruby-ivar">@nested_ids</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">param</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">param_hash</span> = <span class="ruby-identifier">param_hash</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">param</span>)
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-identifier">param_hash</span>[<span class="ruby-value">:controller</span>] = <span class="ruby-identifier">params</span>[<span class="ruby-string">&quot;controller&quot;</span>]
+      <span class="ruby-keyword">if</span> <span class="ruby-ivar">@mega_instance</span>.<span class="ruby-identifier">id</span>
+        <span class="ruby-comment"># todo: add configuration to model_display for where to go after insert.</span>
+        <span class="ruby-identifier">param_hash</span>[<span class="ruby-value">:id</span>] = <span class="ruby-ivar">@mega_instance</span>.<span class="ruby-identifier">id</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@mega_instance</span>.<span class="ruby-identifier">id</span> <span class="ruby-comment">#danger.. added during testing.</span>
+        <span class="ruby-identifier">param_hash</span>[<span class="ruby-value">:action</span>] = <span class="ruby-string">&#39;show&#39;</span>
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">param_hash</span>[<span class="ruby-value">:action</span>] = <span class="ruby-string">&#39;index&#39;</span>
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-identifier">param_hash</span>[<span class="ruby-value">:only_path</span>] = <span class="ruby-keyword">true</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">param_hash</span>), <span class="ruby-identifier">notice</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;It was successfully created.&#39;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">action</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;show&#39;</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:created</span>, <span class="ruby-identifier">location</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@mega_instance</span> }
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> {
+        <span class="ruby-identifier">redo_setup</span>(<span class="ruby-string">&#39;new&#39;</span>)
+        <span class="ruby-identifier">render</span> <span class="ruby-ivar">@new_view_template</span>
+       }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@model</span>.<span class="ruby-identifier">errors</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:unprocessable_entity</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-destroy" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">destroy</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="destroy-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 84</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
+  <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-string">&quot;@&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:kontroller_inst</span>],  <span class="ruby-ivar">@mega_class</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]))
+  <span class="ruby-ivar">@mega_instance</span> = <span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-string">&quot;@&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:kontroller_inst</span>]);
+  <span class="ruby-identifier">session</span>[<span class="ruby-value">:return_to</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">referer</span>
+
+  <span class="ruby-ivar">@mega_instance</span>.<span class="ruby-identifier">destroy</span>
+  <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> {  <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:return_to</span>), <span class="ruby-identifier">notice</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;You nuked it properly.&#39;</span> }
+    <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">head</span> <span class="ruby-value">:no_content</span> }
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-edit" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">edit</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="edit-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 26</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
+  <span class="ruby-identifier">session</span>[<span class="ruby-value">:return_to</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">referer</span>
+  <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-string">&quot;@&quot;</span>  <span class="ruby-operator">+</span> <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:kontroller_inst</span>],  <span class="ruby-ivar">@mega_class</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]))
+  <span class="ruby-ivar">@mega_instance</span> = <span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-string">&quot;@&quot;</span>  <span class="ruby-operator">+</span> <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:kontroller_inst</span>])
+  <span class="ruby-ivar">@form_instance_vars</span> = <span class="ruby-ivar">@nested_instance_variables</span>  <span class="ruby-operator">+</span> [<span class="ruby-ivar">@mega_instance</span>]
+  <span class="ruby-identifier">render</span> <span class="ruby-ivar">@edit_view_template</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-form_path" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">form_path</span><span
+            class="method-args">(action, path, id=nil)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="form_path-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 140</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">form_path</span>(<span class="ruby-identifier">action</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">id</span>=<span class="ruby-keyword">nil</span>)
+  <span class="ruby-comment">#used on index and show forms (for filters &amp; reordering)</span>
+  <span class="ruby-identifier">param_hash</span> = {}
+  <span class="ruby-ivar">@nested_ids</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">param</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">param_hash</span> = <span class="ruby-identifier">param_hash</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">param</span>)
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">param_hash</span> = <span class="ruby-identifier">param_hash</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">params</span>.<span class="ruby-identifier">dup</span>)
+  <span class="ruby-identifier">param_hash</span>[<span class="ruby-value">:id</span>] = <span class="ruby-identifier">id</span>
+  <span class="ruby-identifier">param_hash</span>[<span class="ruby-value">:only_path</span>] = <span class="ruby-keyword">true</span>
+  <span class="ruby-keyword">case</span> <span class="ruby-identifier">action</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;new&#39;</span>
+    <span class="ruby-identifier">param_hash</span>[<span class="ruby-string">&#39;action&#39;</span>] = <span class="ruby-string">&#39;create&#39;</span>
+  <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;edit&#39;</span>
+    <span class="ruby-identifier">param_hash</span>[<span class="ruby-string">&#39;action&#39;</span>] = <span class="ruby-string">&#39;update&#39;</span>
+  <span class="ruby-keyword">else</span>
+     <span class="ruby-identifier">param_hash</span>[<span class="ruby-string">&#39;action&#39;</span>] = <span class="ruby-identifier">action</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">url_for</span>(<span class="ruby-identifier">param_hash</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-index" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">index</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="index-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 5</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
+  <span class="ruby-identifier">records</span> = <span class="ruby-ivar">@mega_class</span>.<span class="ruby-identifier">where</span>(<span class="ruby-ivar">@conditions</span>).<span class="ruby-identifier">where</span>(<span class="ruby-ivar">@conditions_array</span>).<span class="ruby-identifier">order</span>(<span class="ruby-identifier">column_sorting</span>)
+  <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-string">&quot;@&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:kontroller_inst</span>].<span class="ruby-identifier">pluralize</span>,  <span class="ruby-identifier">records</span>)
+  <span class="ruby-ivar">@mega_instance</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-string">&quot;@&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:kontroller_inst</span>].<span class="ruby-identifier">pluralize</span>);
+  <span class="ruby-identifier">render</span> <span class="ruby-ivar">@index_view_template</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-is_displayable-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">is_displayable?</span><span
+            class="method-args">(format)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="is_displayable-3F-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 167</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_displayable?</span>(<span class="ruby-identifier">format</span>)
+  <span class="ruby-keyword">return</span>  (<span class="ruby-identifier">format</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;hidden&#39;</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">format</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;off&#39;</span>) <span class="ruby-operator">?</span> <span class="ruby-keyword">false</span> <span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 19</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
+  <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-string">&quot;@&quot;</span>  <span class="ruby-operator">+</span> <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:kontroller_inst</span>],  <span class="ruby-ivar">@mega_class</span>.<span class="ruby-identifier">new</span>)
+  <span class="ruby-ivar">@mega_instance</span> = <span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-string">&quot;@&quot;</span>  <span class="ruby-operator">+</span> <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:kontroller_inst</span>]);
+  <span class="ruby-ivar">@form_instance_vars</span> = <span class="ruby-ivar">@nested_instance_variables</span>  <span class="ruby-operator">+</span> [<span class="ruby-ivar">@mega_instance</span>]
+  <span class="ruby-identifier">render</span> <span class="ruby-ivar">@new_view_template</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-redo_setup" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">redo_setup</span><span
+            class="method-args">(action)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="redo_setup-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 182</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">redo_setup</span>(<span class="ruby-identifier">action</span>)
+  <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_rout</span>][<span class="ruby-value">:action</span>] = <span class="ruby-identifier">action</span>
+  <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>] = <span class="ruby-constant">MegaEnv</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@block</span>, <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_rout</span>], <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_page</span>]).<span class="ruby-identifier">to_hash</span>
+  <span class="ruby-identifier">set_vars_for_all</span>
+  <span class="ruby-identifier">set_vars_for_displays</span>
+  <span class="ruby-identifier">params</span>[<span class="ruby-value">:action</span>] = <span class="ruby-string">&#39;edit&#39;</span>
+  <span class="ruby-identifier">params</span>[<span class="ruby-value">:redo</span>] = <span class="ruby-keyword">true</span>
+  <span class="ruby-ivar">@form_instance_vars</span> = <span class="ruby-ivar">@nested_instance_variables</span>  <span class="ruby-operator">+</span> [<span class="ruby-ivar">@mega_instance</span>]
+  <span class="ruby-string">&#39;hello&#39;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-set_vars_for_all" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_vars_for_all</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_vars_for_all-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 105</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_vars_for_all</span>
+  <span class="ruby-ivar">@mega_page</span> = <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_page</span>]
+  <span class="ruby-ivar">@mega_rout</span> = <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_rout</span>]
+  <span class="ruby-ivar">@mega_layout</span> = <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_layout</span>]
+  <span class="ruby-ivar">@mega_class</span> = <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:klass</span>].<span class="ruby-identifier">constantize</span>
+  <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>].<span class="ruby-identifier">keys</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span> <span class="ruby-identifier">env_var</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-string">&#39;@&#39;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">env_var</span>.<span class="ruby-identifier">to_s</span>, <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-identifier">env_var</span>]) }
+  <span class="ruby-identifier">unpack_nested_classes</span>(<span class="ruby-ivar">@nested_class_info</span>)
+  <span class="ruby-ivar">@index_view_template</span> <span class="ruby-operator">||=</span> <span class="ruby-string">&quot;mega_bar.html.erb&quot;</span>
+  <span class="ruby-ivar">@show_view_template</span> <span class="ruby-operator">||=</span> <span class="ruby-string">&quot;mega_bar.html.erb&quot;</span>
+  <span class="ruby-ivar">@edit_view_template</span> <span class="ruby-operator">||=</span> <span class="ruby-string">&quot;mega_bar.html.erb&quot;</span>
+  <span class="ruby-ivar">@new_view_template</span> <span class="ruby-operator">||=</span> <span class="ruby-string">&quot;mega_bar.html.erb&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-set_vars_for_displays" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">set_vars_for_displays</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="set_vars_for_displays-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 96</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_vars_for_displays</span>
+  <span class="ruby-ivar">@conditions</span> =  {}; <span class="ruby-keyword">self</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:conditions</span>) <span class="ruby-comment">#allows various &#39;where&#39; statements in queries.</span>
+  <span class="ruby-ivar">@conditions_array</span> =  []; <span class="ruby-keyword">self</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:conditions_array</span>)
+  <span class="ruby-ivar">@options</span> = {}; <span class="ruby-keyword">self</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:get_options</span>) <span class="ruby-comment"># allows for queries to populate menus</span>
+  <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>] = <span class="ruby-identifier">add_form_path_to_mega_displays</span>(<span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>])
+  <span class="ruby-ivar">@default_options</span> = {}
+  <span class="ruby-ivar">@mega_displays</span> = <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:mega_displays</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-show" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">show</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="show-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 12</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
+  <span class="ruby-ivar">@mega_instance</span> <span class="ruby-operator">||=</span> []
+  <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-string">&quot;@&quot;</span>  <span class="ruby-operator">+</span> <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:kontroller_inst</span>],  <span class="ruby-ivar">@mega_class</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]))
+  <span class="ruby-ivar">@mega_instance</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-string">&quot;@&quot;</span>  <span class="ruby-operator">+</span> <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:kontroller_inst</span>]);
+  <span class="ruby-identifier">render</span> <span class="ruby-ivar">@show_view_template</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-sort_column" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">sort_column</span><span
+            class="method-args">(mega_class, model_properties, passed_params)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="sort_column-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 160</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sort_column</span>(<span class="ruby-identifier">mega_class</span>, <span class="ruby-identifier">model_properties</span>, <span class="ruby-identifier">passed_params</span>)
+  <span class="ruby-identifier">mega_class</span>.<span class="ruby-identifier">column_names</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">passed_params</span>[<span class="ruby-value">:sort</span>]) <span class="ruby-operator">?</span> <span class="ruby-identifier">passed_params</span>[<span class="ruby-value">:sort</span>] <span class="ruby-operator">:</span>  <span class="ruby-identifier">model_properties</span>[<span class="ruby-value">:default_sort_field</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-sort_direction" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">sort_direction</span><span
+            class="method-args">(passed_params)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="sort_direction-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 163</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">sort_direction</span>(<span class="ruby-identifier">passed_params</span>)
+  <span class="ruby-node">%w[asc desc]</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">passed_params</span>[<span class="ruby-value">:direction</span>]) <span class="ruby-operator">?</span> <span class="ruby-identifier">passed_params</span>[<span class="ruby-value">:direction</span>] <span class="ruby-operator">:</span> <span class="ruby-string">&#39;desc&#39;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-test_create" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">test_create</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="test_create-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 34</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">test_create</span> <span class="ruby-comment"># $20 bounty for understanding why this is here and figuring out how to get rid of it! (hint: tests break without it)</span>
+   <span class="ruby-identifier">create</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-unpack_nested_classes" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">unpack_nested_classes</span><span
+            class="method-args">(nested_class_infos)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="unpack_nested_classes-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 118</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">unpack_nested_classes</span>(<span class="ruby-identifier">nested_class_infos</span>)
+  <span class="ruby-comment"># nested as in nested resource routes.</span>
+  <span class="ruby-identifier">nested_instance_variables</span> = []
+  <span class="ruby-identifier">nested_class_infos</span>.<span class="ruby-identifier">each_with_index</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">info</span>, <span class="ruby-identifier">idx</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># puts &#39;make a instance var!&#39;</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@nested_ids</span>[<span class="ruby-identifier">idx</span>]
+      <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-string">&quot;@&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">info</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">info</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">constantize</span>.<span class="ruby-identifier">find</span>(<span class="ruby-ivar">@nested_ids</span>[<span class="ruby-identifier">idx</span>].<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span><span class="ruby-identifier">v</span>}).<span class="ruby-identifier">first</span>)
+      <span class="ruby-identifier">nested_instance_variables</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-string">&quot;@&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">info</span>[<span class="ruby-value">1</span>])
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-ivar">@nested_instance_variables</span> = <span class="ruby-identifier">nested_instance_variables</span>.<span class="ruby-identifier">reverse</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-update" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="update-source">
+            <pre><span class="ruby-comment"># File app/controllers/mega_bar/mega_bar_concern.rb, line 67</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
+  <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-string">&quot;@&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:kontroller_inst</span>], <span class="ruby-ivar">@mega_class</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:id</span>]))
+  <span class="ruby-ivar">@mega_instance</span> = <span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-string">&quot;@&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>][<span class="ruby-value">:kontroller_inst</span>])
+  <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-ivar">@mega_instance</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">_params</span>)
+      <span class="ruby-identifier">session</span>[<span class="ruby-value">:return_to</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">referer</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value">:return_to</span>), <span class="ruby-identifier">notice</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Thing was successfully updated.&#39;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">respond_with_bip</span>(<span class="ruby-ivar">@mega_instance</span>) }
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> {
+        <span class="ruby-identifier">redo_setup</span>(<span class="ruby-string">&#39;edit&#39;</span>)
+        <span class="ruby-identifier">render</span> <span class="ruby-identifier">action</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;mega_bar.html.erb&#39;</span>
+      }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@mega_instance</span>.<span class="ruby-identifier">errors</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:unprocessable_entity</span> }
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

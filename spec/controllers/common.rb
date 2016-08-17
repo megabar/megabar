@@ -67,7 +67,7 @@ RSpec.shared_context "common", :a => :b do
         end
       end
       describe "GET new" do
-        it "assigns a new record as @mega_instance", focus: true do
+        it "assigns a new record as @mega_instance" do #, focus: true do
           status, headers, body = controller_class.action(:new).call(get_env(env_new))
           @controller = body.request.env['action_controller.instance']
           expect(assigns(:mega_instance)).to be_a_new(model_class)
@@ -126,7 +126,7 @@ RSpec.shared_context "common", :a => :b do
 
       describe "PUT update" do
         describe "with valid params" do
-          it "updates the requested record" do #, focus: true do
+          it "updates the requested record", focus: true do
             record = model_class.first
             status, headers, body = controller_class.action(:update).call(get_env(env_update))
             record.reload

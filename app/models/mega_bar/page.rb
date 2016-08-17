@@ -20,21 +20,21 @@ module MegaBar
       Rails.application.reload_routes! 
       # this now just adds it to the spec_helper.
       gem_path = ''
-      line = '  ##### MEGABAR END'
-      text = File.read('spec/spec_helper.rb')
-      if self.model_id
-        mod = Model.find(self.model_id)
-        gem_path = Rails.root + '../megabar/'  if File.directory?(Rails.root + '../megabar/')  && mod.modyule == 'MegaBar'
-        route_text = ' resources :' + mod.classname.downcase.pluralize
-        route_text += ", path: '#{self.path}'" if '/' + mod.tablename != self.path
-        route_text += "\n #{line}"
-      else
-        route_text = "get '#{self.path}', to: 'flats#index'"
-        route_text += "\n #{line}"
-      end
-      new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, route_text)
-      # To write changes to the file, use:
-      File.open(gem_path + 'spec/spec_helper.rb', "w") {|file| file.puts new_contents } # unless gem_path == '' && mod.modyule == 'MegaBar'
+      # line = '  ##### MEGABAR END'
+      # text = File.read('spec/spec_helper.rb')
+      # if self.model_id
+      #   mod = Model.find(self.model_id)
+      #   gem_path = Rails.root + '../megabar/'  if File.directory?(Rails.root + '../megabar/')  && mod.modyule == 'MegaBar'
+      #   route_text = ' resources :' + mod.classname.downcase.pluralize
+      #   route_text += ", path: '#{self.path}'" if '/' + mod.tablename != self.path
+      #   route_text += "\n #{line}"
+      # else
+      #   route_text = "get '#{self.path}', to: 'flats#index'"
+      #   route_text += "\n #{line}"
+      # end
+      # new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, route_text)
+      # # To write changes to the file, use:
+      # File.open(gem_path + 'spec/spec_helper.rb', "w") {|file| file.puts new_contents } # unless gem_path == '' && mod.modyule == 'MegaBar'
       # @@notices <<  "You will have to add the route yourself manually to the megabar route file: #{route_text}" if gem_path == '' && modyule == 'MegaBar'
     end
 

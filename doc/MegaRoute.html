@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class MegaRoute - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/darkfish.js"></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="Object.html">Object</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-c-boop">::boop</a>
+    
+    <li ><a href="#method-c-controller_from_block">::controller_from_block</a>
+    
+    <li ><a href="#method-c-load">::load</a>
+    
+    <li ><a href="#method-c-reload">::reload</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-MegaRoute">
+  <h1 id="class-MegaRoute" class="class">
+    class MegaRoute
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-boop" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">boop</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="boop-source">
+            <pre><span class="ruby-comment"># File lib/mega_bar/mega_route.rb, line 99</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">boop</span>
+  <span class="ruby-identifier">abort</span>(<span class="ruby-string">&#39;booop&#39;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-controller_from_block" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">controller_from_block</span><span
+            class="method-args">(context, block)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="controller_from_block-source">
+            <pre><span class="ruby-comment"># File lib/mega_bar/mega_route.rb, line 2</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">controller_from_block</span>(<span class="ruby-identifier">context</span>, <span class="ruby-identifier">block</span>)
+  <span class="ruby-identifier">md</span> = <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">ModelDisplay</span>.<span class="ruby-identifier">by_block</span>(<span class="ruby-identifier">block</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">first</span>
+  <span class="ruby-identifier">m</span> = <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">md</span>.<span class="ruby-identifier">model_id</span>)
+  <span class="ruby-identifier">modu</span> = <span class="ruby-identifier">m</span>.<span class="ruby-identifier">modyule</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">modyule</span> <span class="ruby-operator">+</span> <span class="ruby-string">&#39;::&#39;</span>
+  <span class="ruby-comment"># modu == &#39;MegaBar::&#39; ?  &#39;mega-bar/&#39; + m.classname.tableize</span>
+  <span class="ruby-comment"># puts md.model_id.to_s + &quot; .... &quot; + m.id.to_s + &quot; = &quot; + m.classname.tableize</span>
+  <span class="ruby-identifier">m</span>.<span class="ruby-identifier">classname</span>.<span class="ruby-identifier">tableize</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-load" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">load</span><span
+            class="method-args">(context)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="load-source">
+            <pre><span class="ruby-comment"># File lib/mega_bar/mega_route.rb, line 11</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">context</span>)
+  <span class="ruby-comment"># puts &#39;context: &#39; + context.inspect</span>
+  <span class="ruby-identifier">routes</span> = []
+  <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">Page</span>.<span class="ruby-identifier">all</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">pg</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># puts &#39;new page &#39;</span>
+    <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">Layout</span>.<span class="ruby-identifier">by_page</span>(<span class="ruby-identifier">pg</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">llayout</span><span class="ruby-operator">|</span>
+      <span class="ruby-comment"># puts &#39;new layout&#39;</span>
+     <span class="ruby-comment"># byebug if pg.id == 10</span>
+      <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">Block</span>.<span class="ruby-identifier">by_layout</span>(<span class="ruby-identifier">llayout</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">block</span> <span class="ruby-operator">|</span>
+        <span class="ruby-comment"># byebug if :mc=&gt;{:id=llayout.id == 9</span>
+        <span class="ruby-identifier">p</span> = <span class="ruby-identifier">block</span>.<span class="ruby-identifier">path_base?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">path_base</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">pg</span>.<span class="ruby-identifier">path</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">context</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Array</span>)
+          <span class="ruby-identifier">exclude</span> = <span class="ruby-keyword">false</span>
+          <span class="ruby-identifier">context</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">exclude</span> = <span class="ruby-keyword">true</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">starts_with?</span> <span class="ruby-identifier">c</span>
+          <span class="ruby-keyword">end</span>
+          <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">exclude</span>
+        <span class="ruby-keyword">else</span>
+          <span class="ruby-keyword">if</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">starts_with?</span> <span class="ruby-identifier">context</span>
+            <span class="ruby-identifier">p</span> = <span class="ruby-identifier">p</span>[<span class="ruby-identifier">context</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
+          <span class="ruby-keyword">else</span>
+            <span class="ruby-keyword">next</span>
+          <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-comment"># byebug if pg.id == 10</span>
+        <span class="ruby-identifier">path</span> = <span class="ruby-string">&#39;&#39;</span>
+        <span class="ruby-identifier">p1</span> = <span class="ruby-identifier">p</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;/&#39;</span>)
+        <span class="ruby-identifier">p1</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">seg</span> <span class="ruby-operator">|</span>
+          <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">seg</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">seg</span>.<span class="ruby-identifier">starts_with?</span>(<span class="ruby-string">&#39;:&#39;</span>))
+          <span class="ruby-identifier">path</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">seg</span>.<span class="ruby-identifier">singularize</span> <span class="ruby-operator">+</span> <span class="ruby-string">&#39;_&#39;</span>
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-identifier">path</span> = <span class="ruby-identifier">path</span>.<span class="ruby-identifier">chomp</span>(<span class="ruby-string">&#39;_&#39;</span>).<span class="ruby-identifier">pluralize</span>
+        <span class="ruby-comment"># puts &quot;new block: &quot; + block.id.to_s</span>
+        <span class="ruby-comment"># puts &quot;path: &quot; + path</span>
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">html?</span>
+          <span class="ruby-identifier">p</span> = <span class="ruby-identifier">block</span>.<span class="ruby-identifier">path_base?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">path_base</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">pg</span>.<span class="ruby-identifier">path</span>
+          <span class="ruby-identifier">routes</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-identifier">path</span><span class="ruby-operator">:</span> <span class="ruby-identifier">p</span>, <span class="ruby-identifier">method</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;get&#39;</span>, <span class="ruby-identifier">controller</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;flats&#39;</span>, <span class="ruby-identifier">action</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;index&#39;</span>, <span class="ruby-identifier">as</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;flats_&#39;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">id</span>.<span class="ruby-identifier">to_s</span>}
+          <span class="ruby-comment"># puts &#39;block html path. &#39; + p.to_s</span>
+        <span class="ruby-keyword">else</span>
+          <span class="ruby-keyword">if</span> <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">ModelDisplay</span>.<span class="ruby-identifier">by_block</span>(<span class="ruby-identifier">block</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+           <span class="ruby-comment"># byebug if pg.id ==10</span>
+            <span class="ruby-comment"># byebug if MegaBar::ModelDisplay.by_block(block.id).first.model_id == 3</span>
+            <span class="ruby-identifier">controller</span> = <span class="ruby-constant">MegaRoute</span>.<span class="ruby-identifier">controller_from_block</span>(<span class="ruby-identifier">context</span>, <span class="ruby-identifier">block</span>)
+            <span class="ruby-comment"># puts &quot;controller ---- &quot; + controller + &quot;, path: &quot; + p</span>
+            <span class="ruby-identifier">routes</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-identifier">path</span><span class="ruby-operator">:</span> <span class="ruby-identifier">p</span> <span class="ruby-operator">+</span> <span class="ruby-string">&#39;/:id&#39;</span>, <span class="ruby-identifier">method</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;patch&#39;</span>, <span class="ruby-identifier">action</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;update&#39;</span>, <span class="ruby-identifier">controller</span><span class="ruby-operator">:</span> <span class="ruby-identifier">controller</span>}
+            <span class="ruby-identifier">routes</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-identifier">path</span><span class="ruby-operator">:</span> <span class="ruby-identifier">p</span>, <span class="ruby-identifier">method</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;post&#39;</span>, <span class="ruby-identifier">action</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;create&#39;</span>, <span class="ruby-identifier">controller</span><span class="ruby-operator">:</span> <span class="ruby-identifier">controller</span>}
+            <span class="ruby-identifier">routes</span> <span class="ruby-operator">&lt;&lt;</span> {<span class="ruby-identifier">path</span><span class="ruby-operator">:</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">singularize</span>, <span class="ruby-identifier">method</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;delete&#39;</span>, <span class="ruby-identifier">action</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;destroy&#39;</span>, <span class="ruby-identifier">controller</span><span class="ruby-operator">:</span> <span class="ruby-identifier">controller</span>}
+            <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">ModelDisplay</span>.<span class="ruby-identifier">by_block</span>(<span class="ruby-identifier">block</span>.<span class="ruby-identifier">id</span>).<span class="ruby-identifier">order</span>(<span class="ruby-identifier">collection_or_member</span><span class="ruby-operator">:</span> <span class="ruby-value">:asc</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">md</span> <span class="ruby-operator">|</span> <span class="ruby-comment">#order here becomes important todo</span>
+              <span class="ruby-comment"># puts &quot;mid&quot; + md.model_id.to_s</span>
+              <span class="ruby-identifier">modle</span> = <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">md</span>.<span class="ruby-identifier">model_id</span>)
+              <span class="ruby-identifier">pf</span> = <span class="ruby-string">&#39;&#39;</span>
+              <span class="ruby-identifier">as</span> = <span class="ruby-keyword">nil</span>
+              <span class="ruby-keyword">case</span> <span class="ruby-identifier">md</span>.<span class="ruby-identifier">action</span>
+              <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;show&#39;</span>
+                <span class="ruby-identifier">pf</span> = <span class="ruby-identifier">p</span> <span class="ruby-operator">+</span> <span class="ruby-string">&#39;/:id&#39;</span>
+                <span class="ruby-identifier">as</span> = <span class="ruby-identifier">path</span>.<span class="ruby-identifier">singularize</span>
+              <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;index&#39;</span>
+                <span class="ruby-identifier">pf</span> = <span class="ruby-identifier">p</span>
+                <span class="ruby-identifier">as</span> = <span class="ruby-identifier">path</span>
+              <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;new&#39;</span>
+                <span class="ruby-identifier">pf</span> = <span class="ruby-identifier">p</span> <span class="ruby-operator">+</span> <span class="ruby-string">&#39;/new&#39;</span>
+                <span class="ruby-identifier">as</span> = <span class="ruby-string">&#39;new_&#39;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">path</span>
+              <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;edit&#39;</span>
+                <span class="ruby-identifier">pf</span> = <span class="ruby-identifier">p</span> <span class="ruby-operator">+</span> <span class="ruby-string">&#39;/:id/edit&#39;</span>
+                <span class="ruby-identifier">as</span> = <span class="ruby-string">&#39;edit_&#39;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">path</span>
+              <span class="ruby-keyword">else</span>
+                <span class="ruby-identifier">pf</span> = <span class="ruby-identifier">p</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&quot;/&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">md</span>.<span class="ruby-identifier">action</span>.<span class="ruby-identifier">to_s</span>
+                <span class="ruby-comment"># puts &#39;custom action: &#39; + pf</span>
+                <span class="ruby-comment"># db should track whether custom model_display actions are on member or collection and if they have a special &#39;as&#39; or anything.</span>
+              <span class="ruby-keyword">end</span>
+              <span class="ruby-identifier">route</span> = {<span class="ruby-identifier">path</span><span class="ruby-operator">:</span> <span class="ruby-identifier">pf</span>, <span class="ruby-identifier">method</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;get&#39;</span>, <span class="ruby-identifier">action</span><span class="ruby-operator">:</span> <span class="ruby-identifier">md</span>.<span class="ruby-identifier">action</span>, <span class="ruby-identifier">controller</span><span class="ruby-operator">:</span> <span class="ruby-identifier">controller</span>}
+              <span class="ruby-identifier">route</span> = <span class="ruby-identifier">route</span>.<span class="ruby-identifier">merge</span>({<span class="ruby-identifier">as</span><span class="ruby-operator">:</span> <span class="ruby-identifier">as</span>}) <span class="ruby-keyword">if</span> <span class="ruby-identifier">as</span>
+              <span class="ruby-comment"># route = route.merge({on: x}) if x</span>
+              <span class="ruby-identifier">routes</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">route</span>
+            <span class="ruby-keyword">end</span>
+          <span class="ruby-keyword">end</span>
+        <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span> <span class="ruby-comment">#pages each</span>
+  <span class="ruby-identifier">routes</span>.<span class="ruby-identifier">uniq</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">StatementInvalid</span> <span class="ruby-comment"># you can also add this</span>
+  []
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-c-reload" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">reload</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="reload-source">
+            <pre><span class="ruby-comment"># File lib/mega_bar/mega_route.rb, line 96</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">reload</span>
+  <span class="ruby-constant">ComingSoon</span><span class="ruby-operator">::</span><span class="ruby-constant">Application</span>.<span class="ruby-identifier">routes_reloader</span>.<span class="ruby-identifier">reload!</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

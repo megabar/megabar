@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class Object - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/darkfish.js"></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link">BasicObject
+  
+</div>
+
+    <div id="includes-section" class="nav-section">
+  <h3>Included Modules</h3>
+
+  <ul class="link-list">
+  
+  
+    <li><span class="include">MegaBarConcern</span>
+  
+  
+  
+    <li><span class="include">FactoryGirl::Syntax::Methods</span>
+  
+  
+  </ul>
+</div>
+
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li ><a href="#method-i-_params">#_params</a>
+    
+    <li ><a href="#method-i-blck">#blck</a>
+    
+    <li ><a href="#method-i-get_env">#get_env</a>
+    
+    <li ><a href="#method-i-hello_bob">#hello_bob</a>
+    
+    <li ><a href="#method-i-params_for_index">#params_for_index</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-Object">
+  <h1 id="class-Object" class="class">
+    class Object
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+    <section class="constants-list">
+      <header>
+        <h3>Constants</h3>
+      </header>
+      <dl>
+      
+        <dt id="ENGINE_PATH">ENGINE_PATH
+        
+        <dd>
+        
+      
+        <dt id="ENGINE_ROOT">ENGINE_ROOT
+        
+        <dd><p>This command will automatically be run when you run “rails” with Rails 4
+gems installed from the root of your application.</p>
+        
+      
+        <dt id="MEGABAR_ROOT">MEGABAR_ROOT
+        
+        <dd>
+        
+      
+      </dl>
+    </section>
+    
+
+    
+
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-_params" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">_params</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Never trust parameters from the scary internet, only allow the white list
+through.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="_params-source">
+            <pre><span class="ruby-comment"># File lib/generators/mega_bar/mega_bar_fields/templates/generic_controller.rb, line 8</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">_params</span>
+  <span class="ruby-identifier">params</span>.<span class="ruby-identifier">require</span>(<span class="ruby-value">:textbox</span>).<span class="ruby-identifier">permit</span>()
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-blck" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">blck</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="blck-source">
+            <pre><span class="ruby-comment"># File spec/host_spec_helper.rb, line 31</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">blck</span>
+  <span class="ruby-constant">MegaBar</span><span class="ruby-operator">::</span><span class="ruby-constant">Block</span>.<span class="ruby-identifier">first</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-get_env" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">get_env</span><span
+            class="method-args">(args)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="get_env-source">
+            <pre><span class="ruby-comment"># File spec/host_spec_helper.rb, line 35</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">get_env</span>(<span class="ruby-identifier">args</span>)
+
+  <span class="ruby-identifier">env</span> = <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">MockRequest</span>.<span class="ruby-identifier">env_for</span>(<span class="ruby-identifier">args</span>[<span class="ruby-value">:uri</span>], <span class="ruby-identifier">params</span><span class="ruby-operator">:</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">:params</span>])
+  <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_page</span>] = <span class="ruby-identifier">args</span>[<span class="ruby-value">:page</span>]
+  <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_rout</span>] = <span class="ruby-identifier">args</span>[<span class="ruby-value">:rout</span>]
+  <span class="ruby-identifier">env</span>[<span class="ruby-value">:mega_env</span>] = <span class="ruby-constant">MegaEnv</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">blck</span>, <span class="ruby-identifier">args</span>[<span class="ruby-value">:rout</span>], <span class="ruby-identifier">args</span>[<span class="ruby-value">:page</span>]).<span class="ruby-identifier">to_hash</span> <span class="ruby-comment"># added to env for use in controllers</span>
+  <span class="ruby-identifier">request</span> = <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Request</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">env</span>)
+  <span class="ruby-identifier">request</span>.<span class="ruby-identifier">session</span>[<span class="ruby-value">:return_to</span>] = <span class="ruby-identifier">uri</span>;
+  <span class="ruby-identifier">env</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-hello_bob" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">hello_bob</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="hello_bob-source">
+            <pre><span class="ruby-comment"># File spec/spec_helper.rb, line 51</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">hello_bob</span>
+  <span class="ruby-string">&#39;hello bob&#39;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-params_for_index" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">params_for_index</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="params_for_index-source">
+            <pre><span class="ruby-comment"># File spec/host_spec_helper.rb, line 46</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">params_for_index</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.1.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
