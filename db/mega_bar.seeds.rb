@@ -1027,7 +1027,8 @@ MegaBar::TmpFieldDisplay.create!([
 MegaBar::TmpCheckbox.create!([
   {id: 2, created_at: "2016-08-16 21:34:29", updated_at: "2016-08-17 01:27:50", field_display_id: 676, checked: false},
   {id: 3, created_at: "2016-08-17 13:56:38", updated_at: "2016-08-17 13:56:38", field_display_id: 503, checked: false},
-  {id: 4, created_at: "2016-08-17 14:04:03", updated_at: "2016-08-17 14:04:03", field_display_id: 233, checked: false}
+  {id: 4, created_at: "2016-08-17 14:04:03", updated_at: "2016-08-17 14:04:03", field_display_id: 233, checked: false},
+  {id: 5, created_at: "2016-08-17 14:05:03", updated_at: "2016-08-17 14:05:03", field_display_id: 231, checked: false}
 ])
 MegaBar::TmpSelect.create!([
   {id: 1, field_display_id: 12, created_at: "2015-02-13 01:16:05", updated_at: "2015-02-13 01:16:05", multiple: nil},

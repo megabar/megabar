@@ -228,6 +228,7 @@ class MegaEnv
         field = MegaBar::Field.find(field_disp.field_id)
         if is_displayable?(field_disp.format)
           #lets figure out how to display it right here.
+          puts field_disp.format 
           data_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
           if field_disp.format == 'select'
             options = MegaBar::Option.where(field_id: field.id).collect {|o| [ o.text, o.value ] }

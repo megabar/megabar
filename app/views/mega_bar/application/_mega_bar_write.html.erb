@@ -27,13 +27,13 @@
       end
     end
   %>
+
  <% 
 puts displayable_field[:field_display].format.tableize  %>
   <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: data_format_locals(@mega_instance, displayable_field, value, @mega_display)
 
   # {displayable_field: displayable_field, obj: @mega_instance, mega_bar: @mega_display, value: value}
   %>
-
    <%= render partial: "mega_bar_help_links", :locals => {:links => data_display_help_links(displayable_field)} %>
 
   <%= @mf.field_wrapper_end.html_safe %>

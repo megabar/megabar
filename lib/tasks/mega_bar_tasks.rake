@@ -93,7 +93,7 @@ namespace :mega_bar do
 
     mega_classes.each do |mc|
       mc[:tmp_class].all.each do |tmp|
-        # byebug if MegaBar::TmpModelDisplay == mc[:tmp_class]
+        # byebug if MegaBar::TmpFieldDisplay == mc[:tmp_class]
         dupe_hash = {}
         tmp.reload
         mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] }
@@ -192,6 +192,8 @@ namespace :mega_bar do
   end
 
   def fix_field_displays(c)
+    MegaBar::TmpCheckbox.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    MegaBar::TmpTextarea.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpTextbox.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpTextread.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpSelect.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)

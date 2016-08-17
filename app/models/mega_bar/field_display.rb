@@ -6,6 +6,8 @@ module MegaBar
     has_many :textboxes, dependent: :destroy
     has_many :textreads, dependent: :destroy
     has_many :selects, dependent: :destroy
+    has_many :textareas, dependent: :destroy
+    has_many :checkboxes, dependent: :destroy
 
     scope :by_fields, ->(fields) { where(field_id: fields) }
     scope :by_action, ->(action) { where(action: action) }
@@ -19,7 +21,6 @@ module MegaBar
       Select.by_field_display_id(self.id).delete_all
       Textarea.by_field_display_id(self.id).delete_all
       Checkbox.by_field_display_id(self.id).delete_all
-byebug
       data_display_obj = ("MegaBar::" + self.format.to_s.classify).constantize.new
       model_id = data_display_obj.get_model_id
       fields = Field.by_model(model_id)
@@ -31,7 +32,6 @@ byebug
       end
       fields_defaults[:field_display_id] = self.id
       fields_defaults[:checked] = 'false' if self.format == 'checkbox'
-byebug
        ("MegaBar::" + self.format.to_s.classify).constantize.where(:field_display_id => self.id).first_or_create(fields_defaults)
       f = Field.where(id: self.field_id)
 
