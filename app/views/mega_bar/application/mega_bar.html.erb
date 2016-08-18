@@ -13,6 +13,7 @@
   <% end %>
 <% else %>
   <%= form_for(@form_instance_vars) do |f| %>
+    <% @the_form = f %>
     <% @mega_displays.each do |mega_display| %>
       <%
         @mega_display = mega_display

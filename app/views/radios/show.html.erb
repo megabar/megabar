@@ -1,0 +1,3 @@
+<% MegaBar::Option.where(field_id: field.id).pluck(:text, :value).each do | rad | %>
+  <%= @the_form.radio_button  field.field, rad[1] %> <%= rad[0] %><br />
+<% end %>
