@@ -10,6 +10,12 @@
       <%= @mf.field_header_wrapper_end.html_safe%>
     <% end %>
   <% end %>
+  
+
+  <% if might_paginate? %>
+puts 'ok then.'
+    <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>
+  <% end %>
 
   <% @mega_instance.each do |mega_record| %>
     <%= @mf.record_wrapper.html_safe%>

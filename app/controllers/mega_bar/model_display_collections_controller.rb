@@ -1,10 +1,5 @@
-
-module MegaBar 
-
-
-class ModelDisplayCollectionsController < MegaBar::ApplicationController
+module MegaBar
+  class ModelDisplayCollectionsController < MegaBar::ApplicationController
     include MegaBar::MegaBarConcern    
-end
-
-
+  end
 end 

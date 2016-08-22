@@ -222,6 +222,7 @@ class MegaEnv
     mega_displays_info = [] # collects model and field display settings
     displays.each do | display |
       model_display_format = MegaBar::ModelDisplayFormat.find(display.format)
+      model_display_collection_settings = MegaBar::ModelDisplayCollection.by_model_display_id(display.id).first if display.collection_or_member == 'collection'
       field_displays = MegaBar::FieldDisplay.by_model_display_id(display.id)
       displayable_fields = []
       field_displays.each do |field_disp|
@@ -239,7 +240,8 @@ class MegaEnv
       info = {
         :model_display_format => model_display_format, # Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new,
         :displayable_fields => displayable_fields,
-        :model_display => display
+        :model_display => display,
+        :collection_settings => model_display_collection_settings
       }
       mega_displays_info << info
     end

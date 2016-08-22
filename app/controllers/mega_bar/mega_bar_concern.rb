@@ -4,29 +4,30 @@ module MegaBar
 
     def index
       records = @mega_class.where(@conditions).where(@conditions_array).order(column_sorting)
-      instance_variable_set("@" + env[:mega_env][:kontroller_inst].pluralize,  records)
-      @mega_instance ||= instance_variable_get("@" + env[:mega_env][:kontroller_inst].pluralize);
+      instance_variable_set("@" + @kontroller_inst.pluralize,  records)
+      @mega_instance ||= instance_variable_get("@" + @kontroller_inst.pluralize);
+      @mega_instance = @mega_instance.page(params["#{@kontroller_inst}_page".to_sym]).per(num_per_page) if might_paginate?
       render @index_view_template
     end
 
     def show
       @mega_instance ||= []
-      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
-      @mega_instance << instance_variable_get("@"  + env[:mega_env][:kontroller_inst]);
+      instance_variable_set("@"  + @kontroller_inst,  @mega_class.find(params[:id]))
+      @mega_instance << instance_variable_get("@"  + @kontroller_inst);
       render @show_view_template
     end
 
     def new
-      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.new)
-      @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst]);
-@form_instance_vars = @nested_instance_variables  + [@mega_instance]
+      instance_variable_set("@"  + @kontroller_inst,  @mega_class.new)
+      @mega_instance = instance_variable_get("@"  + @kontroller_inst);
+      @form_instance_vars = @nested_instance_variables  + [@mega_instance]
       render @new_view_template
     end
 
     def edit
       session[:return_to] ||= request.referer
-      instance_variable_set("@"  + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
-      @mega_instance = instance_variable_get("@"  + env[:mega_env][:kontroller_inst])
+      instance_variable_set("@"  + @kontroller_inst,  @mega_class.find(params[:id]))
+      @mega_instance = instance_variable_get("@"  + @kontroller_inst)
       @form_instance_vars = @nested_instance_variables  + [@mega_instance]
       render @edit_view_template
     end
@@ -65,8 +66,8 @@ module MegaBar
     end
 
     def update
-      instance_variable_set("@" + env[:mega_env][:kontroller_inst], @mega_class.find(params[:id]))
-      @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst])
+      instance_variable_set("@" + @kontroller_inst, @mega_class.find(params[:id]))
+      @mega_instance = instance_variable_get("@" + @kontroller_inst)
       respond_to do |format|
         if @mega_instance.update(_params)
           session[:return_to] ||= request.referer
@@ -82,8 +83,8 @@ module MegaBar
       end
     end
     def destroy
-      instance_variable_set("@" + env[:mega_env][:kontroller_inst],  @mega_class.find(params[:id]))
-      @mega_instance = instance_variable_get("@" + env[:mega_env][:kontroller_inst]);
+      instance_variable_set("@" + @kontroller_inst,  @mega_class.find(params[:id]))
+      @mega_instance = instance_variable_get("@" + @kontroller_inst);
       session[:return_to] ||= request.referer
 
       @mega_instance.destroy
@@ -167,6 +168,15 @@ module MegaBar
     def is_displayable?(format)
       return  (format == 'hidden' || format == 'off') ? false : true
     end
+
+    def might_paginate?
+      !@mega_displays[0].dig(:collection_settings)&.pagination_position.blank? && !@mega_instance.blank?
+    end
+    
+    def num_per_page
+      @mega_displays[0].dig(:collection_settings)&.records_per_page.blank? ? 6  : @mega_displays[0].dig(:collection_settings)&.records_per_page
+    end
+
     def constant_from_controller(str)
       logger.info("str::::" + str)
       constant_string = ''

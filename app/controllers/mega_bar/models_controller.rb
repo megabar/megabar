@@ -3,11 +3,11 @@ module MegaBar
     include MegaBarConcern
 
     def index
-      @mega_instance ||= Model.where.not(modyule: 'MegaBar').order(column_sorting)
+      # @mega_instance ||= Model.where.not(modyule: 'MegaBar').order(column_sorting)
       super.index
     end
     def all
-      @mega_instance = Model.all.order(column_sorting)
+      @mega_instance = Model.all.order(column_sorting).page(params[:model_page]).per(5)
       index
     end
 
