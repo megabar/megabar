@@ -1,6 +1,11 @@
 <h1><%= best_in_place @mega_display[:model_display], :header, tabindex: "1", url: @model_display_path %> </h1>
 <div class='model_display_instructions'><%= best_in_place @mega_display[:model_display], :instructions, url: @model_display_path, as: :textarea %> </div>
 
+<% if might_paginate?('top') %>
+  <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>
+  <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} %>
+<% end %>
+
 <%= form_tag @mega_display[:form_path] do |f| %>
   <%=@mf.app_wrapper.html_safe%>
   <% if @mf.separate_header_row == 'true' %>
@@ -12,9 +17,6 @@
   <% end %>
   
 
-  <% if might_paginate?('top') %>
-    <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>
-  <% end %>
 
   <% @mega_instance.each do |mega_record| %>
     <%= @mf.record_wrapper.html_safe%>
@@ -59,4 +61,5 @@
 <% end %>
 <% if might_paginate?('bottom') %>
   <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>
+  <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} %>
 <% end %>

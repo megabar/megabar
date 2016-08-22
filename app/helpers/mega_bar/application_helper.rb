@@ -50,6 +50,11 @@ module MegaBar
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '/model_displays/' + @mega_display[:model_display].id.to_s  + '/edit' , 'Edit Model Display']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
+    def model_display_collection_help_links
+      links = []
+      links << ['/mega-bar/model-display-collections/' + @mega_display[:collection_settings].id.to_s + '/edit?return_to=' + request.env['PATH_INFO'], 'Pagination Settings']
+      links.map{ |l| link_to l[1], l[0]}.join(' | ')
+    end
     def block_help_links
       links = []
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '?return_to=' + request.env['PATH_INFO'], 'Model Displays for the "' + @block.name + '" Block'] if @block.name

@@ -86,6 +86,7 @@ namespace :mega_bar do
     MegaBar::Model.skip_callback(       'create', :before, :standardize_tablename)
     MegaBar::Model.skip_callback(       'create', :after, :make_page_for_model)
     MegaBar::ModelDisplay.skip_callback('save',   :after, :make_field_displays)
+    MegaBar::ModelDisplay.skip_callback('save',   :after, :make_collection_settings)
     MegaBar::Page.skip_callback(        'create', :after, :create_layout_for_page)
     MegaBar::Layout.skip_callback(      'create', :after, :create_block_for_layout)
     # start conflict detection
@@ -126,6 +127,7 @@ namespace :mega_bar do
     MegaBar::Model.set_callback(       'create', :before, :standardize_tablename)
     MegaBar::Model.set_callback(       'create', :after, :make_page_for_model)
     MegaBar::ModelDisplay.set_callback('save',   :after, :make_field_displays)
+    MegaBar::ModelDisplay.set_callback('save',   :after, :make_collection_settings)
     MegaBar::Page.set_callback(        'create', :after, :create_layout_for_page)
     MegaBar::Layout.set_callback(      'create', :after, :create_block_for_layout)
 
@@ -188,6 +190,7 @@ namespace :mega_bar do
 #       # MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id).delete_all
 #     end
     MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id).update_all(model_display_id: c[:perm].id)
+    MegaBar::TmpModelDisplayCollection.where(model_display_id: c[:tmp].id).update_all(model_display_id: c[:perm].id)
     # pprex
   end
 
@@ -199,18 +202,11 @@ namespace :mega_bar do
     MegaBar::TmpTextbox.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpTextread.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
   end
-
+  def fix_model_display_collections(c)
+    # purposefully blank
+  end
   def fix_display_class(c)
-    # # update_data_displays_with_new_field_display_id(c[:tmp].id, c[:perm].id)
-    # MegaBar::TmpTextbox.where(field_display_id: c[:tmp].id).each do |tb|
-    #   tb.update(field_display_id: c[:perm].id)
-    # end
-    # MegaBar::TmpTextread.where(field_display_id: c[:tmp].id).each do |tb|
-    #   tb.update(field_display_id: c[:perm].id)
-    # end
-    # MegaBar::TmpSelect.where(field_display_id: c[:tmp].id).each do |tb|
-    #   tb.update(field_display_id: c[:perm].id)
-    # end
+    # purposefully blank
   end
 
 
@@ -224,6 +220,7 @@ namespace :mega_bar do
     mega_classes << {tmp_class: MegaBar::TmpLayout, perm_class: MegaBar::Layout, unique: [:page_id, :name], resolver: 'fix_layouts', condition: 'tmp.page_id == perm.page_id && tmp.name == perm.name'}
     mega_classes << {tmp_class: MegaBar::TmpBlock, perm_class: MegaBar::Block, unique: [:layout_id, :name], resolver: 'fix_blocks', condition: 'tmp.layout_id == perm.layout_id && tmp.name == perm.name'}
     mega_classes << {tmp_class: MegaBar::TmpModelDisplay, perm_class: MegaBar::ModelDisplay, unique: [:block_id, :action, :series], resolver: 'fix_model_displays', condition: 'tmp.block_id == perm.block_id && tmp.action == perm.action'}
+    mega_classes << {tmp_class: MegaBar::TmpModelDisplayCollection, perm_class: MegaBar::ModelDisplayCollection, unique: [:model_display_id], resolver: 'fix_model_display_collections', condition: 'tmp.model_display_id == perm.model_display_id'}
     mega_classes << {tmp_class: MegaBar::TmpFieldDisplay, perm_class: MegaBar::FieldDisplay, unique: [:model_display_id, :field_id], resolver: 'fix_field_displays', condition: 'tmp.model_display_id == perm.model_display_id && tmp.field_id == perm.field_id && tmp.format == perm.format'}
 
     mega_classes << {tmp_class: MegaBar::TmpCheckbox, perm_class: MegaBar::Checkbox, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
@@ -254,11 +251,13 @@ namespace :mega_bar do
     mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).pluck(:id)
     mega_bar_block_ids = MegaBar::Block.where(layout_id: mega_bar_layout_ids).pluck(:id)
     mega_bar_model_display_ids = MegaBar::ModelDisplay.where(block_id: mega_bar_block_ids).pluck(:id)
+    mega_bar_model_display_collection_ids =  MegaBar::ModelDisplayCollection.where(model_display_id: mega_bar_model_display_ids).pluck(:id)
     mega_bar_field_display_ids =  MegaBar::FieldDisplay.where(model_display_id: mega_bar_model_display_ids).pluck(:id)
     SeedDump.dump(MegaBar::Page.where(id: mega_bar_page_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Layout.where(id: mega_bar_layout_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Block.where(id: mega_bar_block_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::ModelDisplay.where(id: mega_bar_model_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::ModelDisplayCollection.where(id: mega_bar_model_display_collection_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::FieldDisplay.where(id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
     SeedDump.dump(MegaBar::Checkbox.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
