@@ -1,5 +1,5 @@
 FactoryGirl.define do
   factory :radio, class: MegaBar::Radio do
-    id 1
+    field_display_id 1
   end
 end

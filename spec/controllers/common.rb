@@ -114,7 +114,7 @@ RSpec.shared_context "common", :a => :b do
               expect(assigns(:mega_instance)).to be_a_new(model_class)
             end
           end
-          it "re-renders the 'new' template" do #, focus: true  do
+          it "re-renders the 'new' template" do # focus: true  do
             if !skip_invalids
               status, headers, body = controller_class.action(:create).call(get_env(env_invalid_create))
               @controller = body.request.env['action_controller.instance']

@@ -31,7 +31,6 @@
         data = render template: displayable_field[:field_display].format.tableize + "/show", locals: data_format_locals(mega_record, displayable_field)
       %>
 
-
       <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
          <a href='<%=data%>'>
       <% end %>

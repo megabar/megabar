@@ -196,7 +196,7 @@ module MegaBar
     end
     def redo_setup(action)
       env[:mega_rout][:action] = action
-      env[:mega_env] = MegaEnv.new(@block, env[:mega_rout], env[:mega_page]).to_hash
+      env[:mega_env] = MegaEnv.new(@block, env[:mega_rout], env[:mega_page], []).to_hash
       set_vars_for_all
       set_vars_for_displays
       params[:action] = 'edit'
