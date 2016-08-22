@@ -195,7 +195,8 @@ MegaBar::TmpPage.create!([
   {id: 20, name: "Models-Fields-Options Page", path: "/mega-bar/models/:model_id/fields/:field_id/options", created_at: "2016-05-31 03:09:08", updated_at: "2016-05-31 03:09:08", mega_page: "mega"},
   {id: 21, name: "Textareas Model Page", path: "/mega-bar/textareas", created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12", mega_page: "mega"},
   {id: 22, name: "Checkboxes Model Page", path: "/mega-bar/checkboxes", created_at: "2016-08-16 18:14:49", updated_at: "2016-08-16 18:15:10", mega_page: "mega"},
-  {id: 23, name: "Radios Model Page", path: "/mega-bar/radios", created_at: "2016-08-17 19:12:45", updated_at: "2016-08-17 19:32:43", mega_page: "mega"}
+  {id: 23, name: "Radios Model Page", path: "/mega-bar/radios", created_at: "2016-08-17 19:12:45", updated_at: "2016-08-17 19:32:43", mega_page: "mega"},
+  {id: 24, name: "Model Display Collection Settings Model Page", path: "/mega-bar/model-display-collections", created_at: "2016-08-22 02:08:20", updated_at: "2016-08-22 18:32:10", mega_page: "mega"}
 ])
 MegaBar::TmpLayout.create!([
   {id: 1, page_id: 1, name: "Models Layout", created_at: "2015-02-18 05:20:21", updated_at: "2015-02-18 05:20:21"},
@@ -222,7 +223,8 @@ MegaBar::TmpLayout.create!([
   {id: 22, page_id: 20, name: "Models on models-fields-options Layout", created_at: "2016-05-31 03:09:08", updated_at: "2016-05-31 03:09:08"},
   {id: 23, page_id: 21, name: "Textareas Layout", created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12"},
   {id: 24, page_id: 22, name: "Checkboxes Layouttt", created_at: "2016-08-16 18:14:49", updated_at: "2016-08-16 21:52:46"},
-  {id: 25, page_id: 23, name: "Radios Layout", created_at: "2016-08-17 19:12:45", updated_at: "2016-08-17 19:12:45"}
+  {id: 25, page_id: 23, name: "Radios Layout", created_at: "2016-08-17 19:12:45", updated_at: "2016-08-17 19:12:45"},
+  {id: 26, page_id: 24, name: "Model display collection settings Layout", created_at: "2016-08-22 02:08:20", updated_at: "2016-08-22 02:08:20"}
 ])
 MegaBar::TmpBlock.create!([
   {id: 1, layout_id: 1, model_id: nil, name: "Models on Models Layout boo", actions: "current", html: "", nest_level_1: nil, nest_level_2: nil, path_base: "", created_at: "2015-02-18 05:20:43", updated_at: "2015-03-02 00:14:20", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
@@ -275,6 +277,7 @@ MegaBar::TmpBlock.create!([
   {id: 48, layout_id: 4, model_id: nil, name: "Checkboxes for a Field Display", actions: "show", html: "", nest_level_1: 4, nest_level_2: nil, path_base: "/mega-bar/field_displays/:field_display_id/checkboxes", created_at: "2016-08-16 18:34:43", updated_at: "2016-08-16 18:34:43", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 49, layout_id: 25, model_id: nil, name: "Radios on Radios Layout Block", actions: "current", html: nil, nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2016-08-17 19:12:45", updated_at: "2016-08-17 19:12:45", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 50, layout_id: 4, model_id: nil, name: "Radios on Field Displays Layout", actions: "show", html: "", nest_level_1: 4, nest_level_2: nil, path_base: "/mega-bar/field_displays/:field_display_id/radios", created_at: "2016-08-17 19:27:58", updated_at: "2016-08-17 19:27:58", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
+  {id: 51, layout_id: 26, model_id: nil, name: "Model display collection settings on Model display collection settings Layout Block", actions: "current", html: nil, nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2016-08-22 02:08:20", updated_at: "2016-08-22 02:08:20", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 52, layout_id: 15, model_id: nil, name: "Collection Display Settings on Page-Layouts-Blocks-Displays layout", actions: "show", html: "", nest_level_1: 3, nest_level_2: 12, path_base: "/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/model_displays/:model_display_id/model_display_collections", created_at: "2016-08-22 02:33:54", updated_at: "2016-08-22 02:33:54", nest_level_3: 11, nest_level_4: 10, nest_level_5: nil, nest_level_6: nil}
 ])
 MegaBar::TmpModelDisplay.create!([
@@ -386,6 +389,10 @@ MegaBar::TmpModelDisplay.create!([
   {id: 106, block_id: 49, model_id: 15, format: "1", action: "index", header: "Radios", created_at: "2016-08-17 19:12:45", updated_at: "2016-08-17 19:12:45", collection_or_member: "collection", series: nil, instructions: nil},
   {id: 107, block_id: 49, model_id: 15, format: "2", action: "show", header: "Radio", created_at: "2016-08-17 19:12:45", updated_at: "2016-08-17 19:12:45", collection_or_member: nil, series: nil, instructions: nil},
   {id: 108, block_id: 50, model_id: 15, format: "1", action: "index", header: "Radio Button Groups", created_at: "2016-08-17 19:29:59", updated_at: "2016-08-17 19:29:59", collection_or_member: "collection", series: 1, instructions: ""},
+  {id: 109, block_id: 51, model_id: 16, format: "2", action: "new", header: "Create Model display collection setting", created_at: "2016-08-22 02:08:20", updated_at: "2016-08-22 02:08:20", collection_or_member: nil, series: nil, instructions: nil},
+  {id: 110, block_id: 51, model_id: 16, format: "2", action: "edit", header: "Edit Model display collection setting", created_at: "2016-08-22 02:08:20", updated_at: "2016-08-22 02:08:20", collection_or_member: nil, series: nil, instructions: nil},
+  {id: 111, block_id: 51, model_id: 16, format: "1", action: "index", header: "Model display collection settings", created_at: "2016-08-22 02:08:20", updated_at: "2016-08-22 02:08:20", collection_or_member: "collection", series: nil, instructions: nil},
+  {id: 112, block_id: 51, model_id: 16, format: "2", action: "show", header: "Model display collection setting", created_at: "2016-08-22 02:08:20", updated_at: "2016-08-22 02:08:20", collection_or_member: nil, series: nil, instructions: nil},
   {id: 115, block_id: 52, model_id: 16, format: "1", action: "index", header: "Model display collection settings", created_at: "2016-08-22 02:33:55", updated_at: "2016-08-22 02:33:55", collection_or_member: "collection", series: nil, instructions: nil}
 ])
 MegaBar::TmpModelDisplayCollection.create!([
@@ -1056,9 +1063,25 @@ MegaBar::TmpFieldDisplay.create!([
   {id: 661, model_display_id: 106, field_id: 101, format: "textread", action: nil, header: "Field display", link_type: nil, created_at: "2016-08-17 19:14:12", updated_at: "2016-08-17 19:14:12"},
   {id: 662, model_display_id: 107, field_id: 101, format: "textread", action: nil, header: "Field display", link_type: nil, created_at: "2016-08-17 19:14:12", updated_at: "2016-08-17 19:14:12"},
   {id: 663, model_display_id: 108, field_id: 101, format: "textread", action: nil, header: "Field display", link_type: nil, created_at: "2016-08-17 19:29:59", updated_at: "2016-08-17 19:29:59"},
+  {id: 664, model_display_id: 109, field_id: 102, format: "textbox", action: nil, header: "Model display", link_type: nil, created_at: "2016-08-22 02:09:54", updated_at: "2016-08-22 02:09:54"},
+  {id: 665, model_display_id: 110, field_id: 102, format: "textbox", action: nil, header: "Model display", link_type: nil, created_at: "2016-08-22 02:09:54", updated_at: "2016-08-22 02:09:54"},
+  {id: 666, model_display_id: 111, field_id: 102, format: "textread", action: nil, header: "Model display", link_type: nil, created_at: "2016-08-22 02:09:54", updated_at: "2016-08-22 02:09:54"},
+  {id: 667, model_display_id: 112, field_id: 102, format: "textread", action: nil, header: "Model display", link_type: nil, created_at: "2016-08-22 02:09:54", updated_at: "2016-08-22 02:09:54"},
+  {id: 668, model_display_id: 109, field_id: 103, format: "select", action: nil, header: "Pagination position", link_type: nil, created_at: "2016-08-22 02:12:57", updated_at: "2016-08-22 02:12:57"},
+  {id: 669, model_display_id: 110, field_id: 103, format: "select", action: nil, header: "Pagination position", link_type: nil, created_at: "2016-08-22 02:12:57", updated_at: "2016-08-22 02:12:57"},
+  {id: 670, model_display_id: 111, field_id: 103, format: "textread", action: nil, header: "Pagination position", link_type: nil, created_at: "2016-08-22 02:12:57", updated_at: "2016-08-22 02:12:57"},
+  {id: 671, model_display_id: 112, field_id: 103, format: "textread", action: nil, header: "Pagination position", link_type: nil, created_at: "2016-08-22 02:12:57", updated_at: "2016-08-22 02:12:57"},
+  {id: 672, model_display_id: 109, field_id: 104, format: "select", action: nil, header: "Pagination theme", link_type: nil, created_at: "2016-08-22 02:16:44", updated_at: "2016-08-22 02:16:44"},
+  {id: 673, model_display_id: 110, field_id: 104, format: "select", action: nil, header: "Pagination theme", link_type: nil, created_at: "2016-08-22 02:16:44", updated_at: "2016-08-22 02:16:44"},
+  {id: 674, model_display_id: 111, field_id: 104, format: "textread", action: nil, header: "Pagination theme", link_type: nil, created_at: "2016-08-22 02:16:44", updated_at: "2016-08-22 02:16:44"},
+  {id: 675, model_display_id: 112, field_id: 104, format: "textread", action: nil, header: "Pagination theme", link_type: nil, created_at: "2016-08-22 02:16:44", updated_at: "2016-08-22 02:16:44"},
   {id: 682, model_display_id: 115, field_id: 102, format: "textread", action: nil, header: "Model display", link_type: nil, created_at: "2016-08-22 02:33:55", updated_at: "2016-08-22 02:33:55"},
   {id: 683, model_display_id: 115, field_id: 103, format: "textread", action: nil, header: "Pagination position", link_type: nil, created_at: "2016-08-22 02:33:55", updated_at: "2016-08-22 02:33:55"},
   {id: 684, model_display_id: 115, field_id: 104, format: "textread", action: nil, header: "Pagination theme", link_type: nil, created_at: "2016-08-22 02:33:55", updated_at: "2016-08-22 02:33:55"},
+  {id: 688, model_display_id: 109, field_id: 105, format: "textbox", action: nil, header: "Records per page", link_type: nil, created_at: "2016-08-22 04:22:25", updated_at: "2016-08-22 04:22:25"},
+  {id: 689, model_display_id: 110, field_id: 105, format: "textbox", action: nil, header: "Records per page", link_type: nil, created_at: "2016-08-22 04:22:25", updated_at: "2016-08-22 04:22:25"},
+  {id: 690, model_display_id: 111, field_id: 105, format: "textread", action: nil, header: "Records per page", link_type: nil, created_at: "2016-08-22 04:22:25", updated_at: "2016-08-22 04:22:25"},
+  {id: 691, model_display_id: 112, field_id: 105, format: "textread", action: nil, header: "Records per page", link_type: nil, created_at: "2016-08-22 04:22:25", updated_at: "2016-08-22 04:22:25"},
   {id: 692, model_display_id: 115, field_id: 105, format: "textread", action: nil, header: "Records per page", link_type: nil, created_at: "2016-08-22 04:22:25", updated_at: "2016-08-22 04:22:25"}
 ])
 MegaBar::TmpCheckbox.create!([
@@ -1154,7 +1177,11 @@ MegaBar::TmpSelect.create!([
   {id: 84, field_display_id: 621, created_at: "2016-05-31 03:54:16", updated_at: "2016-05-31 03:54:16", multiple: false},
   {id: 85, field_display_id: 624, created_at: "2016-05-31 04:09:33", updated_at: "2016-05-31 04:14:12", multiple: true},
   {id: 86, field_display_id: 629, created_at: "2016-07-14 15:18:19", updated_at: "2016-07-14 15:18:19", multiple: false},
-  {id: 87, field_display_id: 630, created_at: "2016-07-14 15:18:19", updated_at: "2016-07-14 15:18:19", multiple: false}
+  {id: 87, field_display_id: 630, created_at: "2016-07-14 15:18:19", updated_at: "2016-07-14 15:18:19", multiple: false},
+  {id: 88, field_display_id: 668, created_at: "2016-08-22 02:12:57", updated_at: "2016-08-22 02:12:57", multiple: false},
+  {id: 89, field_display_id: 669, created_at: "2016-08-22 02:12:57", updated_at: "2016-08-22 02:12:57", multiple: false},
+  {id: 90, field_display_id: 672, created_at: "2016-08-22 02:16:44", updated_at: "2016-08-22 02:16:44", multiple: false},
+  {id: 91, field_display_id: 673, created_at: "2016-08-22 02:16:44", updated_at: "2016-08-22 02:16:44", multiple: false}
 ])
 MegaBar::TmpTextarea.create!([
   {id: 1, created_at: "2016-08-15 16:28:56", updated_at: "2016-08-15 16:28:56", field_display_id: 643, rows: nil, cols: nil},
@@ -1333,7 +1360,11 @@ MegaBar::TmpTextbox.create!([
   {id: 168, field_display_id: 647, size: 42, created_at: "2016-08-16 18:22:01", updated_at: "2016-08-16 18:22:01"},
   {id: 169, field_display_id: 648, size: 42, created_at: "2016-08-16 18:22:01", updated_at: "2016-08-16 18:22:01"},
   {id: 170, field_display_id: 659, size: 42, created_at: "2016-08-17 19:14:12", updated_at: "2016-08-17 19:14:12"},
-  {id: 171, field_display_id: 660, size: 42, created_at: "2016-08-17 19:14:12", updated_at: "2016-08-17 19:14:12"}
+  {id: 171, field_display_id: 660, size: 42, created_at: "2016-08-17 19:14:12", updated_at: "2016-08-17 19:14:12"},
+  {id: 172, field_display_id: 664, size: 42, created_at: "2016-08-22 02:09:54", updated_at: "2016-08-22 02:09:54"},
+  {id: 173, field_display_id: 665, size: 42, created_at: "2016-08-22 02:09:54", updated_at: "2016-08-22 02:09:54"},
+  {id: 175, field_display_id: 688, size: 42, created_at: "2016-08-22 04:22:25", updated_at: "2016-08-22 04:22:25"},
+  {id: 176, field_display_id: 689, size: 42, created_at: "2016-08-22 04:22:25", updated_at: "2016-08-22 04:22:25"}
 ])
 MegaBar::TmpTextread.create!([
   {id: 1, field_display_id: 1, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-02-25 03:32:05", updated_at: "2015-02-25 03:32:05", truncation_separator: nil},
@@ -1731,8 +1762,16 @@ MegaBar::TmpTextread.create!([
   {id: 393, field_display_id: 661, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-17 19:14:12", updated_at: "2016-08-17 19:14:12", truncation_separator: " "},
   {id: 394, field_display_id: 662, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-17 19:14:12", updated_at: "2016-08-17 19:14:12", truncation_separator: " "},
   {id: 395, field_display_id: 663, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-17 19:29:59", updated_at: "2016-08-17 19:29:59", truncation_separator: " "},
+  {id: 396, field_display_id: 666, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-22 02:09:54", updated_at: "2016-08-22 02:09:54", truncation_separator: " "},
+  {id: 397, field_display_id: 667, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-22 02:09:54", updated_at: "2016-08-22 02:09:54", truncation_separator: " "},
+  {id: 398, field_display_id: 670, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-22 02:12:57", updated_at: "2016-08-22 02:12:57", truncation_separator: " "},
+  {id: 399, field_display_id: 671, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-22 02:12:57", updated_at: "2016-08-22 02:12:57", truncation_separator: " "},
+  {id: 400, field_display_id: 674, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-22 02:16:44", updated_at: "2016-08-22 02:16:44", truncation_separator: " "},
+  {id: 401, field_display_id: 675, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-22 02:16:44", updated_at: "2016-08-22 02:16:44", truncation_separator: " "},
   {id: 405, field_display_id: 682, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-22 02:33:55", updated_at: "2016-08-22 02:33:55", truncation_separator: " "},
   {id: 406, field_display_id: 683, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-22 02:33:55", updated_at: "2016-08-22 02:33:55", truncation_separator: " "},
   {id: 407, field_display_id: 684, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-22 02:33:55", updated_at: "2016-08-22 02:33:55", truncation_separator: " "},
+  {id: 411, field_display_id: 690, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-22 04:22:25", updated_at: "2016-08-22 04:22:25", truncation_separator: " "},
+  {id: 412, field_display_id: 691, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-22 04:22:25", updated_at: "2016-08-22 04:22:25", truncation_separator: " "},
   {id: 413, field_display_id: 692, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-08-22 04:22:26", updated_at: "2016-08-22 04:22:26", truncation_separator: " "}
 ])
