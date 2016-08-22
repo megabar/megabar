@@ -2,7 +2,7 @@
 <div class='model_display_instructions'><%= best_in_place @mega_display[:model_display], :instructions, url: @model_display_path, as: :textarea %> </div>
 
 <% if might_paginate?('top') %>
-  <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>
+  <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page", theme: @mega_display[:collection_settings]&.pagination_theme %>
   <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} %>
 <% end %>
 
