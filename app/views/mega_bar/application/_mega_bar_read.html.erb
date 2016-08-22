@@ -12,8 +12,7 @@
   <% end %>
   
 
-  <% if might_paginate? %>
-puts 'ok then.'
+  <% if might_paginate?('top') %>
     <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>
   <% end %>
 
@@ -57,4 +56,7 @@ puts 'ok then.'
 
   <%=@mf.app_wrapper_end.html_safe%>
  <br><%#= submit_tag %>
+<% end %>
+<% if might_paginate?('bottom') %>
+  <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>
 <% end %>

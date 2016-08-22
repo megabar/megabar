@@ -6,7 +6,7 @@ module MegaBar
       records = @mega_class.where(@conditions).where(@conditions_array).order(column_sorting)
       instance_variable_set("@" + @kontroller_inst.pluralize,  records)
       @mega_instance ||= instance_variable_get("@" + @kontroller_inst.pluralize);
-      @mega_instance = @mega_instance.page(params["#{@kontroller_inst}_page".to_sym]).per(num_per_page) if might_paginate?
+      @mega_instance = @mega_instance.page(@page_number).per(num_per_page) if might_paginate?
       render @index_view_template
     end
 
@@ -169,8 +169,13 @@ module MegaBar
       return  (format == 'hidden' || format == 'off') ? false : true
     end
 
-    def might_paginate?
-      !@mega_displays[0].dig(:collection_settings)&.pagination_position.blank? && !@mega_instance.blank?
+    def might_paginate?(location = nil)
+# byebug
+      if (location)
+        (@mega_displays[0].dig(:collection_settings)&.pagination_position == location || @mega_displays[0].dig(:collection_settings)&.pagination_position == 'both') && !@mega_instance.blank?
+      else 
+        !@mega_displays[0].dig(:collection_settings)&.pagination_position.blank? && !@mega_instance.blank?
+      end
     end
     
     def num_per_page

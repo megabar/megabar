@@ -60,6 +60,7 @@ class MegaRoute
                 modle = MegaBar::Model.find(md.model_id)
                 pf = ''
                 as = nil
+                concerns = nil
                 case md.action
                 when 'show'
                   pf = p + '/:id'
@@ -67,6 +68,7 @@ class MegaRoute
                 when 'index'
                   pf = p
                   as = path
+                  concerns = 'paginatable'
                 when 'new'
                   pf = p + '/new'
                   as = 'new_' + path
@@ -75,11 +77,13 @@ class MegaRoute
                   as = 'edit_' + path
                 else
                   pf = p.to_s + "/" + md.action.to_s
+                  concerns = 'paginatable' if md.collection_or_member == 'collection'
                   # puts 'custom action: ' + pf
                   # db should track whether custom model_display actions are on member or collection and if they have a special 'as' or anything.
                 end
                 route = {path: pf, method: 'get', action: md.action, controller: controller}
                 route = route.merge({as: as}) if as
+                route = route.merge({concerns: concerns}) if concerns
                 # route = route.merge({on: x}) if x
                 routes << route
               end
