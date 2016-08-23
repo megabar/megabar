@@ -131,6 +131,7 @@ class LayoutEngine
     rout
   end
   def set_pagination_info(env, rout_terms)
+    rout_terms ||= []
     pagination_info = []
     rout_terms.map.with_index do |x, i|
      pagination_info <<  {kontrlr: x, page: rout_terms[i + 1] }  if /_page/ =~ x
