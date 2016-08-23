@@ -170,7 +170,6 @@ module MegaBar
     end
 
     def might_paginate?(location = nil)
-# byebug
       if (location)
         (@mega_displays[0].dig(:collection_settings)&.pagination_position == location || @mega_displays[0].dig(:collection_settings)&.pagination_position == 'both') && !@mega_instance.blank?
       else 
@@ -178,6 +177,13 @@ module MegaBar
       end
     end
     
+    def might_filter?(location = nil)
+      if (location)
+        (@mega_displays[0].dig(:collection_settings)&.pagination_position == location || @mega_displays[0].dig(:collection_settings)&.pagination_position == 'both') && !@mega_instance.blank?
+      else 
+        @mega_displays[0].dig(:collection_settings)&.filter_fields && !@mega_instance.blank?
+      end
+    end
     def num_per_page
       @mega_displays[0].dig(:collection_settings)&.records_per_page.blank? ? 6  : @mega_displays[0].dig(:collection_settings)&.records_per_page
     end

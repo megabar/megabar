@@ -52,11 +52,30 @@
       <td><%= link_to 'Destroy', mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 
     <% end %>
+
     <%= @mf.record_wrapper_end.html_safe%>
   <% end %>
 
+  <% if might_filter? %>
+    <tr>
+      <% @mega_display[:displayable_fields].each do | displayable_field | %>
+        <% @displayable_field = displayable_field %>
+        <td>
+          <% if displayable_field[:field].filter_type.blank? %>
+            &nbsp;
+          <% else %>
+            <% meth = "filter_#{displayable_field[:field].filter_type}" %>
+            <%= render partial: "filters", locals: {:filterr => eval(meth)} %>
+          <% end %>
+        </td>
+      <% end %>
+      <td>
+    </tr>
+  <% end %>
+
+
   <%=@mf.app_wrapper_end.html_safe%>
- <br><%#= submit_tag %>
+ <br><%= submit_tag %>
 <% end %>
 <% if might_paginate?('bottom') %>
   <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>
