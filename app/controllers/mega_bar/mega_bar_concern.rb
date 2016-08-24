@@ -39,7 +39,6 @@ module MegaBar
        create
     end
     def create
-byebug
       @mega_instance = @mega_class.new(_params)
       respond_to do |format|
         if @mega_instance.save
