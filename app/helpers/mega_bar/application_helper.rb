@@ -44,7 +44,7 @@ module MegaBar
     def pre_render
     end
     def filter_contains
-      filterr = text_field_tag(param_from_tablename(@mega_model_properties, @displayable_field[:field].tablename) + "[" + @displayable_field[:field].field + "_filter]", '', size: 15 )
+      filterr = text_field_tag(param_from_tablename(@mega_model_properties, @displayable_field[:field].tablename) + "[" + @displayable_field[:field].field + "___filter]", '', size: 15 )
 
     end
 

@@ -65,27 +65,40 @@ class MegaRoute
                 when 'show'
                   pf = p + '/:id'
                   as = path.singularize
+                  meth = 'get'
                 when 'index'
                   pf = p
                   as = path
                   concerns = 'paginatable'
+                  meth = [:get, :post]
                 when 'new'
                   pf = p + '/new'
                   as = 'new_' + path
+                  meth = 'get'
                 when 'edit'
                   pf = p + '/:id/edit'
                   as = 'edit_' + path
+                  meth = 'get'
                 else
                   pf = p.to_s + "/" + md.action.to_s
-                  concerns = 'paginatable' if md.collection_or_member == 'collection'
+                  if md.collection_or_member == 'collection'
+                    concerns = 'paginatable' 
+                    meth =  [:get, :post]
+                  end
                   # puts 'custom action: ' + pf
                   # db should track whether custom model_display actions are on member or collection and if they have a special 'as' or anything.
                 end
-                route = {path: pf, method: 'get', action: md.action, controller: controller}
+                route = {path: pf, method: meth, action: md.action, controller: controller}
                 route = route.merge({as: as}) if as
                 route = route.merge({concerns: concerns}) if concerns
                 # route = route.merge({on: x}) if x
                 routes << route
+                # if md.collection_or_member == 'collection' 
+                #   c_route = route
+                #   c_route[:method] = 'post'
+                #   routes << c_route
+                # end
+
               end
             end
           end

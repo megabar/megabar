@@ -7,6 +7,7 @@ module MegaBar
       instance_variable_set("@" + @kontroller_inst.pluralize,  records)
       @mega_instance ||= instance_variable_get("@" + @kontroller_inst.pluralize);
       @mega_instance = @mega_instance.page(@page_number).per(num_per_page) if might_paginate?
+      @mega_instance = process_filters(@mega_instance)
       render @index_view_template
     end
 
@@ -186,6 +187,37 @@ module MegaBar
     end
     def num_per_page
       @mega_displays[0].dig(:collection_settings)&.records_per_page.blank? ? 6  : @mega_displays[0].dig(:collection_settings)&.records_per_page
+    end
+
+    def collect_filters(filter_types)
+      filters = Hash[filter_types.map {|v| [v, []] }]
+      params[@kontroller_inst].each do |key, value|
+        @mega_displays.each do |md|
+          md[:displayable_fields].each do |df|
+            filters[ df[:field].filter_type] <<  { df[:field].field => value } if !df[:field].filter_type.blank? && key.sub('___filter', '') == df[:field].field 
+            # @mega_displays[0][:displayable_fields][0][:field].filter_type
+          end
+        end
+      end
+      filters
+    end
+    def process_filters(mega_instance)
+      return mega_instance unless params[@kontroller_inst]
+      #cache me.
+      filter_types = MegaBar::Field.includes(:options).find_by(field: 'filter_type', tablename: 'mega_bar_fields').options.pluck(:value)
+      filters = collect_filters(filter_types) 
+      return mega_instance if filters.blank?
+      filters.each do |key, filt| 
+        case key
+        when 'contains'
+          filt.each do | hsh |
+            hsh.each do | field, value | 
+              mega_instance = mega_instance.where(field + " like ?", "%" + value + "%")
+            end
+          end
+        end
+      end
+      mega_instance
     end
 
     def constant_from_controller(str)

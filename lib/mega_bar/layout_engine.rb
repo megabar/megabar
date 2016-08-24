@@ -29,7 +29,6 @@ class LayoutEngine
     @redirect = false
     request = Rack::Request.new(env)
     request.params # strangely this needs to be here for best_in_place updates.
-
     # MegaBar::Engine.routes.routes.named_routes.values.map do |route|
 
     #   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + "#{route.defaults[:controller]}##{route.defaults[:action]}"
@@ -42,16 +41,6 @@ class LayoutEngine
     # the general strategy is..
     # have rails recognize the path_info..
     # tbcontinued.
-
- # rout = set_rout(request, env) #set below via 'recognize_path'
- #    rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
- #    page_info = set_page_info(rout, rout_terms)
- #    pagination = set_pagination_info(request,)
- #    env[:mega_page] = page_info
- #    env[:mega_rout] = rout
-
-
-
 
     request.session[:return_to] = env['rack.request.query_hash']['return_to'] unless env['rack.request.query_hash']['return_to'].blank?
     rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
@@ -124,12 +113,12 @@ class LayoutEngine
 
   def set_rout(request, env)
     request_path_info = request.path_info.dup
-    rout = (Rails.application.routes.recognize_path request_path_info rescue {}) || {}
+    rout = (Rails.application.routes.recognize_path request_path_info, method: env['REQUEST_METHOD'] rescue {}) || {} 
     rout = (MegaBar::Engine.routes.recognize_path request_path_info rescue {}) || {}  if rout.empty? && request_path_info == '/mega-bar' #yeah, a special case for this one.
-    rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', '') rescue {}) || {}  if rout.empty?
-    rout[:action] = get_action(rout[:action], env['REQUEST_METHOD'], )
+    rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', ''), method: env['REQUEST_METHOD'] rescue {}) || {}  if rout.empty?
     rout
   end
+
   def set_pagination_info(env, rout_terms)
     rout_terms ||= []
     pagination_info = []
@@ -141,17 +130,6 @@ class LayoutEngine
      pagination_info <<  {kontrlr: key, page: q_hash[key] }  if /_page/ =~ key
     end
     pagination_info
-  end
-
-  def get_action(action, method)
-    case method
-    when 'PATCH', 'PUT', 'POST'
-      action == 'show'  ? 'update' : 'create'
-    when 'DELETE'
-      'destroy'
-    else
-      action
-    end
   end
 
   def process_block(blck, page_info, rout, orig_query_hash, pagination, env)
@@ -172,7 +150,7 @@ class LayoutEngine
         params_hash = params_hash.merge(param)
       end
       params_hash = params_hash.merge(orig_query_hash)
-      params_hash = params_hash.merge(env['rack.request.form_hash']) if (mega_env.block_action == 'update' || mega_env.block_action == 'create') && !env['rack.request.form_hash'].nil?
+      params_hash = params_hash.merge(env['rack.request.form_hash']) if !env['rack.request.form_hash'].nil? # && (mega_env.block_action == 'update' || mega_env.block_action == 'create') 
       env['QUERY_STRING'] = params_hash.to_param # 150221!
       env['action_dispatch.request.parameters'] = params_hash
 
