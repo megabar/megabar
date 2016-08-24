@@ -7,6 +7,7 @@ module MegaBar
       instance_variable_set("@" + @kontroller_inst.pluralize,  records)
       @mega_instance ||= instance_variable_get("@" + @kontroller_inst.pluralize);
       @mega_instance = @mega_instance.page(@page_number).per(num_per_page) if might_paginate?
+
       @mega_instance = process_filters(@mega_instance)
       render @index_view_template
     end
@@ -19,6 +20,7 @@ module MegaBar
     end
 
     def new
+      session[:return_to] = request.referer
       instance_variable_set("@"  + @kontroller_inst,  @mega_class.new)
       @mega_instance = instance_variable_get("@"  + @kontroller_inst);
       @form_instance_vars = @nested_instance_variables  + [@mega_instance]
@@ -26,7 +28,7 @@ module MegaBar
     end
 
     def edit
-      session[:return_to] ||= request.referer
+      session[:return_to] = request.referer
       instance_variable_set("@"  + @kontroller_inst,  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@"  + @kontroller_inst)
       @form_instance_vars = @nested_instance_variables  + [@mega_instance]
@@ -37,6 +39,7 @@ module MegaBar
        create
     end
     def create
+byebug
       @mega_instance = @mega_class.new(_params)
       respond_to do |format|
         if @mega_instance.save
@@ -115,6 +118,7 @@ module MegaBar
       @show_view_template ||= "mega_bar.html.erb"
       @edit_view_template ||= "mega_bar.html.erb"
       @new_view_template ||= "mega_bar.html.erb"
+      session[:mega_filters] ||= {}
     end
 
     def unpack_nested_classes(nested_class_infos)
@@ -189,23 +193,15 @@ module MegaBar
       @mega_displays[0].dig(:collection_settings)&.records_per_page.blank? ? 6  : @mega_displays[0].dig(:collection_settings)&.records_per_page
     end
 
-    def collect_filters(filter_types)
-      filters = Hash[filter_types.map {|v| [v, []] }]
-      params[@kontroller_inst].each do |key, value|
-        @mega_displays.each do |md|
-          md[:displayable_fields].each do |df|
-            filters[ df[:field].filter_type] <<  { df[:field].field => value } if !df[:field].filter_type.blank? && key.sub('___filter', '') == df[:field].field 
-            # @mega_displays[0][:displayable_fields][0][:field].filter_type
-          end
-        end
-      end
-      filters
-    end
     def process_filters(mega_instance)
-      return mega_instance unless params[@kontroller_inst]
+      return mega_instance unless params[@kontroller_inst] || session[:mega_filters][@kontroller_inst] 
       #cache me.
-      filter_types = MegaBar::Field.includes(:options).find_by(field: 'filter_type', tablename: 'mega_bar_fields').options.pluck(:value)
-      filters = collect_filters(filter_types) 
+      if params[@kontroller_inst] 
+        filter_types = MegaBar::Field.includes(:options).find_by(field: 'filter_type', tablename: 'mega_bar_fields').options.pluck(:value)
+        filters = session[:mega_filters][@kontroller_inst.to_sym] = collect_filters(filter_types)
+      elsif session[:mega_filters][@kontroller_inst]
+         filters = session[:mega_filters][@kontroller_inst]
+      end
       return mega_instance if filters.blank?
       filters.each do |key, filt| 
         case key
@@ -218,6 +214,19 @@ module MegaBar
         end
       end
       mega_instance
+    end
+
+    def collect_filters(filter_types)
+      filters = Hash[filter_types.map {|v| [v, []] }]
+      params[@kontroller_inst].each do |key, value|
+        @mega_displays.each do |md|
+          md[:displayable_fields].each do |df|
+            filters[ df[:field].filter_type] <<  { df[:field].field => value } if !df[:field].filter_type.blank? && key.sub('___filter', '') == df[:field].field 
+            # @mega_displays[0][:displayable_fields][0][:field].filter_type
+          end
+        end
+      end
+      filters
     end
 
     def constant_from_controller(str)

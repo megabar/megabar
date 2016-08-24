@@ -52,9 +52,6 @@ class MegaRoute
               # byebug if MegaBar::ModelDisplay.by_block(block.id).first.model_id == 3
               controller = MegaRoute.controller_from_block(context, block)
               # puts "controller ---- " + controller + ", path: " + p
-              routes << {path: p + '/:id', method: 'patch', action: 'update', controller: controller}
-              routes << {path: p, method: 'post', action: 'create', controller: controller}
-              routes << {path: p.singularize, method: 'delete', action: 'destroy', controller: controller}
               MegaBar::ModelDisplay.by_block(block.id).order(collection_or_member: :asc).each do | md | #order here becomes important todo
                 # puts "mid" + md.model_id.to_s
                 modle = MegaBar::Model.find(md.model_id)
@@ -100,6 +97,9 @@ class MegaRoute
                 # end
 
               end
+              routes << {path: p + '/:id', method: 'patch', action: 'update', controller: controller}
+              routes << {path: p, method: 'post', action: 'create', controller: controller}
+              routes << {path: p.singularize, method: 'delete', action: 'destroy', controller: controller}
             end
           end
         end
