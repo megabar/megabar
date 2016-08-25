@@ -67,7 +67,7 @@ class MegaRoute
                   pf = p
                   as = path
                   concerns = 'paginatable'
-                  meth = [:get, :post]
+                  meth = [:get]
                 when 'new'
                   pf = p + '/new'
                   as = 'new_' + path
@@ -90,6 +90,7 @@ class MegaRoute
                 route = route.merge({concerns: concerns}) if concerns
                 # route = route.merge({on: x}) if x
                 routes << route
+                routes << {path: pf + '/filter', method: [:get, :post], action: md.action, controller: controller} if md.collection_or_member == 'collection' 
                 # if md.collection_or_member == 'collection' 
                 #   c_route = route
                 #   c_route[:method] = 'post'

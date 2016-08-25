@@ -16,7 +16,6 @@ module MegaBar
     private
 
     def table_exists
-byebug
       return true if self.tablename == 'accessor'
       modle = Model.find(self.model_id) #this is a ugly dependency so this doesn't run in test environment.
       prefix = modle.modyule.nil? || modle.modyule.empty? ? '' : modle.modyule.split('::').map { | m | m.underscore }.join('_') + '_'
