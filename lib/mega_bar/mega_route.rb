@@ -52,37 +52,55 @@ class MegaRoute
               # byebug if MegaBar::ModelDisplay.by_block(block.id).first.model_id == 3
               controller = MegaRoute.controller_from_block(context, block)
               # puts "controller ---- " + controller + ", path: " + p
-              routes << {path: p + '/:id', method: 'patch', action: 'update', controller: controller}
-              routes << {path: p, method: 'post', action: 'create', controller: controller}
-              routes << {path: p.singularize, method: 'delete', action: 'destroy', controller: controller}
               MegaBar::ModelDisplay.by_block(block.id).order(collection_or_member: :asc).each do | md | #order here becomes important todo
                 # puts "mid" + md.model_id.to_s
                 modle = MegaBar::Model.find(md.model_id)
                 pf = ''
                 as = nil
+                concerns = nil
                 case md.action
                 when 'show'
                   pf = p + '/:id'
                   as = path.singularize
+                  meth = 'get'
                 when 'index'
                   pf = p
                   as = path
+                  concerns = 'paginatable'
+                  meth = [:get]
                 when 'new'
                   pf = p + '/new'
                   as = 'new_' + path
+                  meth = 'get'
                 when 'edit'
                   pf = p + '/:id/edit'
                   as = 'edit_' + path
+                  meth = 'get'
                 else
                   pf = p.to_s + "/" + md.action.to_s
+                  if md.collection_or_member == 'collection'
+                    concerns = 'paginatable' 
+                    meth =  [:get, :post]
+                  end
                   # puts 'custom action: ' + pf
                   # db should track whether custom model_display actions are on member or collection and if they have a special 'as' or anything.
                 end
-                route = {path: pf, method: 'get', action: md.action, controller: controller}
+                route = {path: pf, method: meth, action: md.action, controller: controller}
                 route = route.merge({as: as}) if as
+                route = route.merge({concerns: concerns}) if concerns
                 # route = route.merge({on: x}) if x
                 routes << route
+                routes << {path: pf + '/filter', method: [:get, :post], action: md.action, controller: controller} if md.collection_or_member == 'collection' 
+                # if md.collection_or_member == 'collection' 
+                #   c_route = route
+                #   c_route[:method] = 'post'
+                #   routes << c_route
+                # end
+
               end
+              routes << {path: p + '/:id', method: 'patch', action: 'update', controller: controller}
+              routes << {path: p, method: 'post', action: 'create', controller: controller}
+              routes << {path: p.singularize, method: 'delete', action: 'destroy', controller: controller}
             end
           end
         end

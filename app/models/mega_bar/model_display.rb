@@ -2,9 +2,12 @@ module MegaBar
   class ModelDisplay < ActiveRecord::Base
     belongs_to :blocks
     has_many :field_displays, dependent: :destroy
+    has_one :model_display_collection, dependent: :destroy
     validates_presence_of :block_id, :model_id, :action, :format
     attr_accessor :new_field_display, :edit_field_display, :index_field_display, :show_field_display
     after_save    :make_field_displays
+    after_save    :make_collection_settings
+
     validates :series, uniqueness: { scope: [:action, :block_id] }
 
 
@@ -12,6 +15,9 @@ module MegaBar
     scope :by_action, ->(action) { where(action: action) if action.present? }
     scope :by_block, ->(block_id) { where(block_id: block_id) if block_id.present? }
 
+    def make_collection_settings
+      ModelDisplayCollection.create(model_display_id: self.id)
+    end 
     def make_field_displays 
       actions = []
       fields = Field.by_model(self.model_id)

@@ -29,7 +29,6 @@ class LayoutEngine
     @redirect = false
     request = Rack::Request.new(env)
     request.params # strangely this needs to be here for best_in_place updates.
-
     # MegaBar::Engine.routes.routes.named_routes.values.map do |route|
 
     #   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + "#{route.defaults[:controller]}##{route.defaults[:action]}"
@@ -43,11 +42,10 @@ class LayoutEngine
     # have rails recognize the path_info..
     # tbcontinued.
     request.session[:return_to] = env['rack.request.query_hash']['return_to'] unless env['rack.request.query_hash']['return_to'].blank?
-    rout = set_rout(request, env) #set below via 'recognize_path'
     rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
-    page_info = set_page_info(rout, rout_terms)
-    env[:mega_page] = page_info
-    env[:mega_rout] = rout
+    env[:mega_rout] = rout = set_rout(request, env) 
+    env[:mega_page] = page_info = set_page_info(rout, rout_terms)
+    pagination = set_pagination_info(env, rout_terms)
     if page_info.empty? #non megabar pages.
       gotta_be_an_array = []
       if rout[:controller].nil?
@@ -68,7 +66,7 @@ class LayoutEngine
       blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(rout[:action])
       final_blocks = []
       blocks.each do |blck|
-        final_blocks << process_block(blck, page_info, rout, orig_query_hash, env)
+        final_blocks << process_block(blck, page_info, rout, orig_query_hash, pagination, env)
       end
       env['mega_final_blocks'] = final_blocks #used in master_layouts_controller
       @status, @headers, @layouts = MegaBar::MasterLayoutsController.action(:render_layout_with_blocks).call(env)
@@ -114,32 +112,33 @@ class LayoutEngine
 
   def set_rout(request, env)
     request_path_info = request.path_info.dup
-    rout = (Rails.application.routes.recognize_path request_path_info rescue {}) || {}
+    rout = (Rails.application.routes.recognize_path request_path_info, method: env['REQUEST_METHOD'] rescue {}) || {} 
     rout = (MegaBar::Engine.routes.recognize_path request_path_info rescue {}) || {}  if rout.empty? && request_path_info == '/mega-bar' #yeah, a special case for this one.
-    rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', '') rescue {}) || {}  if rout.empty?
-    rout[:action] = get_action(rout[:action], env['REQUEST_METHOD'], )
+    rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', ''), method: env['REQUEST_METHOD'] rescue {}) || {}  if rout.empty?
     rout
   end
 
-  def get_action(action, method)
-    case method
-    when 'PATCH', 'PUT', 'POST'
-      action == 'show'  ? 'update' : 'create'
-    when 'DELETE'
-      'destroy'
-    else
-      action
+  def set_pagination_info(env, rout_terms)
+    rout_terms ||= []
+    pagination_info = []
+    rout_terms.map.with_index do |x, i|
+     pagination_info <<  {kontrlr: x, page: rout_terms[i + 1] }  if /_page/ =~ x
     end
+    q_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
+    q_hash.keys.map do | key |
+     pagination_info <<  {kontrlr: key, page: q_hash[key] }  if /_page/ =~ key
+    end
+    pagination_info
   end
 
-  def process_block(blck, page_info, rout, orig_query_hash, env)
+  def process_block(blck, page_info, rout, orig_query_hash, pagination, env)
     if ! blck.html.nil? && ! blck.html.empty?
       blck.html.html_safe
     else
       params_hash = {} # used to set params var for controllers
       params_hash_arr = [] #used to collect 'params_hash' pieces
 
-      mega_env = MegaEnv.new(blck, rout, page_info) # added to env for use in controllers
+      mega_env = MegaEnv.new(blck, rout, page_info, pagination) # added to env for use in controllers
 
       params_hash_arr = mega_env.params_hash_arr
       env[:mega_env] = mega_env.to_hash
@@ -150,7 +149,7 @@ class LayoutEngine
         params_hash = params_hash.merge(param)
       end
       params_hash = params_hash.merge(orig_query_hash)
-      params_hash = params_hash.merge(env['rack.request.form_hash']) if (mega_env.block_action == 'update' || mega_env.block_action == 'create') && !env['rack.request.form_hash'].nil?
+      params_hash = params_hash.merge(env['rack.request.form_hash']) if !env['rack.request.form_hash'].nil? # && (mega_env.block_action == 'update' || mega_env.block_action == 'create') 
       env['QUERY_STRING'] = params_hash.to_param # 150221!
       env['action_dispatch.request.parameters'] = params_hash
 
@@ -185,12 +184,10 @@ class MegaEnv
   attr_writer :mega_model_properties, :mega_displays, :nested_ids
   attr_reader :block, :modle, :modle_id, :mega_model_properties, :klass, :kontroller_inst, :kontroller_path, :kontroller_klass, :mega_displays, :nested_ids, :block_action, :params_hash_arr, :nested_class_info
 
-  def initialize(blck, rout, page_info)
-
+  def initialize(blck, rout, page_info, pagination)
     @block_model_displays =   MegaBar::ModelDisplay.by_block(blck.id)
     @displays = blck.actions == 'current' ? @block_model_displays.by_block(blck.id).by_action(rout[:action]) : @block_model_displays.by_block(blck.id)
     @block_action = @displays.empty? ? rout[:action] : @displays.first.action
-
     @modle = MegaBar::Model.by_model(@block_model_displays.first.model_id).first
     @modle_id = @modle.id
     @modyule = @modle.modyule.empty? ? '' : @modle.modyule + '::'
@@ -202,6 +199,7 @@ class MegaEnv
     @nested_ids, @params_hash_arr, @nested_classes = nest_info(blck, rout, page_info)
     @nested_class_info = set_nested_class_info(@nested_classes)
     @block = blck
+    @page_number = pagination.map {|info| info[:page].to_i if info[:kontrlr] == @kontroller_inst + '_page' }.compact.first
   end
 
   def to_hash
@@ -215,6 +213,7 @@ class MegaEnv
       mega_displays: @mega_displays,
       nested_ids: @nested_ids,
       nested_class_info: @nested_class_info,
+      page_number: @page_number
     }
   end
 
@@ -222,6 +221,7 @@ class MegaEnv
     mega_displays_info = [] # collects model and field display settings
     displays.each do | display |
       model_display_format = MegaBar::ModelDisplayFormat.find(display.format)
+      model_display_collection_settings = MegaBar::ModelDisplayCollection.by_model_display_id(display.id).first if display.collection_or_member == 'collection'
       field_displays = MegaBar::FieldDisplay.by_model_display_id(display.id)
       displayable_fields = []
       field_displays.each do |field_disp|
@@ -239,7 +239,8 @@ class MegaEnv
       info = {
         :model_display_format => model_display_format, # Object.const_get('MegaBar::' + MegaBar::RecordsFormat.find(md.format).name).new,
         :displayable_fields => displayable_fields,
-        :model_display => display
+        :model_display => display,
+        :collection_settings => model_display_collection_settings
       }
       mega_displays_info << info
     end

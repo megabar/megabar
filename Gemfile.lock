@@ -4,6 +4,7 @@ PATH
     mega_bar (0.0.1)
       best_in_place
       jquery-ui-rails
+      kaminari (~> 0.17.0)
       rails
       seed_dump
       seedbank
@@ -96,6 +97,9 @@ GEM
     jquery-ui-rails (5.0.3)
       railties (>= 3.2.16)
     json (1.8.3)
+    kaminari (0.17.0)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     method_source (0.8.2)

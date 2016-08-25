@@ -78,7 +78,7 @@ def get_env(args)
   env = Rack::MockRequest.env_for(args[:uri], params: args[:params])
   env[:mega_page] = args[:page]
   env[:mega_rout] = args[:rout]
-  env[:mega_env] = MegaEnv.new(blck, args[:rout], args[:page]).to_hash # added to env for use in controllers
+  env[:mega_env] = MegaEnv.new(blck, args[:rout], args[:page], []).to_hash # added to env for use in controllers
   request = Rack::Request.new(env)
   request.session[:return_to] = url_for(uri);
   env

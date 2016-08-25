@@ -1,8 +1,16 @@
 <h1><%= best_in_place @mega_display[:model_display], :header, tabindex: "1", url: @model_display_path %> </h1>
 <div class='model_display_instructions'><%= best_in_place @mega_display[:model_display], :instructions, url: @model_display_path, as: :textarea %> </div>
 
-<%= form_tag @mega_display[:form_path] do |f| %>
+
+<%= form_tag @mega_display[:form_path] + '/filter' do  %>
   <%=@mf.app_wrapper.html_safe%>
+  <% if @filter_text && might_filter? %>
+    Current Filters: <%= @filter_text.join(', ') %><br><%= submit_tag 'clear_filters' %>
+  <% end %>
+  <% if might_paginate?('top') %>
+    <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page", theme: @mega_display[:collection_settings]&.pagination_theme %>
+    <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} %>
+  <% end %>
   <% if @mf.separate_header_row == 'true' %>
     <% @mega_display[:displayable_fields].each do | displayable_field | %>
       <%= @mf.field_header_wrapper.html_safe%>
@@ -10,6 +18,7 @@
       <%= @mf.field_header_wrapper_end.html_safe%>
     <% end %>
   <% end %>
+  
 
   <% @mega_instance.each do |mega_record| %>
     <%= @mf.record_wrapper.html_safe%>
@@ -23,7 +32,6 @@
       <%
         data = render template: displayable_field[:field_display].format.tableize + "/show", locals: data_format_locals(mega_record, displayable_field)
       %>
-
 
       <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
          <a href='<%=data%>'>
@@ -46,9 +54,32 @@
       <td><%= link_to 'Destroy', mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 
     <% end %>
+
     <%= @mf.record_wrapper_end.html_safe%>
   <% end %>
 
+  <% if might_filter? %>
+    <tr>
+      <% @mega_display[:displayable_fields].each do | displayable_field | %>
+        <% @displayable_field = displayable_field %>
+        <td>
+          <% if displayable_field[:field].filter_type.blank? %>
+            &nbsp;
+          <% else %>
+            <% meth = "filter_#{displayable_field[:field].filter_type}" %>
+            <%= render partial: "filters", locals: {:filterr => eval(meth)} %>
+          <% end %>
+        </td>
+      <% end %>
+      <td><%= submit_tag 'Filter' %></td>
+    </tr>
+  <% end %>
+
+
   <%=@mf.app_wrapper_end.html_safe%>
- <br><%#= submit_tag %>
+ <br><%= submit_tag %>
+<% end %>
+<% if might_paginate?('bottom') %>
+  <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>
+  <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} %>
 <% end %>

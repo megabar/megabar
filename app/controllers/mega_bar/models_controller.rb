@@ -7,7 +7,7 @@ module MegaBar
       super.index
     end
     def all
-      @mega_instance = Model.all.order(column_sorting)
+      @mega_instance = Model.all.order(column_sorting) # .page(@page_number).per(5)
       index
     end
 

@@ -43,11 +43,20 @@ module MegaBar
 
     def pre_render
     end
+    def filter_contains
+      filterr = text_field_tag(param_from_tablename(@mega_model_properties, @displayable_field[:field].tablename) + "[" + @displayable_field[:field].field + "___filter]", '', size: 15 )
+
+    end
 
     def model_display_help_links
       links = []
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '/model_displays/' + @mega_display[:model_display].id.to_s  + '?return_to=' + request.env['PATH_INFO'], 'Field Displays for the "' + @mega_display[:model_display].header.to_s +  '" model display']
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/layouts/' + @mega_layout.id.to_s + '/blocks/' + @block.id.to_s + '/model_displays/' + @mega_display[:model_display].id.to_s  + '/edit' , 'Edit Model Display']
+      links.map{ |l| link_to l[1], l[0]}.join(' | ')
+    end
+    def model_display_collection_help_links
+      links = []
+      links << ['/mega-bar/model-display-collections/' + @mega_display[:collection_settings].id.to_s + '/edit?return_to=' + request.env['PATH_INFO'], 'Pagination Settings']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
     def block_help_links
