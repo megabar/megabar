@@ -77,7 +77,6 @@
 
 
   <%=@mf.app_wrapper_end.html_safe%>
- <br><%= submit_tag %>
 <% end %>
 <% if might_paginate?('bottom') %>
   <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>
