@@ -7,8 +7,7 @@ module MegaBar
       instance_variable_set("@" + @kontroller_inst.pluralize,  records)
       @mega_instance ||= instance_variable_get("@" + @kontroller_inst.pluralize);
       @mega_instance = @mega_instance.page(@page_number).per(num_per_page) if might_paginate?
-
-      @mega_instance = process_filters(@mega_instance)
+      @mega_instance = process_filters(@mega_instance) unless params["commit"] == "clear_filters" 
       render @index_view_template
     end
 
@@ -202,11 +201,13 @@ module MegaBar
          filters = session[:mega_filters][@kontroller_inst]
       end
       return mega_instance if filters.blank?
+      @filter_text = []
       filters.each do |key, filt| 
         case key
         when 'contains'
           filt.each do | hsh |
             hsh.each do | field, value | 
+              @filter_text << "#{field} contains #{value}" unless value.blank?
               mega_instance = mega_instance.where(field + " like ?", "%" + value + "%")
             end
           end

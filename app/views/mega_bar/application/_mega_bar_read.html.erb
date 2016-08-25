@@ -6,7 +6,7 @@
   <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} %>
 <% end %>
 
-<%= form_tag @mega_display[:form_path] do |f| %>
+<%= form_tag @mega_display[:form_path] do  %>
   <%=@mf.app_wrapper.html_safe%>
   <% if @mf.separate_header_row == 'true' %>
     <% @mega_display[:displayable_fields].each do | displayable_field | %>
@@ -16,7 +16,9 @@
     <% end %>
   <% end %>
   
-
+  <% if @filter_text && might_filter? %>
+    Current Filters: <%= @filter_text.join(', ') %><br><%= submit_tag 'clear_filters' %>
+  <% end %>
 
   <% @mega_instance.each do |mega_record| %>
     <%= @mf.record_wrapper.html_safe%>
@@ -69,7 +71,7 @@
           <% end %>
         </td>
       <% end %>
-      <td>submit</td>
+      <td><%= submit_tag 'Filter' %></td>
     </tr>
   <% end %>
 
