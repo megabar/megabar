@@ -40,7 +40,7 @@ After you've edited your Gemfile, I have a one line shortcut command for all tho
 
 You should then be able to visit a megabar page at http://localhost:3000/mega-bar/models
 
-If you are adding megabar to an existing application, you might want to run each of those commands separately and you'd probably want to carefully merge the contents of the host_spec_helper.rb into your existing spec_helper. 
+If you are adding megabar to an existing application, you might want to run each of those commands separately and you'd probably want to carefully merge the contents of the host_spec_helper.rb into your existing spec_helper. Also, you may not need the rbenv command or want to use an rvm version.
 
 Getting the latest from the MegaBar Team for your existing megabar app takes just a few steps.
 
