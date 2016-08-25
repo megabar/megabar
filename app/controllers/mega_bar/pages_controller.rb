@@ -3,8 +3,7 @@ module MegaBar
     include MegaBar::MegaBarConcern
 
     def index
-      admin_pages = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
-      @mega_instance ||= Page.where(['id not in (?)', admin_pages ]).order(column_sorting)
+      @mega_instance ||= Page.where(mega_page: [false, nil]).order(column_sorting)
       super
     end
     def all
