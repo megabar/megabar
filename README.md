@@ -44,9 +44,7 @@ Getting the latest from the MegaBar Team takes a few steps.
 
 ```megabar directory: > git pull
    myapp directory: > rake db:migrate
-   myapp directory: > bundle exec rake  mega_bar:data_load
-
-```
+   myapp directory: > bundle exec rake  mega_bar:data_load```
 
 
 If you have additions to the 'core data' and would like them to be a part of the 'mega_bar seeds', run this command:
