@@ -417,7 +417,7 @@ MegaBar::TmpModelDisplay.create!([
 ])
 MegaBar::TmpModelDisplayCollection.create!([
   {id: 1, model_display_id: 1, pagination_position: "both", pagination_theme: "default", records_per_page: 5, created_at: "2016-08-22 02:27:46", updated_at: "2016-08-22 16:06:58", filter_fields: nil},
-  {id: 2, model_display_id: 81, pagination_position: "both", pagination_theme: "default", records_per_page: 2, created_at: "2016-08-22 03:58:20", updated_at: "2016-08-25 13:47:06", filter_fields: true},
+  {id: 2, model_display_id: 81, pagination_position: "both", pagination_theme: "default", records_per_page: 5, created_at: "2016-08-22 03:58:20", updated_at: "2016-08-25 13:47:06", filter_fields: true},
   {id: 3, model_display_id: 4, pagination_position: "top", pagination_theme: "google", records_per_page: 20, created_at: "2016-08-22 20:59:00", updated_at: "2016-08-22 22:27:19", filter_fields: nil},
   {id: 4, model_display_id: 52, pagination_position: "top", pagination_theme: "default", records_per_page: 5, created_at: "2016-08-24 22:17:50", updated_at: "2016-08-24 22:18:14", filter_fields: true},
   {id: 5, model_display_id: 85, pagination_position: "top", pagination_theme: "default", records_per_page: 5, created_at: "2016-08-24 22:20:35", updated_at: "2016-08-24 22:20:35", filter_fields: true}
