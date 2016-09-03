@@ -100,7 +100,7 @@ class MegaRoute
               end
               routes << {path: p + '/:id', method: 'patch', action: 'update', controller: controller}
               routes << {path: p, method: 'post', action: 'create', controller: controller}
-              routes << {path: p.singularize, method: 'delete', action: 'destroy', controller: controller}
+              routes << {path: p + '/:id', method: 'delete', action: 'destroy', controller: controller}
             end
           end
         end
