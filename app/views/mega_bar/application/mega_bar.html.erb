@@ -3,6 +3,7 @@
 
   <% # INDEX AND SHOW STUFF %>
   <% @mega_displays.each do |mega_display| %>
+    <% next if mega_display[:collection_settings] && mega_display[:collection_settings][:display_if_empty] == false && @mega_instance.empty? %>
     <%
       @mega_display= mega_display
       @mf = @mega_display[:model_display_format]
