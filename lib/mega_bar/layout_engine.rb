@@ -25,7 +25,7 @@ class LayoutEngine
       @status, @headers, @response = @app.call(env)
       return  [@status, @headers, self]
     end
-
+    env['REQUEST_METHOD'] = "PATCH" if  env['REQUEST_METHOD'] == "PUT"
     @redirect = false
     request = Rack::Request.new(env)
     request.params # strangely this needs to be here for best_in_place updates.
