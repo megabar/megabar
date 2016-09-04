@@ -4,10 +4,12 @@ module MegaBar
     context 'skipping both callbacks' do
       before(:each) do
         Model.skip_callback("create",:after,:make_page_for_model)
+        Model.skip_callback('save',:after,:make_position_field)
         Model.skip_callback("create",:after,:make_all_files)
       end
       after(:each) do
         Model.set_callback('create', :after, :make_page_for_model)
+        Model.set_callback('save',:after,:make_position_field)
         Model.set_callback('create', :after, :make_all_files)
       end
       it 'has a valid factory' do
@@ -93,6 +95,10 @@ module MegaBar
         expect(Dir.glob('db/migrate/*create_test_cases.rb').empty?).to be_falsey
         # cant test routes here.. boo. expect(:get => "/test-cases").to route_to(:controller => 'test_cases#index')
       end
+
+      it 'adds a position field'
+      end
+
     end
 
   end
