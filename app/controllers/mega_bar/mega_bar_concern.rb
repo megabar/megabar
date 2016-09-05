@@ -7,8 +7,7 @@ module MegaBar
       instance_variable_set("@" + @kontroller_inst.pluralize,  records)
       @mega_instance ||= instance_variable_get("@" + @kontroller_inst.pluralize);
       @mega_instance = @mega_instance.page(@page_number).per(num_per_page) if might_paginate?
-      @mega_instance = process_filters(@mega_instance) unless params["commit"] == "clear_filters" 
-
+      @mega_instance = process_filters(@mega_instance)
       render @index_view_template
     end
 
@@ -193,10 +192,14 @@ module MegaBar
     end
 
     def process_filters(mega_instance)
+      if params["commit"] == "clear_filters"
+        session[:mega_filters] = {}
+      end
       session[:mega_filters] ||= {}
       return mega_instance unless params[@kontroller_inst] || session[:mega_filters][@kontroller_inst] 
       #cache me.
       if params[@kontroller_inst] 
+        session[:mega_filters] = {}
         filter_types = MegaBar::Field.includes(:options).find_by(field: 'filter_type', tablename: 'mega_bar_fields').options.pluck(:value)
         filters = session[:mega_filters][@kontroller_inst.to_sym] = collect_filters(filter_types)
       elsif session[:mega_filters][@kontroller_inst]
