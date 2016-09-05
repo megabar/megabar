@@ -13,6 +13,8 @@ module MegaBar
         MegaBar::Field.skip_callback("create",:after,:make_migration)
         MegaBar::Model.skip_callback("create",:after,:make_all_files)
         MegaBar::Model.set_callback("create", :after, :make_page_for_model)
+        # might be needed skip and or set: MegaBar::Model.skip_callback(       'save',   :after, :make_position_field)
+   
         MegaBar::Page.set_callback("create", :after, :create_layout_for_page)
         MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
         MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)

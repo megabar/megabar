@@ -110,7 +110,7 @@ module MegaBar
       @mega_page = env[:mega_page]
       @mega_rout = env[:mega_rout]
       @mega_layout = env[:mega_layout]
-      @mega_class = env[:mega_env][:klass].constantize
+      @mega_class = env[:mega_env][:klass]
       env[:mega_env].keys.each { | env_var | instance_variable_set('@' + env_var.to_s, env[:mega_env][env_var]) }
       unpack_nested_classes(@nested_class_info)
       @index_view_template ||= "mega_bar.html.erb"

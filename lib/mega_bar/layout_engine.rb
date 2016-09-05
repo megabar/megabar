@@ -193,7 +193,8 @@ class MegaEnv
     @modyule = @modle.modyule.empty? ? '' : @modle.modyule + '::'
     @kontroller_klass = @modyule + @modle.classname.classify.pluralize + "Controller"
     @kontroller_path = @modle.modyule.nil? || @modle.modyule.empty? ?   @modle.classname.pluralize.underscore :  @modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + @modle.classname.pluralize.underscore
-    @klass = @modyule + @modle.classname.classify
+    @klass = (@modyule + @modle.classname.classify).constantize
+    meta_programming(@klass, @modle)
     @kontroller_inst = @modle.classname.underscore
     @mega_displays = set_mega_displays(@displays)
     @nested_ids, @params_hash_arr, @nested_classes = nest_info(blck, rout, page_info)
@@ -217,6 +218,10 @@ class MegaEnv
     }
   end
 
+  def meta_programming(klass, modle) 
+    position_parent_method = modle.position_parent.split("::").last.downcase.to_sym if modle.position_parent
+     klass.class_eval{ acts_as_list scope: position_parent_method } if position_parent_method
+  end
   def set_mega_displays(displays)
     mega_displays_info = [] # collects model and field display settings
     displays.each do | display |
