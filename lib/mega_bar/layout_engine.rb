@@ -220,7 +220,7 @@ class MegaEnv
 
   def meta_programming(klass, modle) 
     position_parent_method = modle.position_parent.split("::").last.downcase.to_sym if modle.position_parent
-     klass.class_eval{ acts_as_list scope: position_parent_method } if position_parent_method
+    klass.class_eval{ acts_as_list scope: position_parent_method } if position_parent_method
   end
   def set_mega_displays(displays)
     mega_displays_info = [] # collects model and field display settings

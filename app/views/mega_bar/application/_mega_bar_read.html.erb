@@ -53,6 +53,34 @@
       <td><%= link_to 'Edit', link_path('edit', mega_record.id) %></td>
       <td><%= link_to 'Destroy', mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 
+
+
+
+
+
+      <% if @mega_model_properties.position_parent %>
+        <td>
+          <% unless @mega_instance.first.position == mega_record.position %> 
+          
+            <%= link_to 'up', link_path('move', mega_record.id).to_s + "?method=move_higher",  data: { turbolinks: false } %>
+            <%#= link_to "up", { :action => 'move', :method => 'move_higher', :book_id => mega_record.id } %>
+            <%#= link_to "top", { :action =>'move', :method => 'move_to_top', :book_id => mega_record.id } %> 
+          <% end %> 
+
+          <% unless mega_record.last? %> 
+            <% unless mega_record.position == (@mega_instance.first.position || @mega_instance.last.position) %> | <% end %> 
+            <%#= link_to "down", { :action => 'move', :method => 'move_lower', :book_id => mega_record.id } %> 
+            <%#= link_to "bottom", { :action => 'move', :method => 'move_to_bottom', :book_id => mega_record.id } %> 
+          <% end %>
+        </td>
+      <% end %>
+
+
+
+
+
+
+
     <% end %>
 
     <%= @mf.record_wrapper_end.html_safe%>
