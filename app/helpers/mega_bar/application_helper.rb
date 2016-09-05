@@ -4,8 +4,8 @@ module MegaBar
       #422pm.
       return title if !params[:id].blank?
       title ||= column.titleize
-      css_class = column == sort_column(@mega_class, @mega_model_properties, params) ? 'current ' + sort_direction(params) : nil
-      direction = column == sort_column(@mega_class, @mega_model_properties, params) && sort_direction(params) == 'asc' ? 'desc' : 'asc'
+      css_class = column == sort_column(@mega_class, @mega_model_properties, params) ? 'current ' + sort_direction(params, @mega_model_properties) : nil
+      direction = column == sort_column(@mega_class, @mega_model_properties, params) && sort_direction(params, @mega_model_properties) == 'asc' ? 'desc' : 'asc'
       hsh = {sort: column, direction: direction, controller: @kontroller_path}
       hsh.merge!({action: @mega_rout[:action]}) if @mega_rout[:action] != 'show'
       link_to title, hsh, class: css_class

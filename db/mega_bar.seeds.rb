@@ -1,20 +1,20 @@
 MegaBar::TmpModel.create!([
-  {id: 1, modyule: "MegaBar", classname: "Model", schema: "sqlite", tablename: "mega_bar_models", name: "Model", default_sort_field: "id", created_at: "2014-05-05 17:27:28", updated_at: "2016-05-28 15:19:23", mega_model: "mega", position_parent: nil},
-  {id: 2, modyule: "MegaBar", classname: "Field", schema: "sqliter", tablename: "mega_bar_fields", name: "Fields", default_sort_field: "id", created_at: "2014-05-05 17:28:21", updated_at: "2015-02-18 21:06:04", mega_model: "mega", position_parent: nil},
-  {id: 3, modyule: "MegaBar", classname: "ModelDisplay", schema: "sqlite", tablename: "mega_bar_model_displays", name: "Model Displays", default_sort_field: "series", created_at: "2014-05-05 18:12:24", updated_at: "2016-05-23 03:23:55", mega_model: "mega", position_parent: nil},
-  {id: 4, modyule: "MegaBar", classname: "FieldDisplay", schema: "sqlite", tablename: "mega_bar_field_displays", name: "Field Displays", default_sort_field: "id", created_at: "2014-05-05 19:20:12", updated_at: "2015-02-06 23:56:42", mega_model: "mega", position_parent: nil},
-  {id: 5, modyule: "MegaBar", classname: "Textbox", schema: "anotherxxyyzzyyzz", tablename: "mega_bar_textboxes", name: "Text Boxess", default_sort_field: "id", created_at: "2014-05-12 17:43:13", updated_at: "2016-08-24 21:31:04", mega_model: "mega", position_parent: nil},
-  {id: 6, modyule: "MegaBar", classname: "Textread", schema: "oyyyyyyyyvey", tablename: "mega_bar_textreads", name: "Text Display", default_sort_field: "id", created_at: "2014-05-12 22:59:05", updated_at: "2016-08-24 21:29:33", mega_model: "mega", position_parent: nil},
-  {id: 7, modyule: "MegaBar", classname: "Select", schema: "sqlite99", tablename: "mega_bar_selects", name: "Selects", default_sort_field: "id", created_at: "2015-01-23 03:41:20", updated_at: "2015-02-19 22:09:16", mega_model: "mega", position_parent: nil},
-  {id: 8, modyule: "MegaBar", classname: "ModelDisplayFormat", schema: "sqlite15", tablename: "mega_bar_model_display_formats", name: "Model Display Formats", default_sort_field: "id", created_at: "2015-02-08 18:20:46", updated_at: "2015-02-19 04:09:16", mega_model: "mega", position_parent: nil},
-  {id: 9, modyule: "MegaBar", classname: "Option", schema: "sqlite", tablename: "mega_bar_options", name: "Options", default_sort_field: "id", created_at: "2015-02-12 03:46:33", updated_at: "2015-02-12 03:46:33", mega_model: "mega", position_parent: nil},
-  {id: 10, modyule: "MegaBar", classname: "Page", schema: "sqlitexx", tablename: "mega_bar_pages", name: "Pages", default_sort_field: "id", created_at: "2015-02-13 01:16:38", updated_at: "2016-08-24 21:05:22", mega_model: "mega", position_parent: nil},
-  {id: 11, modyule: "MegaBar", classname: "Layout", schema: "sqlitexx", tablename: "mega_bar_layouts", name: "Layouts", default_sort_field: "id", created_at: "2015-02-18 03:10:38", updated_at: "2016-09-04 21:52:08", mega_model: "mega", position_parent: "MegaBar::TmpPage"},
-  {id: 12, modyule: "MegaBar", classname: "Block", schema: "sqlitexx", tablename: "mega_bar_blocks", name: "Blocks", default_sort_field: "id", created_at: "2015-02-18 03:47:38", updated_at: "2016-08-24 21:17:35", mega_model: "mega", position_parent: nil},
-  {id: 13, modyule: "MegaBar", classname: "Textarea", schema: "sqlite", tablename: "mega_bar_textareas", name: "Textareas", default_sort_field: "id", created_at: "2016-08-15 13:19:06", updated_at: "2016-08-15 13:19:06", mega_model: "mega", position_parent: nil},
-  {id: 14, modyule: "MegaBar", classname: "Checkbox", schema: "sqlite", tablename: "mega_bar_checkboxes", name: "Checkboxes", default_sort_field: "id", created_at: "2016-08-16 18:14:42", updated_at: "2016-08-16 18:14:42", mega_model: "mega", position_parent: nil},
-  {id: 15, modyule: "MegaBar", classname: "Radio", schema: "sqlite", tablename: "mega_bar_radios", name: "Radios", default_sort_field: "id", created_at: "2016-08-17 19:12:38", updated_at: "2016-08-17 19:12:38", mega_model: "mega", position_parent: nil},
-  {id: 16, modyule: "MegaBar", classname: "ModelDisplayCollection", schema: "sqlite", tablename: "mega_bar_model_display_collections", name: "Model Display Collection Settings", default_sort_field: "id", created_at: "2016-08-22 02:08:12", updated_at: "2016-08-22 02:08:12", mega_model: "mega", position_parent: nil}
+  {id: 1, modyule: "MegaBar", classname: "Model", schema: "sqlite", tablename: "mega_bar_models", name: "Model", default_sort_field: "id", created_at: "2014-05-05 17:27:28", updated_at: "2016-05-28 15:19:23", mega_model: "mega", position_parent: nil, default_sort_order: "asc"},
+  {id: 2, modyule: "MegaBar", classname: "Field", schema: "sqliter", tablename: "mega_bar_fields", name: "Fields", default_sort_field: "id", created_at: "2014-05-05 17:28:21", updated_at: "2015-02-18 21:06:04", mega_model: "mega", position_parent: nil, default_sort_order: "desc"},
+  {id: 3, modyule: "MegaBar", classname: "ModelDisplay", schema: "sqlite", tablename: "mega_bar_model_displays", name: "Model Displays", default_sort_field: "series", created_at: "2014-05-05 18:12:24", updated_at: "2016-05-23 03:23:55", mega_model: "mega", position_parent: nil, default_sort_order: "desc"},
+  {id: 4, modyule: "MegaBar", classname: "FieldDisplay", schema: "sqlite", tablename: "mega_bar_field_displays", name: "Field Displays", default_sort_field: "id", created_at: "2014-05-05 19:20:12", updated_at: "2015-02-06 23:56:42", mega_model: "mega", position_parent: nil, default_sort_order: "desc"},
+  {id: 5, modyule: "MegaBar", classname: "Textbox", schema: "anotherxxyyzzyyzz", tablename: "mega_bar_textboxes", name: "Text Boxess", default_sort_field: "id", created_at: "2014-05-12 17:43:13", updated_at: "2016-08-24 21:31:04", mega_model: "mega", position_parent: nil, default_sort_order: "desc"},
+  {id: 6, modyule: "MegaBar", classname: "Textread", schema: "oyyyyyyyyvey", tablename: "mega_bar_textreads", name: "Text Display", default_sort_field: "id", created_at: "2014-05-12 22:59:05", updated_at: "2016-08-24 21:29:33", mega_model: "mega", position_parent: nil, default_sort_order: "desc"},
+  {id: 7, modyule: "MegaBar", classname: "Select", schema: "sqlite99", tablename: "mega_bar_selects", name: "Selects", default_sort_field: "id", created_at: "2015-01-23 03:41:20", updated_at: "2015-02-19 22:09:16", mega_model: "mega", position_parent: nil, default_sort_order: "desc"},
+  {id: 8, modyule: "MegaBar", classname: "ModelDisplayFormat", schema: "sqlite15", tablename: "mega_bar_model_display_formats", name: "Model Display Formats", default_sort_field: "id", created_at: "2015-02-08 18:20:46", updated_at: "2015-02-19 04:09:16", mega_model: "mega", position_parent: nil, default_sort_order: "desc"},
+  {id: 9, modyule: "MegaBar", classname: "Option", schema: "sqlite", tablename: "mega_bar_options", name: "Options", default_sort_field: "id", created_at: "2015-02-12 03:46:33", updated_at: "2015-02-12 03:46:33", mega_model: "mega", position_parent: nil, default_sort_order: "desc"},
+  {id: 10, modyule: "MegaBar", classname: "Page", schema: "sqlitexx", tablename: "mega_bar_pages", name: "Pages", default_sort_field: "id", created_at: "2015-02-13 01:16:38", updated_at: "2016-08-24 21:05:22", mega_model: "mega", position_parent: nil, default_sort_order: "desc"},
+  {id: 11, modyule: "MegaBar", classname: "Layout", schema: "sqlitexx", tablename: "mega_bar_layouts", name: "Layouts", default_sort_field: "position", created_at: "2015-02-18 03:10:38", updated_at: "2016-09-05 19:03:28", mega_model: "mega", position_parent: "MegaBar::TmpPage", default_sort_order: "asc"},
+  {id: 12, modyule: "MegaBar", classname: "Block", schema: "sqlitexx", tablename: "mega_bar_blocks", name: "Blocks", default_sort_field: "id", created_at: "2015-02-18 03:47:38", updated_at: "2016-08-24 21:17:35", mega_model: "mega", position_parent: nil, default_sort_order: "desc"},
+  {id: 13, modyule: "MegaBar", classname: "Textarea", schema: "sqlite", tablename: "mega_bar_textareas", name: "Textareas", default_sort_field: "id", created_at: "2016-08-15 13:19:06", updated_at: "2016-08-15 13:19:06", mega_model: "mega", position_parent: nil, default_sort_order: "desc"},
+  {id: 14, modyule: "MegaBar", classname: "Checkbox", schema: "sqlite", tablename: "mega_bar_checkboxes", name: "Checkboxes", default_sort_field: "id", created_at: "2016-08-16 18:14:42", updated_at: "2016-08-16 18:14:42", mega_model: "mega", position_parent: nil, default_sort_order: "desc"},
+  {id: 15, modyule: "MegaBar", classname: "Radio", schema: "sqlite", tablename: "mega_bar_radios", name: "Radios", default_sort_field: "id", created_at: "2016-08-17 19:12:38", updated_at: "2016-08-17 19:12:38", mega_model: "mega", position_parent: nil, default_sort_order: "desc"},
+  {id: 16, modyule: "MegaBar", classname: "ModelDisplayCollection", schema: "sqlite", tablename: "mega_bar_model_display_collections", name: "Model Display Collection Settings", default_sort_field: "id", created_at: "2016-08-22 02:08:12", updated_at: "2016-08-22 02:08:12", mega_model: "mega", position_parent: nil, default_sort_order: "desc"}
 ])
 MegaBar::TmpField.create!([
   {id: 1, model_id: 1, schema: "sqlite", tablename: "mega_bar_models", field: "id", data_type: nil, accessor: "", default_value: "", default_data_format: "off", default_data_format_edit: "textread", created_at: "2014-05-05 17:31:12", updated_at: "2015-02-08 07:32:31", option_borrow: nil, filter_type: nil},
@@ -126,7 +126,8 @@ MegaBar::TmpField.create!([
   {id: 107, model_id: 16, schema: "sqlite", tablename: "mega_bar_model_display_collections", field: "filter_fields", data_type: "boolean", accessor: "", default_value: "", default_data_format: "textread", default_data_format_edit: "checkbox", created_at: "2016-08-23 02:16:50", updated_at: "2016-08-23 02:25:44", option_borrow: nil, filter_type: "booleans"},
   {id: 108, model_id: 16, schema: "sqlite", tablename: "mega_bar_model_display_collections", field: "display_if_empty", data_type: "boolean", accessor: "", default_value: "true", default_data_format: "textread", default_data_format_edit: "checkbox", created_at: "2016-09-03 15:14:55", updated_at: "2016-09-03 15:14:55", option_borrow: nil, filter_type: ""},
   {id: 109, model_id: 1, schema: "sqlite", tablename: "mega_bar_models", field: "position_parent", data_type: "string", accessor: "", default_value: "", default_data_format: "textread", default_data_format_edit: "select", created_at: "2016-09-04 21:50:27", updated_at: "2016-09-04 21:50:27", option_borrow: nil, filter_type: ""},
-  {id: 110, model_id: 11, schema: nil, tablename: "mega_bar_layouts", field: "position", data_type: "integer", accessor: nil, default_value: nil, default_data_format: "textread", default_data_format_edit: "textbox", created_at: "2016-09-04 21:52:08", updated_at: "2016-09-04 21:52:08", option_borrow: nil, filter_type: nil}
+  {id: 110, model_id: 11, schema: nil, tablename: "mega_bar_layouts", field: "position", data_type: "integer", accessor: nil, default_value: nil, default_data_format: "textread", default_data_format_edit: "textbox", created_at: "2016-09-04 21:52:08", updated_at: "2016-09-04 21:52:08", option_borrow: nil, filter_type: nil},
+  {id: 111, model_id: 1, schema: "sqlite", tablename: "mega_bar_models", field: "default_sort_order", data_type: "string", accessor: "", default_value: "asc", default_data_format: "textread", default_data_format_edit: "select", created_at: "2016-09-05 19:13:11", updated_at: "2016-09-05 19:13:11", option_borrow: nil, filter_type: ""}
 ])
 MegaBar::TmpOption.create!([
   {id: 1, field_id: 19, text: "Textbox", value: "textbox", created_at: "2015-02-12 05:14:39", updated_at: "2015-02-12 05:14:39"},
@@ -189,7 +190,9 @@ MegaBar::TmpOption.create!([
   {id: 58, field_id: 106, text: "Between", value: "between", created_at: "2016-08-23 02:12:15", updated_at: "2016-08-23 02:12:15"},
   {id: 59, field_id: 106, text: "Date Range", value: "date_range", created_at: "2016-08-23 02:12:44", updated_at: "2016-08-23 02:12:44"},
   {id: 60, field_id: 106, text: "True/False", value: "booleans", created_at: "2016-08-23 02:17:14", updated_at: "2016-08-23 02:17:14"},
-  {id: 61, field_id: 19, text: "delete me", value: "bad", created_at: "2016-08-23 19:46:30", updated_at: "2016-08-23 19:46:30"}
+  {id: 61, field_id: 19, text: "delete me", value: "bad", created_at: "2016-08-23 19:46:30", updated_at: "2016-08-23 19:46:30"},
+  {id: 62, field_id: 111, text: "Ascending", value: "asc", created_at: "2016-09-05 19:17:38", updated_at: "2016-09-05 19:17:38"},
+  {id: 63, field_id: 111, text: "Decending", value: "desc", created_at: "2016-09-05 19:17:53", updated_at: "2016-09-05 19:17:53"}
 ])
 MegaBar::TmpModelDisplayFormat.create!([
   {id: 1, name: "GridHtml", app_wrapper: "<table>", app_wrapper_end: "</table>", field_header_wrapper: "<th>", field_header_wrapper_end: "</th>", record_wrapper: "<tr>", record_wrapper_end: "</tr>", field_wrapper: "<td>", field_wrapper_end: "</td>", separate_header_row: "true", created_at: "2015-02-08 18:52:01", updated_at: "2015-02-10 00:38:59"},
@@ -235,19 +238,20 @@ MegaBar::TmpLayout.create!([
   {id: 11, page_id: 6, name: "Textreads Layout", created_at: "2015-02-25 03:32:02", updated_at: "2015-02-25 03:32:02", position: 1},
   {id: 12, page_id: 12, name: "Blocks Layout", created_at: "2015-02-25 03:32:02", updated_at: "2015-02-25 03:32:02", position: 1},
   {id: 13, page_id: 13, name: "Page-Layouts Layout", created_at: "2015-02-25 03:32:02", updated_at: "2015-02-25 03:32:02", position: 1},
-  {id: 14, page_id: 14, name: "Page-Layouts-Blocks Layout", created_at: "2015-02-25 03:32:02", updated_at: "2015-02-25 03:32:02", position: 1},
+  {id: 14, page_id: 14, name: "Page-Layouts-Blocks Layout", created_at: "2015-02-25 03:32:02", updated_at: "2016-09-05 18:07:36", position: 2},
   {id: 15, page_id: 15, name: "Page-Layouts-Blocks-Displays Page", created_at: "2015-02-25 03:32:02", updated_at: "2015-02-25 03:32:02", position: 1},
   {id: 16, page_id: 1, name: "Just a faker layout", created_at: "2015-03-01 20:06:52", updated_at: "2015-03-01 20:06:52", position: 2},
-  {id: 17, page_id: 14, name: "fun layout", created_at: "2015-03-02 02:11:36", updated_at: "2015-03-02 02:11:36", position: 2},
-  {id: 18, page_id: 14, name: "another fun layout", created_at: "2015-03-02 02:14:08", updated_at: "2015-03-02 02:14:08", position: 3},
-  {id: 19, page_id: 14, name: "another fun layout 2", created_at: "2015-03-02 02:20:06", updated_at: "2015-03-02 02:20:06", position: 4},
+  {id: 17, page_id: 14, name: "fun layout", created_at: "2015-03-02 02:11:36", updated_at: "2016-09-05 18:07:36", position: 3},
+  {id: 18, page_id: 14, name: "another fun layout", created_at: "2015-03-02 02:14:08", updated_at: "2016-09-05 18:07:36", position: 4},
+  {id: 19, page_id: 14, name: "another fun layout 2", created_at: "2015-03-02 02:20:06", updated_at: "2016-09-05 18:07:36", position: 1},
   {id: 20, page_id: 18, name: "What is a base name? Layout", created_at: "2016-05-12 16:14:34", updated_at: "2016-05-12 16:14:34", position: 1},
   {id: 21, page_id: 19, name: "Models on models-fields page Layout", created_at: "2016-05-31 01:21:13", updated_at: "2016-05-31 01:21:13", position: 1},
   {id: 22, page_id: 20, name: "Models on models-fields-options Layout", created_at: "2016-05-31 03:09:08", updated_at: "2016-05-31 03:09:08", position: 1},
   {id: 23, page_id: 21, name: "Textareas Layout", created_at: "2016-08-15 13:19:12", updated_at: "2016-08-15 13:19:12", position: 1},
   {id: 24, page_id: 22, name: "Checkboxes Layouttt", created_at: "2016-08-16 18:14:49", updated_at: "2016-08-16 21:52:46", position: 1},
   {id: 25, page_id: 23, name: "Radios Layout", created_at: "2016-08-17 19:12:45", updated_at: "2016-08-17 19:12:45", position: 1},
-  {id: 26, page_id: 24, name: "Model display collection settings Layout", created_at: "2016-08-22 02:08:20", updated_at: "2016-08-22 02:08:20", position: 1}
+  {id: 26, page_id: 24, name: "Model display collection settings Layout", created_at: "2016-08-22 02:08:20", updated_at: "2016-08-22 02:08:20", position: 1},
+  {id: 27, page_id: 14, name: "position layout", created_at: "2016-09-05 19:05:23", updated_at: "2016-09-05 19:05:23", position: 5}
 ])
 MegaBar::TmpBlock.create!([
   {id: 1, layout_id: 1, model_id: nil, name: "Models on Models Layout boo", actions: "current", html: "", nest_level_1: nil, nest_level_2: nil, path_base: "", created_at: "2015-02-18 05:20:43", updated_at: "2015-03-02 00:14:20", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
@@ -301,7 +305,8 @@ MegaBar::TmpBlock.create!([
   {id: 49, layout_id: 25, model_id: nil, name: "Radios on Radios Layout Block", actions: "current", html: nil, nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2016-08-17 19:12:45", updated_at: "2016-08-17 19:12:45", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 50, layout_id: 4, model_id: nil, name: "Radios on Field Displays Layout", actions: "show", html: "", nest_level_1: 4, nest_level_2: nil, path_base: "/mega-bar/field_displays/:field_display_id/radios", created_at: "2016-08-17 19:27:58", updated_at: "2016-08-17 19:27:58", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
   {id: 51, layout_id: 26, model_id: nil, name: "Model display collection settings on Model display collection settings Layout Block", actions: "current", html: nil, nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2016-08-22 02:08:20", updated_at: "2016-08-22 02:08:20", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil},
-  {id: 52, layout_id: 15, model_id: nil, name: "Collection Display Settings on Page-Layouts-Blocks-Displays layout", actions: "show", html: "", nest_level_1: 3, nest_level_2: 12, path_base: "/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/model_displays/:model_display_id/model_display_collections", created_at: "2016-08-22 02:33:54", updated_at: "2016-08-22 02:33:54", nest_level_3: 11, nest_level_4: 10, nest_level_5: nil, nest_level_6: nil}
+  {id: 52, layout_id: 15, model_id: nil, name: "Collection Display Settings on Page-Layouts-Blocks-Displays layout", actions: "show", html: "", nest_level_1: 3, nest_level_2: 12, path_base: "/mega-bar/pages/:page_id/layouts/:layout_id/blocks/:block_id/model_displays/:model_display_id/model_display_collections", created_at: "2016-08-22 02:33:54", updated_at: "2016-08-22 02:33:54", nest_level_3: 11, nest_level_4: 10, nest_level_5: nil, nest_level_6: nil},
+  {id: 53, layout_id: 27, model_id: nil, name: "Position beep on position layout Block", actions: "current", html: "this is the position layout", nest_level_1: nil, nest_level_2: nil, path_base: nil, created_at: "2016-09-05 19:05:23", updated_at: "2016-09-05 19:05:23", nest_level_3: nil, nest_level_4: nil, nest_level_5: nil, nest_level_6: nil}
 ])
 MegaBar::TmpModelDisplay.create!([
   {id: 1, block_id: 1, model_id: 1, format: "1", action: "index", header: "Models", created_at: "2014-05-05 19:13:32", updated_at: "2015-12-09 20:26:19", collection_or_member: "collection", series: 1, instructions: nil},
@@ -738,7 +743,6 @@ MegaBar::TmpFieldDisplay.create!([
   {id: 303, model_display_id: 60, field_id: 64, format: "textread", action: nil, header: "Id", link_type: nil, created_at: "2015-02-26 20:07:17", updated_at: "2015-02-26 20:07:17"},
   {id: 304, model_display_id: 61, field_id: 57, format: "textbox", action: nil, header: "Page", link_type: nil, created_at: "2015-02-26 20:08:35", updated_at: "2015-02-26 20:08:35"},
   {id: 305, model_display_id: 61, field_id: 58, format: "textbox", action: nil, header: "Name", link_type: nil, created_at: "2015-02-26 20:08:35", updated_at: "2015-02-26 20:08:35"},
-  {id: 306, model_display_id: 61, field_id: 65, format: "textbox", action: nil, header: "Id", link_type: nil, created_at: "2015-02-26 20:08:35", updated_at: "2015-02-26 20:08:35"},
   {id: 307, model_display_id: 61, field_id: 72, format: "select", action: nil, header: "Make block", link_type: nil, created_at: "2015-02-26 20:08:35", updated_at: "2015-02-26 20:08:35"},
   {id: 308, model_display_id: 61, field_id: 73, format: "textbox", action: nil, header: "Block text", link_type: nil, created_at: "2015-02-26 20:08:35", updated_at: "2015-02-26 20:08:35"},
   {id: 309, model_display_id: 61, field_id: 74, format: "textbox", action: nil, header: "Base name", link_type: nil, created_at: "2015-02-26 20:08:36", updated_at: "2015-02-26 20:08:36"},
@@ -915,7 +919,6 @@ MegaBar::TmpFieldDisplay.create!([
   {id: 480, model_display_id: 81, field_id: 5, format: "textread", action: nil, header: "Name", link_type: nil, created_at: "2015-12-08 03:59:57", updated_at: "2015-12-08 03:59:57"},
   {id: 481, model_display_id: 81, field_id: 21, format: "textread", action: nil, header: "Default sort field", link_type: nil, created_at: "2015-12-08 03:59:58", updated_at: "2015-12-08 03:59:58"},
   {id: 482, model_display_id: 81, field_id: 41, format: "textread", action: nil, header: "Modyule", link_type: nil, created_at: "2015-12-08 03:59:58", updated_at: "2015-12-08 03:59:58"},
-  {id: 483, model_display_id: 81, field_id: 75, format: "textread", action: nil, header: "Make page", link_type: nil, created_at: "2015-12-08 03:59:59", updated_at: "2015-12-08 03:59:59"},
   {id: 484, model_display_id: 38, field_id: 64, format: "off", action: nil, header: "Id", link_type: nil, created_at: "2015-12-09 18:35:31", updated_at: "2015-12-09 18:35:31"},
   {id: 485, model_display_id: 38, field_id: 76, format: "textbox", action: nil, header: "Base name", link_type: nil, created_at: "2015-12-09 18:35:31", updated_at: "2015-12-09 18:35:31"},
   {id: 486, model_display_id: 39, field_id: 69, format: "textbox", action: nil, header: "Make layout and block", link_type: nil, created_at: "2015-12-09 18:36:32", updated_at: "2015-12-09 18:36:32"},
@@ -1142,7 +1145,15 @@ MegaBar::TmpFieldDisplay.create!([
   {id: 707, model_display_id: 25, field_id: 109, format: "select", action: nil, header: "Position parent", link_type: nil, created_at: "2016-09-04 21:50:36", updated_at: "2016-09-04 21:50:36"},
   {id: 708, model_display_id: 44, field_id: 110, format: "textread", action: nil, header: "Position", link_type: nil, created_at: "2016-09-04 21:52:17", updated_at: "2016-09-04 21:52:17"},
   {id: 709, model_display_id: 50, field_id: 110, format: "textread", action: nil, header: "Position", link_type: nil, created_at: "2016-09-04 21:52:17", updated_at: "2016-09-04 21:52:17"},
-  {id: 710, model_display_id: 63, field_id: 110, format: "textread", action: nil, header: "Position", link_type: nil, created_at: "2016-09-04 21:52:17", updated_at: "2016-09-04 21:52:17"}
+  {id: 710, model_display_id: 63, field_id: 110, format: "textread", action: nil, header: "Position", link_type: nil, created_at: "2016-09-04 21:52:17", updated_at: "2016-09-04 21:52:17"},
+  {id: 711, model_display_id: 1, field_id: 111, format: "textread", action: nil, header: "Default sort order", link_type: nil, created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21"},
+  {id: 712, model_display_id: 5, field_id: 111, format: "select", action: nil, header: "Default sort order", link_type: nil, created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21"},
+  {id: 713, model_display_id: 6, field_id: 111, format: "select", action: nil, header: "Default sort order", link_type: nil, created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21"},
+  {id: 714, model_display_id: 10, field_id: 111, format: "textread", action: nil, header: "Default sort order", link_type: nil, created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21"},
+  {id: 715, model_display_id: 25, field_id: 111, format: "select", action: nil, header: "Default sort order", link_type: nil, created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21"},
+  {id: 716, model_display_id: 81, field_id: 111, format: "textread", action: nil, header: "Default sort order", link_type: nil, created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21"},
+  {id: 717, model_display_id: 82, field_id: 111, format: "textread", action: nil, header: "Default sort order", link_type: nil, created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21"},
+  {id: 718, model_display_id: 88, field_id: 111, format: "textread", action: nil, header: "Default sort order", link_type: nil, created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21"}
 ])
 MegaBar::TmpCheckbox.create!([
   {id: 1, created_at: "2016-08-16 21:34:29", updated_at: "2016-08-17 01:27:50", field_display_id: 655, checked: false},
@@ -1251,7 +1262,10 @@ MegaBar::TmpSelect.create!([
   {id: 94, field_display_id: 689, created_at: "2016-08-23 02:08:53", updated_at: "2016-08-23 02:08:53", multiple: false},
   {id: 95, field_display_id: 690, created_at: "2016-08-23 02:08:53", updated_at: "2016-08-23 02:08:53", multiple: false},
   {id: 96, field_display_id: 706, created_at: "2016-09-04 21:50:36", updated_at: "2016-09-04 21:50:36", multiple: false},
-  {id: 97, field_display_id: 707, created_at: "2016-09-04 21:50:36", updated_at: "2016-09-04 21:50:36", multiple: false}
+  {id: 97, field_display_id: 707, created_at: "2016-09-04 21:50:36", updated_at: "2016-09-04 21:50:36", multiple: false},
+  {id: 98, field_display_id: 712, created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21", multiple: false},
+  {id: 99, field_display_id: 713, created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21", multiple: false},
+  {id: 100, field_display_id: 715, created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21", multiple: false}
 ])
 MegaBar::TmpTextarea.create!([
   {id: 1, created_at: "2016-08-15 16:28:56", updated_at: "2016-08-15 16:28:56", field_display_id: 643, rows: nil, cols: nil},
@@ -1349,7 +1363,6 @@ MegaBar::TmpTextbox.create!([
   {id: 86, field_display_id: 2, size: 42, created_at: "2014-12-26 01:10:42", updated_at: "2014-12-26 01:10:42"},
   {id: 87, field_display_id: 304, size: 42, created_at: "2015-02-26 20:08:35", updated_at: "2015-02-26 20:08:35"},
   {id: 88, field_display_id: 305, size: 42, created_at: "2015-02-26 20:08:35", updated_at: "2015-02-26 20:08:35"},
-  {id: 89, field_display_id: 306, size: 42, created_at: "2015-02-26 20:08:35", updated_at: "2015-02-26 20:08:35"},
   {id: 90, field_display_id: 308, size: 42, created_at: "2015-02-26 20:08:36", updated_at: "2015-02-26 20:08:36"},
   {id: 91, field_display_id: 309, size: 42, created_at: "2015-02-26 20:08:36", updated_at: "2015-02-26 20:08:36"},
   {id: 92, field_display_id: 326, size: 42, created_at: "2015-02-27 16:17:48", updated_at: "2015-02-27 16:17:48"},
@@ -1721,7 +1734,6 @@ MegaBar::TmpTextread.create!([
   {id: 282, field_display_id: 477, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-12-08 03:59:56", updated_at: "2015-12-08 03:59:56", truncation_separator: nil},
   {id: 283, field_display_id: 481, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-12-08 03:59:58", updated_at: "2015-12-08 03:59:58", truncation_separator: nil},
   {id: 284, field_display_id: 482, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-12-08 03:59:59", updated_at: "2015-12-08 03:59:59", truncation_separator: nil},
-  {id: 285, field_display_id: 483, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-12-08 03:59:59", updated_at: "2015-12-08 03:59:59", truncation_separator: nil},
   {id: 286, field_display_id: 489, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-12-09 20:26:19", updated_at: "2015-12-09 20:26:19", truncation_separator: nil},
   {id: 287, field_display_id: 490, truncation: nil, truncation_format: "", transformation: "", created_at: "2015-12-09 20:26:19", updated_at: "2015-12-09 20:26:19", truncation_separator: nil},
   {id: 288, field_display_id: 496, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-05-14 17:03:05", updated_at: "2016-05-14 17:03:05", truncation_separator: nil},
@@ -1860,5 +1872,10 @@ MegaBar::TmpTextread.create!([
   {id: 421, field_display_id: 705, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-09-03 15:15:04", updated_at: "2016-09-03 15:15:04", truncation_separator: " "},
   {id: 422, field_display_id: 708, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-09-04 21:52:17", updated_at: "2016-09-04 21:52:17", truncation_separator: " "},
   {id: 423, field_display_id: 709, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-09-04 21:52:17", updated_at: "2016-09-04 21:52:17", truncation_separator: " "},
-  {id: 424, field_display_id: 710, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-09-04 21:52:17", updated_at: "2016-09-04 21:52:17", truncation_separator: " "}
+  {id: 424, field_display_id: 710, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-09-04 21:52:17", updated_at: "2016-09-04 21:52:17", truncation_separator: " "},
+  {id: 425, field_display_id: 711, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21", truncation_separator: " "},
+  {id: 426, field_display_id: 714, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21", truncation_separator: " "},
+  {id: 427, field_display_id: 716, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21", truncation_separator: " "},
+  {id: 428, field_display_id: 717, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21", truncation_separator: " "},
+  {id: 429, field_display_id: 718, truncation: nil, truncation_format: "", transformation: "", created_at: "2016-09-05 19:13:21", updated_at: "2016-09-05 19:13:21", truncation_separator: " "}
 ])
