@@ -224,7 +224,7 @@ class MegaEnv
     displays.each do | display |
       model_display_format = MegaBar::ModelDisplayFormat.find(display.format)
       model_display_collection_settings = MegaBar::ModelDisplayCollection.by_model_display_id(display.id).first if display.collection_or_member == 'collection'
-      field_displays = MegaBar::FieldDisplay.by_model_display_id(display.id)
+      field_displays = MegaBar::FieldDisplay.by_model_display_id(display.id).order('position asc')
       displayable_fields = []
       field_displays.each do |field_disp|
         field = MegaBar::Field.find(field_disp.field_id)

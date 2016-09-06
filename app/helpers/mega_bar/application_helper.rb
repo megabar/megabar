@@ -95,13 +95,27 @@ module MegaBar
        # links << [MegaBar::Engine.routes.url_for(controller: '/mega_bar/' + field[:field_display].format.pluralize, action: 'edit', id: field[:data_format].id, :only_path=> true), 'Edit ' + field[:field_display].format.capitalize]
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
-
+    def reorder_grid_left(field, direction)
+      return '' if @mega_display[:displayable_fields].first[:field_display].position == field[:field_display].position
+      links = []
+      arrow = direction == 'left' ? '<-' : '^'
+      links << ["/mega-bar/field_displays/move/#{field[:field_display].id}?method=move_higher", arrow]
+      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
+    end
+    def reorder_grid_right(field, direction)
+      return '' if @mega_display[:displayable_fields].last[:field_display].position == field[:field_display].position
+      links = []
+      arrow = direction == 'right' ? '->' : 'v'
+      links << ["/mega-bar/field_displays/move/#{field[:field_display].id}?method=move_lower", arrow]
+      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
+    end
     def data_format_locals(mega_record, displayable_field, value=nil, mega_bar=nil?)
       local = {obj: mega_record, displayable_field: displayable_field, field: displayable_field[:field], field_display: displayable_field[:field_display], options: displayable_field[:options], mega_bar: mega_bar, value: value }
       local[displayable_field[:data_format].class.name.downcase.sub('::', '_').sub('megabar_', '').to_sym] = displayable_field[:data_format]
       local
     end
 
+    
   end
 
 end

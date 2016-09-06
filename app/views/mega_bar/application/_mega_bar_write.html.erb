@@ -8,7 +8,10 @@
     @field_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/field_displays', action: 'show', id: displayable_field[:field_display].id, :only_path=> true)
   %>
   <% if @mf.name == 'ProfileTable' %>
-    <tr><th><%=  best_in_place displayable_field[:field_display], :header, url: @field_display_path %><br>
+    <tr><th> 
+      <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_grid_left(displayable_field, 'up')} %>
+      <%=  best_in_place displayable_field[:field_display], :header, url: @field_display_path %>
+      <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_grid_right(displayable_field, 'down')} %><br>
       <br><%= render partial: "mega_bar_help_links", :locals => {:links => field_help_links(displayable_field)} %>
 
 
