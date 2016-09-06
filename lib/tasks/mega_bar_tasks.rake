@@ -117,7 +117,7 @@ namespace :mega_bar do
       end
       puts 'finished ' + mc[:perm_class].to_s
     end
-
+    MegaBar::Model.update_all("position_parent = replace(position_parent,'MegaBar::Tmp','MegaBar::') ") #fix position parent from regex that happened with seed_dump
     MegaBar::Block.set_callback(       'save',   :after, :make_model_displays)
     MegaBar::Field.set_callback(       'create', :after, :make_migration)
     MegaBar::Field.set_callback(       'save',   :after, :make_field_displays)

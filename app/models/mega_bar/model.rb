@@ -88,9 +88,8 @@ module MegaBar
       modle_name = self.modyule ? self.modyule + "::" + self.classname : self.classname
       mod = modle_name.constantize
       mod.reset_column_information
-
-      # mod.distinct(fk).map(&parent_model.classname.downcase.to_sym).each {|parent| parent.send(self.classname.downcase.pluralize.to_sym).order(:id).each_with_index { |child, i| puts 'position for ' +child.id.to_s+ ' would be ' + i.to_s}}
-      mod.distinct((parent_model.classname.downcase + '_id').to_sym).map(&parent_model.classname.downcase.to_sym).each do |parent|
+      # warning: metaprogramming ahead!
+      mod.distinct((parent_model.classname.underscore.downcase + '_id').to_sym).map(&parent_model.classname.underscore.downcase.to_sym).each do |parent|
         parent.send(self.classname.underscore.downcase.pluralize.to_sym).order(:id).each_with_index do |child, i|
           child.update_columns(position: i + 1)
         end

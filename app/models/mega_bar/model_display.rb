@@ -16,9 +16,10 @@ module MegaBar
     scope :by_block, ->(block_id) { where(block_id: block_id) if block_id.present? }
 
     def make_collection_settings
-      ModelDisplayCollection.create(model_display_id: self.id)
+
+      ModelDisplayCollection.create(model_display_id: self.id) if self.collection_or_member == 'collection'
     end 
-    def make_field_displays 
+    def make_field_displays
       actions = []
       fields = Field.by_model(self.model_id)
       fields.each do | field | 
@@ -36,7 +37,7 @@ module MegaBar
         end
       end
       actions.each do | action |
-        FieldDisplay.create(model_display_id: self.id,:field_id=>action[:field_id], :format=>action[:format], :header=>action[:header])
+        FieldDisplay.create(model_display_id: self.id, :field_id=>action[:field_id], :format=>action[:format], :header=>action[:header])
       end
     end
   end

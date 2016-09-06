@@ -137,12 +137,9 @@ class LayoutEngine
     else
       params_hash = {} # used to set params var for controllers
       params_hash_arr = [] #used to collect 'params_hash' pieces
-
       mega_env = MegaEnv.new(blck, rout, page_info, pagination) # added to env for use in controllers
-
       params_hash_arr = mega_env.params_hash_arr
       env[:mega_env] = mega_env.to_hash
-
       params_hash_arr << {action: mega_env.block_action}
       params_hash_arr << {controller: mega_env.kontroller_path}
       params_hash_arr.each do |param|
@@ -219,8 +216,8 @@ class MegaEnv
   end
 
   def meta_programming(klass, modle) 
-    position_parent_method = modle.position_parent.split("::").last.downcase.to_sym if modle.position_parent
-    klass.class_eval{ acts_as_list scope: position_parent_method } if position_parent_method
+    position_parent_method = modle.position_parent.split("::").last.underscore.downcase.to_sym if modle.position_parent
+    klass.class_eval{ acts_as_list scope: position_parent_method, add_new_at: :bottom } if position_parent_method
   end
   def set_mega_displays(displays)
     mega_displays_info = [] # collects model and field display settings
