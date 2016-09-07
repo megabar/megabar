@@ -67,15 +67,14 @@ module MegaBar
           expect(object.constant_from_controller('mega_bar/models')).to eq('MegaBar::Model')
         end
         skip 'can filter'  do
-          #20 bounty
+          # $20 bounty
         end
         skip 'can paginate' do
-          #20 bounty
+          # $20 bounty
         end
         skip 'can acts_as_list' do
-          #20 bounty
+          # $20 bounty
         end
-
 
       end
     end

@@ -6,9 +6,12 @@ module MegaBar
       title ||= column.titleize
       css_class = column == sort_column(@mega_class, @mega_model_properties, params) ? 'current ' + sort_direction(params, @mega_model_properties) : nil
       direction = column == sort_column(@mega_class, @mega_model_properties, params) && sort_direction(params, @mega_model_properties) == 'asc' ? 'desc' : 'asc'
-      hsh = {sort: column, direction: direction, controller: @kontroller_path}
-      hsh.merge!({action: @mega_rout[:action]}) if @mega_rout[:action] != 'show'
-      link_to title, hsh, class: css_class
+      hsh = {sort: column, direction: direction}
+      action = !['show', 'index'].include?(@mega_rout[:action]) ? "/#{@mega_rout[:action]}" : ''
+      path = url_for([*@nested_instance_variables, @kontroller_inst.pluralize.to_sym ]) + action + '?' + hsh.to_param
+      link_to title, path, class: css_class
+# byebug
+#       link_to title, hsh, class: css_class
       #link_to best_in_place sort_column, title, {:sort => column, :direction => direction, controller: @kontroller_path}, class: css_class
 
     end

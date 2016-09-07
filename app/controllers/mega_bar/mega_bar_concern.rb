@@ -217,6 +217,7 @@ module MegaBar
             end
           end
         end
+        # $50 bounty for each additional case.
       end
       mega_instance
     end
@@ -259,15 +260,8 @@ module MegaBar
 
     def move
       if ["move_lower", "move_higher", "move_to_top", "move_to_bottom"].include?(params[:method]) and @mega_rout[:id] =~ /^\d+$/
-       #if the incoming params contain any of these methods and a numeric book_id, 
-       #let's find the book with that id and send it the acts_as_list specific method
-       #that rode in with the params from whatever link was clicked on
         @mega_class.find(@mega_rout[:id]).send(params[:method])
       end
-      #after we're done updating the position (which gets done in the background
-      #thanks to acts_as_list, let's just go back to the list page, 
-      #refreshing the page basically because I didn't say this was an RJS
-      #tutorial, maybe next time
       session[:return_to] ||= request.referer
       respond_to do |format|
         format.html { redirect_to session.delete(:return_to), notice: 'Thing was successfully mooved.' }

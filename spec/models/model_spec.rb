@@ -96,7 +96,8 @@ module MegaBar
         # cant test routes here.. boo. expect(:get => "/test-cases").to route_to(:controller => 'test_cases#index')
       end
 
-      it 'adds a position field' do
+      skip 'adds a position field' do
+        # $50 bounty
       end
 
     end
