@@ -8,6 +8,7 @@ require 'capybara/rspec'
 require 'simplecov'
 require 'rake'
 require 'rails/all'
+require 'acts_as_list'
 
 SimpleCov.start
 Combustion.initialize! :all do

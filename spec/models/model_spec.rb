@@ -96,7 +96,7 @@ module MegaBar
         # cant test routes here.. boo. expect(:get => "/test-cases").to route_to(:controller => 'test_cases#index')
       end
 
-      it 'adds a position field'
+      it 'adds a position field' do
       end
 
     end

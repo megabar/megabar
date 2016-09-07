@@ -68,7 +68,7 @@ module MegaBar
     end
 
     def make_position_field
-      return unless MegaBar::Field.by_model(self.id).where(field: 'position').empty?
+      return unless MegaBar::Field.by_model(self.id).where(field: 'position').empty? && !self.position_parent.blank?
       mds = find_model_displays_for_position_fields
       Field.create(model_id: self.id, field: 'position', tablename: self.tablename, data_type: 'integer', default_data_format: 'textread', default_data_format_edit: 'textbox', model_display_ids: mds)
       parent_model = MegaBar::Model.find_by(modyule: self.position_parent.split("::")[0...-1].join("::"), classname: self.position_parent.split("::").last)
