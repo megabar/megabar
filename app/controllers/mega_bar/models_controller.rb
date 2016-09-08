@@ -11,9 +11,12 @@ module MegaBar
       index
     end
 
+
     def get_options
+
       @options[:mega_bar_models] =  {
-        default_sort_field: Field.by_model(params[:id]).pluck("field, field")
+        position_parent: MegaBar::Model.all.pluck(:name, :modyule, :classname).map{|a|  [a[1] + ' - ' + a[0], a[1] +'::' +  a[2]] }.unshift(['Position with No Parent', 'pnp']),
+        default_sort_field: Field.by_model(params[:id]).pluck("field, field"),        
       }
     end
   end

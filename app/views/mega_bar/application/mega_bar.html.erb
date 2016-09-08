@@ -3,6 +3,7 @@
 
   <% # INDEX AND SHOW STUFF %>
   <% @mega_displays.each do |mega_display| %>
+    <% next if mega_display[:collection_settings] && mega_display[:collection_settings][:display_if_empty] == false && @mega_instance.empty? %>
     <%
       @mega_display= mega_display
       @mf = @mega_display[:model_display_format]
@@ -31,4 +32,6 @@
 
 <%= render partial: "mega_bar_help_links", :locals => {:links => block_help_links} %>
 <%= link_to 'Create New ' + @mega_model_properties.name.singularize, link_path('new') %> | 
-<%if ['show'].include? params[:action] %><%= link_to 'Edit', link_path('edit', @mega_instance[0].id) %><% end %>
+<%if ['show'].include? params[:action] %>
+  <%= link_to 'Edit', link_path('edit', @mega_instance[0].id) %> | <%= link_to 'Show', link_path('show', @mega_instance[0].id) %>
+<% end %>

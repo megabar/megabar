@@ -11,6 +11,7 @@ group :test do
   gem 'rubocop', require: false
   gem 'simplecov', '~> 0.7.1'
   gem 'jquery-ui-rails'
+  gem 'acts_as_list'
 end
 
 # Declare your gem's dependencies in mega_bar.gemspec.

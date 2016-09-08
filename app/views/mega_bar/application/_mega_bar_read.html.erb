@@ -14,9 +14,12 @@
   <% if @mf.separate_header_row == 'true' %>
     <% @mega_display[:displayable_fields].each do | displayable_field | %>
       <%= @mf.field_header_wrapper.html_safe%>
+      <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'left')}  %>
       <%= sortable(displayable_field[:field].field, displayable_field[:field_display].header) %>
+      <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'right')} %>
       <%= @mf.field_header_wrapper_end.html_safe%>
     <% end %>
+<th>another</th>
   <% end %>
   
 
@@ -26,7 +29,11 @@
       <% @field_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/field_displays', action: 'show', id: displayable_field[:field_display].id, :only_path=> true) %>
 
       <% if @mf.name == 'ProfileTable' %>
-        <tr><th><%=  best_in_place displayable_field[:field_display], :header, url:  @field_display_path %></th><td>
+        <tr><th>
+          <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'up')} %>
+          <%=  best_in_place displayable_field[:field_display], :header, url:  @field_display_path %>
+          <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} %>
+        </th><td>
       <% end %>
       <%= @mf.field_wrapper.html_safe%>
       <%
@@ -52,6 +59,21 @@
       </td>
       <td><%= link_to 'Edit', link_path('edit', mega_record.id) %></td>
       <td><%= link_to 'Destroy', mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+      <% if @mega_model_properties.position_parent && @nested_ids.map{|nid| true if nid.key?((@mega_model_properties.position_parent.split("::").last.underscore.downcase + "_id")) }.first %>
+        <td>
+          <% unless @mega_instance.first.position == mega_record.position %> 
+            <%= link_to 'up', link_path('move', mega_record.id).to_s + "?method=move_higher",  data: { turbolinks: false } %>
+            <%= link_to 'top', link_path('move', mega_record.id).to_s + "?method=move_to_top",  data: { turbolinks: false } %>
+          <% end %> 
+
+          <% unless @mega_instance.last.position == mega_record.position %> 
+            <% unless mega_record.position == (@mega_instance.first.position || @mega_instance.last.position) %> | <% end %> 
+            <%= link_to 'down', link_path('move', mega_record.id).to_s + "?method=move_lower",  data: { turbolinks: false } %>
+            <%= link_to 'bottom', link_path('move', mega_record.id).to_s + "?method=move_to_bottom",  data: { turbolinks: false } %>  
+          <% end %>
+        </td>
+      <% end %>
 
     <% end %>
 

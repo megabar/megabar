@@ -11,6 +11,7 @@ class MegaRoute
   def self.load(context)
     # puts 'context: ' + context.inspect
     routes = []
+    ases = []
     MegaBar::Page.all.each do |pg|
       # puts 'new page '
       MegaBar::Layout.by_page(pg.id).each do |llayout|
@@ -98,9 +99,10 @@ class MegaRoute
                 # end
 
               end
+              routes << {path: p + '/move/:id', method: 'get', action: 'move', controller: controller } 
               routes << {path: p + '/:id', method: 'patch', action: 'update', controller: controller}
               routes << {path: p, method: 'post', action: 'create', controller: controller}
-              routes << {path: p.singularize, method: 'delete', action: 'destroy', controller: controller}
+              routes << {path: p + '/:id', method: 'delete', action: 'destroy', controller: controller}
             end
           end
         end

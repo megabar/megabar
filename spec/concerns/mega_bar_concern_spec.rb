@@ -13,6 +13,8 @@ module MegaBar
         MegaBar::Field.skip_callback("create",:after,:make_migration)
         MegaBar::Model.skip_callback("create",:after,:make_all_files)
         MegaBar::Model.set_callback("create", :after, :make_page_for_model)
+        # might be needed skip and or set: MegaBar::Model.skip_callback(       'save',   :after, :make_position_field)
+   
         MegaBar::Page.set_callback("create", :after, :create_layout_for_page)
         MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
         MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
@@ -46,10 +48,10 @@ module MegaBar
           expect(object.sort_column(mega_class, mega_model_properties, params_with_sort)).to eq('classname')
         end
         it "gets the default sort DIRECTION right" do
-          expect(object.sort_direction(params)).to eq('desc')
+          expect(object.sort_direction(params, mega_model_properties)).to eq('desc')
         end
         it "gets the default sort DIRECTION right" do
-          expect(object.sort_direction(params_with_direction)).to eq('asc')
+          expect(object.sort_direction(params_with_direction, mega_model_properties)).to eq('asc')
         end
         it 'gets the form path' do
           skip('url_for doesnt work in this context')
@@ -64,7 +66,15 @@ module MegaBar
         it ' constant_from_controller returns  a good constant string ' do
           expect(object.constant_from_controller('mega_bar/models')).to eq('MegaBar::Model')
         end
-        it ''
+        skip 'can filter'  do
+          # $20 bounty
+        end
+        skip 'can paginate' do
+          # $20 bounty
+        end
+        skip 'can acts_as_list' do
+          # $20 bounty
+        end
 
       end
     end

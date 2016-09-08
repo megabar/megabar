@@ -1,7 +1,8 @@
 module MegaBar
+  require 'acts_as_list'
   class FieldDisplay < ActiveRecord::Base
     after_save :make_data_display
-    belongs_to :model_displays
+    belongs_to :model_display
     validates_presence_of :model_display_id, :field_id
     has_many :textboxes, dependent: :destroy
     has_many :textreads, dependent: :destroy
@@ -13,6 +14,7 @@ module MegaBar
     scope :by_action, ->(action) { where(action: action) }
     scope :by_model_display_id, ->(model_display_id) { where(model_display_id: model_display_id) }
     validates_uniqueness_of :field_id, scope: :model_display_id
+    acts_as_list scope: :model_display unless Rails.env.test?
 
     def make_data_display
       return if self.format.to_s == 'off'

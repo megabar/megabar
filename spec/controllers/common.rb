@@ -37,15 +37,19 @@ RSpec.shared_context "common", :a => :b do
 
     context 'with callbacks disabled ' do
       before(:each) do
-        MegaBar::Field.skip_callback("save",:after,:make_field_displays)
-        MegaBar::Field.skip_callback("create",:after,:make_field_displays)
-        MegaBar::Model.skip_callback("create",:after,:make_page_for_model)
+        MegaBar::Field.skip_callback("save", :after, :make_field_displays)
+        MegaBar::Field.skip_callback("create", :after, :make_field_displays)
+        MegaBar::Model.skip_callback("create", :after, :make_page_for_model)
+        MegaBar::Model.skip_callback('save', :after, :make_position_field)
+   
         MegaBar::Layout.skip_callback("create",:after,:create_block_for_layout)
       end
       after(:each) do
-        MegaBar::Field.set_callback("save",:after,:make_field_displays)
-        MegaBar::Field.set_callback("create",:after,:make_field_displays)
-        MegaBar::Model.set_callback("create",:after,:make_page_for_model)
+        MegaBar::Field.set_callback("save", :after, :make_field_displays)
+        MegaBar::Field.set_callback("create", :after, :make_field_displays)
+        MegaBar::Model.set_callback("create", :after, :make_page_for_model)
+        MegaBar::Model.set_callback('save', :after, :make_position_field)
+   
         MegaBar::Layout.set_callback("create",:after,:create_block_for_layout)
       end
 
@@ -187,6 +191,8 @@ RSpec.shared_context "common", :a => :b do
     MegaBar::Field.skip_callback("create",:after,:make_migration)
     MegaBar::Model.skip_callback("create",:after,:make_all_files)
     MegaBar::Model.set_callback("create", :after, :make_page_for_model)
+    MegaBar::Model.set_callback('save', :after, :make_position_field)
+   
     MegaBar::Page.set_callback("create", :after, :create_layout_for_page)
     MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
     MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)

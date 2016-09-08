@@ -3,6 +3,7 @@ module MegaBar
     isolate_namespace MegaBar
     require 'seed_dump'
     require 'best_in_place'
+    require 'acts_as_list'
 
     config.autoload_paths << File.expand_path("../*", __FILE__)
 

@@ -4,11 +4,14 @@ module MegaBar
       #422pm.
       return title if !params[:id].blank?
       title ||= column.titleize
-      css_class = column == sort_column(@mega_class, @mega_model_properties, params) ? 'current ' + sort_direction(params) : nil
-      direction = column == sort_column(@mega_class, @mega_model_properties, params) && sort_direction(params) == 'asc' ? 'desc' : 'asc'
-      hsh = {sort: column, direction: direction, controller: @kontroller_path}
-      hsh.merge!({action: @mega_rout[:action]}) if @mega_rout[:action] != 'show'
-      link_to title, hsh, class: css_class
+      css_class = column == sort_column(@mega_class, @mega_model_properties, params) ? 'current ' + sort_direction(params, @mega_model_properties) : nil
+      direction = column == sort_column(@mega_class, @mega_model_properties, params) && sort_direction(params, @mega_model_properties) == 'asc' ? 'desc' : 'asc'
+      hsh = {sort: column, direction: direction}
+      action = !['show', 'index'].include?(@mega_rout[:action]) ? "/#{@mega_rout[:action]}" : ''
+      path = url_for([*@nested_instance_variables, @kontroller_inst.pluralize.to_sym ]) + action + '?' + hsh.to_param
+      link_to title, path, class: css_class
+# byebug
+#       link_to title, hsh, class: css_class
       #link_to best_in_place sort_column, title, {:sort => column, :direction => direction, controller: @kontroller_path}, class: css_class
 
     end
@@ -95,13 +98,27 @@ module MegaBar
        # links << [MegaBar::Engine.routes.url_for(controller: '/mega_bar/' + field[:field_display].format.pluralize, action: 'edit', id: field[:data_format].id, :only_path=> true), 'Edit ' + field[:field_display].format.capitalize]
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
-
+    def reorder_up(field, direction)
+      return '' if @mega_display[:displayable_fields].first[:field_display].position == field[:field_display].position
+      links = []
+      arrow = direction == 'left' ? '<-' : '^'
+      links << ["/mega-bar/field_displays/move/#{field[:field_display].id}?method=move_higher", arrow]
+      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
+    end
+    def reorder_down(field, direction)
+      return '' if @mega_display[:displayable_fields].last[:field_display].position == field[:field_display].position
+      links = []
+      arrow = direction == 'right' ? '->' : 'v'
+      links << ["/mega-bar/field_displays/move/#{field[:field_display].id}?method=move_lower", arrow]
+      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
+    end
     def data_format_locals(mega_record, displayable_field, value=nil, mega_bar=nil?)
       local = {obj: mega_record, displayable_field: displayable_field, field: displayable_field[:field], field_display: displayable_field[:field_display], options: displayable_field[:options], mega_bar: mega_bar, value: value }
       local[displayable_field[:data_format].class.name.downcase.sub('::', '_').sub('megabar_', '').to_sym] = displayable_field[:data_format]
       local
     end
 
+    
   end
 
 end

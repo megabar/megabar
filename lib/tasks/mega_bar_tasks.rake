@@ -85,6 +85,7 @@ namespace :mega_bar do
     MegaBar::Model.skip_callback(       'create', :before, :standardize_classname)
     MegaBar::Model.skip_callback(       'create', :before, :standardize_tablename)
     MegaBar::Model.skip_callback(       'create', :after, :make_page_for_model)
+    MegaBar::Model.skip_callback(       'save',   :after, :make_position_field)
     MegaBar::ModelDisplay.skip_callback('save',   :after, :make_field_displays)
     MegaBar::ModelDisplay.skip_callback('save',   :after, :make_collection_settings)
     MegaBar::Page.skip_callback(        'create', :after, :create_layout_for_page)
@@ -116,7 +117,7 @@ namespace :mega_bar do
       end
       puts 'finished ' + mc[:perm_class].to_s
     end
-
+    MegaBar::Model.update_all("position_parent = replace(position_parent,'MegaBar::Tmp','MegaBar::') ") #fix position parent from regex that happened with seed_dump
     MegaBar::Block.set_callback(       'save',   :after, :make_model_displays)
     MegaBar::Field.set_callback(       'create', :after, :make_migration)
     MegaBar::Field.set_callback(       'save',   :after, :make_field_displays)
@@ -126,6 +127,8 @@ namespace :mega_bar do
     MegaBar::Model.set_callback(       'create', :before, :standardize_classname)
     MegaBar::Model.set_callback(       'create', :before, :standardize_tablename)
     MegaBar::Model.set_callback(       'create', :after, :make_page_for_model)
+    MegaBar::Model.set_callback(       'save',   :after, :make_position_field)
+   
     MegaBar::ModelDisplay.set_callback('save',   :after, :make_field_displays)
     MegaBar::ModelDisplay.set_callback('save',   :after, :make_collection_settings)
     MegaBar::Page.set_callback(        'create', :after, :create_layout_for_page)
@@ -300,6 +303,10 @@ namespace :mega_bar do
 
   task :truncate_all_test_data_once => :environment do
     truncate_etc
+  end
+  task :oink => :environment do
+    byebug
+    puts 'oink'
   end
 
   def truncate_etc

@@ -7,8 +7,7 @@ module MegaBar
       instance_variable_set("@" + @kontroller_inst.pluralize,  records)
       @mega_instance ||= instance_variable_get("@" + @kontroller_inst.pluralize);
       @mega_instance = @mega_instance.page(@page_number).per(num_per_page) if might_paginate?
-      @mega_instance = process_filters(@mega_instance) unless params["commit"] == "clear_filters" 
-
+      @mega_instance = process_filters(@mega_instance)
       render @index_view_template
     end
 
@@ -110,7 +109,7 @@ module MegaBar
       @mega_page = env[:mega_page]
       @mega_rout = env[:mega_rout]
       @mega_layout = env[:mega_layout]
-      @mega_class = env[:mega_env][:klass].constantize
+      @mega_class = env[:mega_env][:klass]
       env[:mega_env].keys.each { | env_var | instance_variable_set('@' + env_var.to_s, env[:mega_env][env_var]) }
       unpack_nested_classes(@nested_class_info)
       @index_view_template ||= "mega_bar.html.erb"
@@ -165,8 +164,8 @@ module MegaBar
     def sort_column(mega_class, model_properties, passed_params)
       mega_class.column_names.include?(passed_params[:sort]) ? passed_params[:sort] :  model_properties[:default_sort_field]
     end
-    def sort_direction(passed_params)
-      %w[asc desc].include?(passed_params[:direction]) ? passed_params[:direction] : 'desc'
+    def sort_direction(passed_params, model_properties)
+      %w[asc desc].include?(passed_params[:direction]) ? passed_params[:direction] :  model_properties[:default_sort_order]
     end
 
     def is_displayable?(format)
@@ -193,10 +192,14 @@ module MegaBar
     end
 
     def process_filters(mega_instance)
+      if params["commit"] == "clear_filters"
+        session[:mega_filters] = {}
+      end
       session[:mega_filters] ||= {}
       return mega_instance unless params[@kontroller_inst] || session[:mega_filters][@kontroller_inst] 
       #cache me.
       if params[@kontroller_inst] 
+        session[:mega_filters] = {}
         filter_types = MegaBar::Field.includes(:options).find_by(field: 'filter_type', tablename: 'mega_bar_fields').options.pluck(:value)
         filters = session[:mega_filters][@kontroller_inst.to_sym] = collect_filters(filter_types)
       elsif session[:mega_filters][@kontroller_inst]
@@ -214,6 +217,7 @@ module MegaBar
             end
           end
         end
+        # $50 bounty for each additional case.
       end
       mega_instance
     end
@@ -241,7 +245,7 @@ module MegaBar
       constant_string
     end
     def column_sorting
-      sort_column(@mega_class, @mega_model_properties, params) + " " + sort_direction(params)
+      sort_column(@mega_class, @mega_model_properties, params) + " " + sort_direction(params, @mega_model_properties)
     end
     def redo_setup(action)
       env[:mega_rout][:action] = action
@@ -252,6 +256,16 @@ module MegaBar
       params[:redo] = true
       @form_instance_vars = @nested_instance_variables  + [@mega_instance]
       'hello'
+    end
+
+    def move
+      if ["move_lower", "move_higher", "move_to_top", "move_to_bottom"].include?(params[:method]) and @mega_rout[:id] =~ /^\d+$/
+        @mega_class.find(@mega_rout[:id]).send(params[:method])
+      end
+      session[:return_to] ||= request.referer
+      respond_to do |format|
+        format.html { redirect_to session.delete(:return_to), notice: 'Thing was successfully mooved.' }
+      end
     end
   end
 end

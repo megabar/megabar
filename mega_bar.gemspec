@@ -21,8 +21,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'seedbank'
   s.add_dependency 'slim-rails'
   s.add_dependency 'best_in_place'
+  s.add_dependency 'acts_as_list'
   s.add_dependency 'jquery-ui-rails'
   s.add_dependency 'kaminari', '~> 0.17.0'
+  s.add_development_dependency 'acts_as_list'
   s.add_development_dependency "aruba"
   s.add_development_dependency "bundler", "~> 1.7"
   s.add_development_dependency 'capybara'

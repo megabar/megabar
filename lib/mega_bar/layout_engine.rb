@@ -25,7 +25,7 @@ class LayoutEngine
       @status, @headers, @response = @app.call(env)
       return  [@status, @headers, self]
     end
-
+    env['REQUEST_METHOD'] = "PATCH" if  env['REQUEST_METHOD'] == "PUT"
     @redirect = false
     request = Rack::Request.new(env)
     request.params # strangely this needs to be here for best_in_place updates.
@@ -137,12 +137,9 @@ class LayoutEngine
     else
       params_hash = {} # used to set params var for controllers
       params_hash_arr = [] #used to collect 'params_hash' pieces
-
       mega_env = MegaEnv.new(blck, rout, page_info, pagination) # added to env for use in controllers
-
       params_hash_arr = mega_env.params_hash_arr
       env[:mega_env] = mega_env.to_hash
-
       params_hash_arr << {action: mega_env.block_action}
       params_hash_arr << {controller: mega_env.kontroller_path}
       params_hash_arr.each do |param|
@@ -193,7 +190,8 @@ class MegaEnv
     @modyule = @modle.modyule.empty? ? '' : @modle.modyule + '::'
     @kontroller_klass = @modyule + @modle.classname.classify.pluralize + "Controller"
     @kontroller_path = @modle.modyule.nil? || @modle.modyule.empty? ?   @modle.classname.pluralize.underscore :  @modyule.split('::').map { | m | m = m.underscore }.join('/') + '/' + @modle.classname.pluralize.underscore
-    @klass = @modyule + @modle.classname.classify
+    @klass = (@modyule + @modle.classname.classify).constantize
+    meta_programming(@klass, @modle)
     @kontroller_inst = @modle.classname.underscore
     @mega_displays = set_mega_displays(@displays)
     @nested_ids, @params_hash_arr, @nested_classes = nest_info(blck, rout, page_info)
@@ -217,12 +215,16 @@ class MegaEnv
     }
   end
 
+  def meta_programming(klass, modle) 
+    position_parent_method = modle.position_parent.split("::").last.underscore.downcase.to_sym if modle.position_parent
+    klass.class_eval{ acts_as_list scope: position_parent_method, add_new_at: :bottom } if position_parent_method
+  end
   def set_mega_displays(displays)
     mega_displays_info = [] # collects model and field display settings
     displays.each do | display |
       model_display_format = MegaBar::ModelDisplayFormat.find(display.format)
       model_display_collection_settings = MegaBar::ModelDisplayCollection.by_model_display_id(display.id).first if display.collection_or_member == 'collection'
-      field_displays = MegaBar::FieldDisplay.by_model_display_id(display.id)
+      field_displays = MegaBar::FieldDisplay.by_model_display_id(display.id).order('position asc')
       displayable_fields = []
       field_displays.each do |field_disp|
         field = MegaBar::Field.find(field_disp.field_id)

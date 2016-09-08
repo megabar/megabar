@@ -1,1 +1,6 @@
-<%= check_box param_from_tablename(@mega_model_properties, field.tablename) , field.field, {}, 'true', 'false' %>
+<% if obj.read_attribute(field.field).nil? %>
+  <% value = ['TRUE', 'True', 'true', 't', 1, 'y'].include?(field.default_value) ? true : false %>
+<% else %>
+  <% value = obj.read_attribute(field.field) ?  true : false%>
+<% end %>
+<%= check_box param_from_tablename(@mega_model_properties, field.tablename), field.field, {checked: value}, 'true', 'false' %>
