@@ -16,9 +16,9 @@ module MegaBar
     scope :by_block, ->(block_id) { where(block_id: block_id) if block_id.present? }
 
     def make_collection_settings
-
       ModelDisplayCollection.create(model_display_id: self.id) if self.collection_or_member == 'collection'
     end 
+
     def make_field_displays
       actions = []
       fields = Field.by_model(self.model_id)

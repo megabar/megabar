@@ -86,6 +86,7 @@ module MegaBar
       # modle = Model.find(model_id)
       # modle_name = modle.modyule ? modle.modyule + "::" + modle.classname : modle.classname
       modle_name = self.modyule ? self.modyule + "::" + self.classname : self.classname
+      return unless defined?(modle_name) == 'constant' && modle_name.class == Class
       mod = modle_name.constantize
       mod.reset_column_information
       # warning: metaprogramming ahead!

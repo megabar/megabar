@@ -262,6 +262,7 @@ module MegaBar
       if ["move_lower", "move_higher", "move_to_top", "move_to_bottom"].include?(params[:method]) and @mega_rout[:id] =~ /^\d+$/
         @mega_class.find(@mega_rout[:id]).send(params[:method])
       end
+byebug
       session[:return_to] ||= request.referer
       respond_to do |format|
         format.html { redirect_to session.delete(:return_to), notice: 'Thing was successfully mooved.' }
