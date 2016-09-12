@@ -19,7 +19,7 @@ Create a new app (you can also just add the gem to an existing app)
 
 ```cd myapp```
 
-Aadd all of this to your gemfile: 
+Add all of this to your gemfile: 
 ```
 gem 'mega_bar', :path => '../megabar/'
 group :development, :test do
