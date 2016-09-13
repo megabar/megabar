@@ -7,8 +7,11 @@ if field.option_borrow.nil?
 end
 
 include_blank = select.multiple == true ? false : "Select " + displayable_field[:field_display].header
-selected =  @default_options[field.field.to_sym] ? @default_options[field.field.to_sym] : value
-
+if field.accessor == 'y' 
+  selected = @mega_instance.send(field.field)
+else 
+  selected =  @default_options[field.field.to_sym] ? @default_options[field.field.to_sym] : value
+end
 select(
   param_from_tablename(@mega_model_properties, field.tablename),
   field.field,

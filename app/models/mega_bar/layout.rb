@@ -1,5 +1,7 @@
 module MegaBar
   class Layout < ActiveRecord::Base
+     has_many :theme_joins, as: :themeable
+    has_many :themes, through: :theme_joins
     after_create    :create_block_for_layout
     attr_accessor :make_block, :block_text, :model_id, :base_name
     belongs_to :page
@@ -7,7 +9,6 @@ module MegaBar
     scope :by_page, ->(page_id) { where(page_id: page_id) if page_id.present? }
     validates_uniqueness_of :name, scope: :page_id,  message: "dupe layout name for this page"
     validates_presence_of :page_id
-
 
     def create_block_for_layout
       # path_base:  MegaBar::Page.find(self.page_id).path, # could be added in below. but doesnt look necessary.
