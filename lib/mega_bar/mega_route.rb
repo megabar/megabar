@@ -53,8 +53,8 @@ class MegaRoute
               # byebug if MegaBar::ModelDisplay.by_block(block.id).first.model_id == 3
               controller = MegaRoute.controller_from_block(context, block)
               # puts "controller ---- " + controller + ", path: " + p
-              MegaBar::ModelDisplay.by_block(block.id).order(collection_or_member: :asc).each do | md | #order here becomes important todo
-                # puts "mid" + md.model_id.to_s
+              MegaBar::ModelDisplay.by_block(block.id).order(collection_or_member: :asc, action: :asc).each do | md | #order here becomes important todo
+                puts "mid #{block.name}" + md.action.to_s
                 modle = MegaBar::Model.find(md.model_id)
                 pf = ''
                 as = nil

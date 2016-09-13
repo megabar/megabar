@@ -7,6 +7,7 @@ if field.option_borrow.nil?
 end
 
 include_blank = select.multiple == true ? false : "Select " + displayable_field[:field_display].header
+
 if field.accessor == 'y' 
   selected = @mega_instance.send(field.field)
 else 

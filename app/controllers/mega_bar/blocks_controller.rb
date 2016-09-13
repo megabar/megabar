@@ -16,7 +16,8 @@ module MegaBar
         nest_level_4: models,
         nest_level_5: models,
         nest_level_6: models,
-        theme_ids: Theme.all.pluck("name, id")
+        theme_ids: Theme.all.pluck("name, id"),
+        site_ids: Site.all.pluck("name, id")
       }
     end
 

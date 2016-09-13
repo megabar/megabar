@@ -5,7 +5,8 @@ module MegaBar
     def get_options
       @options[:mega_bar_layouts] =  {
         page_id: Page.all.pluck("name, id"),
-        theme_ids: Theme.all.pluck("name, id")
+        theme_ids: Theme.all.pluck("name, id"),
+        site_ids: Site.all.pluck("name, id")
       }
     end
   end

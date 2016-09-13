@@ -1,8 +1,11 @@
 module MegaBar
   class Layout < ActiveRecord::Base
-     has_many :theme_joins, as: :themeable
+    has_many :theme_joins, as: :themeable
     has_many :themes, through: :theme_joins
+    has_many :site_joins, as: :siteable
+    has_many :sites, through: :site_joins
     after_create    :create_block_for_layout
+
     attr_accessor :make_block, :block_text, :model_id, :base_name
     belongs_to :page
     has_many :blocks, dependent: :destroy
