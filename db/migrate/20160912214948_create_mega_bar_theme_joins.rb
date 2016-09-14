@@ -7,6 +7,6 @@ class CreateMegaBarThemeJoins < ActiveRecord::Migration
       t.integer  :themeable_id
       t.string   :themeable_type
     end
-    add_index :theme_joins, [:themeable_id, :themeable_type]
+    add_index :mega_bar_theme_joins, [:themeable_id, :themeable_type]
   end
 end

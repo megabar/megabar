@@ -7,6 +7,7 @@ class CreateMegaBarTmpSites < ActiveRecord::Migration
       t.integer  :portfolio_id
       t.string   :name
       t.integer  :theme_id
+      t.string   :code_name
     end
   end
 end

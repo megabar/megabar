@@ -94,8 +94,9 @@ namespace :mega_bar do
     @@prex_all = []
 
     mega_classes.each do |mc|
+
       mc[:tmp_class].all.each do |tmp|
-        # byebug if MegaBar::TmpFieldDisplay == mc[:tmp_class]
+        # byebug if  MegaBar::TmpTheme == mc[:tmp_class]
         dupe_hash = {}
         tmp.reload
         mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] }
@@ -103,7 +104,7 @@ namespace :mega_bar do
         attributes = tmp.attributes.select { |attr, value|  mc[:tmp_class].column_names.include?(attr.to_s) }
         attributes.delete("id")
         obj.assign_attributes(attributes)
-
+        # puts attributes.to_s
         obj.save
         if obj.id != tmp.id
           # update tmplayouts set page_id to bob.id
@@ -117,7 +118,11 @@ namespace :mega_bar do
       end
       puts 'finished ' + mc[:perm_class].to_s
     end
+    # FIx The replacement of MegaBar::..Model with MegaBar::Tmp... done in seed dumping
     MegaBar::Model.update_all("position_parent = replace(position_parent,'MegaBar::Tmp','MegaBar::') ") #fix position parent from regex that happened with seed_dump
+    MegaBar::ThemeJoin.update_all("themeable_type = replace(themeable_type,'MegaBar::Tmp','MegaBar::') ") #fix seed_dump
+    MegaBar::SiteJoin.update_all("siteable_type = replace(siteable_type,'MegaBar::Tmp','MegaBar::') ") #fix  seed_dump
+
     MegaBar::Block.set_callback(       'save',   :after, :make_model_displays)
     MegaBar::Field.set_callback(       'create', :after, :make_migration)
     MegaBar::Field.set_callback(       'save',   :after, :make_field_displays)
@@ -173,15 +178,19 @@ namespace :mega_bar do
 
   def fix_pages(c)
     MegaBar::TmpLayout.where(page_id: c[:tmp].id).update_all(page_id: c[:perm].id)
-  end
+   end
 
   def fix_layouts(c)
     MegaBar::TmpBlock.where(layout_id: c[:tmp].id).update_all(layout_id: c[:perm].id)
+    MegaBar::TmpThemeJoin.where(themeable_type: 'MegaBar::TmpLayout', themeable_id: c[:tmp].id).update_all(themeable_id: c[:perm].id)
+    MegaBar::TmpSiteJoin.where(siteable_type: 'MegaBar::TmpLayout', siteable_id: c[:tmp].id).update_all(siteable_id: c[:perm].id) 
   end
 
   def fix_blocks(c)
     # byebug if MegaBar::TmpModelDisplay(c[:tmp].header == 'Edit Part 2'
     MegaBar::TmpModelDisplay.where(block_id: c[:tmp].id).update_all(block_id: c[:perm].id)
+    MegaBar::TmpThemeJoin.where(themeable_type: 'MegaBar::TmpBlock', themeable_id: c[:tmp].id).update_all(themeable_id: c[:perm].id)
+    MegaBar::TmpSiteJoin.where(siteable_type: 'MegaBar::TmpBlock', siteable_id: c[:tmp].id).update_all(siteable_id: c[:perm].id) 
   end
 
   def fix_model_displays(c)
@@ -212,12 +221,20 @@ namespace :mega_bar do
     # purposefully blank
   end
 
+  def fix_joins(c)
+    # purposefully blank
+  end
 
   def get_mega_classes
     mega_classes = []
     mega_classes << {tmp_class: MegaBar::TmpModel, perm_class: MegaBar::Model, unique: [:classname], resolver: 'fix_model', condition: 'tmp.classname == perm.classname'}
     mega_classes << {tmp_class: MegaBar::TmpField, perm_class: MegaBar::Field, unique: [:model_id, :field], resolver: 'fix_fields', condition: 'tmp.model_id == perm.model_id && tmp.field == perm.field'}
     mega_classes << {tmp_class: MegaBar::TmpOption, perm_class: MegaBar::Option, unique: [:field_id, :value], resolver: 'fix_options', condition: 'tmp.field_id == perm.field_id && tmp.value == perm.value'}
+
+    mega_classes << {tmp_class: MegaBar::TmpTheme, perm_class: MegaBar::Theme, unique: [:code_name], resolver: 'fix_themes', condition: 'tmp.code_name == perm.code_name'}
+    mega_classes << {tmp_class: MegaBar::TmpSite, perm_class: MegaBar::Site, unique: [:code_name], resolver: 'fix_sites', condition: 'tmp.code_name == perm.code_name'}
+    mega_classes << {tmp_class: MegaBar::TmpPortfolio, perm_class: MegaBar::Portfolio, unique: [:code_name], resolver: 'fix_portfolios', condition: 'tmp.code_name == perm.code_name'}
+
 
     mega_classes << {tmp_class: MegaBar::TmpPage, perm_class: MegaBar::Page, unique: [:path], resolver: 'fix_pages', condition: 'tmp.path == perm.path'}
     mega_classes << {tmp_class: MegaBar::TmpLayout, perm_class: MegaBar::Layout, unique: [:page_id, :name], resolver: 'fix_layouts', condition: 'tmp.page_id == perm.page_id && tmp.name == perm.name'}
@@ -235,15 +252,22 @@ namespace :mega_bar do
 
     mega_classes << {tmp_class: MegaBar::TmpModelDisplayFormat, perm_class: MegaBar::ModelDisplayFormat, unique: [:name], resolver: 'fix_model_display_format', condition: 'tmp.name == perm.name'}
 
+    mega_classes << {tmp_class: MegaBar::TmpThemeJoin, perm_class: MegaBar::ThemeJoin, unique: [:theme_id, :themeable_type, :themeable_id], resolver: 'fix_joins', condition: 'tmp.theme_id == perm.theme_id && tmp.themeable_type == perm.themeable_type && tmp.themeable_id = perm.themeable_id'}
+    mega_classes << {tmp_class: MegaBar::TmpSiteJoin, perm_class: MegaBar::SiteJoin, unique: [:site_id, :siteable_type, :siteable_id], resolver: 'fix_joins', condition: 'tmp.site_id == perm.site_id && tmp.siteable_type == perm.siteable_type && tmp.siteable_id = perm.siteable_id'}
     return mega_classes
   end
 
 
   task :dump_seeds => :environment do
+    mega_bar_theme_ids =  MegaBar::Theme.all.pluck(:id) #tbd.
+    SeedDump.dump(MegaBar::Theme.where(id: mega_bar_theme_ids), file: 'db/mega_bar.seeds.rb', exclude: [])
+    SeedDump.dump(MegaBar::Portfolio.where(theme_id: mega_bar_theme_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Site.where(theme_id: mega_bar_theme_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+
     # mega_bar_model_ids = [1,2,3,4,6,7,14,15,17,18,20,21]
     mega_bar_model_ids = MegaBar::Model.where(modyule: 'MegaBar').pluck(:id)
     mega_bar_fields =  MegaBar::Field.where(model_id: mega_bar_model_ids).pluck(:id)
-    SeedDump.dump(MegaBar::Model.where(id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [])
+    SeedDump.dump(MegaBar::Model.where(id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Field.where(model_id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Option.where(field_id: mega_bar_fields), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::ModelDisplayFormat, file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
@@ -269,9 +293,11 @@ namespace :mega_bar do
     SeedDump.dump(MegaBar::Textarea.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Textbox.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Textread.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-
-
+    SeedDump.dump(theme_joins(mega_bar_block_ids, mega_bar_layout_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(site_joins(mega_bar_block_ids, mega_bar_layout_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+      
     File.open(Rails.root.join('db', 'mega_bar.seeds.rb'), "r+") do |file|
+      #note, this will change your data! If you wanted to store a string like MegaBar::Whatever in the db, it'll be changed here and you have to fix that in the data_load.
       text = File.read(file)
       regex = 'MegaBar::'
       replace = 'MegaBar::Tmp'
@@ -305,10 +331,40 @@ namespace :mega_bar do
     truncate_etc
   end
   task :oink => :environment do
+byebug
+    mega_bar_theme_ids =  MegaBar::Theme.all.pluck(:id) #tbd.
+    mega_bar_page_ids = MegaBar::Page.where(mega_page: 'mega')
+    # mega_bar_pages = MegaBar::Page.where(id: mega_bar_page_ids).pluck(:id, :path)
+    mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).pluck(:id)
+    mega_bar_block_ids = MegaBar::Block.where(layout_id: mega_bar_layout_ids).pluck(:id)
     byebug
-    puts 'oink'
+    theme_join = theme_joins(mega_bar_block_ids, mega_bar_layout_ids)
+    site_join = site_joins(mega_bar_block_ids, mega_bar_layout_ids)
+        
+    puts  "theme join size:  #{theme_join.size}"
+  
+    puts  "site join size: #{site_join.size}"
+
+  end
+  def theme_joins(blocks, layouts)
+    MegaBar::ThemeJoin.where("( themeable_type = 'MegaBar::Block' and themeable_id in (" + blocks.join(",") + ") ) or (themeable_type = 'MegaBar::Layout' and themeable_id in (" + layouts.join(",") + ") )")
+# byebug
+#     theme_join = MegaBar::ThemeJoin.all
+#     theme_join = theme_join.reject do |tj| 
+#       (tj.themeable_type == 'MegaBar::Block' && !blocks.include?(tj.themeable_id)) ||  (tj.themeable_type == 'MegaBar::Layout' && !layouts.include?(tj.themeable_id))
+#     end
+# byebug
   end
 
+  def site_joins(blocks, layouts)
+    MegaBar::SiteJoin.where("( siteable_type = 'MegaBar::Block' and siteable_id in (" + blocks.join(",") + ") ) or (siteable_type = 'MegaBar::Layout' and siteable_id in (" + layouts.join(",") + ") )")
+
+    # site_join = MegaBar::SiteJoin.all
+    # site_join = site_join.reject do |sj| 
+    #   (sj.siteable_type == 'MegaBar::Block' && !blocks.include?(sj.siteable_id)) ||  (sj.siteable_type == 'MegaBar::Layout' && !layouts.include?(sj.siteable_id))
+    # end
+  end
+  
   def truncate_etc
     get_mega_classes.each do |mc|
       puts "delete from #{mc[:perm_class].table_name}"
