@@ -54,7 +54,7 @@ RSpec.shared_context "common", :a => :b do
       end
 
       describe "GET index"  do
-        it "assigns all records as @mega_instance" , focus: true do
+        it "assigns all records as @mega_instance" do #, focus: true do
           status, headers, body = controller_class.action(:index).call(get_env(env_index))
           @controller = body.request.env['action_controller.instance']
           assigns(:mega_instance).each_with_index do | v, k |
@@ -88,7 +88,7 @@ RSpec.shared_context "common", :a => :b do
 
       describe "POST create" do
         describe "with valid params" do
-          it "creates a new record" do #, focus: true do
+          it "creates a new record", focus: true do
             expect {
               status, headers, body = controller_class.action(:test_create).call(get_env(env_create))
               @controller = body.request.env['action_controller.instance']
@@ -130,7 +130,7 @@ RSpec.shared_context "common", :a => :b do
 
       describe "PUT update" do
         describe "with valid params" do
-          it "updates the requested record" do #, focus: true do
+          it "updates the requested record" do # , focus: true do
             record = model_class.first
             status, headers, body = controller_class.action(:update).call(get_env(env_update))
             record.reload

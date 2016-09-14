@@ -194,13 +194,6 @@ namespace :mega_bar do
   end
 
   def fix_model_displays(c)
-#     pprex = {}
-# #     pprex[c[:tmp].class.to_s] = {c[:perm].id => MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id)}
-# # byebug if pprex.present?
-#     if !MegaBar::TmpFieldDisplay.where(model_display_id: c[:perm].id).blank?
-#       pprex[c[:tmp].class.to_s] = {c[:tmp].id => MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id)}
-#       # MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id).delete_all
-#     end
     MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id).update_all(model_display_id: c[:perm].id)
     MegaBar::TmpModelDisplayCollection.where(model_display_id: c[:tmp].id).update_all(model_display_id: c[:perm].id)
     # pprex
@@ -331,7 +324,6 @@ namespace :mega_bar do
     truncate_etc
   end
   task :oink => :environment do
-byebug
     mega_bar_theme_ids =  MegaBar::Theme.all.pluck(:id) #tbd.
     mega_bar_page_ids = MegaBar::Page.where(mega_page: 'mega')
     # mega_bar_pages = MegaBar::Page.where(id: mega_bar_page_ids).pluck(:id, :path)
@@ -348,21 +340,10 @@ byebug
   end
   def theme_joins(blocks, layouts)
     MegaBar::ThemeJoin.where("( themeable_type = 'MegaBar::Block' and themeable_id in (" + blocks.join(",") + ") ) or (themeable_type = 'MegaBar::Layout' and themeable_id in (" + layouts.join(",") + ") )")
-# byebug
-#     theme_join = MegaBar::ThemeJoin.all
-#     theme_join = theme_join.reject do |tj| 
-#       (tj.themeable_type == 'MegaBar::Block' && !blocks.include?(tj.themeable_id)) ||  (tj.themeable_type == 'MegaBar::Layout' && !layouts.include?(tj.themeable_id))
-#     end
-# byebug
   end
 
   def site_joins(blocks, layouts)
     MegaBar::SiteJoin.where("( siteable_type = 'MegaBar::Block' and siteable_id in (" + blocks.join(",") + ") ) or (siteable_type = 'MegaBar::Layout' and siteable_id in (" + layouts.join(",") + ") )")
-
-    # site_join = MegaBar::SiteJoin.all
-    # site_join = site_join.reject do |sj| 
-    #   (sj.siteable_type == 'MegaBar::Block' && !blocks.include?(sj.siteable_id)) ||  (sj.siteable_type == 'MegaBar::Layout' && !layouts.include?(sj.siteable_id))
-    # end
   end
   
   def truncate_etc
