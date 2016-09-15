@@ -30,7 +30,7 @@ class LayoutEngine
     request = Rack::Request.new(env)
     request.params # strangely this needs to be here for best_in_place updates.
     # MegaBar::Engine.routes.routes.named_routes.values.map do |route|
-
+    site = MegaBar::Site.where(domains: request.host).first
     #   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + "#{route.defaults[:controller]}##{route.defaults[:action]}"
     # end #vs. Rails.application.routes.routes.named_routes.values.map
     # Rails.application.routes.routes.named_routes.values.map do |route|
@@ -59,6 +59,7 @@ class LayoutEngine
     ################################
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
     final_layouts = []
+
     page_layouts = MegaBar::Layout.by_page(page_info[:page_id])
 
     page_layouts.each do | page_layout |
