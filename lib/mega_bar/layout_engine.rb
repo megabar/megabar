@@ -60,13 +60,15 @@ class LayoutEngine
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
     final_layouts = []
 
-    page_layouts = MegaBar::Layout.by_page(page_info[:page_id])
+    page_layouts = MegaBar::Layout.by_page(page_info[:page_id]).includes(:sites, :themes)
 
     page_layouts.each do | page_layout |
+      next if mega_filtered(page_layout, site)
       env[:mega_layout] = page_layout
       blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(rout[:action])
       final_blocks = []
       blocks.each do |blck|
+        next if mega_filtered(blck, site)
         final_blocks << process_block(blck, page_info, rout, orig_query_hash, pagination, env)
       end
       env['mega_final_blocks'] = final_blocks #used in master_layouts_controller
@@ -174,6 +176,23 @@ class LayoutEngine
     elsif ['DELETE'].include? method
       'delete'
     end
+  end
+ 
+  def mega_filtered(obj, site)
+byebug
+    if obj.sites
+      has_zero_site = obj.sites.pluck(:id).include?(0)
+      has_site = obj.sites.pluck(:id).include?(site.id)
+      return true if has_zero_site and has_site
+      return  true if !has_site
+    end
+    if obj.themes
+      has_zero_theme = obj.themes.pluck(:id).include?(0)
+      has_theme = obj.themes.pluck(:id).include?(site.theme_id)
+      return true if has_zero_theme and has_theme
+      return true if !has_theme
+    end
+    false
   end
 end
 

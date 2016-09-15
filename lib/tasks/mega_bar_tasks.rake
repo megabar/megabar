@@ -102,7 +102,7 @@ namespace :mega_bar do
         mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] }
         obj = mc[:perm_class].find_or_initialize_by(dupe_hash)
         attributes = tmp.attributes.select { |attr, value|  mc[:tmp_class].column_names.include?(attr.to_s) }
-        attributes.delete("id")
+        attributes.delete("id") unless attributes["id"] == 0
         obj.assign_attributes(attributes)
         # puts attributes.to_s
         obj.save
@@ -176,9 +176,23 @@ namespace :mega_bar do
   def fix_options(c)
   end
 
+  def fix_themes(c)
+    MegaBar::TmpPortfolio.where(theme_id: c[:tmp].id).update_all(theme_id: c[:perm].id)
+    MegaBar::TmpSite.where(theme_id: c[:tmp].id).update_all(theme_id: c[:perm].id)
+    MegaBar::TmpThemeJoin.where(theme_id: c[:tmp].id).update_all(theme_id: c[:perm].id)
+  end
+
+  def fix_portfolios(c)
+    MegaBar::TmpSite.where(portfolio_id: c[:tmp].id).update_all(portfolio_id: c[:perm].id)
+  end
+
+  def fix_sites(c)
+    MegaBar::TmpSiteJoin.where(site_id: c[:tmp].id).update_all(site_id: c[:perm].id)
+  end
+
   def fix_pages(c)
     MegaBar::TmpLayout.where(page_id: c[:tmp].id).update_all(page_id: c[:perm].id)
-   end
+  end
 
   def fix_layouts(c)
     MegaBar::TmpBlock.where(layout_id: c[:tmp].id).update_all(layout_id: c[:perm].id)
