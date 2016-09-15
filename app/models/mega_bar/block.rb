@@ -1,9 +1,9 @@
 module MegaBar
   class Block < ActiveRecord::Base
     has_many :theme_joins, as: :themeable
-    has_many :themes, through: :theme_joins
+    has_many :themes, through: :theme_joins, dependent: :destroy
     has_many :site_joins, as: :siteable
-    has_many :sites, through: :site_joins
+    has_many :sites, through: :site_joins, dependent: :destroy
 
     belongs_to :layout
     scope :by_layout, ->(layout_id) { where(layout_id: layout_id) if layout_id.present? }
