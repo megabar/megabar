@@ -179,7 +179,6 @@ class LayoutEngine
   end
  
   def mega_filtered(obj, site)
-byebug
     if obj.sites
       has_zero_site = obj.sites.pluck(:id).include?(0)
       has_site = obj.sites.pluck(:id).include?(site.id)
