@@ -8,6 +8,7 @@ module MegaBar
       direction = column == sort_column(@mega_class, @mega_model_properties, params) && sort_direction(params, @mega_model_properties) == 'asc' ? 'desc' : 'asc'
       hsh = {sort: column, direction: direction}
       action = !['show', 'index'].include?(@mega_rout[:action]) ? "/#{@mega_rout[:action]}" : ''
+
       path = url_for([*@nested_instance_variables, @kontroller_inst.pluralize.to_sym ]) + action + '?' + hsh.to_param
       link_to title, path, class: css_class
 # byebug

@@ -29,7 +29,7 @@ select(
 
 <% if select.excluder %>
   <% value = @mega_instance.send(field.field).include?(0) ? true : false %>
-  <%= check_box param_from_tablename(@mega_model_properties, field.tablename) + '_exclude', field.field, {checked: value, id: field.field + '_exclude'}, 0, nil %>
+  <%= check_box param_from_tablename(@mega_model_properties, field.tablename) + '_exclude', field.field, {checked: value, id: field.field + '_exclude'}, 0, nil %> Exclude Selected
   <script>
     $("#<%= param_from_tablename(@mega_model_properties, field.tablename) + '_' + field.field %> > option").each(function() {
         if (this.value == 0 ) this.hidden = true;

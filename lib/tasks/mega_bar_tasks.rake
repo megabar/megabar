@@ -359,7 +359,7 @@ namespace :mega_bar do
   def site_joins(blocks, layouts)
     MegaBar::SiteJoin.where("( siteable_type = 'MegaBar::Block' and siteable_id in (" + blocks.join(",") + ") ) or (siteable_type = 'MegaBar::Layout' and siteable_id in (" + layouts.join(",") + ") )")
   end
-  
+
   def truncate_etc
     get_mega_classes.each do |mc|
       puts "delete from #{mc[:perm_class].table_name}"
@@ -384,5 +384,19 @@ namespace :mega_bar do
       return
     end
   end
-
+  task :ok => :environment do
+    MegaBar::Layout.all.each do |layout|
+      layout_section = MegaBar::LayoutSection.create(code_name: layout.name.parameterize.underscore + '_full_top')
+      layable = MegaBar::Layable.create(layout_id: layout.id, layout_section_id: layout_section.id, template_section_id: 1)
+      layout_section = MegaBar::LayoutSection.create(code_name: layout.name.parameterize.underscore + '_main')
+      layable = MegaBar::Layable.create(layout_id: layout.id, layout_section_id: layout_section.id, template_section_id: 2)
+      layout.blocks.each do | block |
+        block.layout_section_id = layout_section.id
+        block.save
+      end
+      layout_section = MegaBar::LayoutSection.create(code_name: layout.name.parameterize.underscore + '_full_bottom')
+      layable = MegaBar::Layable.create(layout_id: layout.id, layout_section_id: layout_section.id, template_section_id: 3)
+      
+    end
+  end
 end

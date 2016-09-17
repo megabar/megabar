@@ -13,12 +13,12 @@ class MegaRoute
     routes = []
     ases = []
     MegaBar::Page.all.each do |pg|
+
       # puts 'new page '
       MegaBar::Layout.by_page(pg.id).each do |llayout|
         # puts 'new layout'
-       # byebug if pg.id == 10
         MegaBar::Block.by_layout(llayout.id).each do | block |
-          # byebug if :mc=>{:id=llayout.id == 9
+          # byebug if pg.id > 29 || pg.id == 13 || pg.id == 10
           p = block.path_base? ? block.path_base : pg.path
           if context.kind_of?(Array)
             exclude = false
@@ -33,7 +33,6 @@ class MegaRoute
               next
             end
           end
-          # byebug if pg.id == 10
           path = ''
           p1 = p.split('/')
           p1.each do | seg |
@@ -42,7 +41,9 @@ class MegaRoute
           end
           path = path.chomp('_').pluralize
           # puts "new block: " + block.id.to_s
+          # byebug if  block.id == 74
           # puts "path: " + path
+          # byebug if pg.id > 29 || pg.id == 13 || pg.id == 10
           if block.html?
             p = block.path_base? ? block.path_base : pg.path
             routes << {path: p, method: 'get', controller: 'flats', action: 'index', as: 'flats_' + block.id.to_s}
@@ -54,7 +55,7 @@ class MegaRoute
               controller = MegaRoute.controller_from_block(context, block)
               # puts "controller ---- " + controller + ", path: " + p
               MegaBar::ModelDisplay.by_block(block.id).order(collection_or_member: :asc, action: :asc).each do | md | #order here becomes important todo
-                puts "mid #{block.name}" + md.action.to_s
+                # puts "mid #{block.name}" + md.action.to_s
                 modle = MegaBar::Model.find(md.model_id)
                 pf = ''
                 as = nil
@@ -67,6 +68,7 @@ class MegaRoute
                 when 'index'
                   pf = p
                   as = path
+                  # byebug if as == 'templates'
                   concerns = 'paginatable'
                   meth = [:get]
                 when 'new'
@@ -88,6 +90,7 @@ class MegaRoute
                 end
                 route = {path: pf, method: meth, action: md.action, controller: controller}
                 route = route.merge({as: as}) if as
+                # byebug if as == 'templates'
                 route = route.merge({concerns: concerns}) if concerns
                 # route = route.merge({on: x}) if x
                 routes << route

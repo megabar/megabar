@@ -179,13 +179,13 @@ class LayoutEngine
   end
  
   def mega_filtered(obj, site)
-    if obj.sites
+    if obj.sites.present?
       has_zero_site = obj.sites.pluck(:id).include?(0)
       has_site = obj.sites.pluck(:id).include?(site.id)
       return true if has_zero_site and has_site
       return  true if !has_site
     end
-    if obj.themes
+    if obj.themes.present?
       has_zero_theme = obj.themes.pluck(:id).include?(0)
       has_theme = obj.themes.pluck(:id).include?(site.theme_id)
       return true if has_zero_theme and has_theme
