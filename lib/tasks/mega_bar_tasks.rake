@@ -195,9 +195,10 @@ namespace :mega_bar do
   end
 
   def fix_layouts(c)
-    MegaBar::TmpBlock.where(layout_id: c[:tmp].id).update_all(layout_id: c[:perm].id)
+    MegaBar::TmpLayable.where(layout_id: c[:tmp].id).update_all(layout_id: c[:perm].id)
     MegaBar::TmpThemeJoin.where(themeable_type: 'MegaBar::TmpLayout', themeable_id: c[:tmp].id).update_all(themeable_id: c[:perm].id)
     MegaBar::TmpSiteJoin.where(siteable_type: 'MegaBar::TmpLayout', siteable_id: c[:tmp].id).update_all(siteable_id: c[:perm].id) 
+    
   end
 
   def fix_blocks(c)
@@ -221,6 +222,16 @@ namespace :mega_bar do
     MegaBar::TmpTextbox.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpTextread.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
   end
+
+  def fix_layout_sections(c)
+     MegaBar::TmpLayable.where(layout_section_id: c[:tmp].id).update_all(layout_section_id: c[:perm].id)
+     MegaBar::Block.where(layout_section_id: c[:tmp].id).update_all(layout_section_id: c[:perm].id)
+  end
+
+  def fix_templates(c)
+    MegaBar::TmpTemplateSection.where(template_id: c[:tmp].id).update_all(template_id: c[:perm].id)
+  end
+
   def fix_model_display_collections(c)
     # purposefully blank
   end
@@ -229,6 +240,10 @@ namespace :mega_bar do
   end
 
   def fix_joins(c)
+    # purposefully blank
+  end
+
+  def fix_template_sections(c)
     # purposefully blank
   end
 
@@ -242,9 +257,13 @@ namespace :mega_bar do
     mega_classes << {tmp_class: MegaBar::TmpSite, perm_class: MegaBar::Site, unique: [:code_name], resolver: 'fix_sites', condition: 'tmp.code_name == perm.code_name'}
     mega_classes << {tmp_class: MegaBar::TmpPortfolio, perm_class: MegaBar::Portfolio, unique: [:code_name], resolver: 'fix_portfolios', condition: 'tmp.code_name == perm.code_name'}
 
+    mega_classes << {tmp_class: MegaBar::TmpTemplate, perm_class: MegaBar::Template, unique: [:code_name], resolver: 'fix_templates', condition: 'tmp.code_name == perm.code_name'}
+    mega_classes << {tmp_class: MegaBar::TmpTemplateSection, perm_class: MegaBar::TemplateSection, unique: [:code_name, :template_id], resolver: 'fix_template_sections', condition: 'tmp.code_name == perm.code_name && tmp.template_id == perm.template_id'}
 
     mega_classes << {tmp_class: MegaBar::TmpPage, perm_class: MegaBar::Page, unique: [:path], resolver: 'fix_pages', condition: 'tmp.path == perm.path'}
     mega_classes << {tmp_class: MegaBar::TmpLayout, perm_class: MegaBar::Layout, unique: [:page_id, :name], resolver: 'fix_layouts', condition: 'tmp.page_id == perm.page_id && tmp.name == perm.name'}
+    mega_classes << {tmp_class: MegaBar::TmpLayoutSection, perm_class: MegaBar::LayoutSection, unique: [:code_name], resolver: 'fix_layouts', condition: 'tmp.code_name == perm.code_name'}
+
     mega_classes << {tmp_class: MegaBar::TmpBlock, perm_class: MegaBar::Block, unique: [:layout_id, :name], resolver: 'fix_blocks', condition: 'tmp.layout_id == perm.layout_id && tmp.name == perm.name'}
     mega_classes << {tmp_class: MegaBar::TmpModelDisplay, perm_class: MegaBar::ModelDisplay, unique: [:block_id, :action, :series], resolver: 'fix_model_displays', condition: 'tmp.block_id == perm.block_id && tmp.action == perm.action'}
     mega_classes << {tmp_class: MegaBar::TmpModelDisplayCollection, perm_class: MegaBar::ModelDisplayCollection, unique: [:model_display_id], resolver: 'fix_model_display_collections', condition: 'tmp.model_display_id == perm.model_display_id'}
@@ -259,6 +278,7 @@ namespace :mega_bar do
 
     mega_classes << {tmp_class: MegaBar::TmpModelDisplayFormat, perm_class: MegaBar::ModelDisplayFormat, unique: [:name], resolver: 'fix_model_display_format', condition: 'tmp.name == perm.name'}
 
+    mega_classes << {tmp_class: MegaBar::TmpLayable, perm_class: MegaBar::Layable, unique: [:layout_id, :layout_section_id], resolver: 'fix_joins', condition: 'tmp.layout_id == perm.layout_id && tmp.layout_section_id == perm.layout_section_id'}
     mega_classes << {tmp_class: MegaBar::TmpThemeJoin, perm_class: MegaBar::ThemeJoin, unique: [:theme_id, :themeable_type, :themeable_id], resolver: 'fix_joins', condition: 'tmp.theme_id == perm.theme_id && tmp.themeable_type == perm.themeable_type && tmp.themeable_id = perm.themeable_id'}
     mega_classes << {tmp_class: MegaBar::TmpSiteJoin, perm_class: MegaBar::SiteJoin, unique: [:site_id, :siteable_type, :siteable_id], resolver: 'fix_joins', condition: 'tmp.site_id == perm.site_id && tmp.siteable_type == perm.siteable_type && tmp.siteable_id = perm.siteable_id'}
     return mega_classes
@@ -267,28 +287,39 @@ namespace :mega_bar do
 
   task :dump_seeds => :environment do
     mega_bar_theme_ids =  MegaBar::Theme.all.pluck(:id) #tbd.
+    mega_bar_template_ids = MegaBar::Template.all.pluck(:id)
+    mega_bar_model_ids = MegaBar::Model.where(modyule: 'MegaBar').pluck(:id)
+    mega_bar_fields =  MegaBar::Field.where(model_id: mega_bar_model_ids).pluck(:id)
+    mega_bar_page_ids = MegaBar::Page.where(mega_page: 'mega')
+    mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).pluck(:id)
+    mega_bar_layable_ids = MegaBar::Layable.where(layout_id: mega_bar_layout_ids).pluck(:id)
+    mega_bar_layout_section_ids = MegaBar::LayoutSection.where(id: MegaBar::Layable.where(layout_section_id: mega_bar_layable_ids))
+
+    mega_bar_block_ids = MegaBar::Block.where(layout_section_id: mega_bar_layout_section_ids).pluck(:id)
+    mega_bar_model_display_ids = MegaBar::ModelDisplay.where(block_id: mega_bar_block_ids).pluck(:id)
+    mega_bar_model_display_collection_ids =  MegaBar::ModelDisplayCollection.where(model_display_id: mega_bar_model_display_ids).pluck(:id)
+    mega_bar_field_display_ids =  MegaBar::FieldDisplay.where(model_display_id: mega_bar_model_display_ids).pluck(:id)
+
     SeedDump.dump(MegaBar::Theme.where(id: mega_bar_theme_ids), file: 'db/mega_bar.seeds.rb', exclude: [])
     SeedDump.dump(MegaBar::Portfolio.where(theme_id: mega_bar_theme_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Site.where(theme_id: mega_bar_theme_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
+    SeedDump.dump(MegaBar::Template.where(id: mega_bar_template_ids), file: 'db/mega_bar.seeds.rb', exclude: [])
+    SeedDump.dump(MegaBar::TemplateSection.where(template_id: mega_bar_template_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+        
     # mega_bar_model_ids = [1,2,3,4,6,7,14,15,17,18,20,21]
-    mega_bar_model_ids = MegaBar::Model.where(modyule: 'MegaBar').pluck(:id)
-    mega_bar_fields =  MegaBar::Field.where(model_id: mega_bar_model_ids).pluck(:id)
     SeedDump.dump(MegaBar::Model.where(id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Field.where(model_id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Option.where(field_id: mega_bar_fields), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::ModelDisplayFormat, file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
+    
     # mega_bar_page_ids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
-    mega_bar_page_ids = MegaBar::Page.where(mega_page: 'mega')
     # mega_bar_pages = MegaBar::Page.where(id: mega_bar_page_ids).pluck(:id, :path)
-    mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).pluck(:id)
-    mega_bar_block_ids = MegaBar::Block.where(layout_id: mega_bar_layout_ids).pluck(:id)
-    mega_bar_model_display_ids = MegaBar::ModelDisplay.where(block_id: mega_bar_block_ids).pluck(:id)
-    mega_bar_model_display_collection_ids =  MegaBar::ModelDisplayCollection.where(model_display_id: mega_bar_model_display_ids).pluck(:id)
-    mega_bar_field_display_ids =  MegaBar::FieldDisplay.where(model_display_id: mega_bar_model_display_ids).pluck(:id)
     SeedDump.dump(MegaBar::Page.where(id: mega_bar_page_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Layout.where(id: mega_bar_layout_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::LayoutSection.where(id: mega_bar_layout_section_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+
     SeedDump.dump(MegaBar::Block.where(id: mega_bar_block_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::ModelDisplay.where(id: mega_bar_model_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::ModelDisplayCollection.where(id: mega_bar_model_display_collection_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
@@ -300,6 +331,8 @@ namespace :mega_bar do
     SeedDump.dump(MegaBar::Textarea.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Textbox.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Textread.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    
+    SeedDump.dump(MegaBar::Layable.where(id: mega_bar_layable_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(theme_joins(mega_bar_block_ids, mega_bar_layout_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(site_joins(mega_bar_block_ids, mega_bar_layout_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
       

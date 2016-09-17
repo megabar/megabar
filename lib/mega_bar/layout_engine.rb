@@ -65,16 +65,28 @@ class LayoutEngine
     page_layouts.each do | page_layout |
       next if mega_filtered(page_layout, site)
       env[:mega_layout] = page_layout
-      blocks = MegaBar::Block.by_layout(page_layout.id).by_actions(rout[:action])
-      final_blocks = []
-      blocks.each do |blck|
-        next if mega_filtered(blck, site)
-        final_blocks << process_block(blck, page_info, rout, orig_query_hash, pagination, env)
+      final_layout_sections = {}
+      page_layout.layout_sections.each do | layout_section | 
+        template_section = MegaBar::TemplateSection.find(layout_section.layables.where(layout_id: page_layout.id).first.template_section_id).code_name
+        blocks = MegaBar::Block.by_layout_section(layout_section.id).by_actions(rout[:action])
+        final_blocks = []
+        next unless blocks.present?
+        final_layout_sections[template_section] = []
+        blocks.each do |blck|
+          next if mega_filtered(blck, site)
+          final_blocks << process_block(blck, page_info, rout, orig_query_hash, pagination, env)
+        end
+        env[:mega_layout_section] = layout_section
+        env['mega_final_blocks'] = final_blocks #used in master_layouts_controller
+        @status, @headers, @layout_sections = MegaBar::MasterLayoutSectionsController.action(:render_layout_section_with_blocks).call(env)
+        final_layout_sections[template_section] <<  ls = @layout_sections.blank? ? '' : @layout_sections.body.html_safe
       end
-      env['mega_final_blocks'] = final_blocks #used in master_layouts_controller
-      @status, @headers, @layouts = MegaBar::MasterLayoutsController.action(:render_layout_with_blocks).call(env)
+      env['mega_final_layout_sections'] = final_layout_sections #used in master_layouts_controller
+      @status, @headers, @layouts = MegaBar::MasterLayoutsController.action(:render_layout_with_sections).call(env)
       final_layouts <<  l = @layouts.blank? ? '' : @layouts.body.html_safe
     end
+
+
     env['mega_final_layouts'] = final_layouts
     @status, @headers, @page = MegaBar::MasterPagesController.action(:render_page).call(env)
     final_page = []

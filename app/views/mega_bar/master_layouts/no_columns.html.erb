@@ -1,0 +1,12 @@
+yahooo no columns!
+<div class="no_columns_template">
+<% if @mega_layout_sections['full_top'].present? %>
+  <div class='full_top'><%= @mega_layout_sections['full_top']%></div>
+<% end %>
+<% if @mega_layout_sections['main'].present? %>
+  <div class='full_top'><%= @mega_layout_sections['main'][0]%></div>
+<% end %>
+<% if @mega_layout_sections['full_bottom'].present? %>
+  <div class='full_top'><%= @mega_layout_sections['full_top']%></div>
+<% end %>
+<%= render partial: 'mega_bar_help_links' ,:locals => {:links => layout_help_links} %>
