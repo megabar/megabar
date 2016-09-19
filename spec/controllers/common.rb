@@ -41,16 +41,16 @@ RSpec.shared_context "common", :a => :b do
         MegaBar::Field.skip_callback("create", :after, :make_field_displays)
         MegaBar::Model.skip_callback("create", :after, :make_page_for_model)
         MegaBar::Model.skip_callback('save', :after, :make_position_field)
-   
-        MegaBar::Layout.skip_callback("create",:after,:create_block_for_layout)
+        MegaBar::Layout.skip_callback('create', :after, :create_layable_sections)
+        MegaBar::Layout.skip_callback('create', :after, :create_block_for_section)
       end
       after(:each) do
         MegaBar::Field.set_callback("save", :after, :make_field_displays)
         MegaBar::Field.set_callback("create", :after, :make_field_displays)
         MegaBar::Model.set_callback("create", :after, :make_page_for_model)
         MegaBar::Model.set_callback('save', :after, :make_position_field)
-   
-        MegaBar::Layout.set_callback("create",:after,:create_block_for_layout)
+        MegaBar::Layout.set_callback('create', :after, :create_layable_sections)
+        MegaBar::Layout.set_callback('create', :after, :create_block_for_section)
       end
 
       describe "GET index"  do
@@ -194,8 +194,8 @@ RSpec.shared_context "common", :a => :b do
     MegaBar::Model.set_callback('save', :after, :make_position_field)
    
     MegaBar::Page.set_callback("create", :after, :create_layout_for_page)
-    MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
-    MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
+    MegaBar::Layout.set_callback('create', :after, :create_layable_sections)
+    MegaBar::Layout.set_callback('create', :after, :create_block_for_section)
     MegaBar::Block.set_callback("create", :after, :make_model_displays)
     model_and_page
     fields_and_displays

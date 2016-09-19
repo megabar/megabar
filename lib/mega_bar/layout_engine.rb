@@ -66,9 +66,11 @@ class LayoutEngine
       next if mega_filtered(page_layout, site)
       env[:mega_layout] = page_layout
       final_layout_sections = {}
+
       page_layout.layout_sections.each do | layout_section | 
         template_section = MegaBar::TemplateSection.find(layout_section.layables.where(layout_id: page_layout.id).first.template_section_id).code_name
-        blocks = MegaBar::Block.by_layout_section(layout_section.id).by_actions(rout[:action])
+        blocks = MegaBar::Block.by_layout_section(layout_section.id)
+        blocks = blocks.by_actions(rout[:action]) unless rout.blank?
         final_blocks = []
         next unless blocks.present?
         final_layout_sections[template_section] = []
@@ -148,7 +150,10 @@ class LayoutEngine
 
   def process_block(blck, page_info, rout, orig_query_hash, pagination, env)
     if ! blck.html.nil? && ! blck.html.empty?
-      blck.html.html_safe
+      bip = '<span data-bip-type="textarea" data-bip-attribute="html" data-bip-object="block" data-bip-original-content="' +  blck.html + '" data-bip-skip-blur="false" data-bip-url="/mega-bar/blocks/' + blck.id.to_s + '" data-bip-value="' +  blck.html + '" class="best_in_place" id="best_in_place_block_' + blck.id.to_s + '_html">' + blck.html.html_safe + '</span>'
+      bip.html_safe
+    elsif blck.model_displays.empty?
+      ''
     else
       params_hash = {} # used to set params var for controllers
       params_hash_arr = [] #used to collect 'params_hash' pieces

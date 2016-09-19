@@ -1,0 +1,32 @@
+nice job! Right column!
+
+<!--
+{if $layoutWidth.full neq 24}<div class="span-{$layoutWidth.full}">{/if}
+{if ! empty($layoutArray.fullTop)}<{$thisLayout.pageLayoutFullTopWrapper} class="span-{$layoutWidth.full} last fullTop fullTop{$layoutWidth.full} layout{$LCR}fullTop">{$layoutArray.fullTop}</{$thisLayout.pageLayoutFullTopWrapper}>{/if}
+
+  <{$thisLayout.pageLayoutLeftWrapper} class="span-{$layoutWidth.left} leftColumn leftColumn{$layoutWidth.left} layout{$LCR}LeftColumn">{$layoutArray.left}</{$thisLayout.pageLayoutLeftWrapper}>
+  <{$thisLayout.pageLayoutMainWrapper} class="span-{$layoutWidth.main} last main main{$layoutWidth.main} layout{$LCR}Main">{$layoutArray.main}</{$thisLayout.pageLayoutMainWrapper}>
+{if ! empty($layoutArray.fullEnd)}<{$thisLayout.pageLayoutFullEndWrapper} class="span-{$layoutWidth.full} last fullEnd fullEnd{$layoutWidth.full}">{$layoutArray.fullEnd}</{$thisLayout.pageLayoutFullEndWrapper}>{/if}
+{if $layoutWidth.full neq 24}</div>{/if} 
+
+-->
+
+<div id="main-container" class="container left_column_template">
+ <div class="row">
+    <% if @mega_layout_sections['full_top'].present? %>
+      <div class='layout_section full_top col-xs-12'><%= @mega_layout_sections['full_top'][0]%></div>
+    <% end %>
+
+    <% if @mega_layout_sections['main'].present? %>
+      <div class='layout_section left_column col-xs-8'><%= @mega_layout_sections['main'][0]%></div>
+    <% end %>
+    <% if @mega_layout_sections['right_column'].present? %>
+      <div class='layout_section main col-xs-4'><%= @mega_layout_sections['right_column'][0]%></div>
+    <% end %>
+
+    <% if @mega_layout_sections['full_end'].present? %>
+      <div class='layout_section full_end col-xs-12'><%= @mega_layout_sections['full_end'][0]%></div>
+    <% end %>
+    <div class='links col-xs-12'><%= render partial: 'mega_bar_help_links' ,:locals => {:links => layout_help_links} %></div>
+  </div>
+</div>

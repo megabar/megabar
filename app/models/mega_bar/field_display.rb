@@ -17,26 +17,33 @@ module MegaBar
     acts_as_list scope: :model_display unless Rails.env.test?
 
     def make_data_display
+byebug
       return if self.format.to_s == 'off'
-      Textbox.by_field_display_id(self.id).delete_all
-      Textread.by_field_display_id(self.id).delete_all
-      Select.by_field_display_id(self.id).delete_all
-      Textarea.by_field_display_id(self.id).delete_all
-      Checkbox.by_field_display_id(self.id).delete_all
+      Textbox.by_field_display_id(self.id).delete_all unless self.format == 'textbox'
+      Textread.by_field_display_id(self.id).delete_all unless self.format == 'textread'
+      Select.by_field_display_id(self.id).delete_all unless self.format == 'select'
+      Textarea.by_field_display_id(self.id).delete_all unless self.format == 'textarea'
+      Checkbox.by_field_display_id(self.id).delete_all unless self.format == 'checkbox'
+      obj = ("MegaBar::" + self.format.to_s.classify).constantize.where(:field_display_id => self.id).first_or_initialize()
+      unless obj.id.present?
+        fields = Field.by_model(get_model_id)
+        fields_defaults = {}
+        fields.each do |field|
+          unless (field.default_value.nil? || field.default_value == 'off')
+            fields_defaults[field.field.parameterize.underscore.to_sym] = field.default_value
+          end
+        end
+        fields_defaults[:field_display_id] = self.id
+        fields_defaults[:checked] = 'false' if self.format == 'checkbox'
+        data_display = obj.save(fields_defaults)
+      end
+      f = Field.where(id: self.field_id)
+    end
+
+    def get_model_id
       data_display_obj = ("MegaBar::" + self.format.to_s.classify).constantize.new
       model_id = data_display_obj.get_model_id
-      fields = Field.by_model(model_id)
-      fields_defaults = {}
-      fields.each do |field|
-        unless (field.default_value.nil? || field.default_value == 'off')
-          fields_defaults[field.field.parameterize.underscore.to_sym] = field.default_value
-        end
-      end
-      fields_defaults[:field_display_id] = self.id
-      fields_defaults[:checked] = 'false' if self.format == 'checkbox'
-       ("MegaBar::" + self.format.to_s.classify).constantize.where(:field_display_id => self.id).first_or_create(fields_defaults)
-      f = Field.where(id: self.field_id)
-
     end
+
   end
 end

@@ -16,8 +16,8 @@ module MegaBar
         # might be needed skip and or set: MegaBar::Model.skip_callback(       'save',   :after, :make_position_field)
    
         MegaBar::Page.set_callback("create", :after, :create_layout_for_page)
-        MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
-        MegaBar::Layout.set_callback("create", :after, :create_block_for_layout)
+        MegaBar::Layout.set_callback(      'create', :after, :create_layable_sections)
+        MegaBar::Layout.set_callback(      'create', :after, :create_block_for_section)
         MegaBar::Block.set_callback("create", :after, :make_model_displays)
         model = create(:model)
       end

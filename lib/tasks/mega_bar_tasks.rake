@@ -89,7 +89,9 @@ namespace :mega_bar do
     MegaBar::ModelDisplay.skip_callback('save',   :after, :make_field_displays)
     MegaBar::ModelDisplay.skip_callback('save',   :after, :make_collection_settings)
     MegaBar::Page.skip_callback(        'create', :after, :create_layout_for_page)
-    MegaBar::Layout.skip_callback(      'create', :after, :create_block_for_layout)
+    MegaBar::Layout.skip_callback(      'create', :after, :create_layable_sections)
+    MegaBar::Layout.skip_callback(      'create', :after, :create_block_for_section)
+
     # start conflict detection
     @@prex_all = []
 
@@ -137,8 +139,8 @@ namespace :mega_bar do
     MegaBar::ModelDisplay.set_callback('save',   :after, :make_field_displays)
     MegaBar::ModelDisplay.set_callback('save',   :after, :make_collection_settings)
     MegaBar::Page.set_callback(        'create', :after, :create_layout_for_page)
-    MegaBar::Layout.set_callback(      'create', :after, :create_block_for_layout)
-
+    MegaBar::Layout.set_callback(      'create', :after, :create_layable_sections)
+    MegaBar::Layout.set_callback(      'create', :after, :create_block_for_section)
     # end of main function for loading data
     # important sub functions are below
     puts "Loaded Data"

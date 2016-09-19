@@ -12,8 +12,8 @@ module MegaBar
     scope :by_model, ->(model_id) { where(id: model_id) if model_id.present? }
     after_save :make_model_displays
     attr_accessor  :model_id, :new_model_display, :edit_model_display, :index_model_display, :show_model_display
-    validates_uniqueness_of :name, scope: :layout_id
-    validates_presence_of :layout_id
+    # validates_uniqueness_of :name, scope: :layout_id
+    # validates_presence_of :layout_id
 
     def self.by_actions(action)
       if action.present?
