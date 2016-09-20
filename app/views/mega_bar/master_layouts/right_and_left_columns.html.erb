@@ -17,6 +17,6 @@ bingo! both columns<br>
     <% if @mega_layout_sections['full_end'].present? %>
       <div class='layout_section full_end col-xs-12'><%= @mega_layout_sections['full_end'][0]%></div>
     <% end %>
-    <div class='links col-xs-12'><%= render partial: 'mega_bar_help_links' ,:locals => {:links => layout_help_links} %></div>
+    <div class='links col-xs-12'><%#= render partial: 'mega_bar_help_links' ,:locals => {:links => layout_help_links} %></div>
   </div>
 </div>

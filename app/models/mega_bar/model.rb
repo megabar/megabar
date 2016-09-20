@@ -4,7 +4,7 @@ module MegaBar
     include MegaBar::MegaBarModelConcern
 
     after_create  :make_all_files
-    after_create  :make_page_for_model
+    after_save  :make_page_for_model
     after_save    :make_position_field
     attr_accessor :make_page
     attr_writer   :model_id
@@ -35,7 +35,9 @@ module MegaBar
         mod = self.modyule.nil? || self.modyule.empty?  ? '' : self.modyule.underscore + '/'
         path = '/' + mod.dasherize + self.classname.underscore.dasherize.pluralize
         # path = self.make_page == 'default_model_path' ? path : self.make_page
-        Page.create(name: self.name + ' Model Page', path: path, make_layout_and_block: 'y', base_name: self.name, model_id: self.id )
+        page = Page.find_or_initialize_by(path: path)
+        page.assign_attributes(name: self.name + ' Model Page', path: path, make_layout_and_block: self.make_page, base_name: self.name, model_id: self.id)        
+        page.save unless page.id
       end
     end
 

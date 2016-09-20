@@ -20,8 +20,12 @@ module MegaBar
 
     def create_layable_sections
       template = Template.find(self.template_id)
-      template.template_sections.each do |section| 
-        layout_section_hash = { code_name: self.base_name + '_' + section.code_name, block_text: self.block_text, model_id: self.model_id, base_name: self.base_name}
+      template.template_sections.each do |section|
+        if section.code_name == 'main'
+          layout_section_hash = { code_name: self.base_name + '_' + section.code_name, block_text: self.block_text, model_id: self.model_id, base_name: self.base_name}
+        else 
+          layout_section_hash = { code_name: self.base_name + '_' + section.code_name, block_text: self.block_text, base_name: self.base_name}
+        end
         ls = LayoutSection.create(layout_section_hash)
         layable = Layable.create(layout_section_id: ls.id, template_section_id: section.id, layout_id: self.id)
       end

@@ -17,7 +17,6 @@ module MegaBar
     acts_as_list scope: :model_display unless Rails.env.test?
 
     def make_data_display
-byebug
       return if self.format.to_s == 'off'
       Textbox.by_field_display_id(self.id).delete_all unless self.format == 'textbox'
       Textread.by_field_display_id(self.id).delete_all unless self.format == 'textread'

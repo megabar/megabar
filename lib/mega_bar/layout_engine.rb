@@ -74,11 +74,11 @@ class LayoutEngine
         final_blocks = []
         next unless blocks.present?
         final_layout_sections[template_section] = []
+        env[:mega_layout_section] = layout_section
         blocks.each do |blck|
           next if mega_filtered(blck, site)
           final_blocks << process_block(blck, page_info, rout, orig_query_hash, pagination, env)
         end
-        env[:mega_layout_section] = layout_section
         env['mega_final_blocks'] = final_blocks #used in master_layouts_controller
         @status, @headers, @layout_sections = MegaBar::MasterLayoutSectionsController.action(:render_layout_section_with_blocks).call(env)
         final_layout_sections[template_section] <<  ls = @layout_sections.blank? ? '' : @layout_sections.body.html_safe
