@@ -1,4 +1,4 @@
 <% @blocks.each do |block| %>
-  <div class='block'><%=block%></div>
+  <%=block%>
 <% end %>
 <%= render partial: 'mega_bar_help_links' ,:locals => {:links => layout_help_links} %>

@@ -10,7 +10,7 @@ class LayoutEngine
   # this does set some environment variables that are then used in your controllers, but inspect them there.
   # if you've set up your page->layouts->blocks->model_displays->field_displays properly this should just work.
   # if you've created a page using the gui and its not working.. check it's path setting and check your routes file to see that they are looking right.
-  def initialize(app, message = "Response Time")
+  def initialize(app = nil, message = "Response Time")
     @app = app
     @message = message
   end
@@ -65,24 +65,9 @@ class LayoutEngine
     page_layouts.each do | page_layout |
       next if mega_filtered(page_layout, site)
       env[:mega_layout] = page_layout
-      final_layout_sections = {}
 
-      page_layout.layout_sections.each do | layout_section | 
-        template_section = MegaBar::TemplateSection.find(layout_section.layables.where(layout_id: page_layout.id).first.template_section_id).code_name
-        blocks = MegaBar::Block.by_layout_section(layout_section.id)
-        blocks = blocks.by_actions(rout[:action]) unless rout.blank?
-        final_blocks = []
-        next unless blocks.present?
-        final_layout_sections[template_section] = []
-        env[:mega_layout_section] = layout_section
-        blocks.each do |blck|
-          next if mega_filtered(blck, site)
-          final_blocks << process_block(blck, page_info, rout, orig_query_hash, pagination, env)
-        end
-        env['mega_final_blocks'] = final_blocks #used in master_layouts_controller
-        @status, @headers, @layout_sections = MegaBar::MasterLayoutSectionsController.action(:render_layout_section_with_blocks).call(env)
-        final_layout_sections[template_section] <<  ls = @layout_sections.blank? ? '' : @layout_sections.body.html_safe
-      end
+      final_layout_sections = process_page_layout(page_layout, page_info, rout, orig_query_hash, pagination, site, env)
+
       env['mega_final_layout_sections'] = final_layout_sections #used in master_layouts_controller
       @status, @headers, @layouts = MegaBar::MasterLayoutsController.action(:render_layout_with_sections).call(env)
       final_layouts <<  l = @layouts.blank? ? '' : @layouts.body.html_safe
@@ -103,6 +88,7 @@ class LayoutEngine
     @response.each(&display)
   end
 
+  
   def set_page_info(rout, rout_terms)
 
     page_info = {}
@@ -143,9 +129,31 @@ class LayoutEngine
     end
     q_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
     q_hash.keys.map do | key |
-     pagination_info <<  {kontrlr: key, page: q_hash[key] }  if /_page/ =~ key
+      pagination_info <<  {kontrlr: key, page: q_hash[key] }  if /_page/ =~ key
     end
     pagination_info
+  end
+
+  def process_page_layout(page_layout, page_info, rout, orig_query_hash, pagination, site, env)
+    final_layout_sections = {}
+
+    page_layout.layout_sections.each do | layout_section | 
+      template_section = MegaBar::TemplateSection.find(layout_section.layables.where(layout_id: page_layout.id).first.template_section_id).code_name
+      blocks = MegaBar::Block.by_layout_section(layout_section.id)
+      blocks = blocks.by_actions(rout[:action]) unless rout.blank?
+      final_blocks = []
+      next unless blocks.present?
+      final_layout_sections[template_section] = []
+      env[:mega_layout_section] = layout_section
+      blocks.each do |blck|
+        next if mega_filtered(blck, site)
+        final_blocks << process_block(blck, page_info, rout, orig_query_hash, pagination, env)
+      end
+      env['mega_final_blocks'] = final_blocks #used in master_layouts_controller
+      @status, @headers, @layout_sections = MegaBar::MasterLayoutSectionsController.action(:render_layout_section_with_blocks).call(env)
+      final_layout_sections[template_section] <<  ls = @layout_sections.blank? ? '' : @layout_sections.body.html_safe
+    end
+    final_layout_sections
   end
 
   def process_block(blck, page_info, rout, orig_query_hash, pagination, env)
@@ -169,7 +177,7 @@ class LayoutEngine
       params_hash = params_hash.merge(env['rack.request.form_hash']) if !env['rack.request.form_hash'].nil? # && (mega_env.block_action == 'update' || mega_env.block_action == 'create') 
       env['QUERY_STRING'] = params_hash.to_param # 150221!
       env['action_dispatch.request.parameters'] = params_hash
-
+      env['block_class'] = blck.name.downcase.parameterize.underscore
       @status, @headers, @disp_body = mega_env.kontroller_klass.constantize.action(mega_env.block_action).call(env)
       @redirect = [@status, @headers, @disp_body] if @status == 302
       block_body = @disp_body.blank? ? '' : @disp_body.body.html_safe

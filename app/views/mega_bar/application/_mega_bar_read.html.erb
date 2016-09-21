@@ -64,8 +64,7 @@
       </td>
       <td><%= link_to 'Edit&nbsp;'.html_safe, link_path('edit', mega_record.id) %></td>
       <td><%= link_to 'Destroy&nbsp;'.html_safe, mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-
-      <% if @mega_model_properties.position_parent && @nested_ids.map{|nid| true if nid.key?((@mega_model_properties.position_parent.split("::").last.underscore.downcase + "_id")) }.first %>
+      <% if @mega_model_properties.position_parent.present? && @nested_ids.map{|nid| true if nid.key?((@mega_model_properties.position_parent.split("::").last.underscore.downcase + "_id")) }.first %>
         <td>
           <% unless @mega_instance.first.position == mega_record.position %> 
             <%= link_to 'up', link_path('move', mega_record.id).to_s + "?method=move_higher",  data: { turbolinks: false } %>

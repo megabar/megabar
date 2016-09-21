@@ -1,0 +1,25 @@
+<%# byebug %>
+<h3>Layout Section: <%= @layable.layout_section.code_name %> (id: <%= @layable.layout_section.id %>)</h3>
+
+<p><%= link_to 'Switch Layout Section', edit_layables_path(@layable), class:'admin_links' %></p>
+
+<% if @layable.layout_section.blocks.present? %>
+  <% @layable.layout_section.blocks.each do |block| %>
+    <div class='admin_block_divider'>
+      Block name: <%= block.name %> <%#= block_action_interpreter(block.action) %><br>
+      <% if block.model_displays.present? %>
+        Model Displays:<br>
+        <%= 
+          content_tag :ul do
+            block.model_displays.collect {|item| concat(content_tag(:li, link_to(item.action, model_display_path(item))))}
+         end
+        %>
+      <% elsif block.html.present? %>
+        This is a 'flat html' block. You can edit it <%= link_to 'here', edit_blocks_path(block) %>
+      <% else %>
+        This block is not really doing anything.  You can edit it <%= link_to 'here', edit_blocks_path(block) %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+      

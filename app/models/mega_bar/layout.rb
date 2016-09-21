@@ -1,6 +1,7 @@
 module MegaBar
   class Layout < ActiveRecord::Base
     belongs_to :page
+    belongs_to :template
     has_many :theme_joins, as: :themeable
     has_many :themes, through: :theme_joins, dependent: :destroy
     has_many :site_joins, as: :siteable

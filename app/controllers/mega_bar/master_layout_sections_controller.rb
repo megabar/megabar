@@ -6,6 +6,9 @@ module MegaBar
       @mega_layout = env[:mega_layout]
       @mega_page = env[:mega_page]
       render
-   end
+    end
+    def render_layout_section_admin
+      render 'render_layout_section_admin'
+    end
   end
 end 

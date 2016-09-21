@@ -1,5 +1,11 @@
 
 .admin_links, .admin_links a {color: #aaa; font-size: .7em; clear:both;}
 
-.mega_bar__template_gallery .container .row .layout_section {border: 1px solid black;}
+.mega_bar__template_gallery .container .row .layout_section, .block.layout_section_admin  .container .row .layout_section {border: 1px solid black;}
 
+ tr:nth-child(odd) > td{
+   background-color: #F0F0F0;
+}
+div.admin_block_divider:nth-child(odd) {
+   background-color: #F0F0F0;
+}

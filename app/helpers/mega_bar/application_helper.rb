@@ -113,7 +113,10 @@ module MegaBar
       local
     end
 
-    
+    def block_action_interpreter(action)
+
+      'awesome'
+    end
   end
 
 end

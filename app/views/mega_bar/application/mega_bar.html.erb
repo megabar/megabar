@@ -1,3 +1,4 @@
+<div class='block <%= @block_class %>'>
 <% puts params[:action] + 'was the action' %>
 <% if !['edit', 'new', 'create'].include? params[:action]%>
 
@@ -35,3 +36,4 @@
 <%if ['show'].include? params[:action] %>
   <%= link_to 'Edit', link_path('edit', @mega_instance[0].id) %> | <%= link_to 'Show', link_path('show', @mega_instance[0].id) %>
 <% end %>
+</div>
