@@ -113,6 +113,17 @@ module MegaBar
       @mega_layout_section = env[:mega_layout_section]
       @block_class =  env['block_class']
       env[:mega_env].keys.each { | env_var | instance_variable_set('@' + env_var.to_s, env[:mega_env][env_var]) }
+      # that line sets these instance vars that were determined in the layout_engine middleware
+      # @block,
+      # @modle_id,
+      # @mega_model_properties
+      # @klass
+      # @kontroller_inst
+      # @kontroller_path
+      # @mega_displays (an arry of stuff like model_display_format, :displayable_fields, :model_display, :collection_settings, :form_path )
+      # @nested_ids
+      # @nested_class_info,
+      # @page_number
       unpack_nested_classes(@nested_class_info)
       @index_view_template ||= "mega_bar.html.erb"
       @show_view_template ||= "mega_bar.html.erb"

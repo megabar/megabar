@@ -54,7 +54,7 @@ module MegaBar
     def model_display_help_links
       links = []
       links << ['/mega-bar/model_displays/' + @mega_display[:model_display].id.to_s  + '?return_to=' + request.env['PATH_INFO'], 'Field Displays for the "' + @mega_display[:model_display].header.to_s +  '" model display']
-      links << ['/mega-bar/model_displays/' + @mega_display[:model_display].id.to_s  + '/edit' , 'Edit Model Display']
+      # links << ['/mega-bar/model_displays/' + @mega_display[:model_display].id.to_s  + '/edit' , 'Edit Model Display']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
     def model_display_collection_help_links
@@ -64,15 +64,14 @@ module MegaBar
     end
     def block_help_links
       links = []  
-      links << ['/mega-bar/blocks/' + @block.id.to_s + '?return_to=' + request.env['PATH_INFO'], 'Model Displays for the "' + @block.name + '" Block'] if @block.name
-      links << ['/mega-bar/blocks/' + @block.id.to_s + '/edit', 'Edit Block']
+      # links << ['/mega-bar/blocks/' + @block.id.to_s + '?return_to=' + request.env['PATH_INFO'], 'Model Displays for the "' + @block.name + '" Block'] if @block.name
+      # links << ['/mega-bar/blocks/' + @block.id.to_s + '/edit', 'Edit Block']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
     def layout_help_links
       links = []
-
-      links << ['/mega-bar/layout-sections/' + @mega_layout_section.id.to_s + '?return_to=' + request.env['PATH_INFO'], 'Blocks on the "' + @mega_layout_section.code_name + '" Layout Section']
-      links << ['/mega-bar/layouts/' + @mega_layout.id.to_s + '/edit', 'Edit Layout']
+      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s  + '/layouts/' + @mega_layout.id.to_s  + '?return_to=' + request.env['PATH_INFO'], 'Layout Settings'] unless @mega_page.blank?
+      # links << ['/mega-bar/layouts/' + @mega_layout.id.to_s + '/edit', 'Edit Layout']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
     def page_help_links

@@ -7,6 +7,28 @@ module MegaBar
       @layout_section_id =  params["layout_section_id"] if params["layout_section_id"]
       super
     end
+
+    def edit
+      @mega_instance = Block.find(params["id"])
+
+      @mega_displays[0][:displayable_fields].reject! do | df | 
+        case df[:field].field
+        when 'index_model_display'
+          true if @mega_instance.model_displays.pluck(:action).include?'index'
+        when 'show_model_display'
+         true if @mega_instance.model_displays.pluck(:action).include?'show'
+        when 'edit_model_display'
+         true if @mega_instance.model_displays.pluck(:action).include?'edit'
+        when 'new_model_display'
+         true if @mega_instance.model_displays.pluck(:action).include?'new'
+        else 
+          false
+        end
+      end
+      super
+    end
+
+
     def get_options
       models = Model.all.pluck("name, id")
       @options[:mega_bar_blocks] =  {
