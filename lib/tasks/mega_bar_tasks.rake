@@ -49,6 +49,7 @@ namespace :mega_bar do
   desc 'load data from the mega_bar.seeds.rb file into the local db, checking for and resolving conflicts along the way'
   # task data_load: :environment do
   task :data_load, [:file, :model_set]  => :environment do |t, args|
+
     # this is the core function of allowing multiple repos contribute back to a single one.
     # It could be used within a single organization or to commit back to the real mega_bar gem.
     # perm refers to the regular tables and objects.. like mega_bar_models
@@ -90,7 +91,7 @@ namespace :mega_bar do
     MegaBar::ModelDisplay.skip_callback('save',   :after, :make_collection_settings)
     MegaBar::Page.skip_callback(        'create', :after, :create_layout_for_page)
     MegaBar::Layout.skip_callback(      'create', :after, :create_layable_sections)
-    MegaBar::Layout.skip_callback(      'create', :after, :create_block_for_section)
+    MegaBar::LayoutSection.skip_callback( 'create', :after,  :create_block_for_section)
 
     # start conflict detection
     @@prex_all = []
@@ -140,7 +141,7 @@ namespace :mega_bar do
     MegaBar::ModelDisplay.set_callback('save',   :after, :make_collection_settings)
     MegaBar::Page.set_callback(        'create', :after, :create_layout_for_page)
     MegaBar::Layout.set_callback(      'create', :after, :create_layable_sections)
-    MegaBar::Layout.set_callback(      'create', :after, :create_block_for_section)
+    MegaBar::LayoutSection.set_callback(      'create', :after, :create_block_for_section)
     # end of main function for loading data
     # important sub functions are below
     puts "Loaded Data"

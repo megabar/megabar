@@ -4,6 +4,7 @@ module MegaBar
     
     def new
       @layout_id = params["layout_id"] if params["layout_id"]
+      @layout_section_id =  params["layout_section_id"] if params["layout_section_id"]
       super
     end
     def get_options

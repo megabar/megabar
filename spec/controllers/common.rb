@@ -42,7 +42,7 @@ RSpec.shared_context "common", :a => :b do
         MegaBar::Model.skip_callback("create", :after, :make_page_for_model)
         MegaBar::Model.skip_callback('save', :after, :make_position_field)
         MegaBar::Layout.skip_callback('create', :after, :create_layable_sections)
-        MegaBar::Layout.skip_callback('create', :after, :create_block_for_section)
+        MegaBar::LayoutSection.skip_callback('create', :after, :create_block_for_section)
       end
       after(:each) do
         MegaBar::Field.set_callback("save", :after, :make_field_displays)
@@ -50,7 +50,7 @@ RSpec.shared_context "common", :a => :b do
         MegaBar::Model.set_callback("create", :after, :make_page_for_model)
         MegaBar::Model.set_callback('save', :after, :make_position_field)
         MegaBar::Layout.set_callback('create', :after, :create_layable_sections)
-        MegaBar::Layout.set_callback('create', :after, :create_block_for_section)
+        MegaBar::LayoutSection.set_callback('create', :after, :create_block_for_section)
       end
 
       describe "GET index"  do

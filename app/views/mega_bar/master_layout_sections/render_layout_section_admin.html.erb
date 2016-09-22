@@ -6,7 +6,7 @@
 <% if @layable.layout_section.blocks.present? %>
   <% @layable.layout_section.blocks.each do |block| %>
     <div class='admin_block_divider'>
-      Block name: <%= block.name %> <%#= block_action_interpreter(block.action) %><br>
+      Block name: <%= link_to block.name, block_path(block) %> <%#= block_action_interpreter(block.action) %><br>
       <% if block.model_displays.present? %>
         Model Displays:<br>
         <%= 
@@ -21,5 +21,5 @@
       <% end %>
     </div>
   <% end %>
-<% end %>
-      
+<% end %>    
+<p><%= link_to 'Add new block', '/mega-bar/blocks/new?layout_section_id=' + @layable.layout_section.id.to_s %></p>
