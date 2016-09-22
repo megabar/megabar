@@ -1,12 +1,12 @@
 <%# byebug %>
-<h3>Layout Section: <%= @layable.layout_section.code_name %> (id: <%= @layable.layout_section.id %>)</h3>
+<h3> <%= @layable.layout_section.id %>: <%= @layable.layout_section.code_name %></h3>
 
 <p><%= link_to 'Switch Layout Section', edit_layables_path(@layable), class:'admin_links' %></p>
 
 <% if @layable.layout_section.blocks.present? %>
   <% @layable.layout_section.blocks.each do |block| %>
     <div class='admin_block_divider'>
-      Block name: <%= link_to block.name, block_path(block) %> <%#= block_action_interpreter(block.action) %><br>
+      Block name: <%= link_to block.name, block_path(block) %> <%= block_action_interpreter(block) %><br>
       <% if block.model_displays.present? %>
         Model Displays:<br>
         <%= 

@@ -112,9 +112,23 @@ module MegaBar
       local
     end
 
-    def block_action_interpreter(action)
+    def block_action_interpreter(block)
+      case block.actions
+      when 'show'
+        "(used on show)"
+      when 'sine'
+        "(used on all displays)"
+      when "current"
+        "(uses current action)"
+      else
+       'not sure when this block would be used'
+      end
+    end
 
-      'awesome'
+    def layout_settings_header(layout = nil)
+      if layout.present?
+        "<h2>Layout Sections</h2>".html_safe
+      end
     end
   end
 
