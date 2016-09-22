@@ -9,3 +9,5 @@
 div.admin_block_divider:nth-child(odd) {
    background-color: #F0F0F0;
 }
+
+.field_instructions { font-weight: normal; font-size: .8em; font-style: italic}

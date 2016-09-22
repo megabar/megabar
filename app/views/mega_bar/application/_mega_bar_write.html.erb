@@ -11,7 +11,10 @@
     <tr><th> 
       <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'up')} %>
       <%=  best_in_place displayable_field[:field_display], :header, url: @field_display_path %>
-      <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} %><br>
+      <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} %>
+      <% if displayable_field[:field].instructions.present? %>
+        <div class='field_instructions'><%=  best_in_place displayable_field[:field], :instructions, url: @field_path %></div>
+      <% end %>      
       <br><%= render partial: "mega_bar_help_links", :locals => {:links => field_help_links(displayable_field)} %>
 
 
@@ -36,7 +39,8 @@
 
   # {displayable_field: displayable_field, obj: @mega_instance, mega_bar: @mega_display, value: value}
   %>
-   <%= render partial: "mega_bar_help_links", :locals => {:links => data_display_help_links(displayable_field)} %>
+
+<%= render partial: "mega_bar_help_links", :locals => {:links => data_display_help_links(displayable_field)} %>
 
   <%= @mf.field_wrapper_end.html_safe %>
 <%end %>

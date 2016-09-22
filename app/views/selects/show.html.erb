@@ -22,7 +22,7 @@ select(
   field.field,
   options,  
   {include_blank: include_blank, selected: selected },
-  {multiple: select.multiple},
+  {multiple: select.multiple, title: field.tool_tip,  :data => {:toggle => 'tooltip' }},
 
 )
 %>

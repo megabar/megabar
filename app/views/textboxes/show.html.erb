@@ -2,5 +2,5 @@
 <%=text_field_tag(
 	param_from_tablename(@mega_model_properties, field.tablename) + "[" + field.field + "]",
 	value,
-	size: textbox.size
+	size: textbox.size, title: field.tool_tip, :data => {:toggle => 'tooltip' }
 	) if textbox %>
