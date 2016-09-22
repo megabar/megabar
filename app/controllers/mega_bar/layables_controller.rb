@@ -25,7 +25,7 @@ module MegaBar
      end
       m_layout.instance_variable_set('@mega_layout_sections', final_layout_sections)
       m_layout.instance_variable_set('@mega_layout', @layout)
-      m_layout.instance_variable_set('@layout_helper', true)
+      # m_layout.instance_variable_set('@layout_helper', true)
       # env['mega_final_layout_sections'] = final_layout_sections #used in master_layouts_controller
       m_layout.render_layout_with_sections
     end

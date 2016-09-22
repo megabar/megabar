@@ -292,12 +292,17 @@ namespace :mega_bar do
   end
 
 
-  task :dump_seeds => :environment do
+  task :dump_seeds, [:mega] => :environment do |t, args|
+    if args[:mega].present?
+      mega_bar_model_ids = MegaBar::Model.where(modyule: 'MegaBar').pluck(:id)
+      mega_bar_page_ids = MegaBar::Page.where(mega_page: 'mega')
+    else 
+      mega_bar_model_ids = MegaBar::Model.all.pluck(:id)
+      mega_bar_page_ids = MegaBar::Page.all.pluck(:id)
+    end 
     mega_bar_theme_ids =  MegaBar::Theme.all.pluck(:id) #tbd.
     mega_bar_template_ids = MegaBar::Template.all.pluck(:id)
-    mega_bar_model_ids = MegaBar::Model.where(modyule: 'MegaBar').pluck(:id)
     mega_bar_fields =  MegaBar::Field.where(model_id: mega_bar_model_ids).pluck(:id)
-    mega_bar_page_ids = MegaBar::Page.where(mega_page: 'mega')
     mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).pluck(:id)
     mega_bar_layable_ids = MegaBar::Layable.where(layout_id: mega_bar_layout_ids).pluck(:id)
     mega_bar_layout_section_ids = MegaBar::LayoutSection.where(id: MegaBar::Layable.where(layout_section_id: mega_bar_layable_ids))
@@ -306,7 +311,6 @@ namespace :mega_bar do
     mega_bar_model_display_ids = MegaBar::ModelDisplay.where(block_id: mega_bar_block_ids).pluck(:id)
     mega_bar_model_display_collection_ids =  MegaBar::ModelDisplayCollection.where(model_display_id: mega_bar_model_display_ids).pluck(:id)
     mega_bar_field_display_ids =  MegaBar::FieldDisplay.where(model_display_id: mega_bar_model_display_ids).pluck(:id)
-
     SeedDump.dump(MegaBar::Theme.where(id: mega_bar_theme_ids), file: 'db/mega_bar.seeds.rb', exclude: [])
     SeedDump.dump(MegaBar::Portfolio.where(theme_id: mega_bar_theme_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Site.where(theme_id: mega_bar_theme_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
