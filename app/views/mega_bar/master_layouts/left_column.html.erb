@@ -1,16 +1,3 @@
-huzzah, left column!
-
-<!--
-{if $layoutWidth.full neq 24}<div class="span-{$layoutWidth.full}">{/if}
-{if ! empty($layoutArray.fullTop)}<{$thisLayout.pageLayoutFullTopWrapper} class="span-{$layoutWidth.full} last fullTop fullTop{$layoutWidth.full} layout{$LCR}fullTop">{$layoutArray.fullTop}</{$thisLayout.pageLayoutFullTopWrapper}>{/if}
-
-  <{$thisLayout.pageLayoutLeftWrapper} class="span-{$layoutWidth.left} leftColumn leftColumn{$layoutWidth.left} layout{$LCR}LeftColumn">{$layoutArray.left}</{$thisLayout.pageLayoutLeftWrapper}>
-  <{$thisLayout.pageLayoutMainWrapper} class="span-{$layoutWidth.main} last main main{$layoutWidth.main} layout{$LCR}Main">{$layoutArray.main}</{$thisLayout.pageLayoutMainWrapper}>
-{if ! empty($layoutArray.fullEnd)}<{$thisLayout.pageLayoutFullEndWrapper} class="span-{$layoutWidth.full} last fullEnd fullEnd{$layoutWidth.full}">{$layoutArray.fullEnd}</{$thisLayout.pageLayoutFullEndWrapper}>{/if}
-{if $layoutWidth.full neq 24}</div>{/if} 
-
--->
-
 <div id="main-container" class="container left_column_template">
  <div class="row">
     <% if @mega_layout_sections['full_top'].present? %>
