@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :template, class: MegaBar::Template do
-    id 1
+    name 'a template'
+    code_name 'a_template'
   end
 end

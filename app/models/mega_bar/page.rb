@@ -13,6 +13,7 @@ module MegaBar
       template_id = self.template_id.present? ? self.template_id : self.make_layout_and_block
       layout_hash = {page_id: self.id, name: base_name.humanize + ' Layout', base_name: base_name, make_block: true, model_id: self.model_id, template_id: template_id}
       layout_hash = layout_hash.merge({block_text: self.block_text}) if self.block_text
+# byebug
       _layout = Layout.create(layout_hash)  if (!Layout.by_page(self.id).present? && template_id.present?)
     end
 

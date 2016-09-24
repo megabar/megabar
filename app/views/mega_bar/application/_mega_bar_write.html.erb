@@ -1,7 +1,6 @@
 <h1><%= best_in_place @mega_display[:model_display], :header, url: @model_display_path %></h1>
 <div class="model_display_instructions"><%= best_in_place @mega_display[:model_display], :instructions, url: @model_display_path, as: :textarea %></div>
 
-
 <%=@mf.record_wrapper.html_safe%>
 <% @mega_display[:displayable_fields].each do | displayable_field | %>
   <%
@@ -13,6 +12,7 @@
       <%=  best_in_place displayable_field[:field_display], :header, url: @field_display_path %>
       <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} %>
       <% if displayable_field[:field].instructions.present? %>
+<% byebug %>
         <div class='field_instructions'><%=  best_in_place displayable_field[:field], :instructions, url: @field_path %></div>
       <% end %>      
       <br><%= render partial: "mega_bar_help_links", :locals => {:links => field_help_links(displayable_field)} %>

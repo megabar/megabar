@@ -30,7 +30,7 @@ module MegaBar
     let(:controller_class) { MegaBar::SitesController }
     let(:model_class) { MegaBar::Site }
     
-    let(:model_and_page) { create(:model_with_page, classname: 'Site', tablename: 'mega_bar_sites', name: 'Site', modyule: 'MegaBar' ) }
+    let(:model_and_page) { create(:model_with_page, classname: 'Site', tablename: 'mega_bar_sites', name: 'Site', modyule: 'MegaBar', make_page: 1) }
     let(:page_terms) { ["MegaBar", "sites"]  }
     let(:page_name) { 'MegaBar page'   }
     let(:spec_subject) { 'site' }

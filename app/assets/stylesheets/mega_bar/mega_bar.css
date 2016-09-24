@@ -3,7 +3,7 @@
 .layout_help_link  div a{font-size: 16px;}
 .mega_bar__template_gallery .container .row .layout_section, .block.layout_section_admin  .container .row .layout_section {border: 1px solid black;}
 
- tr:nth-child(odd) > td{
+ tr:nth-child(odd) > td,  tr:nth-child(odd) > th{
    background-color: #F0F0F0;
 }
 div.admin_block_divider:nth-child(odd) {

@@ -26,7 +26,8 @@ RSpec.shared_context "common", :a => :b do
   let(:rout_for_collection) { {action: 'index', controller: controlller} }
   let(:rout_for_member) { {action: 'index', controller: controlller, id: 1} }
   let(:rout_for_update) { {controller: controlller, action: 'update', id: 1} }
-
+  let(:template) { create(:template) }
+  let(:template_section) { create(:template_section) }
   context 'with mega_env' do
     before(:each) do
       test_setup
@@ -130,7 +131,7 @@ RSpec.shared_context "common", :a => :b do
 
       describe "PUT update" do
         describe "with valid params" do
-          it "updates the requested record", focus: true do
+          it "updates the requested record" , focus: true do
             record = model_class.first
             status, headers, body = controller_class.action(:update).call(get_env(env_update))
             record.reload
@@ -192,16 +193,19 @@ RSpec.shared_context "common", :a => :b do
     MegaBar::Model.skip_callback("create",:after,:make_all_files)
     MegaBar::Model.set_callback("create", :after, :make_page_for_model)
     MegaBar::Model.set_callback('save', :after, :make_position_field)
-   
+    
     MegaBar::Page.set_callback("create", :after, :create_layout_for_page)
     MegaBar::Layout.set_callback('create', :after, :create_layable_sections)
-    MegaBar::Layout.set_callback('create', :after, :create_block_for_section)
+    MegaBar::LayoutSection.set_callback('create', :after, :create_block_for_section)
     MegaBar::Block.set_callback("create", :after, :make_model_displays)
+    template
+    template_section
     model_and_page
     fields_and_displays
     a_record
     model_display_format unless MegaBar::ModelDisplayFormat.first
     model_display_format_2 unless MegaBar::ModelDisplayFormat.count > 1
+
   }
   let (:test_teardown) {
     MegaBar::Field.set_callback("create",:after,:make_migration)

@@ -2,9 +2,9 @@ module MegaBar
   class LayoutSection < ActiveRecord::Base
     attr_accessor :template_section_id, :model_id, :block_text, :base_name, :new_model_display, :edit_model_display, :index_model_display, :show_model_display
    
-    has_many :layables
+    has_many :layables, dependent: :destroy
     has_many :layouts, through: :layables
-    has_many :blocks
+    has_many :blocks, dependent: :destroy
 
     after_create :create_block_for_section
 

@@ -63,7 +63,7 @@ namespace :mega_bar do
     puts "Loading Route Information..." if args[:model_set] == 'routes'
 
     mega_classes = get_mega_classes
-    route_classes = [MegaBar::Page, MegaBar::Layout, MegaBar::Block, MegaBar::ModelDisplay, MegaBar::Model]
+    route_classes = [MegaBar::Page, MegaBar::Layout, MegaBar::LayoutSection, MegaBar::Layable, MegaBar::Block, MegaBar::ModelDisplay, MegaBar::Model]
     mega_classes.delete_if { |x| not route_classes.include? x[:perm_class] } if args[:model_set] == 'routes'
 
     all_conflicts = []

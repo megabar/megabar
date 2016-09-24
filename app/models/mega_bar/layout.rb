@@ -10,7 +10,7 @@ module MegaBar
 
 
     has_many :layables
-    has_many :layout_sections, through: :layables
+    has_many :layout_sections, through: :layables, dependent: :destroy
 
 
     attr_accessor :make_block, :block_text, :model_id, :base_name
