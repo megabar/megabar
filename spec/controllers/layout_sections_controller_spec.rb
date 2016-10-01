@@ -10,7 +10,10 @@ module MegaBar
     let(:updated_attrs) { { 'tbd' => 'tbd' } }
     let(:valid_attributes) {{ 'tbd' => "tbd" } }
     let(:valid_new) { { tbd: 'tbd'} }
-    let(:fields_and_displays) {  create(:field_with_displays, field: 'tbd', tablename: 'mega_bar_layout_sections', model_display_ids: model_model_display_ids) }
+    let(:fields_and_displays) {  
+        create(:field_with_displays, field: 'layout_id', tablename: 'mega_bar_layout_sections', model_display_ids: model_model_display_ids) 
+
+    }
     # Megabar says, If you want to test invalid data, modify these: 
     let(:skip_invalids) { true }
     let(:invalid_new) { {tbd: ''} }

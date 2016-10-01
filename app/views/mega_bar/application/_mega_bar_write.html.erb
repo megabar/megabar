@@ -12,7 +12,7 @@
       <%=  best_in_place displayable_field[:field_display], :header, url: @field_display_path %>
       <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} %>
       <% if displayable_field[:field].instructions.present? %>
-<% byebug %>
+<%# byebug %>
         <div class='field_instructions'><%=  best_in_place displayable_field[:field], :instructions, url: @field_path %></div>
       <% end %>      
       <br><%= render partial: "mega_bar_help_links", :locals => {:links => field_help_links(displayable_field)} %>
