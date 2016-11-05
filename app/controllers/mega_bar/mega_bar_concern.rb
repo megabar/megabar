@@ -189,15 +189,15 @@ module MegaBar
     def might_paginate?(location = nil)
       if (location)
         (@mega_displays[0].dig(:collection_settings)&.pagination_position == location || @mega_displays[0].dig(:collection_settings)&.pagination_position == 'both') && !@mega_instance.blank?
-      else 
+      else
         !@mega_displays[0].dig(:collection_settings)&.pagination_position.blank? && !@mega_instance.blank?
       end
     end
-    
+
     def might_filter?(location = nil)
       if (location)
         (@mega_displays[0].dig(:collection_settings)&.pagination_position == location || @mega_displays[0].dig(:collection_settings)&.pagination_position == 'both') && !@mega_instance.blank?
-      else 
+      else
         @mega_displays[0].dig(:collection_settings)&.filter_fields && !@mega_instance.blank?
       end
     end
@@ -210,9 +210,9 @@ module MegaBar
         session[:mega_filters] = {}
       end
       session[:mega_filters] ||= {}
-      return mega_instance unless params[@kontroller_inst] || session[:mega_filters][@kontroller_inst] 
+      return mega_instance unless params[@kontroller_inst] || session[:mega_filters][@kontroller_inst]
       #cache me.
-      if params[@kontroller_inst] 
+      if params[@kontroller_inst]
         session[:mega_filters] = {}
         filter_types = MegaBar::Field.includes(:options).find_by(field: 'filter_type', tablename: 'mega_bar_fields').options.pluck(:value)
         filters = session[:mega_filters][@kontroller_inst.to_sym] = collect_filters(filter_types)
@@ -221,11 +221,11 @@ module MegaBar
       end
       return mega_instance if filters.blank?
       @filter_text = []
-      filters.each do |key, filt| 
+      filters.each do |key, filt|
         case key
         when 'contains'
           filt.each do | hsh |
-            hsh.each do | field, value | 
+            hsh.each do | field, value |
               @filter_text << "#{field} contains #{value}" unless value.blank?
               mega_instance = mega_instance.where(field + " like ?", "%" + value + "%")
             end
@@ -241,7 +241,7 @@ module MegaBar
       params[@kontroller_inst].each do |key, value|
         @mega_displays.each do |md|
           md[:displayable_fields].each do |df|
-            filters[ df[:field].filter_type] <<  { df[:field].field => value } if !df[:field].filter_type.blank? && key.sub('___filter', '') == df[:field].field 
+            filters[ df[:field].filter_type] <<  { df[:field].field => value } if !df[:field].filter_type.blank? && key.sub('___filter', '') == df[:field].field
             # @mega_displays[0][:displayable_fields][0][:field].filter_type
           end
         end

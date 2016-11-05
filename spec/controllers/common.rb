@@ -193,7 +193,7 @@ RSpec.shared_context "common", :a => :b do
     MegaBar::Model.skip_callback("create",:after,:make_all_files)
     MegaBar::Model.set_callback("create", :after, :make_page_for_model)
     MegaBar::Model.set_callback('save', :after, :make_position_field)
-    
+
     MegaBar::Page.set_callback("create", :after, :create_layout_for_page)
     MegaBar::Layout.set_callback('create', :after, :create_layable_sections)
     MegaBar::LayoutSection.set_callback('create', :after, :create_block_for_section)
