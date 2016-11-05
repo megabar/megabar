@@ -4,7 +4,7 @@ module MegaBar
     include MegaBar::MegaBarModelConcern
 
     after_create  :make_all_files
-    after_create  :make_page_for_model
+    after_save  :make_page_for_model
     after_save    :make_position_field
     attr_accessor :make_page
     attr_writer   :model_id
@@ -31,11 +31,13 @@ module MegaBar
     end
 
     def make_page_for_model
-      if !self.make_page.nil? && !self.make_page.empty?
+      if !self.make_page.nil? && !self.make_page.blank?
         mod = self.modyule.nil? || self.modyule.empty?  ? '' : self.modyule.underscore + '/'
         path = '/' + mod.dasherize + self.classname.underscore.dasherize.pluralize
         # path = self.make_page == 'default_model_path' ? path : self.make_page
-        Page.create(name: self.name + ' Model Page', path: path, make_layout_and_block: 'y', base_name: self.name, model_id: self.id )
+        page = Page.find_or_initialize_by(path: path)
+        page.assign_attributes(name: self.name + ' Model Page', path: path, make_layout_and_block: self.make_page, base_name: self.name, model_id: self.id)
+        page.save unless page.id
       end
     end
 
@@ -86,6 +88,7 @@ module MegaBar
       # modle = Model.find(model_id)
       # modle_name = modle.modyule ? modle.modyule + "::" + modle.classname : modle.classname
       modle_name = self.modyule ? self.modyule + "::" + self.classname : self.classname
+      return unless defined?(modle_name) == 'constant' && modle_name.class == Class
       mod = modle_name.constantize
       mod.reset_column_information
       # warning: metaprogramming ahead!

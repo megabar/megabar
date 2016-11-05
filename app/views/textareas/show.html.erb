@@ -1,5 +1,5 @@
 <br>
 <%=text_area_tag(
 	param_from_tablename(@mega_model_properties, field.tablename) + "[" + field.field + "]",
-	value, rows: textarea.rows, cols: textarea.cols
+	value, rows: textarea.rows, cols: textarea.cols, title: field.tool_tip, :data => {:toggle => 'tooltip' }
 	) if textarea %>

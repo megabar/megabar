@@ -1,3 +1,13 @@
-<%=
-textread[:truncation].to_i == 0 ? obj.read_attribute(field.field).to_s :
+<% value = textread[:truncation].to_i == 0 ? obj.read_attribute(field.field).to_s :
  obj.read_attribute(field.field).to_s.truncate(textread[:truncation].to_i, {omission: textread[:truncation_format], separator: textread[:truncation_separator]}) %>
+
+
+<% if field_display.link_type == 'link_field_value' && field_display.format == 'textread' %>
+  <%= value %>
+<% elsif field.default_data_format_edit == 'textbox' && field.data_type == 'string' %>
+  <%= best_in_place obj, field.field, value: value  %>
+<% elsif field.default_data_format_edit == 'textarea' && field.data_type == 'text'%>
+  <%= best_in_place obj, field.field, value: value, as: :textarea  %>
+<% else %>
+  <%= value %>
+<% end %>

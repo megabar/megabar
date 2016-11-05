@@ -1,0 +1,5 @@
+class AddLayoutSectionIdToMegaBarBlocks < ActiveRecord::Migration
+  def change
+    add_column :mega_bar_blocks, :layout_section_id, :integer
+  end
+end

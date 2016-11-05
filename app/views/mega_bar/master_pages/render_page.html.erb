@@ -7,8 +7,8 @@
  
     <%= csrf_meta_tags %>
   </head>
-  <body>
-    <nav>
+  <body class='<%= @page_class %>'>
+    <nav style='background-color: #eeeeee'>
       <%= link_to 'Home', '/' %> | <%= link_to 'My Pages', mega_bar.pages_path %> |  <%= link_to 'My Models', mega_bar.models_path %>
     </nav>
 
@@ -20,11 +20,13 @@
     <% end %>
 
     <% @page_layouts.each do |layout| %>
-      <div class='layout'><%=layout%></div>
+      <%=layout%>
     <% end %>
+
     <%= render partial: 'mega_bar_help_links' ,:locals => {:links => page_help_links} %>
+    <nav  style='background-color: #eeeeee'>
   <%= link_to 'MegaBar Pages', '/mega-bar/pages/all' %> |  <%= link_to 'MegaBar Models', '/mega-bar/models/all' %>
-<div class='admin_links'>To replace this global template, create a file at myapp/app/views/mega_bar/master_pages/render_page.html.erb that contains at least this: <pre style='margin:0'>< % @page_layouts.each{ |layout| puts "&lt;div class='layout'&gt;#{layout}&lt;/div&gt;"  } % ></pre></div>
-    
+<div class='admin_links'>To replace this global template, create a file at myapp/app/views/mega_bar/master_pages/render_page.html.erb that contains at least this: <span>< % @page_layouts.each{ |layout| puts "&lt;div class='layout'&gt;#{layout}&lt;/div&gt;"  } % ></span></div>
+    </nav>
   </body>
 </html>
