@@ -36,7 +36,7 @@ module MegaBar
         path = '/' + mod.dasherize + self.classname.underscore.dasherize.pluralize
         # path = self.make_page == 'default_model_path' ? path : self.make_page
         page = Page.find_or_initialize_by(path: path)
-        page.assign_attributes(name: self.name + ' Model Page', path: path, make_layout_and_block: self.make_page, base_name: self.name, model_id: self.id)        
+        page.assign_attributes(name: self.name + ' Model Page', path: path, make_layout_and_block: self.make_page, base_name: self.name, model_id: self.id)
         page.save unless page.id
       end
     end

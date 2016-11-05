@@ -50,6 +50,8 @@ module MegaBar
     context 'with make_all_files disabled' do
       before(:each) do
         Model.skip_callback('create',:after,:make_all_files)
+        create(:template)
+        create(:template_section)
         create(:model_with_page)
       end
       after(:each) do
@@ -86,7 +88,7 @@ module MegaBar
         Model.find(1).destroy
       end
 
-      it 'generates everything for a non megabar model', focus: true do
+      it 'generates everything for a non megabar model' do #, focus: true do
 
         expect(File).to exist('spec/internal/app/models/test_case.rb')
         expect(File).to exist('spec/internal/app/controllers/test_cases_controller.rb')
