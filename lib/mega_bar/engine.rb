@@ -4,6 +4,8 @@ module MegaBar
     require 'seed_dump'
     require 'best_in_place'
     require 'acts_as_list'
+    require 'devise'
+
 
     config.autoload_paths << File.expand_path("../*", __FILE__)
 
@@ -46,7 +48,7 @@ end
 #     MegaBar::Application.routes.draw do
 #       MegaBar::Page.all.each do |pg|
 #         puts "page path: " + pg.path
-#         MegaBar::Layout.all.each do |layout| 
+#         MegaBar::Layout.all.each do |layout|
 #           MegaBar::Block.all.each do | block |
 #             puts "Routing #{pg.name}"
 #             get "/#{pg.name}", :to => "pages#show", defaults: { id: pg.id }

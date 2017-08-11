@@ -45,6 +45,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'webmock'
 
   s.test_files = Dir["spec/**/*"]
+
+
+  s.add_dependency "devise"
+
 end
 
 
