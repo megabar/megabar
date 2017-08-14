@@ -30,7 +30,9 @@ class LayoutEngine
     request = Rack::Request.new(env)
     request.params # strangely this needs to be here for best_in_place updates.
     # MegaBar::Engine.routes.routes.named_routes.values.map do |route|
+
     site = MegaBar::Site.where(domains: request.host).first
+    site = MegaBar::Site.first unless site
     #   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + "#{route.defaults[:controller]}##{route.defaults[:action]}"
     # end #vs. Rails.application.routes.routes.named_routes.values.map
     # Rails.application.routes.routes.named_routes.values.map do |route|
@@ -43,7 +45,7 @@ class LayoutEngine
     # tbcontinued.
     request.session[:return_to] = env['rack.request.query_hash']['return_to'] unless env['rack.request.query_hash']['return_to'].blank?
     rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
-    env[:mega_rout] = rout = set_rout(request, env) 
+    env[:mega_rout] = rout = set_rout(request, env)
     env[:mega_page] = page_info = set_page_info(rout, rout_terms)
     pagination = set_pagination_info(env, rout_terms)
     if page_info.empty? #non megabar pages.
@@ -88,7 +90,7 @@ class LayoutEngine
     @response.each(&display)
   end
 
-  
+
   def set_page_info(rout, rout_terms)
 
     page_info = {}
@@ -115,7 +117,7 @@ class LayoutEngine
 
   def set_rout(request, env)
     request_path_info = request.path_info.dup
-    rout = (Rails.application.routes.recognize_path request_path_info, method: env['REQUEST_METHOD'] rescue {}) || {} 
+    rout = (Rails.application.routes.recognize_path request_path_info, method: env['REQUEST_METHOD'] rescue {}) || {}
     rout = (MegaBar::Engine.routes.recognize_path request_path_info rescue {}) || {}  if rout.empty? && request_path_info == '/mega-bar' #yeah, a special case for this one.
     rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!('/mega-bar/', ''), method: env['REQUEST_METHOD'] rescue {}) || {}  if rout.empty?
     rout
@@ -137,7 +139,7 @@ class LayoutEngine
   def process_page_layout(page_layout, page_info, rout, orig_query_hash, pagination, site, env)
     final_layout_sections = {}
 
-    page_layout.layout_sections.each do | layout_section | 
+    page_layout.layout_sections.each do | layout_section |
       template_section = MegaBar::TemplateSection.find(layout_section.layables.where(layout_id: page_layout.id).first.template_section_id).code_name
       blocks = MegaBar::Block.by_layout_section(layout_section.id)
       blocks = blocks.by_actions(rout[:action]) unless rout.blank?
@@ -174,7 +176,7 @@ class LayoutEngine
         params_hash = params_hash.merge(param)
       end
       params_hash = params_hash.merge(orig_query_hash)
-      params_hash = params_hash.merge(env['rack.request.form_hash']) if !env['rack.request.form_hash'].nil? # && (mega_env.block_action == 'update' || mega_env.block_action == 'create') 
+      params_hash = params_hash.merge(env['rack.request.form_hash']) if !env['rack.request.form_hash'].nil? # && (mega_env.block_action == 'update' || mega_env.block_action == 'create')
       env['QUERY_STRING'] = params_hash.to_param # 150221!
       env['action_dispatch.request.parameters'] = params_hash
       env['block_class'] = blck.name.downcase.parameterize.underscore
@@ -202,7 +204,7 @@ class LayoutEngine
       'delete'
     end
   end
- 
+
   def mega_filtered(obj, site)
     if obj.sites.present?
       has_zero_site = obj.sites.pluck(:id).include?(0)
@@ -259,7 +261,7 @@ class MegaEnv
     }
   end
 
-  def meta_programming(klass, modle) 
+  def meta_programming(klass, modle)
     position_parent_method = modle.position_parent.split("::").last.underscore.downcase.to_sym unless modle.position_parent.blank?
     klass.class_eval{ acts_as_list scope: position_parent_method, add_new_at: :bottom } if position_parent_method
   end
@@ -274,7 +276,7 @@ class MegaEnv
         field = MegaBar::Field.find(field_disp.field_id)
         if is_displayable?(field_disp.format)
           #lets figure out how to display it right here.
-          puts field_disp.format 
+          puts field_disp.format
           data_format = Object.const_get('MegaBar::' + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
           if field_disp.format == 'select'
             options = MegaBar::Option.where(field_id: field.id).collect {|o| [ o.text, o.value ] }
