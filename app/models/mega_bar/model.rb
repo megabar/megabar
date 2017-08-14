@@ -12,6 +12,7 @@ module MegaBar
     before_create :standardize_classname
     before_create :standardize_tablename
     has_many      :fields, dependent: :destroy
+    has_many      :model_displays, dependent: :destroy # or after_destroy delete_model_displays. see field model example
     scope         :by_model, ->(model_id) { where(id: model_id) if model_id.present? }
     validates     :classname, format: { with: /\A[A-Za-z][A-Za-z0-9\-\_]*\z/, message: "Must start with a letter and have only letters, numbers, dashes or underscores" }
     validates_presence_of :default_sort_field, :name

@@ -1,7 +1,9 @@
 class MegaRoute
+
   def self.controller_from_block(context, block)
     md = MegaBar::ModelDisplay.by_block(block.id).first
     m = MegaBar::Model.find(md.model_id)
+    return unless m
     modu = m.modyule.empty? ? '' : m.modyule + '::'
     # modu == 'MegaBar::' ?  'mega-bar/' + m.classname.tableize
     # puts md.model_id.to_s + " .... " + m.id.to_s + " = " + m.classname.tableize
@@ -16,7 +18,7 @@ class MegaRoute
       # puts 'new page '
       MegaBar::Layout.by_page(pg.id).each do |llayout|
         # puts 'new layout'
-        llayout.layout_sections.each do | layout_section | 
+        llayout.layout_sections.each do | layout_section |
           MegaBar::Block.by_layout_section(layout_section.id).each do | block |
             # byebug if pg.id  == 18 || pg.id == 33
             p = block.path_base? ? block.path_base : pg.path
@@ -52,7 +54,11 @@ class MegaRoute
               if MegaBar::ModelDisplay.by_block(block.id).size > 0
                # byebug if pg.id ==10
                 # byebug if MegaBar::ModelDisplay.by_block(block.id).first.model_id == 3
-                controller = MegaRoute.controller_from_block(context, block)
+                begin
+                  controller = MegaRoute.controller_from_block(context, block)
+                rescue
+                next
+                end
                 # puts "controller ---- " + controller + ", path: " + p
                 MegaBar::ModelDisplay.by_block(block.id).order(collection_or_member: :asc, action: :asc).each do | md | #order here becomes important todo
                   # puts "mid #{block.name}" + md.action.to_s
@@ -82,7 +88,7 @@ class MegaRoute
                   else
                     pf = p.to_s + "/" + md.action.to_s
                     if md.collection_or_member == 'collection'
-                      concerns = 'paginatable' 
+                      concerns = 'paginatable'
                       meth =  [:get, :post]
                     end
                     # puts 'custom action: ' + pf
@@ -94,15 +100,15 @@ class MegaRoute
                   route = route.merge({concerns: concerns}) if concerns
                   # route = route.merge({on: x}) if x
                   routes << route
-                  routes << {path: pf + '/filter', method: [:get, :post], action: md.action, controller: controller} if md.collection_or_member == 'collection' 
-                  # if md.collection_or_member == 'collection' 
+                  routes << {path: pf + '/filter', method: [:get, :post], action: md.action, controller: controller} if md.collection_or_member == 'collection'
+                  # if md.collection_or_member == 'collection'
                   #   c_route = route
                   #   c_route[:method] = 'post'
                   #   routes << c_route
                   # end
 
                 end
-                routes << {path: p + '/move/:id', method: 'get', action: 'move', controller: controller } 
+                routes << {path: p + '/move/:id', method: 'get', action: 'move', controller: controller }
                 routes << {path: p + '/:id', method: 'patch', action: 'update', controller: controller}
                 routes << {path: p, method: 'post', action: 'create', controller: controller}
                 routes << {path: p + '/:id', method: 'delete', action: 'destroy', controller: controller}

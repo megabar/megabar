@@ -7,14 +7,15 @@
     @field_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/field_displays', action: 'show', id: displayable_field[:field_display].id, :only_path=> true)
   %>
   <% if @mf.name == 'ProfileTable' %>
-    <tr><th> 
+    <tr><th>
       <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'up')} %>
       <%=  best_in_place displayable_field[:field_display], :header, url: @field_display_path %>
       <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} %>
       <% if displayable_field[:field].instructions.present? %>
-<%# byebug %>
+ <% #byebug %>
+        <% @field_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/fields', action: 'show', id: displayable_field[:field].id, :only_path=> true) %>
         <div class='field_instructions'><%=  best_in_place displayable_field[:field], :instructions, url: @field_path %></div>
-      <% end %>      
+      <% end %>
       <br><%= render partial: "mega_bar_help_links", :locals => {:links => field_help_links(displayable_field)} %>
 
 

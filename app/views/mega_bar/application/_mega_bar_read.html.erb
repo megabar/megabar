@@ -26,7 +26,7 @@
 <th>&nbsp;</th>
 <th>Position</th>
   <% end %>
-  
+
 
   <% @mega_instance.each do |mega_record| %>
     <%= @mf.record_wrapper.html_safe%>
@@ -64,17 +64,18 @@
       </td>
       <td><%= link_to 'Edit&nbsp;'.html_safe, link_path('edit', mega_record.id) %></td>
       <td><%= link_to 'Destroy&nbsp;'.html_safe, mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
       <% if @mega_model_properties.position_parent.present? && @nested_ids.map{|nid| true if nid.key?((@mega_model_properties.position_parent.split("::").last.underscore.downcase + "_id")) }.first %>
         <td>
-          <% unless @mega_instance.first.position == mega_record.position %> 
+          <% unless @mega_instance.first.position == mega_record.position %>
             <%= link_to 'up', link_path('move', mega_record.id).to_s + "?method=move_higher",  data: { turbolinks: false } %>
             <%= link_to 'top', link_path('move', mega_record.id).to_s + "?method=move_to_top",  data: { turbolinks: false } %>
-          <% end %> 
+          <% end %>
 
-          <% unless @mega_instance.last.position == mega_record.position %> 
-            <% unless mega_record.position == (@mega_instance.first.position || @mega_instance.last.position) %> | <% end %> 
+          <% unless @mega_instance.last.position == mega_record.position %>
+            <% unless mega_record.position == (@mega_instance.first.position || @mega_instance.last.position) %> | <% end %>
             <%= link_to 'down', link_path('move', mega_record.id).to_s + "?method=move_lower",  data: { turbolinks: false } %>
-            <%= link_to 'bottom', link_path('move', mega_record.id).to_s + "?method=move_to_bottom",  data: { turbolinks: false } %>  
+            <%= link_to 'bottom', link_path('move', mega_record.id).to_s + "?method=move_to_bottom",  data: { turbolinks: false } %>
           <% end %>
         </td>
       <% end %>

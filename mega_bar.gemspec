@@ -7,11 +7,11 @@ require "mega_bar/version"
 Gem::Specification.new do |s|
   s.name        = "mega_bar"
   s.version     = MegaBar::VERSION
-  s.authors     = ["Tomochi Art"]
-  s.email       = ["TomochiArt@gmail.com"]
+  s.authors     = ["Bagus"]
+  s.email       = ["bagus@bagus.org"]
   s.homepage    = "http://www.github.com/tomochiart/mega_bar"
   s.summary     = " MegaBar."
-  s.description = "Description of MegaBar."
+  s.description = "Rails GUI."
   s.license     = "MIT"
   s.files = Dir["{app,config,db,lib}/**/*",  "spec/internal/factories/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
   # s.add_development_dependency "rspec", "~> 2.6"
