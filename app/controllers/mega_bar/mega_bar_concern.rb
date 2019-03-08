@@ -160,7 +160,8 @@ module MegaBar
       @nested_ids.each do |param|
         param_hash = param_hash.merge(param)
       end
-      param_hash = param_hash.merge(params.dup)
+      # url_for(param_hash)
+      param_hash = param_hash.merge(_params.dup)
       param_hash[:id] = id
       param_hash[:only_path] = true
 

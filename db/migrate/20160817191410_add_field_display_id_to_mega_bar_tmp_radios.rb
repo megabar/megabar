@@ -1,4 +1,4 @@
-class AddFieldDisplayIdToMegaBarTmpRadios < ActiveRecord::Migration
+class AddFieldDisplayIdToMegaBarTmpRadios < ActiveRecord::Migration[4.2]
   def change
     add_column :mega_bar_tmp_radios, :field_display_id, :integer
   end

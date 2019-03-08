@@ -1,4 +1,4 @@
-class CreateMegaBarSites < ActiveRecord::Migration
+class CreateMegaBarSites < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_sites do |t|
       t.datetime :created_at

@@ -1,4 +1,4 @@
-class CreateMegaBarLayoutSections < ActiveRecord::Migration
+class CreateMegaBarLayoutSections < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_layout_sections do |t|
       t.datetime :created_at

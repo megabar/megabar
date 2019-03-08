@@ -1,4 +1,4 @@
-class CreateMegaBarModelDisplayFormats < ActiveRecord::Migration
+class CreateMegaBarModelDisplayFormats < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_model_display_formats do |t|
       t.string :name

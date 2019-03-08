@@ -1,4 +1,4 @@
-module MegaBar 
+module MegaBar
   class MasterLayoutSectionsController < ActionController::Base
     def render_layout_section_with_blocks
       @blocks = env['mega_final_blocks']
@@ -10,5 +10,10 @@ module MegaBar
     def render_layout_section_admin
       render 'render_layout_section_admin'
     end
+
+    def env
+      request.env
+    end
+
   end
-end 
+end

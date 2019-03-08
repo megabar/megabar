@@ -1,4 +1,4 @@
-class CreateFieldDisplays < ActiveRecord::Migration
+class CreateFieldDisplays < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_field_displays do |t|
       t.references :model_display

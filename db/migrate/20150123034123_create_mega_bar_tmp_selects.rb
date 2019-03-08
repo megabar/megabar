@@ -1,4 +1,4 @@
-class CreateMegaBarTmpSelects < ActiveRecord::Migration
+class CreateMegaBarTmpSelects < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_tmp_selects do |t|
       t.references :field_display

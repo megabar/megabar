@@ -1,4 +1,4 @@
-class CreateFields < ActiveRecord::Migration
+class CreateFields < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_fields do |t|
       t.references :model

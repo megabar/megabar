@@ -5,6 +5,10 @@ module MegaBar
 
     after_create  :make_all_files
     after_save  :make_page_for_model
+
+    after_create :make_page_for_model
+
+
     after_save    :make_position_field
     attr_accessor :make_page
     attr_writer   :model_id

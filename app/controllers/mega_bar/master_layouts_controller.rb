@@ -1,4 +1,4 @@
-module MegaBar 
+module MegaBar
   class MasterLayoutsController < ActionController::Base
     def render_layout_with_sections
       @mega_layout_sections ||= env['mega_final_layout_sections']
@@ -7,5 +7,10 @@ module MegaBar
       template = Template.find(@mega_layout[:template_id])
       render template.code_name
     end
+
+    def env
+      request.env
+    end
+
   end
-end 
+end

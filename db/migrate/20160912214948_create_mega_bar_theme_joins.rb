@@ -1,4 +1,4 @@
-class CreateMegaBarThemeJoins < ActiveRecord::Migration
+class CreateMegaBarThemeJoins < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_theme_joins do |t|
       t.datetime :created_at

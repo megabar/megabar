@@ -1,4 +1,4 @@
-class CreateTextreads < ActiveRecord::Migration
+class CreateTextreads < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_textreads do |t|
       t.references :field_display

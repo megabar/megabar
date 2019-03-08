@@ -38,7 +38,7 @@ module MegaBar
       @nested_ids.each do |param|
         param_hash = param_hash.merge(param)
       end
-      param_hash = param_hash.merge(params.dup)
+      param_hash = param_hash.merge(@p_params)
       param_hash[:action] = action
       param_hash[:id] = id
       url_for(param_hash)
@@ -63,7 +63,7 @@ module MegaBar
       links.map{ |l| link_to l[1], l[0]}.join(' | ')
     end
     def block_help_links
-      links = []  
+      links = []
       # links << ['/mega-bar/blocks/' + @block.id.to_s + '?return_to=' + request.env['PATH_INFO'], 'Model Displays for the "' + @block.name + '" Block'] if @block.name
       # links << ['/mega-bar/blocks/' + @block.id.to_s + '/edit', 'Edit Block']
       links.map{ |l| link_to l[1], l[0]}.join(' | ')

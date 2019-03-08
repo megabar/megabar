@@ -1,4 +1,4 @@
-class CreateMegaBarTmpFields < ActiveRecord::Migration
+class CreateMegaBarTmpFields < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_tmp_fields do |t|
       t.references :model
@@ -6,7 +6,7 @@ class CreateMegaBarTmpFields < ActiveRecord::Migration
       t.string :tablename
       t.string :field
       t.string :data_type
-      t.string :accessor     
+      t.string :accessor
       t.string :default_value
       t.string :default_data_format
       t.string :default_data_format_edit
