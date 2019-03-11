@@ -20,9 +20,16 @@ module MegaBar
           permits << { att.field => [] }
         else
           permits << att.field unless ['id', 'created_at', 'updated_at', :id].include?(att)
+          permits << att.field + '___filter'
         end
+
       end
-      @p_params = params.permit(permits)
+
+      if params[controller_name.singularize]
+        @p_params = params.require(controller_name.singularize).permit(permits)
+      else
+        @p_params = params.permit(permits)
+      end
     end
 
     def env

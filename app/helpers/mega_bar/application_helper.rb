@@ -40,7 +40,8 @@ module MegaBar
       end
       param_hash = param_hash.merge(@p_params)
       param_hash[:action] = action
-      param_hash[:id] = id
+      param_hash[:id] = id if id
+      param_hash[:controller] = params[:controller]
       url_for(param_hash)
     end
 

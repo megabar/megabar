@@ -32,7 +32,8 @@ module MegaBar
       mod = self.modyule.nil? || self.modyule.empty?  ? 'no_mod' : self.modyule
       # MegaBar.call_rails('mega_bar_models', {modyule: mod, classname: self.classname, model_id: self.id.to_s})
       system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s
-      ActiveRecord::Migrator.migrate "db/migrate"
+      ActiveRecord::MigrationContext.new("db/migrate").migrate
+      # ActiveRecord::Migrator.migrate "db/migrate"
     end
 
     def make_page_for_model

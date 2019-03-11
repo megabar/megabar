@@ -164,7 +164,7 @@ module MegaBar
       param_hash = param_hash.merge(_params.dup)
       param_hash[:id] = id
       param_hash[:only_path] = true
-
+      param_hash[:controller] = params[:controller]
       case action
       when 'new'
         param_hash['action'] = 'create'
