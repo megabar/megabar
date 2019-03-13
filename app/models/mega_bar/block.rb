@@ -5,7 +5,6 @@ module MegaBar
     has_many :site_joins, as: :siteable
     has_many :sites, through: :site_joins, dependent: :destroy
 
-    belongs_to :layout
     scope :by_layout, ->(layout_id) { where(layout_id: layout_id) if layout_id.present? }
     scope :by_layout_section, ->(layout_section_id) { where(layout_section_id: layout_section_id) if layout_section_id.present? }
     has_many :model_displays, dependent: :destroy

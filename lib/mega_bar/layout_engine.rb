@@ -138,7 +138,6 @@ class LayoutEngine
 
   def process_page_layout(page_layout, page_info, rout, orig_query_hash, pagination, site, env)
     final_layout_sections = {}
-
     page_layout.layout_sections.each do | layout_section |
       template_section = MegaBar::TemplateSection.find(layout_section.layables.where(layout_id: page_layout.id).first.template_section_id).code_name
       blocks = MegaBar::Block.by_layout_section(layout_section.id)
@@ -262,7 +261,7 @@ class MegaEnv
   end
 
   def meta_programming(klass, modle)
-    position_parent_method = modle.position_parent.split("::").last.underscore.downcase.to_sym unless modle.position_parent.blank?
+    position_parent_method = modle.position_parent.split("::").last.underscore.downcase.to_sym unless modle.position_parent.blank? || modle.position_parent == 'pnp'
     klass.class_eval{ acts_as_list scope: position_parent_method, add_new_at: :bottom } if position_parent_method
   end
   def set_mega_displays(displays)
