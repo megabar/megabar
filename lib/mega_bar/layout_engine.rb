@@ -164,8 +164,8 @@ class LayoutEngine
       bip = '<span data-bip-type="textarea" data-bip-attribute="html" data-bip-object="block" data-bip-original-content="' +  blck.html + '" data-bip-skip-blur="false" data-bip-url="/mega-bar/blocks/' + blck.id.to_s + '" data-bip-value="' +  blck.html + '" class="best_in_place" id="best_in_place_block_' + blck.id.to_s + '_html">' + blck.html.html_safe + '</span>'
       bip.html_safe
     elsif blck.model_displays.empty?
-      # a controller with views not handled by megabar. just put something in the path_base.
       return '' if blck.path_base.nil?
+      # a controller with views not handled by megabar. like the devise stuff. just put something in the path_base.
       @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)
       return @page.body.html_safe
 
