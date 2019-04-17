@@ -16,8 +16,8 @@
         <%#= link_to('Logout', destroy_session_path, method: :delete) %> | 
         <%#= link_to('Edit registration', edit_registration_path) %>
       <% else %>
-        <%#= link_to('Login', new_session_path)  %> |
-        <%# = link_to('Register', new_registration_path)  %>
+        <%= link_to('Login', '/users/sign_in')  %> |
+        <%= link_to('Register', '/users/sign_up')  %>
       <% end %>
     </nav>
     <%# = image_tag "music-warehouse.jpeg" %>
