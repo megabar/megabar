@@ -387,7 +387,7 @@ namespace :mega_bar do
     # mega_bar_pages = MegaBar::Page.where(id: mega_bar_page_ids).pluck(:id, :path)
     mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).pluck(:id)
     mega_bar_block_ids = MegaBar::Block.where(layout_id: mega_bar_layout_ids).pluck(:id)
-    byebug
+    # byebug
     theme_join = theme_joins(mega_bar_block_ids, mega_bar_layout_ids)
     site_join = site_joins(mega_bar_block_ids, mega_bar_layout_ids)
 

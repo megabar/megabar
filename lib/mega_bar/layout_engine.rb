@@ -47,7 +47,9 @@ class LayoutEngine
     rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
     env[:mega_rout] = rout = set_rout(request, env)
     env[:mega_page] = page_info = set_page_info(rout, rout_terms)
+    env["devise.mapping"] = Devise.mappings[:user]
     pagination = set_pagination_info(env, rout_terms)
+
     if page_info.empty? #non megabar pages.
       gotta_be_an_array = []
       if rout[:controller].nil?
@@ -162,7 +164,11 @@ class LayoutEngine
       bip = '<span data-bip-type="textarea" data-bip-attribute="html" data-bip-object="block" data-bip-original-content="' +  blck.html + '" data-bip-skip-blur="false" data-bip-url="/mega-bar/blocks/' + blck.id.to_s + '" data-bip-value="' +  blck.html + '" class="best_in_place" id="best_in_place_block_' + blck.id.to_s + '_html">' + blck.html.html_safe + '</span>'
       bip.html_safe
     elsif blck.model_displays.empty?
-      ''
+      # a controller with views not handled by megabar. just put something in the path_base.
+      return '' if blck.path_base.nil?
+      @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)
+      return @page.body.html_safe
+
     else
       params_hash = {} # used to set params var for controllers
       params_hash_arr = [] #used to collect 'params_hash' pieces

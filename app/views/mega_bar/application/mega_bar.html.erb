@@ -1,7 +1,5 @@
 <div class='block <%= @block_class %>'>
-<% puts params[:action] + 'was the action' %>
 <% if !['edit', 'new', 'create'].include? params[:action]%>
-
   <% # INDEX AND SHOW STUFF %>
   <% @mega_displays.each do |mega_display| %>
     <% next if mega_display[:collection_settings] && mega_display[:collection_settings][:display_if_empty] == false && @mega_instance.empty? %>

@@ -18,6 +18,10 @@ module MegaBar
       template "generic_tmp_model.rb", "#{gem_path}#{the_model_file_path}tmp_#{the_model_file_name}.rb" if modyule == 'MegaBar'
     end
     def generate_migration
+      if ActiveRecord::Base.connection.table_exists? self.tablename
+        @@notices << "The migration to create this table already exists"
+        return
+      end
       if the_module_name
         generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'
         generate 'migration create_' + 'mega_bar_tmp_' + classname.underscore.downcase.pluralize + ' created_at:datetime updated_at:datetime' if modyule == 'MegaBar'

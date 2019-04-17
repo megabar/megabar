@@ -1,7 +1,5 @@
-
 Rails.application.routes.draw do
   MegaBar::Engine.routes.draw do
-
     MegaRoute.load('/mega-bar').each do |route|
       get '/template_sections_for_layout/:id', to: 'utils#by_layout'
       # puts "MB: HEY: #{route[:path]} => #{route[:controller]}##{route[:action]} via #{route[:method]} as: #{route[:as]}" # if route[:path].include?('models') || route[:path].include?('survey')
@@ -14,5 +12,5 @@ Rails.application.routes.draw do
       # end
     end
   end
-
+  devise_for :users, class_name: "MegaBar::User", module: :devise
 end

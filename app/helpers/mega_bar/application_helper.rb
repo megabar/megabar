@@ -1,5 +1,11 @@
 module MegaBar
   module ApplicationHelper
+
+    def page_title(separator = " – ")
+      # not sure how useful this is.
+      [content_for(:title), @mega_page[:name]].compact.join(separator)
+    end
+
     def sortable(column, title=nil)
       #422pm.
       return title if !params[:id].blank?
