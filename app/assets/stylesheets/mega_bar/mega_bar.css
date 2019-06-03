@@ -11,3 +11,23 @@ div.admin_block_divider:nth-child(odd) {
 }
 
 .field_instructions { font-weight: normal; font-size: .8em; font-style: italic}
+
+
+.galleryList {
+	list-style: none;
+	padding: 0;
+}
+
+ul.galleryList :first-child { margin-left: 0 !important;}
+
+
+.galleryList li {
+  border: 1px solid black;
+  float:left;
+  padding: 10px;
+  margin:10px;
+}
+
+.products_main_block { 
+  border: 1px solid blue;
+}

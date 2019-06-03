@@ -3,7 +3,7 @@
 
 
 <%= form_tag @mega_display[:form_path] + '/filter' do  %>
-  <%=@mf.app_wrapper.html_safe%>
+  <<%=@mf.app_wrapper.html_safe%> class="<%=model_display_classnames%>">
   <% if @filter_text && might_filter? %>
     Current Filters: <%= @filter_text.join(', ') %><br><%= submit_tag 'clear_filters' %>
   <% end %>
@@ -21,10 +21,10 @@
         </nobr>
       <%= @mf.field_header_wrapper_end.html_safe%>
     <% end %>
-<th>&nbsp;</th>
-<th>&nbsp;</th>
-<th>&nbsp;</th>
-<th>Position</th>
+    <th>&nbsp;</th>
+    <th>&nbsp;</th>
+    <th>&nbsp;</th>
+    <th>Position</th>
   <% end %>
 
 

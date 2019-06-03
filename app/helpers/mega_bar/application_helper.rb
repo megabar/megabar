@@ -16,6 +16,13 @@ module MegaBar
 
     end
 
+    def model_display_classnames
+      classnames = []
+      classnames << @mf.main_classname if @mf.main_classname.present?
+      classnames << @mega_display[:model_display].classname if @mega_display[:model_display].classname.present?
+      classnames.join(" ")
+    end
+
     def param_from_tablename(model_props, tablename)
       # used in data_display stuff. but might could be replaced with env[:mega_env] stuff
 

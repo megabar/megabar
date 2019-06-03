@@ -22,7 +22,7 @@
         @mf = @mega_display[:model_display_format]
         @model_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/model_displays', action: 'show', id: @mega_display[:model_display].id, :only_path=> true)
       %>
-      <%=@mf.app_wrapper.html_safe%>
+      <<%=@mf.app_wrapper.html_safe%>>
       <%= render partial: "mega_bar_write" %>
       <%=@mf.app_wrapper_end.html_safe%>
       <%= render partial: "mega_bar_help_links",:locals => {:links => model_display_help_links} %>
