@@ -6,6 +6,7 @@ class CreateMegaBarTmpModelDisplays < ActiveRecord::Migration[4.2]
       t.string :format
       t.string :action
       t.string :header
+      t.string :classname
       t.timestamps
     end
   end

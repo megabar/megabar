@@ -11,6 +11,7 @@ class CreateMegaBarTmpModelDisplayFormats < ActiveRecord::Migration[4.2]
       t.string :field_wrapper
       t.string :field_wrapper_end
       t.string :separate_header_row
+      t.string :main_classname
       t.datetime :created_at
       t.datetime :updated_at
     end

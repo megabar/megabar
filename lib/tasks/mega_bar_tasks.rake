@@ -49,7 +49,6 @@ namespace :mega_bar do
   desc 'load data from the mega_bar.seeds.rb file into the local db, checking for and resolving conflicts along the way'
   # task data_load: :environment do
   task :data_load, [:file, :model_set]  => :environment do |t, args|
-
     # this is the core function of allowing multiple repos contribute back to a single one.
     # It could be used within a single organization or to commit back to the real mega_bar gem.
     # perm refers to the regular tables and objects.. like mega_bar_models
@@ -117,7 +116,6 @@ namespace :mega_bar do
           # puts "---------------------------------"
           @@prex_all << method(mc[:resolver]).call(c)
         end
-
       end
       puts 'finished ' + mc[:perm_class].to_s
     end
