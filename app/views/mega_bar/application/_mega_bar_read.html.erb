@@ -59,9 +59,7 @@
       <% end %>
     <% end %>
     <% if @mf.name == 'GridHtml' %>
-      <td>
-        <%= link_to 'Show&nbsp;'.html_safe, link_path('show', mega_record.id) %>
-      </td>
+      <td><%= link_to 'Show&nbsp;'.html_safe, link_path('show', mega_record.id) %></td>
       <td><%= link_to 'Edit&nbsp;'.html_safe, link_path('edit', mega_record.id) %></td>
       <td><%= link_to 'Destroy&nbsp;'.html_safe, mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 
