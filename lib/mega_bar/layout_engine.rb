@@ -159,8 +159,9 @@ class LayoutEngine
 
   def process_block(blck, page_info, rout, orig_query_hash, pagination, env)
     if ! blck.html.nil? && ! blck.html.empty?
-      bip = '<span data-bip-type="textarea" data-bip-attribute="html" data-bip-object="block" data-bip-original-content="' +  blck.html + '" data-bip-skip-blur="false" data-bip-url="/mega-bar/blocks/' + blck.id.to_s + '" data-bip-value="' +  blck.html + '" class="best_in_place" id="best_in_place_block_' + blck.id.to_s + '_html">' + blck.html.html_safe + '</span>'
-      bip.html_safe
+      # bip = '<span data-bip-type="textarea" data-bip-attribute="html" data-bip-object="block" data-bip-original-content="' +  blck.html + '" data-bip-skip-blur="false" data-bip-url="/mega-bar/blocks/' + blck.id.to_s + '" data-bip-value="' +  blck.html + '" class="best_in_place" id="best_in_place_block_' + blck.id.to_s + '_html">' + blck.html + '</span>'
+      # bip.html_safe
+      blck.html.html_safe
     elsif blck.model_displays.empty?
       ''
     else

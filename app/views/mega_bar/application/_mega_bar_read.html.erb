@@ -24,12 +24,12 @@
     <th>&nbsp;</th>
     <th>&nbsp;</th>
     <th>&nbsp;</th>
-    <th>Position</th>
+    <th><%= @mega_model_properties.position_parent.blank? ? '&nbsp'.html_safe : 'Position' %></th>
   <% end %>
 
 
   <% @mega_instance.each do |mega_record| %>
-    <%= @mf.record_wrapper.html_safe%>
+    <<%= @mf.record_wrapper.html_safe %> id="<%= record_id(mega_record) %>" class="<%= record_class(mega_record) %>">
     <% @mega_display[:displayable_fields].each do | displayable_field | %>
       <% @field_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/field_displays', action: 'show', id: displayable_field[:field_display].id, :only_path=> true) %>
 
@@ -40,7 +40,7 @@
           <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} %>
         </th><td>
       <% end %>
-      <%= @mf.field_wrapper.html_safe%>
+      <<%= field_wrapper(displayable_field) %> id="<%= field_id(displayable_field) %>" class="<%= field_class(displayable_field) %>">
       <%
         data = render template: displayable_field[:field_display].format.tableize + "/show", locals: data_format_locals(mega_record, displayable_field)
       %>
@@ -53,7 +53,7 @@
       <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
          </a>
       <% end %>
-      <%= @mf.field_wrapper_end.html_safe %>
+      </<%= field_wrapper(displayable_field) %>>
       <% if @mf.name == 'ProfileTable' %>
         </td>
       <% end %>

@@ -7,7 +7,7 @@
 <% elsif field.default_data_format_edit == 'textbox' && field.data_type == 'string' %>
   <%= best_in_place obj, field.field, value: value  %>
 <% elsif field.default_data_format_edit == 'textarea' && field.data_type == 'text'%>
-  <%= best_in_place obj, field.field, value: value, as: :textarea  %>
+  <%=value.html_safe %>
 <% else %>
   <%= value %>
 <% end %>

@@ -10,6 +10,8 @@ class CreateMegaBarTmpFields < ActiveRecord::Migration[4.2]
       t.string :default_value
       t.string :default_data_format
       t.string :default_data_format_edit
+      t.string :default_index_wrapper
+      t.string :default_show_wrapper
       t.timestamps
     end
   end

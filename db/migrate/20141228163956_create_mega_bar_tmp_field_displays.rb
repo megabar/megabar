@@ -7,6 +7,7 @@ class CreateMegaBarTmpFieldDisplays < ActiveRecord::Migration[4.2]
       t.string :action
       t.string :header
       t.string :link_type
+      t.string :wrapper
       t.timestamps
     end
   end

@@ -3,7 +3,8 @@
 if field.option_borrow.nil?
   options =  (!@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil?) ? @options[field.tablename.to_sym][field.field.to_sym] : displayable_field[:options]
  else
-   options = MegaBar::Option.where(field_id: 19).pluck(:text, :value)
+   # TODO make this independent of id's.
+   options = MegaBar::Option.where(field_id: field.option_borrow).pluck(:text, :value)
 end
 
 # options = options.reject{|o| o[1] == 0} #later we may need a field param allowing zero options to show up.

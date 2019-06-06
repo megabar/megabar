@@ -32,7 +32,13 @@ module MegaBar
       return unless mds
       mds.each do | md |
         data_display = ['new', 'edit'].include?(md.action) ? self.default_data_format_edit :  self.default_data_format
-        FieldDisplay.create(model_display_id: md.id, field_id: self.id, format:data_display, header: self.field.humanize)
+
+        if md.action == 'index'
+          wrapper = self.default_index_wrapper.present? ? self.default_index_wrapper : 'div'
+        elsif md.action == 'show'
+          wrapper = self.default_show_wrapper.present? ? self.default_show_wrapper : 'div'
+        end
+        FieldDisplay.create(model_display_id: md.id, field_id: self.id, format:data_display, header: self.field.humanize, wrapper: wrapper) #note that index_wrapper should be refactored to just be wrapper.
       end
     end
 

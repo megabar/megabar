@@ -1,5 +1,4 @@
-
-<div id="main-container" class="container no_columns_template">
+<div id="layout-<%=@mega_layout.name.downcase.dasherize%>" class="container no_columns_template">
   <div class="row">
     <%= layout_settings_header(@layout_helper) %>
     <% if @mega_layout_sections['full_top'].present? %>

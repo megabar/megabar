@@ -1,5 +1,30 @@
 module MegaBar
   module ApplicationHelper
+    def record_class(mega_record)
+      mega_record.class.to_s.downcase + '-record'
+    end
+
+    def record_id(mega_record)
+      mega_record.class.to_s.downcase + '-record-' + mega_record.id.to_s if mega_record.id.present?
+    end
+
+    def field_class(d_f)
+      classes = []
+      classes << "format-#{d_f[:field_display].format}"
+      classes << "#{d_f[:field].tablename}--#{d_f[:field].field}"
+      classes.join(" ")
+    end
+
+    def field_id(d_f)
+      "fd-#{d_f[:field_display].id}-f-#{d_f[:field].id}-df-#{d_f[:data_format].id}"
+    end
+
+    def field_wrapper(d_f)
+      return d_f[:field_display].wrapper if d_f[:field_display].wrapper.present?
+      # note wrapper should be refactored to be just wrapper.
+      @mf.field_wrapper
+    end
+
     def sortable(column, title=nil)
       #422pm.
       return title if !params[:id].blank?
@@ -11,9 +36,8 @@ module MegaBar
 
       path = url_for([*@nested_instance_variables, @kontroller_inst.pluralize.to_sym ]) + action + '?' + hsh.to_param
       link_to title, path, class: css_class
-#       link_to title, hsh, class: css_class
-      #link_to best_in_place sort_column, title, {:sort => column, :direction => direction, controller: @kontroller_path}, class: css_class
-
+      # link_to title, hsh, class: css_class
+      # link_to best_in_place sort_column, title, {:sort => column, :direction => direction, controller: @kontroller_path}, class: css_class
     end
 
     def model_display_classnames
