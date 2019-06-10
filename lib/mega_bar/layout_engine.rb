@@ -32,7 +32,7 @@ class LayoutEngine
     # MegaBar::Engine.routes.routes.named_routes.values.map do |route|
 
     site = MegaBar::Site.where(domains: request.host).first
-    site = MegaBar::Site.first unless site
+    env[:mega_site] = site.present? ? site : ''
     #   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + "#{route.defaults[:controller]}##{route.defaults[:action]}"
     # end #vs. Rails.application.routes.routes.named_routes.values.map
     # Rails.application.routes.routes.named_routes.values.map do |route|
