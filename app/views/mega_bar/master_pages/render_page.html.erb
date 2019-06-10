@@ -27,7 +27,7 @@
 
     <%= render partial: 'mega_bar_help_links' ,:locals => {:links => page_help_links} %>
     <nav  style='background-color: #eeeeee'>
-  <%= link_to 'MegaBar Pages', '/mega-bar/pages/all' %> |  <%= link_to 'MegaBar Models', '/mega-bar/models/all' %>
+  <%= link_to 'MegaBar Pages', '/mega-bar/pages/all' %> |  <%= link_to 'MegaBar Models', '/mega-bar/models/all' %> | <%= link_to 'Sites', '/mega-bar/sites' %>
 <div class='admin_links'>To replace this global template, create a file at myapp/app/views/mega_bar/master_pages/render_page.html.erb that contains at least this: <span>< % @page_layouts.each{ |layout| puts "&lt;div class='layout'&gt;#{layout}&lt;/div&gt;"  } % ></span></div>
     </nav>
   </body>
