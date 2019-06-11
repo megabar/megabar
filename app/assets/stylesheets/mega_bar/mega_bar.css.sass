@@ -5,9 +5,27 @@
   clear:both
 .layout_help_link  div a
   font-size: 16px
+table>tbody>tr>td
+  padding: 0 3px 0 3px
+table>tbody>tr:last-child> td
+  background-color: #ffffff
 
-tr:nth-child(odd) > td, tr:nth-child(odd) > th
-  background-color: #F0F0F0
+table>tbody>tr:nth-child(even)> td:nth-child(even) 
+  background-color: #E5E4E2
+table>tbody>tr:nth-child(even)> td:nth-child(odd)
+  background-color: #EFEEEC
+table>tbody>tr:nth-child(odd)>td:nth-child(even)
+  background-color: #e8e8e8
+table>tbody>tr:nth-child(odd)>td:nth-child(odd)
+  background-color: #f0f0f0
+
+table>tbody>tr.filter-row:last-child>td
+  background-color: white
+
+table.profile-table>tbody>tr>th
+  background-color: #f0f0f0
+table.profile-table>tbody>tr>td
+  background-color: #f0f0f0
 
 div.admin_block_divider:nth-child(odd)
   background-color: #F0F0F0
@@ -32,6 +50,8 @@ ul.galleryList :first-child
 
 .products_main_block 
   border: 1px solid blue
+.layout_section_admin .layout_section
+    border: 3px solid blue
 
 .mega_bar__template_gallery-page .layout-template
   margin-top: 30px

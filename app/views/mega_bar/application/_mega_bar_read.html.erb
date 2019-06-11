@@ -84,10 +84,10 @@
   <% end %>
 
   <% if might_filter? %>
-    <tr>
+    <tr class='filter-row'>
       <% @mega_display[:displayable_fields].each do | displayable_field | %>
         <% @displayable_field = displayable_field %>
-        <td>
+        <td class='filter-row-td'>
           <% if displayable_field[:field].filter_type.blank? %>
             &nbsp;
           <% else %>
