@@ -5,7 +5,15 @@
 <% if @layable.layout_section.blocks.present? %>
   <% @layable.layout_section.blocks.each do |block| %>
     <div class='admin_block_divider'>
-      Block name: <%= link_to block.name, block_path(block) %> <%= block_action_interpreter(block) %><br>
+      <div>
+        Block name: <%= link_to block.name, block_path(block) %> <%= block_action_interpreter(block) %>
+        <% if @layable.layout_section.blocks.size > 1 %>
+          <span style="float:right">
+            <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_block_up(block)}  %><br>
+            <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_block_down(block)}  %>
+          </span>
+        <% end %>
+      </div>
       <% if block.model_displays.present? %>
         Model Displays:<br>
         <%= 

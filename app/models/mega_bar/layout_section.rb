@@ -4,7 +4,8 @@ module MegaBar
 
     has_many :layables, dependent: :destroy
     has_many :layouts, through: :layables
-    has_many :blocks, dependent: :destroy
+    has_many :blocks, -> { order(position: :asc)}, dependent: :destroy
+
     validates_presence_of :code_name
     validates_uniqueness_of :code_name
 

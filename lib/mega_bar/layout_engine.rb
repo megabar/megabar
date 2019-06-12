@@ -140,7 +140,7 @@ class LayoutEngine
     final_layout_sections = {}
     page_layout.layout_sections.each do | layout_section |
       template_section = MegaBar::TemplateSection.find(layout_section.layables.where(layout_id: page_layout.id).first.template_section_id).code_name
-      blocks = MegaBar::Block.by_layout_section(layout_section.id)
+      blocks = MegaBar::Block.by_layout_section(layout_section.id).order(position: :asc)
       blocks = blocks.by_actions(rout[:action]) unless rout.blank?
       final_blocks = []
       next unless blocks.present?

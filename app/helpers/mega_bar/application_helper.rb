@@ -138,6 +138,25 @@ module MegaBar
       links << ["/mega-bar/field_displays/move/#{field[:field_display].id}?method=move_lower&return_to=" + request.env['PATH_INFO'] , arrow]
       links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
     end
+
+    def reorder_block_up(block)
+      return '' if @layable.layout_section.blocks.first.position == block.position
+
+      links = []
+      arrow = '^'
+      links << ["/mega-bar/blocks/move/#{block.id}?method=move_higher&return_to=" + request.env['PATH_INFO'] , arrow]
+      links.map { |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
+    end
+
+    def reorder_block_down(block)
+      return '' if @layable.layout_section.blocks.last.position == block.position
+
+      links = []
+      arrow =  'v'
+      links << ["/mega-bar/blocks/move/#{block.id}?method=move_lower&return_to=" + request.env['PATH_INFO'] , arrow]
+      links.map { |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
+    end
+
     def data_format_locals(mega_record, displayable_field, value=nil, mega_bar=nil?)
       local = {obj: mega_record, displayable_field: displayable_field, field: displayable_field[:field], field_display: displayable_field[:field_display], options: displayable_field[:options], mega_bar: mega_bar, value: value }
       local[displayable_field[:data_format].class.name.downcase.sub('::', '_').sub('megabar_', '').to_sym] = displayable_field[:data_format]
@@ -162,6 +181,11 @@ module MegaBar
         "<h2>Layout Sections</h2>".html_safe
       end
     end
+
+    def param_separator(record)
+      link_path('move', record.id).include?('?') ? '&' : '?'
+    end
   end
+
 
 end
