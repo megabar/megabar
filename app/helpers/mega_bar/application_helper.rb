@@ -20,6 +20,8 @@ module MegaBar
     end
 
     def field_wrapper(d_f)
+      # byebug
+      return 'td' if @mf.name =='ProfileTable' or @mf.name == 'GridHtml'
       return d_f[:field_display].wrapper if d_f[:field_display].wrapper.present?
       # note wrapper should be refactored to be just wrapper.
       @mf.field_wrapper

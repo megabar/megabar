@@ -12,19 +12,21 @@
     <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} %>
   <% end %>
   <% if @mf.separate_header_row == 'true' %>
-    <% @mega_display[:displayable_fields].each do | displayable_field | %>
-      <%= @mf.field_header_wrapper.html_safe%>
-        <nobr>
-          <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'left')}  %>
-          <%= sortable(displayable_field[:field].field, displayable_field[:field_display].header) %>
-          <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'right')} %>
-        </nobr>
-      <%= @mf.field_header_wrapper_end.html_safe%>
-    <% end %>
-    <th>&nbsp;</th>
-    <th>&nbsp;</th>
-    <th>&nbsp;</th>
-    <th><%= @mega_model_properties.position_parent.blank? ? '&nbsp'.html_safe : 'Position' %></th>
+    <tr>
+      <% @mega_display[:displayable_fields].each do | displayable_field | %>
+        <<%= @mf.field_header_wrapper.html_safe%>>
+          <nobr>
+            <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'left')}  %>
+            <%= sortable(displayable_field[:field].field, displayable_field[:field_display].header) %>
+            <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'right')} %>
+          </nobr>
+        </<%= @mf.field_header_wrapper_end.html_safe%>>
+      <% end %>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th><%= @mega_model_properties.position_parent.blank? ? '&nbsp;'.html_safe : 'Position' %></th>
+    </tr>
   <% end %>
 
 
@@ -34,13 +36,15 @@
       <% @field_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/field_displays', action: 'show', id: displayable_field[:field_display].id, :only_path=> true) %>
 
       <% if @mf.name == 'ProfileTable' %>
-        <tr><th>
+        <tr>
+        <th>
           <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'up')} %>
           <%=  best_in_place displayable_field[:field_display], :header, url:  @field_display_path %>
           <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} %>
-        </th><td>
+        </th>
       <% end %>
-      <<%= field_wrapper(displayable_field) %> id="<%= field_id(displayable_field) %>" class="<%= field_class(displayable_field) %>">
+
+      <<%= field_wrapper(displayable_field) %> id="<%= field_id(displayable_field) %>" class="<%= field_class(displayable_field) %> and this stuff too">
       <%
         data = render template: displayable_field[:field_display].format.tableize + "/show", locals: data_format_locals(mega_record, displayable_field)
       %>
@@ -55,7 +59,7 @@
       <% end %>
       </<%= field_wrapper(displayable_field) %>>
       <% if @mf.name == 'ProfileTable' %>
-        </td>
+        </tr>
       <% end %>
     <% end %>
     <% if @mf.name == 'GridHtml' %>
@@ -80,7 +84,7 @@
 
     <% end %>
 
-    <%= @mf.record_wrapper_end.html_safe%>
+    </<%= @mf.record_wrapper_end.html_safe%>>
   <% end %>
 
   <% if might_filter? %>
@@ -101,7 +105,7 @@
   <% end %>
 
 
-  <%=@mf.app_wrapper_end.html_safe%>
+  </<%=@mf.app_wrapper_end.html_safe%>>
 <% end %>
 <% if might_paginate?('bottom') %>
   <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>

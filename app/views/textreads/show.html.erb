@@ -1,4 +1,3 @@
-
 <%# byebug if obj.id == 134 and textread[:id] == 155 %>
 <% if textread[:transformation].present? %>
   <% 
@@ -29,5 +28,6 @@
 <% elsif field.default_data_format_edit == 'textarea' && field.data_type == 'text'%>
   <%=value.html_safe %>
 <% else %>
-  <%= value %>
+
+  <%= value.html_safe if value.present? %>
 <% end %>
