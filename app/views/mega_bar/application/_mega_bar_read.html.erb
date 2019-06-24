@@ -50,12 +50,11 @@
       %>
 
       <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
-         <a href='<%=data%>'>
-      <% end %>
-
-      <%= data %>
-      <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
-         </a>
+         <a href='<%=data%>'><%= data %></a>
+      <% elsif displayable_field[:field_display].link_type == 'show' && displayable_field[:field_display].format == 'textread' %>
+        <%= link_to data, mega_record %>
+      <% else %>
+        <%= data %>
       <% end %>
       </<%= field_wrapper(displayable_field) %>>
       <% if @mf.name == 'ProfileTable' %>

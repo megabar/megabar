@@ -5,5 +5,5 @@
 <% else %>
   <% value = obj.read_attribute(field.field) ?  true : false%>
 <% end %>
-<%= check_box param_from_tablename(@mega_model_properties, field.tablename), field.field, {checked: value}, 'true', 'false' %>
+<%= check_box param_from_tablename(@mega_model_properties, field.tablename), field.field, {checked: value}, true, false %>
 <%= field&.options&.first&.text %>
