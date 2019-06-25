@@ -31,6 +31,7 @@ module MegaBar
       instance_variable_set("@"  + @kontroller_inst,  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@"  + @kontroller_inst)
       @form_instance_vars = @nested_instance_variables  + [@mega_instance]
+      try(:filter_displays)
       render @edit_view_template
     end
 

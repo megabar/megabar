@@ -1,3 +1,14 @@
-<% MegaBar::Option.where(field_id: field.id).pluck(:text, :value).each do | rad | %>
+<%
+
+if field.option_borrow.nil?
+   options =  (!@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil?) ? @options[field.tablename.to_sym][field.field.to_sym] : displayable_field[:field].options.pluck(:text, :value)
+else
+   # TODO make this independent of id's.
+   options = MegaBar::Option.where(field_id: field.option_borrow).pluck(:text, :value)
+end
+
+%>
+
+<% options.each do | rad | %>
   <%= @the_form.radio_button  field.field, rad[1] %> <%= rad[0] %><br />
 <% end %>
