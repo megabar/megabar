@@ -263,8 +263,9 @@ class MegaEnv
   end
 
   def meta_programming(klass, modle)
-    position_parent_method = modle.position_parent.split("::").last.underscore.downcase.to_sym unless modle.position_parent.blank? || modle.position_parent == 'pnp'
-    klass.class_eval{ acts_as_list scope: position_parent_method, add_new_at: :bottom } if position_parent_method
+    # byebug
+    # position_parent_method = modle.position_parent.split("::").last.underscore.downcase.to_sym unless modle.position_parent.blank? || modle.position_parent == 'pnp'
+    # klass.class_eval{ acts_as_list scope: position_parent_method, add_new_at: :bottom } if position_parent_method
   end
   def set_mega_displays(displays)
     mega_displays_info = [] # collects model and field display settings

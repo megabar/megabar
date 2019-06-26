@@ -11,6 +11,7 @@ module MegaBar
     has_many :model_displays, dependent: :destroy
     scope :by_model, ->(model_id) { where(id: model_id) if model_id.present? }
     after_save :make_model_displays
+    after_save :add_route
     attr_accessor  :model_id, :new_model_display, :edit_model_display, :index_model_display, :show_model_display
     # validates_uniqueness_of :name, scope: :layout_id
     validates_presence_of :layout_section_id, allow_blank: false
@@ -51,7 +52,12 @@ module MegaBar
           md = ModelDisplay.create(:block_id=>self.id, model_id: self.model_id, :format=>action[:format], :action=>action[:action], :header=>action[:header], collection_or_member: action[:collection_or_member])
         end
       end
+    end
 
+    def add_route
+      return unless saved_changes["path_base"].present?
+      return if ENV['RAILS_ENV'] == 'test'
+      Rails.application.reload_routes!
     end
   end
 end

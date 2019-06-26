@@ -5,6 +5,7 @@ module MegaBar
     argument :modyule, type: :string
     argument :classname, type: :string
     argument :model_id, type: :string
+    argument :pos, type: :string
     @@notices = []
 
     # in generators, all public methods are run. Weird, huh?
@@ -49,7 +50,10 @@ module MegaBar
       File.directory?(Rails.root + '../megabar/')  && modyule == 'MegaBar' ? Rails.root + '../megabar/' : ''
     end
 
-
+    def position
+      return '' if  pos == 'none'
+      pos.split('^').join(' ')
+    end
     def the_controller_file_name
       classname.pluralize.underscore + "_controller"
     end

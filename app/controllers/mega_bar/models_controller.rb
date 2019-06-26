@@ -12,11 +12,12 @@ module MegaBar
     end
 
     def filter_displays
-      return unless Page.by_route('/' + @mega_instance.classname.underscore.dasherize.pluralize)
+      return unless Page.by_route('/' + @mega_instance.classname.underscore.dasherize.pluralize).present?
 
-      @mega_displays[0][:displayable_fields].reject! do |df|
+      @mega_displays[0][:displayable_fields] = @mega_displays[0][:displayable_fields].reject do |df|
         df[:field].field == 'make_page'
       end
+
     end
 
     def get_options

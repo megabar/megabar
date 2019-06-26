@@ -52,7 +52,8 @@
       <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
          <a href='<%=data%>'><%= data %></a>
       <% elsif displayable_field[:field_display].link_type == 'show' && displayable_field[:field_display].format == 'textread' %>
-        <%= link_to data, mega_record %>
+        <%# byebug %>
+        <%= link_to data, url_for([*@nested_instance_variables, @kontroller_inst.pluralize.to_sym ]) + "/" + mega_record.id.to_s %>
       <% else %>
         <%= data %>
       <% end %>
@@ -65,8 +66,9 @@
       <td><%= link_to 'Show&nbsp;'.html_safe, link_path('show', mega_record.id) %></td>
       <td><%= link_to 'Edit&nbsp;'.html_safe, link_path('edit', mega_record.id) %></td>
       <td><%= link_to 'Destroy&nbsp;'.html_safe, mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-
-      <% if @mega_model_properties.position_parent.present? && @nested_ids.map{|nid| true if nid.key?((@mega_model_properties.position_parent.split("::").last.underscore.downcase + "_id")) }.first %>
+      <% if @mega_model_properties.position_parent.present?
+      # not sure why this was part of the above condition. will leave it for now. && @nested_ids.map{|nid| true if nid.key?((@mega_model_properties.position_parent.split("::").last.underscore.downcase + "_id")) }.first 
+       %>
         <td>
           <% unless @mega_instance.first.position == mega_record.position %>
             <%= link_to 'up', link_path('move', mega_record.id).to_s + param_separator(mega_record) + "method=move_higher",  data: { turbolinks: false } %>
