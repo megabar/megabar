@@ -55,7 +55,7 @@ module MegaBar
     end
 
     def add_route
-      return unless saved_changes["path_base"].present?
+      return unless saved_changes["path_base"].present? and saved_changes["path_base"][1].present?
       return if ENV['RAILS_ENV'] == 'test'
       Rails.application.reload_routes!
     end

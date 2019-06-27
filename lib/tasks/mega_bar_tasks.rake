@@ -77,6 +77,7 @@ namespace :mega_bar do
     require_relative file #LOADS SEEDS INTO TMP TABLES
     # start conflict resolution
     MegaBar::Block.skip_callback(       'save',   :after, :make_model_displays)
+    MegaBar::Block.skip_callback(       'save',   :after, :add_route)
     MegaBar::Field.skip_callback(       'create', :after, :make_migration)
     MegaBar::Field.skip_callback(       'save',   :after, :make_field_displays)
     MegaBar::FieldDisplay.skip_callback('save',   :after, :make_data_display)
@@ -125,6 +126,7 @@ namespace :mega_bar do
     MegaBar::SiteJoin.update_all("siteable_type = replace(siteable_type,'MegaBar::Tmp','MegaBar::') ") #fix  seed_dump
 
     MegaBar::Block.set_callback(       'save',   :after, :make_model_displays)
+    MegaBar::Block.set_callback(       'save',   :after, :add_route)
     MegaBar::Field.set_callback(       'create', :after, :make_migration)
     MegaBar::Field.set_callback(       'save',   :after, :make_field_displays)
     # MegaBar::FieldDisplay.set_callback('save',   :after, :make_data_display)
