@@ -37,6 +37,13 @@ module MegaBar
 
     config.action_view.logger = nil
 
+    config.assets.paths << File.expand_path("../../assets/stylesheets", __FILE__)
+    config.assets.paths << File.expand_path("../../assets/javascripts", __FILE__)
+    config.assets.paths << File.expand_path("../../assets/stylesheets/mega_bar", __FILE__)
+    config.assets.paths << File.expand_path("../../assets/javascripts/mega_bar", __FILE__)
+    config.assets.precompile += %w( mega_bar.css )
+
+ 
   end
 end
 

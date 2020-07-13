@@ -1,5 +1,5 @@
 require 'active_record'
-require 'sqlite3'
+# require 'sqlite3'
 require 'logger'
 
 class LayoutEngine
@@ -25,6 +25,10 @@ class LayoutEngine
       @status, @headers, @response = @app.call(env)
       return  [@status, @headers, self]
     end
+    if env['PATH_INFO'].end_with?('.json') 
+      @status, @headers, @response = @app.call(env)
+      return  [@status, @headers, self]
+    end
     env['REQUEST_METHOD'] = "PATCH" if  env['REQUEST_METHOD'] == "PUT"
     @redirect = false
     request = Rack::Request.new(env)
@@ -32,7 +36,8 @@ class LayoutEngine
     # MegaBar::Engine.routes.routes.named_routes.values.map do |route|
 
     site = MegaBar::Site.where(domains: request.host).first
-    env[:mega_site] = site.present? ? site : ''
+    site.present? ? site : MegaBar::Site.where(domains: 'base').first
+    env[:mega_site] = site 
     #   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + "#{route.defaults[:controller]}##{route.defaults[:action]}"
     # end #vs. Rails.application.routes.routes.named_routes.values.map
     # Rails.application.routes.routes.named_routes.values.map do |route|
@@ -49,6 +54,11 @@ class LayoutEngine
     env[:mega_rout] = rout = set_rout(request, env)
     env[:mega_page] = page_info = set_page_info(rout, rout_terms)
     pagination = set_pagination_info(env, rout_terms)
+    puts '-----------------------------'
+    puts 'mega_rout: ' + env[:mega_rout].inspect;
+    puts 'mega_page: ' + env[:mega_page].inspect;
+    puts '-----------------------------'
+    request.env["devise.mapping"] = Devise.mappings[:user]
     if page_info.empty? #non megabar pages.
       gotta_be_an_array = []
       if rout[:controller].nil?
@@ -214,6 +224,7 @@ class LayoutEngine
       return  true if !has_site
     end
     if obj.themes.present?
+      
       has_zero_theme = obj.themes.pluck(:id).include?(0)
       has_theme = obj.themes.pluck(:id).include?(site.theme_id)
       return true if has_zero_theme and has_theme
@@ -263,7 +274,7 @@ class MegaEnv
   end
 
   def meta_programming(klass, modle)
-    # byebug
+    # 
     # position_parent_method = modle.position_parent.split("::").last.underscore.downcase.to_sym unless modle.position_parent.blank? || modle.position_parent == 'pnp'
     # klass.class_eval{ acts_as_list scope: position_parent_method, add_new_at: :bottom } if position_parent_method
   end
@@ -344,5 +355,8 @@ end
 
 class FlatsController < ActionController::Base
   def index
+  end
+  def app
+    redirect_to '/app'
   end
 end

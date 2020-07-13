@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'seed_dump'
   s.add_dependency 'seedbank'
   s.add_dependency 'slim-rails'
+  s.add_dependency 'nandi'
 
   s.add_development_dependency 'aruba'
   s.add_development_dependency 'bundler' # , '~> 1.7'

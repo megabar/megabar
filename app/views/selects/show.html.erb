@@ -1,5 +1,6 @@
 <%=
 
+byebug
 if field.option_borrow.nil?
   options =  (!@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil?) ? @options[field.tablename.to_sym][field.field.to_sym] : displayable_field[:options]
  else
@@ -11,7 +12,7 @@ end
 
 include_blank = select.multiple == true ? false : "Select " + displayable_field[:field_display].header
 
-if field.accessor == 'y' 
+if ActiveModel::Type::Boolean.new.cast(field.accessor) 
   selected = @mega_instance.send(field.field)
 else 
   selected =  @default_options[field.field.to_sym] ? @default_options[field.field.to_sym] : value
