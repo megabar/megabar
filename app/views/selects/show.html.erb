@@ -1,6 +1,5 @@
 <%=
 
-byebug
 if field.option_borrow.nil?
   options =  (!@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil?) ? @options[field.tablename.to_sym][field.field.to_sym] : displayable_field[:options]
  else

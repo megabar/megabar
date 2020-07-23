@@ -102,15 +102,21 @@ class LayoutEngine
   end
 
 
-  def set_page_info(rout, rout_terms)
-
-    page_info = {}
+def set_page_info(rout, rout_terms)
+  page_info = {}
     rout_terms ||= []
     diff = 20
     prev_diff = 21
     MegaBar::Page.all.order(' id desc').pluck(:id, :path, :name).each do | page |
       page_path_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
+      puts 'a: rout_terms ' + rout_terms.inspect
+      puts 'b: page_path_terms ' + page_path_terms.inspect
+      puts 'c: (rout_terms - page_path_terms).size: ' + (rout_terms - page_path_terms).size.to_s
+      puts 'd: rout_terms.size - page_path_terms.size: ' + (rout_terms.size - page_path_terms.size).to_s
+      puts 'e: ' +  ((rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size).to_s
+      
       next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
+
       next if (page_path_terms.empty? && !rout_terms.empty? ) # home page /
       diff = (rout_terms - page_path_terms).size
       page_terms = page[1].split('/').reject! { |c| (c.nil? || c.empty?) }
@@ -121,10 +127,12 @@ class LayoutEngine
       end
       variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
       page_info = {page_id: page[0], page_path: page[1], terms: page_terms, vars: variable_segments, name: page[2]} if diff < prev_diff
-      prev_diff = diff
+      prev_diff = diff if diff < prev_diff
     end
+    
     page_info
   end
+
 
   def set_rout(request, env)
     request_path_info = request.path_info.dup

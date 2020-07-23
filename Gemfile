@@ -6,7 +6,7 @@ group :test do
   gem 'actionmailer'
   gem 'actionpack'
   gem 'rspec-rails'
-  gem 'factory_girl_rails', '~> 4.0'
+  gem 'factory_bot_rails'
   gem 'byebug'
   gem 'rubocop', require: false
   gem 'simplecov', '~> 0.7.1'

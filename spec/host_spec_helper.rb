@@ -13,7 +13,7 @@ require File.expand_path("../../config/environment", __FILE__)
 
 require 'rubygems'
 load File.expand_path(MEGABAR_ROOT + "lib/tasks/mega_bar_tasks.rake", __FILE__)
-include FactoryGirl::Syntax::Methods
+include FactoryBot::Syntax::Methods
 Dir[File.join(MEGABAR_ROOT, "spec/internal/factories/*.rb")].each { |f| require f }
 Rake::Task.define_task(:environment)
 

@@ -11,12 +11,15 @@
 
 */
 .admin_links, .admin_links a {
-  color: #aaa 
-  font-size: .7em 
-  clear: both}
+  color: #aaa ;
+  font-size: .9em ;
+  clear: both
+}
+
 .layout_help_link  div a{
   font-size: 16px
 }
+
 
 table>tbody>tr>td {
   padding: 0 3px 0 3px
@@ -44,6 +47,10 @@ table>tbody>tr.filter-row:last-child>td{
 
 table.profile-table>tbody>tr>th{
   background-color: #f0f0f0
+}
+
+table.profile-table>tbody>tr>th .admin_links{
+  font-weight: normal 
 }
 table.profile-table>tbody>tr>td{
   background-color: #f0f0f0
@@ -91,3 +98,6 @@ ul.galleryList :first-child  {
   .right_and_left_columns_template .layout_section
     border: 3px solid black */
     
+.megaSetting {
+  font-style: italic;
+}

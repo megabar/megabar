@@ -13,7 +13,7 @@ module MegaBar
         Model.set_callback('create', :after, :make_all_files)
       end
       it 'has a valid factory' do
-        expect(FactoryGirl.create(:model)).to be_valid
+        expect(FactoryBot.create(:model)).to be_valid
       end
       it 'fixes bad class names' do
         create(:model, classname: 'my_model')

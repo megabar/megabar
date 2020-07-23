@@ -1,5 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :layout_section, class: MegaBar::LayoutSection do
-    code_name 'layout_section_woo'
+    code_name {'layout_section_woo'}
   end
 end
