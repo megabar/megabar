@@ -161,6 +161,50 @@ def set_page_info(rout, rout_terms)
       template_section = MegaBar::TemplateSection.find(layout_section.layables.where(layout_id: page_layout.id).first.template_section_id).code_name
       blocks = MegaBar::Block.by_layout_section(layout_section.id).order(position: :asc)
       blocks = blocks.by_actions(rout[:action]) unless rout.blank?
+      if layout_section.rules == 'specific' 
+        puts '----------------------'
+        puts blocks.pluck(:path_base).inspect
+        puts '-----------------------'
+        diff = 20
+        prev_diff = 21
+        rout_terms = env["REQUEST_URI"].split('/').reject! { |c| (c.nil? || c.empty?) }
+        best = {}
+        blocks.each do | block | 
+          page_path_terms = block.path_base.split('/').map{ | m | m if m[0] != ':'} - ["", nil]
+          
+          puts 'a: rout_terms ' + rout_terms.inspect
+          puts 'b: page_path_terms ' + page_path_terms.inspect
+          puts 'c: (rout_terms - page_path_terms).size: ' + (rout_terms - page_path_terms).size.to_s
+          puts 'd: rout_terms.size - page_path_terms.size: ' + (rout_terms.size - page_path_terms.size).to_s
+          puts 'e: ' +  ((rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size).to_s
+          
+          next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
+
+          next if (page_path_terms.empty? && !rout_terms.empty? ) # home page /
+          diff = (rout_terms - page_path_terms).size
+          page_terms = block.path_base.split('/').reject! { |c| (c.nil? || c.empty?) }
+          page_terms ||= []
+          variable_segments = []
+          page_terms.each_with_index do | v, k |
+            variable_segments << rout_terms[k] if page_terms[k].starts_with?(':')
+          end
+          variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
+          best = block if diff < prev_diff
+          prev_diff = diff if diff < prev_diff
+        end
+        blocks = blocks.reject{ |b| b.id != best.id}
+      end
+      if layout_section.rules == 'chosen'
+        # puts 'the chosen'
+        chosen_fields = MegaBar::Model.where(classname: page_info[:terms][0].classify).first.fields.where("field LIKE ?", '%template%').pluck(:field)
+        chosen_obj = page_info[:terms][0].classify.constantize.find(page_info[:vars][0].to_i);
+        chosen_blocks = chosen_fields.map{ | f | chosen_obj.send(f) }
+        blocks = blocks.where(id: chosen_blocks)
+
+        # puts chosen_blocks.inspect
+        # puts '----------------------------------------- goes here '
+        # byebug
+      end 
       final_blocks = []
       next unless blocks.present?
       final_layout_sections[template_section] = []

@@ -4,7 +4,7 @@ module MegaBar
     after_destroy :delete_field_displays
     after_save    :make_field_displays
     attr_accessor :model_display_ids, :new_field_display, :edit_field_display, :index_field_display, :show_field_display, :block_id
-    before_create :standardize_tablename
+    before_create :handle_simple_relation
     belongs_to    :model
     has_many      :options, dependent: :destroy
     scope         :by_model, ->(model_id) { where(model_id: model_id) if model_id.present? }
@@ -42,7 +42,7 @@ module MegaBar
       end
     end
 
-    def standardize_tablename
+    def handle_simple_relation
 
     end
 
@@ -55,6 +55,13 @@ module MegaBar
       boolean =   self.data_type == 'boolean' ? ' null: false, default: false' : '' #todo allow default true.
       system 'bundle exec rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + self.data_type + boolean
       ActiveRecord::MigrationContext.new("db/migrate").migrate
+
+      if self.data_type == 'references' 
+        byebug
+        self.field = self.field + "_id"
+        self.save
+      end
+        
     end
     def delete_field_displays
       FieldDisplay.by_fields(self.id).destroy_all

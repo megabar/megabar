@@ -111,15 +111,17 @@ module MegaBar
     end
     def page_help_links
       links = []
+      styleClass = @mega_page[:page_path].starts_with?('/mega-bar/') ? 'megaSetting' : ''
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '?return_to=' + request.env['PATH_INFO'], 'Layouts on the "' + @mega_page[:name] + '" Page']
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/edit/', 'Edit Page']
-      links.map{ |l| link_to l[1], l[0], target: :_blank}.join(' | ')
+      links.map{ |l| link_to l[1], l[0], target: :_blank, class: styleClass}.join(' | ')
     end
     def field_help_links(field)
       links = []
+      styleClass = field[:field].model.mega_model == 'mega' ? 'megaSetting' : ''
       links << ['/mega-bar/models/' + field[:field].model_id.to_s + '/fields/' + field[:field].id.to_s + '?return_to=' + request.env['PATH_INFO'], 'Field']
       links << ['/mega-bar/field_displays/' + field[:field_display].id.to_s, 'Field Display']
-      links.map{ |l| link_to l[1], l[0], target: :_blank}.join(' | ')
+      links.map{ |l| link_to l[1], l[0], target: :_blank, class: styleClass}.join(' | ')
     end
     def data_display_help_links(field)
       links = []
