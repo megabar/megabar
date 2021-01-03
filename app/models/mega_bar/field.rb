@@ -47,17 +47,13 @@ module MegaBar
     end
 
     def make_migration
-      
       return true if ActiveModel::Type::Boolean.new.cast(self.accessor)
       return if Model.connection.column_exists?(self.tablename,  self.field)
-      
       # if self.field.ends_with('_id') byebug
       boolean =   self.data_type == 'boolean' ? ' null: false, default: false' : '' #todo allow default true.
       system 'bundle exec rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + self.data_type + boolean
-      ActiveRecord::MigrationContext.new("db/migrate").migrate
-
+      ActiveRecord::MigrationContext.new("db/migrate", ActiveRecord::Base.connection.schema_migration).migrate
       if self.data_type == 'references' 
-        byebug
         self.field = self.field + "_id"
         self.save
       end

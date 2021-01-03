@@ -7,6 +7,8 @@
 # task :mega_bar do
 #   # Task goes here
 # end
+require 'fileutils'
+
 
 namespace :mega_bar do
   desc 'engine_init' # just for testing
@@ -17,10 +19,15 @@ namespace :mega_bar do
 
     new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, "#{line}\n\n  MegaRoute.load(['/mega-bar']).each do |route|\n    match route[:path] => \"\#{route[:controller]}\#\#{route[:action]}\", via: route[:method], as: route[:as]\n  end \n  ##### MEGABAR BEGIN #####\n  mount MegaBar::Engine, at: '/mega-bar'\n  ##### MEGABAR END #####\n")
     File.open('config/routes.rb', "w") {|file| file.puts new_contents }
+    unless File.directory?('app/assets/javascripts')
+      FileUtils.mkdir_p('app/assets/javascripts')
+    end
+    IO.write("app/assets/javascripts/application.js", "//= require mega_bar/application.js ", mode: 'a')
 
-    File.open('app/assets/javascripts/application.js', 'a') { |f|
-      f.puts "//= require mega_bar/application.js "
-    }
+    # File.open('app/assets/javascripts/application.js', 'a') { |f|
+    #   f.puts "//= require mega_bar/application.js "
+    # }
+
     File.open('app/assets/stylesheets/application.css', 'a') { |f|
       f.puts "//= require mega_bar/application.css "
     }
@@ -99,7 +106,7 @@ namespace :mega_bar do
     mega_classes.each do |mc|
 
       mc[:tmp_class].all.each do |tmp|
-        # byebug if  MegaBar::TmpTheme == mc[:tmp_class]
+        # byebug if  MegaBar::TmpLayoutSection == mc[:tmp_class]
         dupe_hash = {}
         tmp.reload
         mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] }

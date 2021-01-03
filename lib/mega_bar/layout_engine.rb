@@ -107,7 +107,7 @@ def set_page_info(rout, rout_terms)
     rout_terms ||= []
     diff = 20
     prev_diff = 21
-    MegaBar::Page.all.order(' id desc').pluck(:id, :path, :name).each do | page |
+    MegaBar::Page.all.order(id: :desc).pluck(:id, :path, :name).each do | page |
       page_path_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
       puts 'a: rout_terms ' + rout_terms.inspect
       puts 'b: page_path_terms ' + page_path_terms.inspect

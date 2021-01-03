@@ -5,7 +5,7 @@ rescue LoadError
 end
 
 require 'rdoc/task'
-
+require 'byebug'
 RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title    = 'MegaBar'

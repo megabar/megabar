@@ -10,12 +10,19 @@ require 'rake'
 require 'rails/all'
 require 'acts_as_list'
 
+require 'rspec/rails'
+require 'bundler'
+
+Bundler.require :default, :development
+
+require File.expand_path("../../spec/internal/config/environment", __FILE__)
 SimpleCov.start
 Combustion.initialize! :all do
   # Megabar dyamically generates routes based on data in the db.
   # So we'll load all the data here so the routes are generated properly
   # but then we'll have to delete all the data so the tests run on an empty db
   # like a normal test suite would.
+
   load File.expand_path("../../lib/tasks/mega_bar_tasks.rake", __FILE__)
   Rake::Task.define_task(:environment)
   Rake::Task['mega_bar:data_load'].invoke('../../db/mega_bar.seeds.rb', 'routes')
