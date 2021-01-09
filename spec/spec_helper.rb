@@ -15,18 +15,13 @@ require 'bundler'
 
 Bundler.require :default, :development
 
-require File.expand_path("../../spec/internal/config/environment", __FILE__)
-SimpleCov.start
-Combustion.initialize! :all do
-  # Megabar dyamically generates routes based on data in the db.
-  # So we'll load all the data here so the routes are generated properly
-  # but then we'll have to delete all the data so the tests run on an empty db
-  # like a normal test suite would.
+# require File.expand_path("../../spec/internal/config/environment", __FILE__)
 
-  load File.expand_path("../../lib/tasks/mega_bar_tasks.rake", __FILE__)
-  Rake::Task.define_task(:environment)
-  Rake::Task['mega_bar:data_load'].invoke('../../db/mega_bar.seeds.rb', 'routes')
-end
+
+# SimpleCov.start
+Combustion.initialize! :all
+
+
 # after combustion has initialized the routes, we have to delete all the data
 # that the seeds added so that the tests run with empty databases.
 MegaBar::Page.connection.execute('delete from mega_bar_pages')
@@ -46,7 +41,7 @@ MegaBar::Model.connection.execute('delete from sqlite_sequence where name="mega_
 
 require 'rspec/rails'
 require 'capybara/rails'
-require 'factory_girl_rails'
+require 'factory_bot_rails'
 
 
 Rails.backtrace_cleaner.remove_silencers!

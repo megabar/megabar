@@ -23,8 +23,6 @@ module MegaBar
     validates_uniqueness_of :classname
 
 
-    private
-
     def make_all_files
 
       make_position_field

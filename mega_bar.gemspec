@@ -26,20 +26,18 @@ Gem::Specification.new do |s|
   s.add_dependency 'slim-rails'
   s.add_dependency 'nandi'
 
+
   s.add_development_dependency 'aruba'
   s.add_development_dependency 'bundler' # , '~> 1.7'
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'combustion', '~> 1.3'
-  s.add_development_dependency 'cucumber'
-  s.add_development_dependency 'factory_bot_rails'
+  # s.add_development_dependency 'cucumber'
   s.add_development_dependency 'pry'
   s.add_development_dependency 'pry-doc'
   s.add_development_dependency 'pry-rails'
   s.add_development_dependency 'pry-stack_explorer'
-  s.add_development_dependency 'rake', '~> 10.0'
+  s.add_development_dependency 'rake', '~> 13.0'
   s.add_development_dependency 'rspec-core'
-  s.add_development_dependency 'simplecov', '~> 0.7.1'
-  s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'webmock'
   s.test_files = Dir['spec/**/*']
 end

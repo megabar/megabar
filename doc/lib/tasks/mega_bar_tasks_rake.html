@@ -175,7 +175,6 @@ task :data_load, [:file, :model_set]  =&gt; :environment do |t, args|
   #   and probably add a resolver function.
   puts &quot;Loading Route Information...&quot; if args[:model_set] == &#39;routes&#39;
 
-byebug
   mega_classes = get_mega_classes
   route_classes = [MegaBar::Page, MegaBar::Layout, MegaBar::Block, MegaBar::ModelDisplay, MegaBar::Model]
   mega_classes.delete_if { |x| not route_classes.include? x[:perm_class] } if args[:model_set] == &#39;routes&#39;

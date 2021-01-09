@@ -3,7 +3,8 @@ source "https://rubygems.org"
 
 group :test do
   gem 'activerecord'
-  # gem 'sqlite3'
+  gem 'sqlite3'
+  gem 'rails', '~> 6.1.0'
   gem 'actionmailer'
   gem 'actionpack'
   gem 'rspec-rails'
@@ -16,7 +17,7 @@ group :test do
   gem 'sprockets'
   gem 'kaminari'
   gem 'best_in_place', git: 'https://github.com/mmotherwell/best_in_place'
-
+  gem 'rails-controller-testing'
 end
 
 # Declare your gem's dependencies in mega_bar.gemspec.

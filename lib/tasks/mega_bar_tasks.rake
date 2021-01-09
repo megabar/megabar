@@ -106,7 +106,7 @@ namespace :mega_bar do
     mega_classes.each do |mc|
 
       mc[:tmp_class].all.each do |tmp|
-        # byebug if  MegaBar::TmpLayoutSection == mc[:tmp_class]
+        # byebug if  MegaBar::TmpBlock == mc[:tmp_class]
         dupe_hash = {}
         tmp.reload
         mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] }
@@ -394,7 +394,6 @@ namespace :mega_bar do
     # mega_bar_pages = MegaBar::Page.where(id: mega_bar_page_ids).pluck(:id, :path)
     mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).pluck(:id)
     mega_bar_block_ids = MegaBar::Block.where(layout_id: mega_bar_layout_ids).pluck(:id)
-    byebug
     theme_join = theme_joins(mega_bar_block_ids, mega_bar_layout_ids)
     site_join = site_joins(mega_bar_block_ids, mega_bar_layout_ids)
 
@@ -420,6 +419,7 @@ namespace :mega_bar do
       ActiveRecord::Base.connection.execute("DELETE FROM SQLITE_SEQUENCE WHERE name='#{mc[:tmp_class].table_name}'")
     end
   end
+
   def prompt(conflict, callback)
     begin
       STDOUT.puts conflict[:text]
