@@ -31,6 +31,7 @@ module MegaBar
       instance_variable_set("@"  + @kontroller_inst,  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@"  + @kontroller_inst)
       @form_instance_vars = @nested_instance_variables  + [@mega_instance]
+      try(:filter_displays)
       render @edit_view_template
     end
 
@@ -160,10 +161,11 @@ module MegaBar
       @nested_ids.each do |param|
         param_hash = param_hash.merge(param)
       end
-      param_hash = param_hash.merge(params.dup)
+      # url_for(param_hash)
+      param_hash = param_hash.merge(_params.dup)
       param_hash[:id] = id
       param_hash[:only_path] = true
-
+      param_hash[:controller] = params[:controller]
       case action
       when 'new'
         param_hash['action'] = 'create'

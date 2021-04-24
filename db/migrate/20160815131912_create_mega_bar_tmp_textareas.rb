@@ -1,4 +1,4 @@
-class CreateMegaBarTmpTextareas < ActiveRecord::Migration
+class CreateMegaBarTmpTextareas < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_tmp_textareas do |t|
       t.datetime :created_at

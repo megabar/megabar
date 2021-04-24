@@ -7,6 +7,8 @@
 # task :mega_bar do
 #   # Task goes here
 # end
+require 'fileutils'
+
 
 namespace :mega_bar do
   desc 'engine_init' # just for testing
@@ -17,10 +19,15 @@ namespace :mega_bar do
 
     new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, "#{line}\n\n  MegaRoute.load(['/mega-bar']).each do |route|\n    match route[:path] => \"\#{route[:controller]}\#\#{route[:action]}\", via: route[:method], as: route[:as]\n  end \n  ##### MEGABAR BEGIN #####\n  mount MegaBar::Engine, at: '/mega-bar'\n  ##### MEGABAR END #####\n")
     File.open('config/routes.rb', "w") {|file| file.puts new_contents }
+    unless File.directory?('app/assets/javascripts')
+      FileUtils.mkdir_p('app/assets/javascripts')
+    end
+    IO.write("app/assets/javascripts/application.js", "//= require mega_bar/application.js ", mode: 'a')
 
-    File.open('app/assets/javascripts/application.js', 'a') { |f|
-      f.puts "//= require mega_bar/application.js "
-    }
+    # File.open('app/assets/javascripts/application.js', 'a') { |f|
+    #   f.puts "//= require mega_bar/application.js "
+    # }
+
     File.open('app/assets/stylesheets/application.css', 'a') { |f|
       f.puts "//= require mega_bar/application.css "
     }
@@ -49,7 +56,6 @@ namespace :mega_bar do
   desc 'load data from the mega_bar.seeds.rb file into the local db, checking for and resolving conflicts along the way'
   # task data_load: :environment do
   task :data_load, [:file, :model_set]  => :environment do |t, args|
-
     # this is the core function of allowing multiple repos contribute back to a single one.
     # It could be used within a single organization or to commit back to the real mega_bar gem.
     # perm refers to the regular tables and objects.. like mega_bar_models
@@ -78,6 +84,7 @@ namespace :mega_bar do
     require_relative file #LOADS SEEDS INTO TMP TABLES
     # start conflict resolution
     MegaBar::Block.skip_callback(       'save',   :after, :make_model_displays)
+    MegaBar::Block.skip_callback(       'save',   :after, :add_route)
     MegaBar::Field.skip_callback(       'create', :after, :make_migration)
     MegaBar::Field.skip_callback(       'save',   :after, :make_field_displays)
     MegaBar::FieldDisplay.skip_callback('save',   :after, :make_data_display)
@@ -99,7 +106,7 @@ namespace :mega_bar do
     mega_classes.each do |mc|
 
       mc[:tmp_class].all.each do |tmp|
-        # byebug if  MegaBar::TmpTheme == mc[:tmp_class]
+        # byebug if  MegaBar::TmpBlock == mc[:tmp_class]
         dupe_hash = {}
         tmp.reload
         mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] }
@@ -117,7 +124,6 @@ namespace :mega_bar do
           # puts "---------------------------------"
           @@prex_all << method(mc[:resolver]).call(c)
         end
-
       end
       puts 'finished ' + mc[:perm_class].to_s
     end
@@ -127,6 +133,7 @@ namespace :mega_bar do
     MegaBar::SiteJoin.update_all("siteable_type = replace(siteable_type,'MegaBar::Tmp','MegaBar::') ") #fix  seed_dump
 
     MegaBar::Block.set_callback(       'save',   :after, :make_model_displays)
+    MegaBar::Block.set_callback(       'save',   :after, :add_route)
     MegaBar::Field.set_callback(       'create', :after, :make_migration)
     MegaBar::Field.set_callback(       'save',   :after, :make_field_displays)
     # MegaBar::FieldDisplay.set_callback('save',   :after, :make_data_display)
@@ -136,7 +143,7 @@ namespace :mega_bar do
     MegaBar::Model.set_callback(       'create', :before, :standardize_tablename)
     MegaBar::Model.set_callback(       'create', :after, :make_page_for_model)
     MegaBar::Model.set_callback(       'save',   :after, :make_position_field)
-   
+
     MegaBar::ModelDisplay.set_callback('save',   :after, :make_field_displays)
     MegaBar::ModelDisplay.set_callback('save',   :after, :make_collection_settings)
     MegaBar::Page.set_callback(        'create', :after, :create_layout_for_page)
@@ -200,7 +207,7 @@ namespace :mega_bar do
   def fix_layouts(c)
     MegaBar::TmpLayable.where(layout_id: c[:tmp].id).update_all(layout_id: c[:perm].id)
     MegaBar::TmpThemeJoin.where(themeable_type: 'MegaBar::TmpLayout', themeable_id: c[:tmp].id).update_all(themeable_id: c[:perm].id)
-    MegaBar::TmpSiteJoin.where(siteable_type: 'MegaBar::TmpLayout', siteable_id: c[:tmp].id).update_all(siteable_id: c[:perm].id)   
+    MegaBar::TmpSiteJoin.where(siteable_type: 'MegaBar::TmpLayout', siteable_id: c[:tmp].id).update_all(siteable_id: c[:perm].id)
   end
 
   def fix_layables(c)
@@ -216,7 +223,7 @@ namespace :mega_bar do
     # byebug if MegaBar::TmpModelDisplay(c[:tmp].header == 'Edit Part 2'
     MegaBar::TmpModelDisplay.where(block_id: c[:tmp].id).update_all(block_id: c[:perm].id)
     MegaBar::TmpThemeJoin.where(themeable_type: 'MegaBar::TmpBlock', themeable_id: c[:tmp].id).update_all(themeable_id: c[:perm].id)
-    MegaBar::TmpSiteJoin.where(siteable_type: 'MegaBar::TmpBlock', siteable_id: c[:tmp].id).update_all(siteable_id: c[:perm].id) 
+    MegaBar::TmpSiteJoin.where(siteable_type: 'MegaBar::TmpBlock', siteable_id: c[:tmp].id).update_all(siteable_id: c[:perm].id)
   end
 
   def fix_model_displays(c)
@@ -296,10 +303,10 @@ namespace :mega_bar do
     if args[:mega].present?
       mega_bar_model_ids = MegaBar::Model.where(modyule: 'MegaBar').pluck(:id)
       mega_bar_page_ids = MegaBar::Page.where(mega_page: 'mega')
-    else 
+    else
       mega_bar_model_ids = MegaBar::Model.all.pluck(:id)
       mega_bar_page_ids = MegaBar::Page.all.pluck(:id)
-    end 
+    end
     mega_bar_theme_ids =  MegaBar::Theme.all.pluck(:id) #tbd.
     mega_bar_template_ids = MegaBar::Template.all.pluck(:id)
     mega_bar_fields =  MegaBar::Field.where(model_id: mega_bar_model_ids).pluck(:id)
@@ -317,14 +324,14 @@ namespace :mega_bar do
 
     SeedDump.dump(MegaBar::Template.where(id: mega_bar_template_ids), file: 'db/mega_bar.seeds.rb', exclude: [])
     SeedDump.dump(MegaBar::TemplateSection.where(template_id: mega_bar_template_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-        
+
     # mega_bar_model_ids = [1,2,3,4,6,7,14,15,17,18,20,21]
     SeedDump.dump(MegaBar::Model.where(id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Field.where(model_id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Option.where(field_id: mega_bar_fields), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::ModelDisplayFormat, file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
-    
+
     # mega_bar_page_ids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
     # mega_bar_pages = MegaBar::Page.where(id: mega_bar_page_ids).pluck(:id, :path)
     SeedDump.dump(MegaBar::Page.where(id: mega_bar_page_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
@@ -342,11 +349,11 @@ namespace :mega_bar do
     SeedDump.dump(MegaBar::Textarea.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Textbox.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Textread.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    
+
     SeedDump.dump(MegaBar::Layable.where(id: mega_bar_layable_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(theme_joins(mega_bar_block_ids, mega_bar_layout_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(site_joins(mega_bar_block_ids, mega_bar_layout_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-      
+
     File.open(Rails.root.join('db', 'mega_bar.seeds.rb'), "r+") do |file|
       #note, this will change your data! If you wanted to store a string like MegaBar::Whatever in the db, it'll be changed here and you have to fix that in the data_load.
       text = File.read(file)
@@ -387,12 +394,11 @@ namespace :mega_bar do
     # mega_bar_pages = MegaBar::Page.where(id: mega_bar_page_ids).pluck(:id, :path)
     mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).pluck(:id)
     mega_bar_block_ids = MegaBar::Block.where(layout_id: mega_bar_layout_ids).pluck(:id)
-    byebug
     theme_join = theme_joins(mega_bar_block_ids, mega_bar_layout_ids)
     site_join = site_joins(mega_bar_block_ids, mega_bar_layout_ids)
-        
+
     puts  "theme join size:  #{theme_join.size}"
-  
+
     puts  "site join size: #{site_join.size}"
 
   end
@@ -413,6 +419,7 @@ namespace :mega_bar do
       ActiveRecord::Base.connection.execute("DELETE FROM SQLITE_SEQUENCE WHERE name='#{mc[:tmp_class].table_name}'")
     end
   end
+
   def prompt(conflict, callback)
     begin
       STDOUT.puts conflict[:text]
@@ -440,7 +447,19 @@ namespace :mega_bar do
       end
       layout_section = MegaBar::LayoutSection.create(code_name: layout.name.parameterize.underscore + '_full_bottom')
       layable = MegaBar::Layable.create(layout_id: layout.id, layout_section_id: layout_section.id, template_section_id: 3)
-      
+
     end
   end
+
+  task path: :environment do
+    require "utils/routes_formatter"
+    require 'action_dispatch/routing/inspector'
+    all_routes = Rails.application.routes.routes
+    inspector = ActionDispatch::Routing::RoutesInspector.new(all_routes)
+    puts inspector.format(ActionDispatch::Routing::MarkdownFormatter.new(ENV['path']), ENV['CONTROLLER'])
+  end
+  task all: :environment do
+    puts inspector.format(ActionDispatch::Routing::MarkdownFormatter.new, ENV['CONTROLLER'])
+  end
+
 end

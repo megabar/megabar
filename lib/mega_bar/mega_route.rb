@@ -100,6 +100,7 @@ class MegaRoute
                   route = route.merge({concerns: concerns}) if concerns
                   # route = route.merge({on: x}) if x
                   routes << route
+                  # byebug
                   routes << {path: pf + '/filter', method: [:get, :post], action: md.action, controller: controller} if md.collection_or_member == 'collection'
                   # if md.collection_or_member == 'collection'
                   #   c_route = route

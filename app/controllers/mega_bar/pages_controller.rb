@@ -8,7 +8,7 @@ module MegaBar
     end
     def all
       @mega_instance = Page.where(mega_page: 'mega').order(column_sorting)
-# .page(@page_number).per(10)
+       # .page(@page_number).per(10)
       index
     end
     def edit

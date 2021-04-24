@@ -1,0 +1,15 @@
+rails new.. with postgres:
+
+rails new bobber --database=postgresql
+cd bobber
+subl .
+edit gemfile.
+bundle
+rake db:setup
+rails generate rspec:install
+mkdir app/assets/javascripts
+subl app/assets/javascripts/application.jsls
+subl app/assets/config/manifest.js
+bundle exec rake mega_bar:engine_init;
+
+

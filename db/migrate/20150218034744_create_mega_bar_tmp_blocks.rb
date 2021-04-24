@@ -1,4 +1,4 @@
-class CreateMegaBarTmpBlocks < ActiveRecord::Migration
+class CreateMegaBarTmpBlocks < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_tmp_blocks do |t|
       t.references :layout

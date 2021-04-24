@@ -1,5 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :layout, class: MegaBar::Layout do
-    id 1
+    id {1}
   end
 end

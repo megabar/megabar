@@ -1,13 +1,103 @@
-
-.admin_links, .admin_links a {color: #aaa; font-size: .7em; clear:both;}
-.layout_help_link  div a{font-size: 16px;}
-.mega_bar__template_gallery .container .row .layout_section, .block.layout_section_admin  .container .row .layout_section {border: 1px solid black;}
-
- tr:nth-child(odd) > td,  tr:nth-child(odd) > th{
-   background-color: #F0F0F0;
+.header_row {
+  white-space: nowrap
 }
-div.admin_block_divider:nth-child(odd) {
-   background-color: #F0F0F0;
+/*#layout-page-layouts-layout 
+  .layout_section.main 
+    h1
+      font-size: 14px
+    .model_display_instructions
+      display: none
+
+
+*/
+.admin_links, .admin_links a {
+  color: #aaa ;
+  font-size: .9em ;
+  clear: both
 }
 
-.field_instructions { font-weight: normal; font-size: .8em; font-style: italic}
+.layout_help_link  div a{
+  font-size: 16px
+}
+
+
+table>tbody>tr>td {
+  padding: 6px 6px 6px 6px
+}
+table>tbody>tr:last-child> td{
+  background-color: #ffffff
+}
+
+table>tbody>tr:nth-child(even)> td:nth-child(even) {
+  background-color: #E5E4E2
+}
+table>tbody>tr:nth-child(even)> td:nth-child(odd){
+  background-color: #EFEEEC
+}
+table>tbody>tr:nth-child(odd)>td:nth-child(even){
+  background-color: #e8e8e8
+}
+table>tbody>tr:nth-child(odd)>td:nth-child(odd){
+  background-color: #f0f0f0
+}
+
+table>tbody>tr.filter-row:last-child>td{
+  background-color: white
+}
+
+table.profile-table>tbody>tr>th{
+  background-color: #f0f0f0
+}
+
+table.profile-table>tbody>tr>th .admin_links{
+  font-weight: normal 
+}
+table.profile-table>tbody>tr>td{
+  background-color: #f0f0f0
+}
+
+div.admin_block_divider:nth-child(odd){
+  background-color: #F0F0F0
+}
+
+.field_instructions {
+  font-weight: normal 
+  font-size: .8em 
+  font-style: italic
+}
+.galleryList {
+  list-style-type: none
+  margin: 0
+  padding: 0
+  overflow: hidden
+  
+}
+ul.galleryList :first-child  {
+  margin-left: 0 !important
+}
+
+.galleryList li {
+  border: 1px solid black
+  float: left
+  padding: 10px
+  margin: 10px
+}
+.layout_section_admin .layout_section {
+    border: 3px solid blue
+}
+.mega_bar__template_gallery-page .layout-template {
+  margin-top: 30px
+}
+/*.mega_bar__template_gallery-page  
+  .no_columns_template .layout_section
+    border: 3px solid blue
+  .left_column_template .layout_section 
+    border: 3px solid red 
+  .right_column_template .layout_section
+    border: 3px solid green 
+  .right_and_left_columns_template .layout_section
+    border: 3px solid black */
+    
+.megaSetting {
+  font-style: italic;
+}

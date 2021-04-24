@@ -1,4 +1,4 @@
-class CreateMegaBarTmpLayables < ActiveRecord::Migration
+class CreateMegaBarTmpLayables < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_tmp_layables do |t|
       t.datetime :created_at

@@ -1,6 +1,7 @@
 module MegaBar
   class ModelDisplay < ActiveRecord::Base
     belongs_to :block
+    belongs_to :model
     has_many :field_displays, dependent: :destroy
     has_one :model_display_collection, dependent: :destroy
     validates_presence_of :block_id, :model_id, :action, :format

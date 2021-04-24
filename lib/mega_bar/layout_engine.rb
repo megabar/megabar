@@ -1,5 +1,5 @@
 require 'active_record'
-require 'sqlite3'
+# require 'sqlite3'
 require 'logger'
 
 class LayoutEngine
@@ -25,6 +25,10 @@ class LayoutEngine
       @status, @headers, @response = @app.call(env)
       return  [@status, @headers, self]
     end
+    if env['PATH_INFO'].end_with?('.json') 
+      @status, @headers, @response = @app.call(env)
+      return  [@status, @headers, self]
+    end
     env['REQUEST_METHOD'] = "PATCH" if  env['REQUEST_METHOD'] == "PUT"
     @redirect = false
     request = Rack::Request.new(env)
@@ -32,7 +36,8 @@ class LayoutEngine
     # MegaBar::Engine.routes.routes.named_routes.values.map do |route|
 
     site = MegaBar::Site.where(domains: request.host).first
-    site = MegaBar::Site.first unless site
+    site.present? ? site : MegaBar::Site.where(domains: 'base').first
+    env[:mega_site] = site 
     #   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + "#{route.defaults[:controller]}##{route.defaults[:action]}"
     # end #vs. Rails.application.routes.routes.named_routes.values.map
     # Rails.application.routes.routes.named_routes.values.map do |route|
@@ -44,10 +49,16 @@ class LayoutEngine
     # have rails recognize the path_info..
     # tbcontinued.
     request.session[:return_to] = env['rack.request.query_hash']['return_to'] unless env['rack.request.query_hash']['return_to'].blank?
+    request.session[:return_to] = nil if env['rack.request.query_hash']['method'].present?
     rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
     env[:mega_rout] = rout = set_rout(request, env)
     env[:mega_page] = page_info = set_page_info(rout, rout_terms)
     pagination = set_pagination_info(env, rout_terms)
+    puts '-----------------------------'
+    puts 'mega_rout: ' + env[:mega_rout].inspect;
+    puts 'mega_page: ' + env[:mega_page].inspect;
+    puts '-----------------------------'
+    request.env["devise.mapping"] = Devise.mappings[:user]
     if page_info.empty? #non megabar pages.
       gotta_be_an_array = []
       if rout[:controller].nil?
@@ -91,15 +102,21 @@ class LayoutEngine
   end
 
 
-  def set_page_info(rout, rout_terms)
-
-    page_info = {}
+def set_page_info(rout, rout_terms)
+  page_info = {}
     rout_terms ||= []
     diff = 20
     prev_diff = 21
-    MegaBar::Page.all.order(' id desc').pluck(:id, :path, :name).each do | page |
+    MegaBar::Page.all.order(id: :desc).pluck(:id, :path, :name).each do | page |
       page_path_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
+      puts 'a: rout_terms ' + rout_terms.inspect
+      puts 'b: page_path_terms ' + page_path_terms.inspect
+      puts 'c: (rout_terms - page_path_terms).size: ' + (rout_terms - page_path_terms).size.to_s
+      puts 'd: rout_terms.size - page_path_terms.size: ' + (rout_terms.size - page_path_terms.size).to_s
+      puts 'e: ' +  ((rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size).to_s
+      
       next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
+
       next if (page_path_terms.empty? && !rout_terms.empty? ) # home page /
       diff = (rout_terms - page_path_terms).size
       page_terms = page[1].split('/').reject! { |c| (c.nil? || c.empty?) }
@@ -110,10 +127,12 @@ class LayoutEngine
       end
       variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
       page_info = {page_id: page[0], page_path: page[1], terms: page_terms, vars: variable_segments, name: page[2]} if diff < prev_diff
-      prev_diff = diff
+      prev_diff = diff if diff < prev_diff
     end
+    
     page_info
   end
+
 
   def set_rout(request, env)
     request_path_info = request.path_info.dup
@@ -138,11 +157,54 @@ class LayoutEngine
 
   def process_page_layout(page_layout, page_info, rout, orig_query_hash, pagination, site, env)
     final_layout_sections = {}
-
     page_layout.layout_sections.each do | layout_section |
       template_section = MegaBar::TemplateSection.find(layout_section.layables.where(layout_id: page_layout.id).first.template_section_id).code_name
-      blocks = MegaBar::Block.by_layout_section(layout_section.id)
+      blocks = MegaBar::Block.by_layout_section(layout_section.id).order(position: :asc)
       blocks = blocks.by_actions(rout[:action]) unless rout.blank?
+      if layout_section.rules == 'specific' 
+        puts '----------------------'
+        puts blocks.pluck(:path_base).inspect
+        puts '-----------------------'
+        diff = 20
+        prev_diff = 21
+        rout_terms = env["REQUEST_URI"].split('/').reject! { |c| (c.nil? || c.empty?) }
+        best = {}
+        blocks.each do | block | 
+          page_path_terms = block.path_base.split('/').map{ | m | m if m[0] != ':'} - ["", nil]
+          
+          puts 'a: rout_terms ' + rout_terms.inspect
+          puts 'b: page_path_terms ' + page_path_terms.inspect
+          puts 'c: (rout_terms - page_path_terms).size: ' + (rout_terms - page_path_terms).size.to_s
+          puts 'd: rout_terms.size - page_path_terms.size: ' + (rout_terms.size - page_path_terms.size).to_s
+          puts 'e: ' +  ((rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size).to_s
+          
+          next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
+
+          next if (page_path_terms.empty? && !rout_terms.empty? ) # home page /
+          diff = (rout_terms - page_path_terms).size
+          page_terms = block.path_base.split('/').reject! { |c| (c.nil? || c.empty?) }
+          page_terms ||= []
+          variable_segments = []
+          page_terms.each_with_index do | v, k |
+            variable_segments << rout_terms[k] if page_terms[k].starts_with?(':')
+          end
+          variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
+          best = block if diff < prev_diff
+          prev_diff = diff if diff < prev_diff
+        end
+        blocks = blocks.reject{ |b| b.id != best.id}
+      end
+      if layout_section.rules == 'chosen'
+        # puts 'the chosen'
+        chosen_fields = MegaBar::Model.where(classname: page_info[:terms][0].classify).first.fields.where("field LIKE ?", '%template%').pluck(:field)
+        chosen_obj = page_info[:terms][0].classify.constantize.find(page_info[:vars][0].to_i);
+        chosen_blocks = chosen_fields.map{ | f | chosen_obj.send(f) }
+        blocks = blocks.where(id: chosen_blocks)
+
+        # puts chosen_blocks.inspect
+        # puts '----------------------------------------- goes here '
+        # byebug
+      end 
       final_blocks = []
       next unless blocks.present?
       final_layout_sections[template_section] = []
@@ -160,8 +222,9 @@ class LayoutEngine
 
   def process_block(blck, page_info, rout, orig_query_hash, pagination, env)
     if ! blck.html.nil? && ! blck.html.empty?
-      bip = '<span data-bip-type="textarea" data-bip-attribute="html" data-bip-object="block" data-bip-original-content="' +  blck.html + '" data-bip-skip-blur="false" data-bip-url="/mega-bar/blocks/' + blck.id.to_s + '" data-bip-value="' +  blck.html + '" class="best_in_place" id="best_in_place_block_' + blck.id.to_s + '_html">' + blck.html.html_safe + '</span>'
-      bip.html_safe
+      # bip = '<span data-bip-type="textarea" data-bip-attribute="html" data-bip-object="block" data-bip-original-content="' +  blck.html + '" data-bip-skip-blur="false" data-bip-url="/mega-bar/blocks/' + blck.id.to_s + '" data-bip-value="' +  blck.html + '" class="best_in_place" id="best_in_place_block_' + blck.id.to_s + '_html">' + blck.html + '</span>'
+      # bip.html_safe
+      blck.html.html_safe
     elsif blck.model_displays.empty?
       ''
     else
@@ -213,6 +276,7 @@ class LayoutEngine
       return  true if !has_site
     end
     if obj.themes.present?
+      
       has_zero_theme = obj.themes.pluck(:id).include?(0)
       has_theme = obj.themes.pluck(:id).include?(site.theme_id)
       return true if has_zero_theme and has_theme
@@ -262,8 +326,9 @@ class MegaEnv
   end
 
   def meta_programming(klass, modle)
-    position_parent_method = modle.position_parent.split("::").last.underscore.downcase.to_sym unless modle.position_parent.blank?
-    klass.class_eval{ acts_as_list scope: position_parent_method, add_new_at: :bottom } if position_parent_method
+    # 
+    # position_parent_method = modle.position_parent.split("::").last.underscore.downcase.to_sym unless modle.position_parent.blank? || modle.position_parent == 'pnp'
+    # klass.class_eval{ acts_as_list scope: position_parent_method, add_new_at: :bottom } if position_parent_method
   end
   def set_mega_displays(displays)
     mega_displays_info = [] # collects model and field display settings
@@ -342,5 +407,8 @@ end
 
 class FlatsController < ActionController::Base
   def index
+  end
+  def app
+    redirect_to '/app'
   end
 end

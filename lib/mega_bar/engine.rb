@@ -24,7 +24,7 @@ module MegaBar
     end
 
     initializer "model_core.factories", :after => "factory_girl.set_factory_paths" do
-      FactoryGirl.definition_file_paths << File.expand_path('../../../spec/factories', __FILE__) if defined?(FactoryGirl)
+      FactoryBot.definition_file_paths << File.expand_path('../../../spec/factories', __FILE__) if defined?(FactoryBot)
     end
     config.generators do |g|
       g.test_framework :rspec
@@ -37,6 +37,13 @@ module MegaBar
 
     config.action_view.logger = nil
 
+    config.assets.paths << File.expand_path("../../assets/stylesheets", __FILE__)
+    config.assets.paths << File.expand_path("../../assets/javascripts", __FILE__)
+    config.assets.paths << File.expand_path("../../assets/stylesheets/mega_bar", __FILE__)
+    config.assets.paths << File.expand_path("../../assets/javascripts/mega_bar", __FILE__)
+    config.assets.precompile += %w( mega_bar.css )
+
+ 
   end
 end
 

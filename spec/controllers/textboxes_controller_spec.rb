@@ -12,9 +12,7 @@ module MegaBar
     let(:updated_attrs) { { 'field_display_id' =>  2 } }
     let(:valid_attributes) {{ 'field_display_id' => '2' } }
     let(:valid_new) { { field_display_id: '5' } }
-    let(:fields_and_displays) {
-      create(:field_with_displays, field: 'field_display_id', tablename: 'mega_bar_textboxes', model_display_ids: model_model_display_ids )
-    }
+    let(:fields_and_displays) { create(:field_with_displays, field: 'field_display_id', tablename: 'mega_bar_textboxes', model_display_ids: model_model_display_ids ) }
     let(:model_class) { MegaBar::Textbox }
     let(:controlller) { 'mega_bar/textboxes' }
     let(:invalid_attributes) { { 'field_display_id' => '' }  }

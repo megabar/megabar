@@ -5,6 +5,10 @@ module MegaBar
 
     after_create  :make_all_files
     after_save  :make_page_for_model
+
+    after_create :make_page_for_model
+
+
     after_save    :make_position_field
     attr_accessor :make_page
     attr_writer   :model_id
@@ -19,17 +23,24 @@ module MegaBar
     validates_uniqueness_of :classname
 
 
-    private
-
     def make_all_files
+
       make_position_field
       # generate 'active_record:model', [self.classname]]
       logger.info("creating scaffold for " + self.classname + 'via: ' + 'rails g mega_bar:mega_bar ' + self.classname + ' ' + self.id.to_s)
       mod = self.modyule.nil? || self.modyule.empty?  ? 'no_mod' : self.modyule
-      # MegaBar.call_rails('mega_bar_models', {modyule: mod, classname: self.classname, model_id: self.id.to_s})
-      system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s
-      ActiveRecord::Migrator.migrate "db/migrate"
+
+      system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s + ' ' + pos
+      ActiveRecord::MigrationContext.new("db/migrate").migrate
+      # ActiveRecord::Migrator.migrate "db/migrate"
     end
+
+    def pos
+      return 'none' unless position_parent.present?
+      return 'acts_as_list' if position_parent == 'pnp'
+      "acts_as_list scope: :#{position_parent.gsub('::', '_').singularize.underscore.sub(/^_/, '')}  unless Rails.env.test? ".split(' ').join('^')
+    end
+
 
     def make_page_for_model
       if !self.make_page.nil? && !self.make_page.blank?

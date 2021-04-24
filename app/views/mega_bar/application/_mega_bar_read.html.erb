@@ -3,7 +3,7 @@
 
 
 <%= form_tag @mega_display[:form_path] + '/filter' do  %>
-  <%=@mf.app_wrapper.html_safe%>
+  <<%=@mf.app_wrapper.html_safe%> class="<%=model_display_classnames%>">
   <% if @filter_text && might_filter? %>
     Current Filters: <%= @filter_text.join(', ') %><br><%= submit_tag 'clear_filters' %>
   <% end %>
@@ -12,84 +12,92 @@
     <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} %>
   <% end %>
   <% if @mf.separate_header_row == 'true' %>
-    <% @mega_display[:displayable_fields].each do | displayable_field | %>
-      <%= @mf.field_header_wrapper.html_safe%>
-        <nobr>
-          <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'left')}  %>
-          <%= sortable(displayable_field[:field].field, displayable_field[:field_display].header) %>
-          <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'right')} %>
-        </nobr>
-      <%= @mf.field_header_wrapper_end.html_safe%>
-    <% end %>
-<th>&nbsp;</th>
-<th>&nbsp;</th>
-<th>&nbsp;</th>
-<th>Position</th>
+    <tr>
+      <% @mega_display[:displayable_fields].each do | displayable_field | %>
+        <<%= @mf.field_header_wrapper.html_safe%>>
+          <nobr>
+            <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'left')}  %>
+            <%= sortable(displayable_field[:field].field, displayable_field[:field_display].header) %>
+            <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'right')} %>
+          </nobr>
+        </<%= @mf.field_header_wrapper_end.html_safe%>>
+      <% end %>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th>&nbsp;</th>
+      <th><%= @mega_model_properties.position_parent.blank? ? '&nbsp;'.html_safe : 'Position' %></th>
+    </tr>
   <% end %>
 
 
   <% @mega_instance.each do |mega_record| %>
-    <%= @mf.record_wrapper.html_safe%>
+    <<%= @mf.record_wrapper.html_safe %> id="<%= record_id(mega_record) %>" class="<%= record_class(mega_record) %>">
     <% @mega_display[:displayable_fields].each do | displayable_field | %>
       <% @field_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/field_displays', action: 'show', id: displayable_field[:field_display].id, :only_path=> true) %>
 
       <% if @mf.name == 'ProfileTable' %>
-        <tr><th>
+        <tr>
+        <th>
           <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'up')} %>
           <%=  best_in_place displayable_field[:field_display], :header, url:  @field_display_path %>
           <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} %>
-        </th><td>
+        </th>
       <% end %>
-      <%= @mf.field_wrapper.html_safe%>
+
+      <<%= field_wrapper(displayable_field) %> id="<%= field_id(displayable_field) %>" class="<%= field_class(displayable_field) %> and this stuff too">
       <%
+      # byebug
         data = render template: displayable_field[:field_display].format.tableize + "/show", locals: data_format_locals(mega_record, displayable_field)
       %>
 
       <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
-         <a href='<%=data%>'>
+        <% #byebug %>
+        <a href='<%=data%>'><%= data %></a>
+      <% elsif displayable_field[:field_display].link_type == 'rel_link' && displayable_field[:field_display].format == 'textread' %>
+        <% #byebug %>
+        <a href='<%=request.path %>/<%= data %>'><%= data %></a>
+      <% elsif displayable_field[:field_display].link_type == 'show' && displayable_field[:field_display].format == 'textread' %>
+        <%# byebug %>
+        <%= link_to data, url_for([*@nested_instance_variables, @kontroller_inst.pluralize.to_sym ]) + "/" + mega_record.id.to_s %>
+      <% else %>
+        <%= data %>
       <% end %>
-
-      <%= data %>
-      <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
-         </a>
-      <% end %>
-      <%= @mf.field_wrapper_end.html_safe %>
+      </<%= field_wrapper(displayable_field) %>>
       <% if @mf.name == 'ProfileTable' %>
-        </td>
+        </tr>
       <% end %>
     <% end %>
     <% if @mf.name == 'GridHtml' %>
-      <td>
-        <%= link_to 'Show&nbsp;'.html_safe, link_path('show', mega_record.id) %>
-      </td>
+      <td><%= link_to 'Show&nbsp;'.html_safe, link_path('show', mega_record.id) %></td>
       <td><%= link_to 'Edit&nbsp;'.html_safe, link_path('edit', mega_record.id) %></td>
       <td><%= link_to 'Destroy&nbsp;'.html_safe, mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-
-      <% if @mega_model_properties.position_parent.present? && @nested_ids.map{|nid| true if nid.key?((@mega_model_properties.position_parent.split("::").last.underscore.downcase + "_id")) }.first %>
+      <% if @mega_model_properties.position_parent.present?
+      # not sure why this was part of the above condition. will leave it for now. && @nested_ids.map{|nid| true if nid.key?((@mega_model_properties.position_parent.split("::").last.underscore.downcase + "_id")) }.first 
+       %>
         <td>
           <% unless @mega_instance.first.position == mega_record.position %>
-            <%= link_to 'up', link_path('move', mega_record.id).to_s + "?method=move_higher",  data: { turbolinks: false } %>
-            <%= link_to 'top', link_path('move', mega_record.id).to_s + "?method=move_to_top",  data: { turbolinks: false } %>
+            <%= link_to 'up', link_path('move', mega_record.id).to_s + param_separator(mega_record) + "method=move_higher",  data: { turbolinks: false } %>
+            <%= link_to 'top', link_path('move', mega_record.id).to_s + param_separator(mega_record) + "method=move_to_top",  data: { turbolinks: false } %>
           <% end %>
 
           <% unless @mega_instance.last.position == mega_record.position %>
             <% unless mega_record.position == (@mega_instance.first.position || @mega_instance.last.position) %> | <% end %>
-            <%= link_to 'down', link_path('move', mega_record.id).to_s + "?method=move_lower",  data: { turbolinks: false } %>
-            <%= link_to 'bottom', link_path('move', mega_record.id).to_s + "?method=move_to_bottom",  data: { turbolinks: false } %>
+            <%= link_to 'down', link_path('move', mega_record.id).to_s + param_separator(mega_record) + "method=move_lower",  data: { turbolinks: false } %>
+            <%= link_to 'bottom', link_path('move', mega_record.id).to_s + param_separator(mega_record) + "method=move_to_bottom",  data: { turbolinks: false } %>
           <% end %>
         </td>
       <% end %>
 
     <% end %>
 
-    <%= @mf.record_wrapper_end.html_safe%>
+    </<%= @mf.record_wrapper_end.html_safe%>>
   <% end %>
 
   <% if might_filter? %>
-    <tr>
+    <tr class='filter-row'>
       <% @mega_display[:displayable_fields].each do | displayable_field | %>
         <% @displayable_field = displayable_field %>
-        <td>
+        <td class='filter-row-td'>
           <% if displayable_field[:field].filter_type.blank? %>
             &nbsp;
           <% else %>
@@ -103,7 +111,7 @@
   <% end %>
 
 
-  <%=@mf.app_wrapper_end.html_safe%>
+  </<%=@mf.app_wrapper_end.html_safe%>>
 <% end %>
 <% if might_paginate?('bottom') %>
   <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>

@@ -1,4 +1,4 @@
-class CreateMegaBarTmpModelDisplayCollections < ActiveRecord::Migration
+class CreateMegaBarTmpModelDisplayCollections < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_tmp_model_display_collections do |t|
       t.integer :model_display_id

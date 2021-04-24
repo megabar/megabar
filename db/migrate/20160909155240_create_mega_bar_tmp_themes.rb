@@ -1,4 +1,4 @@
-class CreateMegaBarTmpThemes < ActiveRecord::Migration
+class CreateMegaBarTmpThemes < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_tmp_themes do |t|
       t.datetime :created_at

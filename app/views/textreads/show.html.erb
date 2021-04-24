@@ -1,13 +1,38 @@
-<% value = textread[:truncation].to_i == 0 ? obj.read_attribute(field.field).to_s :
- obj.read_attribute(field.field).to_s.truncate(textread[:truncation].to_i, {omission: textread[:truncation_format], separator: textread[:truncation_separator]}) %>
-
-
-<% if field_display.link_type == 'link_field_value' && field_display.format == 'textread' %>
-  <%= value %>
-<% elsif field.default_data_format_edit == 'textbox' && field.data_type == 'string' %>
-  <%= best_in_place obj, field.field, value: value  %>
-<% elsif field.default_data_format_edit == 'textarea' && field.data_type == 'text'%>
-  <%= best_in_place obj, field.field, value: value, as: :textarea  %>
+<% final_field = (field.data_type == 'references' && !field.field.ends_with?('_id')) ?  field.field + '_id' : field.field %>
+<% if textread[:transformation].present? %>
+  <% 
+    value = obj.read_attribute(final_field)
+    # byebug
+    case textread[:transformation]
+    when 'model_from_id'
+    	value = value.to_s + ' ' + MegaBar::Model.find(value).classname if value.present?
+    when 'page_from_id'
+    	value = value.to_s + ' ' + MegaBar::Page.find(value).name if value.present?
+    when 'template_from_id'
+    	value = MegaBar::Template.find(value).name if value.present?
+	  when 'field_from_id'
+    	value = value.to_s + ' ' + MegaBar::Field.find(value).tablename + '.' + MegaBar::Field.find(value).field if value.present?
+	  when 'mdf_from_id'
+    	value = MegaBar::ModelDisplayFormat.find(value).name if value.present?
+    when 'foreign_name'
+      value = ['name', 'title'].map { |n| obj.send(field.field[0..-4]).try(n.to_sym)}.compact.first
+    when 'staticOptionTextFromValue'
+      value =  obj.send(field.field).present? ? field.options.where(value: obj.send(field.field)).first.text : ''
+    when 'belongsToName' 
+      value = ['name', 'title'].map { |n|  obj.send(field.field[0..-4]).try(n.to_sym)}.compact.first
+    end
+  %>
 <% else %>
-  <%= value %>
+<% value = textread[:truncation].to_i == 0 ? obj.read_attribute(final_field).to_s : obj.read_attribute(final_field).to_s.truncate(textread[:truncation].to_i, {omission: textread[:truncation_format], separator: textread[:truncation_separator]}) %>
+<% end %>
+<% if field_display.link_type == 'link_field_value' && field_display.format == 'textread' %>
+<%= value %>
+<% elsif field.default_data_format_edit == 'textbox' && field.data_type == 'string' and textread.editable_in_place %>
+<%= best_in_place obj, final_field, value: value  %>
+<% elsif field.default_data_format_edit == 'textbox' && field.data_type == 'string' %>
+<%= value %>
+<% elsif field.default_data_format_edit == 'textarea' && field.data_type == 'text'%>
+<%=value.html_safe %>
+<% else %>
+<%= value.html_safe if value.present? %>
 <% end %>

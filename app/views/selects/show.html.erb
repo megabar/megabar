@@ -3,14 +3,15 @@
 if field.option_borrow.nil?
   options =  (!@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil?) ? @options[field.tablename.to_sym][field.field.to_sym] : displayable_field[:options]
  else
-   options = MegaBar::Option.where(field_id: 19).pluck(:text, :value)
+   # TODO make this independent of id's.
+   options = MegaBar::Option.where(field_id: field.option_borrow).pluck(:text, :value)
 end
 
 # options = options.reject{|o| o[1] == 0} #later we may need a field param allowing zero options to show up.
 
 include_blank = select.multiple == true ? false : "Select " + displayable_field[:field_display].header
 
-if field.accessor == 'y' 
+if ActiveModel::Type::Boolean.new.cast(field.accessor) 
   selected = @mega_instance.send(field.field)
 else 
   selected =  @default_options[field.field.to_sym] ? @default_options[field.field.to_sym] : value

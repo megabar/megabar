@@ -39,7 +39,7 @@ RSpec.shared_context "common", :a => :b do
     context 'with callbacks disabled ' do
       before(:each) do
         MegaBar::Field.skip_callback("save", :after, :make_field_displays)
-        MegaBar::Field.skip_callback("create", :after, :make_field_displays)
+        # MegaBar::Field.skip_callback("create", :after, :make_field_displays)
         MegaBar::Model.skip_callback("create", :after, :make_page_for_model)
         MegaBar::Model.skip_callback('save', :after, :make_position_field)
         MegaBar::Layout.skip_callback('create', :after, :create_layable_sections)
@@ -55,9 +55,9 @@ RSpec.shared_context "common", :a => :b do
       end
 
       describe "GET index"  do
-        it "assigns all records as @mega_instance" do #, focus: true do
+        it "assigns all records as @mega_instance", focus: true do
           status, headers, body = controller_class.action(:index).call(get_env(env_index))
-          @controller = body.request.env['action_controller.instance']
+          @controller = contrlr(body)
           assigns(:mega_instance).each_with_index do | v, k |
             expect(v).to have_same_attributes_as(model_class.order(id: :desc)[k])
           end
@@ -67,14 +67,14 @@ RSpec.shared_context "common", :a => :b do
       describe "GET show" do
         it "assigns the requested record as @mega_instance" do #, focus: true do
           status, headers, body = controller_class.action(:show).call(get_env(env_show))
-          @controller = body.request.env['action_controller.instance']
+          @controller = contrlr(body)
           expect(assigns(:mega_instance)).to eq([a_record])
         end
       end
       describe "GET new" do
         it "assigns a new record as @mega_instance" do #, focus: true do
           status, headers, body = controller_class.action(:new).call(get_env(env_new))
-          @controller = body.request.env['action_controller.instance']
+          @controller = contrlr(body)
           expect(assigns(:mega_instance)).to be_a_new(model_class)
         end
       end
@@ -82,7 +82,7 @@ RSpec.shared_context "common", :a => :b do
       describe "GET edit" do
         it "assigns the requested record as @mega_instance" do
           status, headers, body = controller_class.action(:edit).call(get_env(env_edit))
-          @controller = body.request.env['action_controller.instance']
+          @controller = contrlr(body)
           expect(assigns(:mega_instance)).to eq(a_record)
         end
       end
@@ -92,22 +92,22 @@ RSpec.shared_context "common", :a => :b do
           it "creates a new record" do #, focus: true do
             expect {
               status, headers, body = controller_class.action(:test_create).call(get_env(env_create))
-              @controller = body.request.env['action_controller.instance']
+              @controller = contrlr(body)
             }.to change(model_class, :count).by(1)
           end
 
           it "assigns a newly created record as @mega_instance" do
             status, headers, body = controller_class.action(:test_create).call(get_env(env_create))
-            @controller = body.request.env['action_controller.instance']
+            @controller = contrlr(body)
             expect(assigns(:mega_instance)).to be_a(model_class)
             expect(assigns(:mega_instance)).to be_persisted
           end
 
           it "redirects to the created record" do #, focus: true do
             status, headers, body = controller_class.action(:test_create).call(get_env(env_create))
-            @controller = body.request.env['action_controller.instance']
+            @controller = contrlr(body)
             expect(status).to be(302)
-            expect(body.instance_variable_get(:@body).instance_variable_get(:@header)["Location"]).to include(uri) #almost good enough
+            expect(location(body)).to include(uri) #almost good enough
           end
         end
 
@@ -115,14 +115,14 @@ RSpec.shared_context "common", :a => :b do
           it "assigns a newly created but unsaved record as @mega_instance" do
             if !skip_invalids
               status, headers, body = controller_class.action(:create).call(get_env(env_invalid_create))
-              @controller = body.request.env['action_controller.instance']
+              @controller = contrlr(body)
               expect(assigns(:mega_instance)).to be_a_new(model_class)
             end
           end
           it "re-renders the 'new' template" do # focus: true  do
             if !skip_invalids
               status, headers, body = controller_class.action(:create).call(get_env(env_invalid_create))
-              @controller = body.request.env['action_controller.instance']
+              @controller = contrlr(body)
               expect(response).to render_template('mega_bar.html.erb')
             end
           end
@@ -141,14 +141,14 @@ RSpec.shared_context "common", :a => :b do
           it "assigns the requested record as @mega_instance" do
             model = model_class.last
             status, headers, body = controller_class.action(:update).call(get_env(env_update))
-            @controller = body.request.env['action_controller.instance']
+            @controller = contrlr(body)
             expect(assigns(:mega_instance)).to eq(a_record)
           end
 
           it "redirects to the record" do
             model = model_class.last
             status, headers, body = controller_class.action(:update).call(get_env(env_update))
-            expect(body.instance_variable_get(:@body).instance_variable_get(:@header)["Location"]).to include(uri) #almost good enough
+            expect(location(body)).to include(uri) #almost good enough
           #   expect(response).to redirect_to(model)
           end
         end
@@ -158,7 +158,7 @@ RSpec.shared_context "common", :a => :b do
             if !skip_invalids
               model = model_class.last
               status, headers, body = controller_class.action(:update).call(get_env(env_invalid_update))
-              @controller = body.request.env['action_controller.instance']
+              @controller = contrlr(body)
               expect(assigns(:mega_instance)).to eq(a_record)
             end
           end
@@ -167,7 +167,7 @@ RSpec.shared_context "common", :a => :b do
             if !skip_invalids
               model = model_class.last
               status, headers, body = controller_class.action(:update).call(get_env(env_invalid_update))
-              @controller = body.request.env['action_controller.instance']
+              @controller = contrlr(body)
               expect(response).to render_template("mega_bar.html.erb")
             end
           end
@@ -177,13 +177,13 @@ RSpec.shared_context "common", :a => :b do
         it "destroys the requested record" do
           expect {
             status, headers, body = controller_class.action(:destroy).call(get_env(env_destroy))
-            @controller = body.request.env['action_controller.instance']
+            @controller = contrlr(body)
           }.to change(model_class, :count).by(-1)
         end
 
         it "redirects to the index list" do #, focus: true do
           status, headers, body = controller_class.action(:destroy).call(get_env(env_destroy))
-          expect(body.instance_variable_get(:@body).instance_variable_get(:@header)["Location"]).to include(uri) #almost good enough
+          expect(location(body)).to include(uri) #almost good enough
         end
       end
     end
@@ -215,4 +215,12 @@ RSpec.shared_context "common", :a => :b do
     MegaBar::ModelDisplayFormat.destroy_all
     model_class.destroy_all
   }
+
+  def location(body) 
+    body.instance_variable_get(:@response).instance_variable_get(:@header)["Location"]
+  end
+
+  def contrlr(body)
+    body.instance_variable_get(:@response).instance_variable_get(:@request).env['action_controller.instance']
+  end
 end

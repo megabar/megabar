@@ -1,4 +1,4 @@
-class CreateRecordsFormats < ActiveRecord::Migration
+class CreateRecordsFormats < ActiveRecord::Migration[4.2]
   def change
     create_table :mega_bar_records_formats do |t|
       t.string :name

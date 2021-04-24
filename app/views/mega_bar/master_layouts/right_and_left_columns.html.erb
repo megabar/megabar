@@ -1,4 +1,4 @@
-<div id="main-container" class="container right_and_left_columns_template">
+<div id="layout-<%=@mega_layout.name.gsub(' ', '-').downcase.dasherize %>" class="container right_and_left_columns_template layout-template">
  <div class="row">
     <% if @mega_layout_sections['full_top'].present? %>
       <div class='layout_section full_top col-xs-12'><%= @mega_layout_sections['full_top'][0]%></div>
