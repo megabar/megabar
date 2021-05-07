@@ -4,8 +4,8 @@ module MegaBar
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :exception
     helper_method :sort_column, :sort_direction, :is_displayable, :might_paginate?, :might_filter?
-    before_action :set_vars_for_all
-    before_action :set_vars_for_displays # , except: [:update, :create, :destroy]
+    before_action :set_vars_for_all, :unless => Proc.new {|c| c.request.format.json?}
+    before_action :set_vars_for_displays, :unless => Proc.new {|c| c.request.format.json?} # , except: [:update, :create, :destroy]
     skip_before_action :verify_authenticity_token
 
     def _params

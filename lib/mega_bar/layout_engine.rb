@@ -20,7 +20,15 @@ class LayoutEngine
   end
 
   def _call(env)
+    byebug
     # so.. a lot does go on here... I'll have to write a white paper.
+    # 1) dish off css, images, json, react, kinda stuff 
+    # 2) get basic page and route information together
+    # 3) iterate over page layouts for the page and put those in master_pages.
+    # 4) within that iterate over 'layout sections' in process_page_layout and put those in master_page_layout.
+    # 5) within that iterate over 'blocks', which may have model displays and create mega_env in process_block and put those in master_blocks.
+    # 6) within that call individual controllers which then call the generic html.erb to generate code.
+    # 7) with all that collected, ultimately render the page.
     if env['PATH_INFO'].end_with?('.css')  || env['PATH_INFO'].end_with?('.js') || env['PATH_INFO'].end_with?('.jpeg')
       @status, @headers, @response = @app.call(env)
       return  [@status, @headers, self]
@@ -29,15 +37,27 @@ class LayoutEngine
       @status, @headers, @response = @app.call(env)
       return  [@status, @headers, self]
     end
+    # byebug
+    if env['PATH_INFO'].start_with?('/app/') 
+      @status, @headers, @response = @app.call(env)
+      return  [@status, @headers, self]
+    end
+    mega_env_only = false;
+    json = {}
+    if env['PATH_INFO'].end_with?('.megaenv')
+      env['PATH_INFO'] = env['PATH_INFO'][0..-9]
+      env[:mega_env_only] = mega_env_only = true;
+    end
+
     env['REQUEST_METHOD'] = "PATCH" if  env['REQUEST_METHOD'] == "PUT"
     @redirect = false
     request = Rack::Request.new(env)
     request.params # strangely this needs to be here for best_in_place updates.
     # MegaBar::Engine.routes.routes.named_routes.values.map do |route|
-
+    # byebug
     site = MegaBar::Site.where(domains: request.host).first
     site.present? ? site : MegaBar::Site.where(domains: 'base').first
-    env[:mega_site] = site 
+    env[:mega_site] = json[:site] = site 
     #   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + "#{route.defaults[:controller]}##{route.defaults[:action]}"
     # end #vs. Rails.application.routes.routes.named_routes.values.map
     # Rails.application.routes.routes.named_routes.values.map do |route|
@@ -50,10 +70,11 @@ class LayoutEngine
     # tbcontinued.
     request.session[:return_to] = env['rack.request.query_hash']['return_to'] unless env['rack.request.query_hash']['return_to'].blank?
     request.session[:return_to] = nil if env['rack.request.query_hash']['method'].present?
+    json[:return_to] = request.session[:return_to]
     rout_terms = request.path_info.split('/').reject! { |c| (c.nil? || c.empty?) }
-    env[:mega_rout] = rout = set_rout(request, env)
-    env[:mega_page] = page_info = set_page_info(rout, rout_terms)
-    pagination = set_pagination_info(env, rout_terms)
+    env[:mega_rout] = rout = json[:mega_rout] = set_rout(request, env)
+    env[:mega_page] = page_info = json[:mega_page] = set_page_info(rout, rout_terms)
+    pagination = json[:pagination] = set_pagination_info(env, rout_terms)
     puts '-----------------------------'
     puts 'mega_rout: ' + env[:mega_rout].inspect;
     puts 'mega_page: ' + env[:mega_page].inspect;
@@ -65,45 +86,49 @@ class LayoutEngine
         rout[:controller] = 'flats'
         rout[:action] = 'index'
       end
-      @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)
-      gotta_be_an_array << page = @page.blank? ? '' : @page.body.html_safe
-      return @status, @headers, gotta_be_an_array
+      unless mega_env_only
+        @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)
+        gotta_be_an_array << page = @page.blank? ? '' : @page.body.html_safe
+        return @status, @headers, gotta_be_an_array
+      end
     end
     ################################
     orig_query_hash = Rack::Utils.parse_nested_query(env['QUERY_STRING'])
-    final_layouts = []
-
+    final_layouts = json[:final_layouts] = []
+json[:mega_final_layout_sections] = []
     page_layouts = MegaBar::Layout.by_page(page_info[:page_id]).includes(:sites, :themes)
-
+    
     page_layouts.each do | page_layout |
       next if mega_filtered(page_layout, site)
       env[:mega_layout] = page_layout
-
+      json[:final_layouts] = []
       final_layout_sections = process_page_layout(page_layout, page_info, rout, orig_query_hash, pagination, site, env)
-
       env['mega_final_layout_sections'] = final_layout_sections #used in master_layouts_controller
-      @status, @headers, @layouts = MegaBar::MasterLayoutsController.action(:render_layout_with_sections).call(env)
+      json[:mega_final_layout_sections] << [final_layout_sections, page_layout, page_layout.template] if mega_env_only
+      @status, @headers, @layouts = MegaBar::MasterLayoutsController.action(:render_layout_with_sections).call(env) unless mega_env_only
       final_layouts <<  l = @layouts.blank? ? '' : @layouts.body.html_safe
     end
 
-
     env['mega_final_layouts'] = final_layouts
-    @status, @headers, @page = MegaBar::MasterPagesController.action(:render_page).call(env)
+    @status, @headers, @page = MegaBar::MasterPagesController.action(:render_page).call(env) unless mega_env_only
     final_page = []
     final_page_content = @page.blank? ? '' : @page.body.html_safe
     # final_page_content = @page.instance_variable_get(:@response).nil? ? @page.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @page.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]
     final_page << final_page_content
+    final_page = [json.to_json] if mega_env_only 
+    byebug
     return @redirect ? [@redirect[0], @redirect[1], ['you are being redirected']] : [@status, @headers, final_page]
   end
 
   def each(&display)
-    display.call("<!-- #{@message}: #{@stop - @start} -->\n") if (!@headers['Content-Type'].nil? && @headers["Content-Type"].include?("text/html"))
+    # byebug
+    #display.call("<!-- #{@message}: #{@stop - @start} -->\n") if (!@headers['Content-Type'].nil? && @headers["Content-Type"].include?("text/html"))
     @response.each(&display)
   end
 
 
 def set_page_info(rout, rout_terms)
-  page_info = {}
+    page_info = {}
     rout_terms ||= []
     diff = 20
     prev_diff = 21
@@ -157,11 +182,16 @@ def set_page_info(rout, rout_terms)
 
   def process_page_layout(page_layout, page_info, rout, orig_query_hash, pagination, site, env)
     final_layout_sections = {}
+    json = {}
+    json[:template] = page_layout.template
+    json[:template_sections] = []
+    # byebug
     page_layout.layout_sections.each do | layout_section |
-      template_section = MegaBar::TemplateSection.find(layout_section.layables.where(layout_id: page_layout.id).first.template_section_id).code_name
+      json[:template_sections] << template_section = MegaBar::TemplateSection.find(layout_section.layables.where(layout_id: page_layout.id).first.template_section_id).code_name
       blocks = MegaBar::Block.by_layout_section(layout_section.id).order(position: :asc)
       blocks = blocks.by_actions(rout[:action]) unless rout.blank?
-      if layout_section.rules == 'specific' 
+      if layout_section.rules == 'specific'
+        # this is most common. it chooses the best match . 
         puts '----------------------'
         puts blocks.pluck(:path_base).inspect
         puts '-----------------------'
@@ -170,6 +200,7 @@ def set_page_info(rout, rout_terms)
         rout_terms = env["REQUEST_URI"].split('/').reject! { |c| (c.nil? || c.empty?) }
         best = {}
         blocks.each do | block | 
+          
           page_path_terms = block.path_base.split('/').map{ | m | m if m[0] != ':'} - ["", nil]
           
           puts 'a: rout_terms ' + rout_terms.inspect
@@ -189,7 +220,7 @@ def set_page_info(rout, rout_terms)
             variable_segments << rout_terms[k] if page_terms[k].starts_with?(':')
           end
           variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
-          best = block if diff < prev_diff
+          best = block if diff < prev_diff # this compares paths and chooses blocks with fewer variable segments if possible. (or something)
           prev_diff = diff if diff < prev_diff
         end
         blocks = blocks.reject{ |b| b.id != best.id}
@@ -203,20 +234,22 @@ def set_page_info(rout, rout_terms)
 
         # puts chosen_blocks.inspect
         # puts '----------------------------------------- goes here '
-        # byebug
+        # 
       end 
       final_blocks = []
       next unless blocks.present?
       final_layout_sections[template_section] = []
       env[:mega_layout_section] = layout_section
-      blocks.each do |blck|
+      blocks.each do |blck|   
         next if mega_filtered(blck, site)
         final_blocks << process_block(blck, page_info, rout, orig_query_hash, pagination, env)
       end
       env['mega_final_blocks'] = final_blocks #used in master_layouts_controller
-      @status, @headers, @layout_sections = MegaBar::MasterLayoutSectionsController.action(:render_layout_section_with_blocks).call(env)
+      @status, @headers, @layout_sections = MegaBar::MasterLayoutSectionsController.action(:render_layout_section_with_blocks).call(env) if env[:mega_env_only]
       final_layout_sections[template_section] <<  ls = @layout_sections.blank? ? '' : @layout_sections.body.html_safe
     end
+    byebug
+    return json[:final_layout_sections] = final_layout_sections if env[:mega_env_only]
     final_layout_sections
   end
 
@@ -243,7 +276,7 @@ def set_page_info(rout, rout_terms)
       env['QUERY_STRING'] = params_hash.to_param # 150221!
       env['action_dispatch.request.parameters'] = params_hash
       env['block_class'] = blck.name.downcase.parameterize.underscore
-      @status, @headers, @disp_body = mega_env.kontroller_klass.constantize.action(mega_env.block_action).call(env)
+      @status, @headers, @disp_body = mega_env.kontroller_klass.constantize.action(mega_env.block_action).call(env) unless env[:mega_env_only]
       @redirect = [@status, @headers, @disp_body] if @status == 302
       block_body = @disp_body.blank? ? '' : @disp_body.body.html_safe
     end
@@ -331,8 +364,10 @@ class MegaEnv
     # klass.class_eval{ acts_as_list scope: position_parent_method, add_new_at: :bottom } if position_parent_method
   end
   def set_mega_displays(displays)
+    
     mega_displays_info = [] # collects model and field display settings
     displays.each do | display |
+      
       model_display_format = MegaBar::ModelDisplayFormat.find(display.format)
       model_display_collection_settings = MegaBar::ModelDisplayCollection.by_model_display_id(display.id).first if display.collection_or_member == 'collection'
       field_displays = MegaBar::FieldDisplay.by_model_display_id(display.id).order('position asc')
@@ -355,8 +390,10 @@ class MegaEnv
         :model_display => display,
         :collection_settings => model_display_collection_settings
       }
+      
       mega_displays_info << info
     end
+    
     mega_displays_info
   end
 
@@ -389,6 +426,7 @@ class MegaEnv
       params_hash_arr << i =  {MegaBar::Model.find(blck.nest_level_1).classname.underscore + '_id' =>  rout[:id]} if !blck.nest_level_1.nil?
       nested_ids << i if i
     end
+    
     return nested_ids, params_hash_arr, nested_classes
   end
   def set_nested_class_info(nested_classes)
@@ -398,6 +436,7 @@ class MegaEnv
       klass = modyule + nc.classname.classify
       nested_class_info << [klass, nc.classname.underscore] if idx != 0
     end
+    
     nested_class_info
   end
   def is_displayable?(format)

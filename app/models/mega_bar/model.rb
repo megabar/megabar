@@ -31,8 +31,12 @@ module MegaBar
       mod = self.modyule.nil? || self.modyule.empty?  ? 'no_mod' : self.modyule
 
       system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s + ' ' + pos
-      ActiveRecord::MigrationContext.new("db/migrate").migrate
-      # ActiveRecord::Migrator.migrate "db/migrate"
+
+      migrations_paths = ActiveRecord::Migrator.migrations_paths
+      schema_migration = ActiveRecord::Base.connection.schema_migration
+      migration_context = ActiveRecord::MigrationContext.new(migrations_paths, schema_migration)
+      # ActiveRecord::MigrationContext.new("db/migrate").migrate
+      migration_context.migrate
     end
 
     def pos
