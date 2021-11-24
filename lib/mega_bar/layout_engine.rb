@@ -20,8 +20,9 @@ class LayoutEngine
   end
 
   def _call(env)
+
     # so.. a lot does go on here... I'll have to write a white paper.
-    if env['PATH_INFO'].end_with?('.css')  || env['PATH_INFO'].end_with?('.js') || env['PATH_INFO'].end_with?('.jpeg')
+    if env['PATH_INFO'].end_with?('.css')  || env['PATH_INFO'].end_with?('.js') || env['PATH_INFO'].end_with?('.jpeg') || env['PATH_INFO'].end_with?('.jpg')
       @status, @headers, @response = @app.call(env)
       return  [@status, @headers, self]
     end
@@ -59,12 +60,17 @@ class LayoutEngine
     puts 'mega_page: ' + env[:mega_page].inspect;
     puts '-----------------------------'
     request.env["devise.mapping"] = Devise.mappings[:user]
+    request.env['warden'] = Warden::Proxy.new({}, Warden::Manager.new({})).tap{|i| i.set_user({user: 7}, scope: {user: 7}) }
+    request.session[:init] = true
+    env[:mega_user] =  request.session["warden.user.user.key"];
+
     if page_info.empty? #non megabar pages.
       gotta_be_an_array = []
       if rout[:controller].nil?
         rout[:controller] = 'flats'
         rout[:action] = 'index'
       end
+      if ( rout[:controller] == 'sessions' && rout[:action] == 'destroy') request.session["warden.user.user.key"] = nil;
       @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)
       gotta_be_an_array << page = @page.blank? ? '' : @page.body.html_safe
       return @status, @headers, gotta_be_an_array
