@@ -5,7 +5,7 @@ module MegaBar
     has_many :field_displays, dependent: :destroy
     has_one :model_display_collection, dependent: :destroy
     validates_presence_of :block_id, :model_id, :action, :format
-    attr_accessor :new_field_display, :edit_field_display, :index_field_display, :show_field_display
+    attr_accessor :new_field_display, :edit_field_display, :index_field_display, :show_field_display, :authorized
     after_save    :make_field_displays
     after_save    :make_collection_settings
 

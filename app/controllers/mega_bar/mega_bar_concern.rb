@@ -106,6 +106,10 @@ module MegaBar
       @mega_displays = env[:mega_env][:mega_displays]
     end
 
+    def check_authorization
+      render json: "Unauthorized", status: 401 unless  env[:mega_env][:mega_displays].first[:model_display].authorized 
+    end
+
     def set_vars_for_all
       @mega_page = env[:mega_page]
       @mega_rout = env[:mega_rout]
@@ -203,6 +207,7 @@ module MegaBar
         @mega_displays[0].dig(:collection_settings)&.filter_fields && !@mega_instance.blank?
       end
     end
+
     def num_per_page
       @mega_displays[0].dig(:collection_settings)&.records_per_page.blank? ? 6  : @mega_displays[0].dig(:collection_settings)&.records_per_page
     end

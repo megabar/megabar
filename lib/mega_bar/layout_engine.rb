@@ -62,15 +62,16 @@ class LayoutEngine
     request.env["devise.mapping"] = Devise.mappings[:user]
     request.env['warden'] = Warden::Proxy.new({}, Warden::Manager.new({})).tap{|i| i.set_user({user: 7}, scope: {user: 7}) }
     request.session[:init] = true
-    env[:mega_user] =  request.session["warden.user.user.key"];
+    @user = env[:mega_user] =  request.session["warden.user.user.key"] ? User.find(request.session["warden.user.user.key"][0][0]) : {};
 
+    @user.pll=@user&.permission_level&.level
     if page_info.empty? #non megabar pages.
       gotta_be_an_array = []
       if rout[:controller].nil?
         rout[:controller] = 'flats'
         rout[:action] = 'index'
       end
-      if ( rout[:controller] == 'sessions' && rout[:action] == 'destroy') request.session["warden.user.user.key"] = nil;
+      request.session["warden.user.user.key"] = nil if ( rout[:controller] == 'sessions' && rout[:action] == 'destroy') 
       @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)
       gotta_be_an_array << page = @page.blank? ? '' : @page.body.html_safe
       return @status, @headers, gotta_be_an_array
@@ -236,7 +237,7 @@ def set_page_info(rout, rout_terms)
     else
       params_hash = {} # used to set params var for controllers
       params_hash_arr = [] #used to collect 'params_hash' pieces
-      mega_env = MegaEnv.new(blck, rout, page_info, pagination) # added to env for use in controllers
+      mega_env = MegaEnv.new(blck, rout, page_info, pagination, @user) # added to env for use in controllers
       params_hash_arr = mega_env.params_hash_arr
       env[:mega_env] = mega_env.to_hash
       params_hash_arr << {action: mega_env.block_action}
@@ -297,8 +298,9 @@ class MegaEnv
   attr_writer :mega_model_properties, :mega_displays, :nested_ids
   attr_reader :block, :modle, :modle_id, :mega_model_properties, :klass, :kontroller_inst, :kontroller_path, :kontroller_klass, :mega_displays, :nested_ids, :block_action, :params_hash_arr, :nested_class_info
 
-  def initialize(blck, rout, page_info, pagination)
-    @block_model_displays =   MegaBar::ModelDisplay.by_block(blck.id)
+  def initialize(blck, rout, page_info, pagination, user)
+    @user = user;
+    @block_model_displays = MegaBar::ModelDisplay.by_block(blck.id)
     @displays = blck.actions == 'current' ? @block_model_displays.by_block(blck.id).by_action(rout[:action]) : @block_model_displays.by_block(blck.id)
     @block_action = @displays.empty? ? rout[:action] : @displays.first.action
     @modle = MegaBar::Model.by_model(@block_model_displays.first.model_id).first
@@ -327,7 +329,8 @@ class MegaEnv
       mega_displays: @mega_displays,
       nested_ids: @nested_ids,
       nested_class_info: @nested_class_info,
-      page_number: @page_number
+      page_number: @page_number,
+      user: @user
     }
   end
 
@@ -339,6 +342,7 @@ class MegaEnv
   def set_mega_displays(displays)
     mega_displays_info = [] # collects model and field display settings
     displays.each do | display |
+      display.authorized = display.permission_level ? @user.pll >= display.permission_level ? true : false : true
       model_display_format = MegaBar::ModelDisplayFormat.find(display.format)
       model_display_collection_settings = MegaBar::ModelDisplayCollection.by_model_display_id(display.id).first if display.collection_or_member == 'collection'
       field_displays = MegaBar::FieldDisplay.by_model_display_id(display.id).order('position asc')

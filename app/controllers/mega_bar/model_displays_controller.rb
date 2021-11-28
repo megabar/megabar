@@ -5,7 +5,8 @@ module MegaBar
     def get_options
       @options[:mega_bar_model_displays] =  {
         model_id: Model.all.pluck("name, id"),
-        format: ModelDisplayFormat.all.pluck("name, id")
+        format: ModelDisplayFormat.all.pluck("name, id"),
+        permission_level: PermissionLevel.all.pluck("level_name, level")
       }
     end
 
