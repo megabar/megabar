@@ -85,6 +85,7 @@ module MegaBar
         end
       end
     end
+    
     def destroy
       instance_variable_set("@" + @kontroller_inst,  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + @kontroller_inst);
@@ -107,7 +108,7 @@ module MegaBar
     end
 
     def check_authorization
-      render json: "Unauthorized", status: 401 unless  env[:mega_env][:mega_displays].first[:model_display].authorized 
+      render json: "Unauthorized", status: 401 unless env[:mega_env][:authorized]
     end
 
     def set_vars_for_all

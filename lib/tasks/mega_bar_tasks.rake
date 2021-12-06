@@ -234,6 +234,7 @@ namespace :mega_bar do
 
   def fix_field_displays(c)
     MegaBar::TmpCheckbox.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    MegaBar::TmpPasswordField.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpRadio.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpSelect.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpTextarea.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
@@ -288,6 +289,7 @@ namespace :mega_bar do
     mega_classes << {tmp_class: MegaBar::TmpFieldDisplay, perm_class: MegaBar::FieldDisplay, unique: [:model_display_id, :field_id], resolver: 'fix_field_displays', condition: 'tmp.model_display_id == perm.model_display_id && tmp.field_id == perm.field_id && tmp.format == perm.format'}
 
     mega_classes << {tmp_class: MegaBar::TmpCheckbox, perm_class: MegaBar::Checkbox, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
+    mega_classes << {tmp_class: MegaBar::TmpPasswordField, perm_class: MegaBar::PasswordField, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {tmp_class: MegaBar::TmpRadio, perm_class: MegaBar::Radio, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {tmp_class: MegaBar::TmpSelect, perm_class: MegaBar::Select, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {tmp_class: MegaBar::TmpTextarea, perm_class: MegaBar::Textarea, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
@@ -350,6 +352,7 @@ namespace :mega_bar do
     SeedDump.dump(MegaBar::FieldDisplay.where(id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
     SeedDump.dump(MegaBar::Checkbox.where(field_display_id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::PasswordField.where(field_display_id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Radio.where(field_display_id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Select.where(field_display_id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
     SeedDump.dump(MegaBar::Textarea.where(field_display_id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
