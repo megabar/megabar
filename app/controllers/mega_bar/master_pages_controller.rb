@@ -15,7 +15,7 @@ module MegaBar
     end
 
     def page_classes
-      [portfolio_class, page_class, site_class, theme_class].compact.join(' ')
+      [portfolio_class, page_class, site_class, theme_class, 'megabar_site_body'].compact.join(' ')
     end
 
     def portfolio_class

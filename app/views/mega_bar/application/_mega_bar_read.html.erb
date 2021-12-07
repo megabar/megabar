@@ -62,8 +62,8 @@
     <% end %>
     <% if @mf.name == 'GridHtml' %>
       <td><%= link_to 'Show&nbsp;'.html_safe, link_path('show', mega_record.id) %></td>
-      <td><%= link_to 'Edit&nbsp;'.html_safe, link_path('edit', mega_record.id) %></td>
-      <td><%= link_to 'Destroy&nbsp;'.html_safe, mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <%if @authorizations[:editAndSave] %><td><%= link_to 'Edit&nbsp;'.html_safe, link_path('edit', mega_record.id) %></td><% end %>
+      <%if @authorizations[:delete] %><td><%= link_to 'Destroy&nbsp;'.html_safe, mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td><% end %>
       <% if @mega_model_properties.position_parent.present?
       # not sure why this was part of the above condition. will leave it for now. && @nested_ids.map{|nid| true if nid.key?((@mega_model_properties.position_parent.split("::").last.underscore.downcase + "_id")) }.first 
        %>
