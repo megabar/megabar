@@ -4,8 +4,10 @@ module MegaBar
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :exception
     helper_method :sort_column, :sort_direction, :is_displayable, :might_paginate?, :might_filter?
+    before_action :check_authorization
     before_action :set_vars_for_all
     before_action :set_vars_for_displays # , except: [:update, :create, :destroy]
+
     skip_before_action :verify_authenticity_token
 
     def _params
@@ -36,5 +38,10 @@ module MegaBar
      request.env
     end
 
+    def current_user
+      @current_user || MegaBar::User.find(session[:user_id]) if session[:user_id]
+    end
+
+    helper_method :current_user
   end
 end

@@ -85,6 +85,7 @@ module MegaBar
         end
       end
     end
+    
     def destroy
       instance_variable_set("@" + @kontroller_inst,  @mega_class.find(params[:id]))
       @mega_instance = instance_variable_get("@" + @kontroller_inst);
@@ -104,6 +105,10 @@ module MegaBar
       env[:mega_env] = add_form_path_to_mega_displays(env[:mega_env])
       @default_options = {}
       @mega_displays = env[:mega_env][:mega_displays]
+    end
+
+    def check_authorization
+      render json: "Unauthorized", status: 401 unless env[:mega_env][:authorized]
     end
 
     def set_vars_for_all
@@ -203,6 +208,7 @@ module MegaBar
         @mega_displays[0].dig(:collection_settings)&.filter_fields && !@mega_instance.blank?
       end
     end
+
     def num_per_page
       @mega_displays[0].dig(:collection_settings)&.records_per_page.blank? ? 6  : @mega_displays[0].dig(:collection_settings)&.records_per_page
     end

@@ -29,7 +29,6 @@
     </tr>
   <% end %>
 
-
   <% @mega_instance.each do |mega_record| %>
     <<%= @mf.record_wrapper.html_safe %> id="<%= record_id(mega_record) %>" class="<%= record_class(mega_record) %>">
     <% @mega_display[:displayable_fields].each do | displayable_field | %>
@@ -45,19 +44,13 @@
       <% end %>
 
       <<%= field_wrapper(displayable_field) %> id="<%= field_id(displayable_field) %>" class="<%= field_class(displayable_field) %> and this stuff too">
-      <%
-      # byebug
-        data = render template: displayable_field[:field_display].format.tableize + "/show", locals: data_format_locals(mega_record, displayable_field)
-      %>
+      <% data = render template: displayable_field[:field_display].format.tableize + "/show", locals: data_format_locals(mega_record, displayable_field)    %>
 
       <% if displayable_field[:field_display].link_type == 'link_field_value' && displayable_field[:field_display].format == 'textread' %>
-        <% #byebug %>
         <a href='<%=data%>'><%= data %></a>
       <% elsif displayable_field[:field_display].link_type == 'rel_link' && displayable_field[:field_display].format == 'textread' %>
-        <% #byebug %>
         <a href='<%=request.path %>/<%= data %>'><%= data %></a>
       <% elsif displayable_field[:field_display].link_type == 'show' && displayable_field[:field_display].format == 'textread' %>
-        <%# byebug %>
         <%= link_to data, url_for([*@nested_instance_variables, @kontroller_inst.pluralize.to_sym ]) + "/" + mega_record.id.to_s %>
       <% else %>
         <%= data %>
@@ -92,7 +85,6 @@
 
     </<%= @mf.record_wrapper_end.html_safe%>>
   <% end %>
-
   <% if might_filter? %>
     <tr class='filter-row'>
       <% @mega_display[:displayable_fields].each do | displayable_field | %>

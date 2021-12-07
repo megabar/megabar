@@ -1,0 +1,9 @@
+<br>
+
+<%=password_field_tag(
+	param_from_tablename(@mega_model_properties, field.tablename) + "[" + field.field + "]",
+	'', 
+	title: field.tool_tip, 
+	:data => {:toggle => 'tooltip' }, 
+	class: 'mega_password_field'
+	) %>

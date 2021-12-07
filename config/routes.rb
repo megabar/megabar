@@ -13,6 +13,10 @@ Rails.application.routes.draw do
       match route[:path] => "#{route[:controller]}##{route[:action]}", via: route[:method], as: route[:as]
       # end
     end
+
+
+    resources :sessions
+  
   end
 
 end

@@ -24,14 +24,15 @@ module MegaBar
 
 
     def make_all_files
-
       make_position_field
       # generate 'active_record:model', [self.classname]]
       logger.info("creating scaffold for " + self.classname + 'via: ' + 'rails g mega_bar:mega_bar ' + self.classname + ' ' + self.id.to_s)
       mod = self.modyule.nil? || self.modyule.empty?  ? 'no_mod' : self.modyule
 
       system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s + ' ' + pos
-      ActiveRecord::MigrationContext.new("db/migrate").migrate
+      ActiveRecord::Base.connection.migration_context.migrate
+      
+      # ActiveRecord::MigrationContext.new("db/migrate").migrate
       # ActiveRecord::Migrator.migrate "db/migrate"
     end
 
@@ -48,7 +49,7 @@ module MegaBar
         path = '/' + mod.dasherize + self.classname.underscore.dasherize.pluralize
         # path = self.make_page == 'default_model_path' ? path : self.make_page
         page = Page.find_or_initialize_by(path: path)
-        page.assign_attributes(name: self.name + ' Model Page', path: path, make_layout_and_block: self.make_page, base_name: self.name, model_id: self.id)
+        page.assign_attributes(name: self.name + ' Model Page', path: path, make_layout_and_block: self.make_page, mega_page: self.mega_model, base_name: self.name, model_id: self.id)
         page.save unless page.id
       end
     end

@@ -20,8 +20,8 @@ module MegaBar
     end
     def generate_migration
       if the_module_name
-        generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'
-        generate 'migration create_' + 'mega_bar_tmp_' + classname.underscore.downcase.pluralize + ' created_at:datetime updated_at:datetime' if modyule == 'MegaBar'
+        generate 'migration create_' + the_table_name
+        generate 'migration create_' + 'mega_bar_tmp_' + classname.underscore.downcase.pluralize  if modyule == 'MegaBar'
         @@notices <<  "You will have to copy your Migrations manually over to the megabar gem"
       else
         generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'

@@ -234,6 +234,7 @@ namespace :mega_bar do
 
   def fix_field_displays(c)
     MegaBar::TmpCheckbox.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    MegaBar::TmpPasswordField.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpRadio.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpSelect.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpTextarea.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
@@ -261,6 +262,10 @@ namespace :mega_bar do
     # purposefully blank
   end
 
+  def fix_permission_levels(c)
+    # purposefully blank
+  end
+
   def get_mega_classes
     mega_classes = []
     mega_classes << {tmp_class: MegaBar::TmpModel, perm_class: MegaBar::Model, unique: [:classname], resolver: 'fix_model', condition: 'tmp.classname == perm.classname'}
@@ -284,6 +289,7 @@ namespace :mega_bar do
     mega_classes << {tmp_class: MegaBar::TmpFieldDisplay, perm_class: MegaBar::FieldDisplay, unique: [:model_display_id, :field_id], resolver: 'fix_field_displays', condition: 'tmp.model_display_id == perm.model_display_id && tmp.field_id == perm.field_id && tmp.format == perm.format'}
 
     mega_classes << {tmp_class: MegaBar::TmpCheckbox, perm_class: MegaBar::Checkbox, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
+    mega_classes << {tmp_class: MegaBar::TmpPasswordField, perm_class: MegaBar::PasswordField, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {tmp_class: MegaBar::TmpRadio, perm_class: MegaBar::Radio, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {tmp_class: MegaBar::TmpSelect, perm_class: MegaBar::Select, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {tmp_class: MegaBar::TmpTextarea, perm_class: MegaBar::Textarea, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
@@ -295,64 +301,68 @@ namespace :mega_bar do
     mega_classes << {tmp_class: MegaBar::TmpLayable, perm_class: MegaBar::Layable, unique: [:layout_id, :layout_section_id], resolver: 'fix_joins', condition: 'tmp.layout_id == perm.layout_id && tmp.layout_section_id == perm.layout_section_id'}
     mega_classes << {tmp_class: MegaBar::TmpThemeJoin, perm_class: MegaBar::ThemeJoin, unique: [:theme_id, :themeable_type, :themeable_id], resolver: 'fix_joins', condition: 'tmp.theme_id == perm.theme_id && tmp.themeable_type == perm.themeable_type && tmp.themeable_id = perm.themeable_id'}
     mega_classes << {tmp_class: MegaBar::TmpSiteJoin, perm_class: MegaBar::SiteJoin, unique: [:site_id, :siteable_type, :siteable_id], resolver: 'fix_joins', condition: 'tmp.site_id == perm.site_id && tmp.siteable_type == perm.siteable_type && tmp.siteable_id = perm.siteable_id'}
+    mega_classes << {tmp_class: MegaBar::TmpPermissionLevel, perm_class: MegaBar::PermissionLevel, unique: [:level_name], resolver: 'fix_permission_levels', condition: 'tmp.level_name == perm.level_name'}
     return mega_classes
   end
 
 
   task :dump_seeds, [:mega] => :environment do |t, args|
     if args[:mega].present?
-      mega_bar_model_ids = MegaBar::Model.where(modyule: 'MegaBar').pluck(:id)
-      mega_bar_page_ids = MegaBar::Page.where(mega_page: 'mega')
+      mega_bar_model_ids = MegaBar::Model.where(modyule: 'MegaBar').order(:id).pluck(:id)
+      mega_bar_page_ids = MegaBar::Page.where(mega_page: 'mega').order(:id)
     else
-      mega_bar_model_ids = MegaBar::Model.all.pluck(:id)
-      mega_bar_page_ids = MegaBar::Page.all.pluck(:id)
+      mega_bar_model_ids = MegaBar::Model.all.order(:id).pluck(:id)
+      mega_bar_page_ids = MegaBar::Page.all.order(:id).pluck(:id)
     end
-    mega_bar_theme_ids =  MegaBar::Theme.all.pluck(:id) #tbd.
-    mega_bar_template_ids = MegaBar::Template.all.pluck(:id)
-    mega_bar_fields =  MegaBar::Field.where(model_id: mega_bar_model_ids).pluck(:id)
-    mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).pluck(:id)
-    mega_bar_layable_ids = MegaBar::Layable.where(layout_id: mega_bar_layout_ids).pluck(:id)
-    mega_bar_layout_section_ids = MegaBar::LayoutSection.where(id: MegaBar::Layable.where(layout_section_id: mega_bar_layable_ids))
+    mega_bar_theme_ids =  MegaBar::Theme.all.order(:id).pluck(:id) #tbd.
 
-    mega_bar_block_ids = MegaBar::Block.where(layout_section_id: mega_bar_layout_section_ids).pluck(:id)
-    mega_bar_model_display_ids = MegaBar::ModelDisplay.where(block_id: mega_bar_block_ids).pluck(:id)
-    mega_bar_model_display_collection_ids =  MegaBar::ModelDisplayCollection.where(model_display_id: mega_bar_model_display_ids).pluck(:id)
-    mega_bar_field_display_ids =  MegaBar::FieldDisplay.where(model_display_id: mega_bar_model_display_ids).pluck(:id)
-    SeedDump.dump(MegaBar::Theme.where(id: mega_bar_theme_ids), file: 'db/mega_bar.seeds.rb', exclude: [])
-    SeedDump.dump(MegaBar::Portfolio.where(theme_id: mega_bar_theme_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::Site.where(theme_id: mega_bar_theme_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    mega_bar_template_ids = MegaBar::Template.all.order(:id).pluck(:id)
+    mega_bar_fields =  MegaBar::Field.where(model_id: mega_bar_model_ids).order(:id).pluck(:id)
+    mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).order(:id).pluck(:id)
+    mega_bar_layable_ids = MegaBar::Layable.where(layout_id: mega_bar_layout_ids).order(:id).pluck(:id)
+    mega_bar_layout_section_ids = MegaBar::LayoutSection.where(id: MegaBar::Layable.where(layout_section_id: mega_bar_layable_ids).order(:id)).order(:id)
 
-    SeedDump.dump(MegaBar::Template.where(id: mega_bar_template_ids), file: 'db/mega_bar.seeds.rb', exclude: [])
-    SeedDump.dump(MegaBar::TemplateSection.where(template_id: mega_bar_template_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    mega_bar_block_ids = MegaBar::Block.where(layout_section_id: mega_bar_layout_section_ids).order(:id).pluck(:id)
+    mega_bar_model_display_ids = MegaBar::ModelDisplay.where(block_id: mega_bar_block_ids).order(:id).pluck(:id)
+    mega_bar_model_display_collection_ids =  MegaBar::ModelDisplayCollection.where(model_display_id: mega_bar_model_display_ids).order(:id).pluck(:id)
+    mega_bar_field_display_ids =  MegaBar::FieldDisplay.where(model_display_id: mega_bar_model_display_ids).order(:id).pluck(:id)
+    SeedDump.dump(MegaBar::Theme.where(id: mega_bar_theme_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [])
+    SeedDump.dump(MegaBar::Portfolio.where(theme_id: mega_bar_theme_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Site.where(theme_id: mega_bar_theme_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+
+    SeedDump.dump(MegaBar::Template.where(id: mega_bar_template_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [])
+    SeedDump.dump(MegaBar::TemplateSection.where(template_id: mega_bar_template_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
     # mega_bar_model_ids = [1,2,3,4,6,7,14,15,17,18,20,21]
-    SeedDump.dump(MegaBar::Model.where(id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::Field.where(model_id: mega_bar_model_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::Option.where(field_id: mega_bar_fields), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::ModelDisplayFormat, file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Model.where(id: mega_bar_model_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Field.where(model_id: mega_bar_model_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Option.where(field_id: mega_bar_fields).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::ModelDisplayFormat.all.order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
 
     # mega_bar_page_ids = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]
     # mega_bar_pages = MegaBar::Page.where(id: mega_bar_page_ids).pluck(:id, :path)
-    SeedDump.dump(MegaBar::Page.where(id: mega_bar_page_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::Layout.where(id: mega_bar_layout_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::LayoutSection.where(id: mega_bar_layout_section_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Page.where(id: mega_bar_page_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Layout.where(id: mega_bar_layout_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::LayoutSection.where(id: mega_bar_layout_section_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
-    SeedDump.dump(MegaBar::Block.where(id: mega_bar_block_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::ModelDisplay.where(id: mega_bar_model_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::ModelDisplayCollection.where(id: mega_bar_model_display_collection_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::FieldDisplay.where(id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Block.where(id: mega_bar_block_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::ModelDisplay.where(id: mega_bar_model_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::ModelDisplayCollection.where(id: mega_bar_model_display_collection_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::FieldDisplay.where(id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
-    SeedDump.dump(MegaBar::Checkbox.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::Radio.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::Select.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::Textarea.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::Textbox.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(MegaBar::Textread.where(field_display_id: mega_bar_field_display_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Checkbox.where(field_display_id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::PasswordField.where(field_display_id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Radio.where(field_display_id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Select.where(field_display_id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Textarea.where(field_display_id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Textbox.where(field_display_id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Textread.where(field_display_id: mega_bar_field_display_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
-    SeedDump.dump(MegaBar::Layable.where(id: mega_bar_layable_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(theme_joins(mega_bar_block_ids, mega_bar_layout_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
-    SeedDump.dump(site_joins(mega_bar_block_ids, mega_bar_layout_ids), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::Layable.where(id: mega_bar_layable_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(theme_joins(mega_bar_block_ids, mega_bar_layout_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(site_joins(mega_bar_block_ids, mega_bar_layout_ids).order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
+    SeedDump.dump(MegaBar::PermissionLevel.all.order(:id), file: 'db/mega_bar.seeds.rb', exclude: [], append: true)
 
     File.open(Rails.root.join('db', 'mega_bar.seeds.rb'), "r+") do |file|
       #note, this will change your data! If you wanted to store a string like MegaBar::Whatever in the db, it'll be changed here and you have to fix that in the data_load.
