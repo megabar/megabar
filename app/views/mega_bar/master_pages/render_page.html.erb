@@ -8,21 +8,24 @@
     <%= csrf_meta_tags %>
   </head>
   <body class='<%= @page_classes %>'>
-    <h1 class='site_name'><%= @site_name %></h1>
+    <h1 class='site_name' style=" margin-left: 18px;"><%= @site_name %></h1>
     <nav style='background-color: #eeeeee'>
-      <%= link_to 'Home', '/' %> | 
-      <%= link_to 'My Pages', mega_bar.pages_path %> |  
-      <%= link_to 'My Models', mega_bar.models_path %> | 
-
+      <span style=" margin-left: 18px;">
+        <%= link_to 'Home', '/' %> | 
+        <%= link_to 'My Pages', mega_bar.pages_path %> |  
+        <%= link_to 'My Models', mega_bar.models_path %> | 
+      </span>
 
       <% @current_user = @current_user  ? @current_user : MegaBar::User.find_by_id(session[:user_id]) if session[:user_id] %>
-      <% if @current_user %>
-        Logged in as <%= @current_user.email %> (<%= @current_user.pln %>) |
-        <%= link_to 'Log Out', session_path("current"), method: "delete" %>
-      <% else %>
-        <%= link_to 'Sign Up', mega_bar.new_users_path %> | 
-        <%= link_to 'Log In', "/mega-bar/sessions/new" %> 
-      <% end %>
+      <span style="float: right; margin-right: 18px;">
+        <% if @current_user %>
+          Logged in as <%= @current_user.email %> (<%= @current_user.pln %>) |
+          <%= link_to 'Log Out', session_path("current"), method: "delete" %>
+        <% else %>
+          <%= link_to 'Sign Up', mega_bar.new_users_path %> | 
+          <%= link_to 'Log In', "/mega-bar/sessions/new" %> 
+        <% end %>
+      </span>
     </nav>
     <%# = image_tag "music-warehouse.jpeg" %>
 

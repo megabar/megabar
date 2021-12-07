@@ -13,3 +13,5 @@
  *= require_tree .
  *= require_self
  */
+
+.megabar_site_body { margin: 0px 18px 0px 18px }

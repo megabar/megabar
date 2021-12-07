@@ -314,6 +314,7 @@ class MegaEnv
     @block = blck
     @page_number = pagination.map {|info| info[:page].to_i if info[:kontrlr] == @kontroller_inst + '_page' }.compact.first
     @authorized = authorized?
+    @authorizations = get_authorizations
   end
 
   def to_hash
@@ -329,8 +330,8 @@ class MegaEnv
       nested_class_info: @nested_class_info,
       page_number: @page_number,
       user: @user,
-      authorized: @authorized
-
+      authorized: @authorized,
+      authorizations: @authorizations
     }
   end
 
@@ -427,6 +428,15 @@ class MegaEnv
       # tbd for custom actions. 
     end
     required.present? ? required <= @user.pll : true
+  end
+
+  def get_authorizations
+   { 
+    createAndNew: @block.permCreateAndNew.present? ? @user.pll >= @block.permCreateAndNew : true, 
+    listAndView: @block.permListAndView.present? ? @user.pll >= @block.permListAndView : true,
+    editAndSave: @block.permEditAndSave.present? ? @user.pll >= @block.permEditAndSave : true, 
+    delete: @block.permDelete.present? ? @user.pll >= @block.permDelete : true
+   }
   end
 end
 

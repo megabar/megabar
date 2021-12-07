@@ -130,6 +130,8 @@ module MegaBar
       # @nested_ids
       # @nested_class_info,
       # @page_number
+      # @authorized
+      # @authorizations
       unpack_nested_classes(@nested_class_info)
       @index_view_template ||= "mega_bar.html.erb"
       @show_view_template ||= "mega_bar.html.erb"
