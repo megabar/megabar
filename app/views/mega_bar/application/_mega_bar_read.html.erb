@@ -9,16 +9,16 @@
   <% end %>
   <% if might_paginate?('top') %>
     <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page", theme: @mega_display[:collection_settings]&.pagination_theme %>
-    <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} %>
+    <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} if block_admin?%>
   <% end %>
   <% if @mf.separate_header_row == 'true' %>
     <tr>
       <% @mega_display[:displayable_fields].each do | displayable_field | %>
         <<%= @mf.field_header_wrapper.html_safe%>>
           <nobr>
-            <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'left')}  %>
+            <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'left')} if block_admin?%>
             <%= sortable(displayable_field[:field].field, displayable_field[:field_display].header) %>
-            <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'right')} %>
+            <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'right')} if block_admin? %>
           </nobr>
         </<%= @mf.field_header_wrapper_end.html_safe%>>
       <% end %>
@@ -37,9 +37,9 @@
       <% if @mf.name == 'ProfileTable' %>
         <tr>
         <th>
-          <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'up')} %>
+          <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'up')} if block_admin? %>
           <%=  best_in_place displayable_field[:field_display], :header, url:  @field_display_path %>
-          <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} %>
+          <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} if block_admin? %>
         </th>
       <% end %>
 
@@ -107,5 +107,5 @@
 <% end %>
 <% if might_paginate?('bottom') %>
   <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>
-  <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} %>
+  <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} if block_admin? %>
 <% end %>

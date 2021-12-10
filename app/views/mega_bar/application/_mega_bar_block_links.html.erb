@@ -1,3 +1,9 @@
+<% admin_text = block_admin? ? 'Turn off Admin for ' : 'Administer ' %>
+
+<%= link_to admin_text + @block.name + ' Block', link_path('administer_block', @block.id.to_s) if @authorizations[:block_administrator] %>
+
+<%= ' | '  if @authorizations[:block_administrator] %> 
+
 <%= link_to 'Create New ' + @mega_model_properties.name.singularize, link_path('new')  if @authorizations[:createAndNew] %> 
 <%= ' | '  if @authorizations[:createAndNew] %> 
 <% if ['show'].include? params[:action] %>

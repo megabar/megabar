@@ -18,7 +18,8 @@ module MegaBar
 
     def get_options
       @options[:mega_bar_pages] =  {
-        template_id: Template.all.pluck("name, id")
+        template_id: Template.all.pluck("name, id"),
+        administrator: PermissionLevel.all.pluck("level_name, level"),
       }
     end
   end

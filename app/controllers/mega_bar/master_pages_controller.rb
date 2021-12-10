@@ -7,12 +7,21 @@ module MegaBar
       @mega_site = env[:mega_site]
       @page_classes = page_classes
       @site_name = site_name
+      session[:admin_pages] ||= []
+
+      
       render
     end
 
     def env
       request.env
     end
+
+    def page_admin?
+      session[:admin_pages].include?(@mega_page[:page_id].to_s)
+    end
+
+    helper_method :page_admin?
 
     def page_classes
       [portfolio_class, page_class, site_class, theme_class, 'megabar_site_body'].compact.join(' ')

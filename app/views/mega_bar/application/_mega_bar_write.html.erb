@@ -4,14 +4,14 @@
       @field_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/field_displays', action: 'show', id: displayable_field[:field_display].id, :only_path=> true)
     %>
     <th>
-      <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'up')} %>
+      <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'up')} if block_admin? %>
       <%=  best_in_place displayable_field[:field_display], :header, url: @field_display_path %>
-      <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} %>
+      <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} if block_admin? %>
       <% if displayable_field[:field].instructions.present? %>
         <% @field_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/fields', action: 'show', id: displayable_field[:field].id, :only_path=> true) %>
         <div class='field_instructions'><%=  best_in_place displayable_field[:field], :instructions, url: @field_path %></div>
       <% end %>
-      <br><%= render partial: "mega_bar_help_links", :locals => {:links => field_help_links(displayable_field)} %>
+      <br><%= render partial: "mega_bar_help_links", :locals => {:links => field_help_links(displayable_field)} if block_admin? %>
     </th>
     <td>
       <% # figure out the value of the thing we are trying to display
@@ -27,7 +27,7 @@
       end
       %>
       <%=render template: displayable_field[:field_display].format.tableize + "/show", locals: data_format_locals(@mega_instance, displayable_field, value, @mega_display) %>
-      <%= render partial: "mega_bar_help_links", :locals => {:links => data_display_help_links(displayable_field)} %>
+      <%= render partial: "mega_bar_help_links", :locals => {:links => data_display_help_links(displayable_field)} if block_admin? %>
     </td>
   </tr>
 <%end %>

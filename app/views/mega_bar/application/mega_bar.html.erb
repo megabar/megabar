@@ -11,7 +11,7 @@
       @model_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/model_displays', action: 'show', id: @mega_display[:model_display].id, :only_path=> true)
     %>
     <%= render partial: "mega_bar_read" %>
-    <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_help_links} %>
+    <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_help_links} if block_admin?%>
   <% end %>
 <% else %>
   <% if @mega_instance.errors.any? %>
@@ -39,13 +39,13 @@
       <<%=@mf.app_wrapper.html_safe%> class="<%=model_display_classnames%> banana">
       <%= render partial: "mega_bar_write" %>
       </<%=@mf.app_wrapper_end.html_safe%>>
-      <%= render partial: "mega_bar_help_links",:locals => {:links => model_display_help_links} %>
+      <%= render partial: "mega_bar_help_links",:locals => {:links => model_display_help_links} if block_admin? %>
     <% end %>
     <table><tr><th>Save</th><td><%= submit_tag %></td><th></tr></table>
   <% end%>
 <% end %>
 
-<%= render partial: "mega_bar_help_links", :locals => {:links => block_help_links} %>
+<%= render partial: "mega_bar_help_links", :locals => {:links => block_help_links} if block_admin? %>
 <%= render partial: "mega_bar_block_links" %>
 
 </div>

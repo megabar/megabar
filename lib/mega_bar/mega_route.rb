@@ -113,6 +113,8 @@ class MegaRoute
                 routes << {path: p + '/:id', method: 'patch', action: 'update', controller: controller}
                 routes << {path: p, method: 'post', action: 'create', controller: controller}
                 routes << {path: p + '/:id', method: 'delete', action: 'destroy', controller: controller}
+                routes << {path: p + '/administer-block/:id', method: 'get', action: 'administer_block', controller: controller}
+                routes << {path: p + '/administer-page/:id', method: 'get', action: 'administer_page', controller: controller}
               end
             end
           end  #blocks each

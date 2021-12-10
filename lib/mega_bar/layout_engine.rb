@@ -60,7 +60,7 @@ class LayoutEngine
     puts '-----------------------------'
     # request.env["devise.mapping"] = Devise.mappings[:user]
     # request.env['warden'] = Warden::Proxy.new({}, Warden::Manager.new({})).tap{|i| i.set_user({user: 7}, scope: {user: 7}) }
-    request.session[:init] = true
+    request.session[:init] = true #unless request.session
     @user = env[:mega_user] = request.session["user_id"] && MegaBar::User.all.size > 0 ? MegaBar::User.find(request.session["user_id"]) : MegaBar::User.new;
     if page_info.empty? #non megabar pages.
       puts "NON MEGABAR PAGE"
@@ -112,7 +112,7 @@ def set_page_info(rout, rout_terms)
     rout_terms ||= []
     diff = 20
     prev_diff = 21
-    MegaBar::Page.all.order(id: :desc).pluck(:id, :path, :name).each do | page |
+    MegaBar::Page.all.order(id: :desc).pluck(:id, :path, :name, :administrator).each do | page |
       page_path_terms = page[1].split('/').map{ | m | m if m[0] != ':'} - ["", nil]
       puts 'a: rout_terms ' + rout_terms.inspect
       puts 'b: page_path_terms ' + page_path_terms.inspect
@@ -131,7 +131,7 @@ def set_page_info(rout, rout_terms)
         variable_segments << rout_terms[k] if page_terms[k].starts_with?(':')
       end
       variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
-      page_info = {page_id: page[0], page_path: page[1], terms: page_terms, vars: variable_segments, name: page[2]} if diff < prev_diff
+      page_info = {page_id: page[0], page_path: page[1], terms: page_terms, vars: variable_segments, name: page[2], administrator: page[3]} if diff < prev_diff
       prev_diff = diff if diff < prev_diff
     end
     
@@ -204,10 +204,6 @@ def set_page_info(rout, rout_terms)
         chosen_obj = page_info[:terms][0].classify.constantize.find(page_info[:vars][0].to_i);
         chosen_blocks = chosen_fields.map{ | f | chosen_obj.send(f) }
         blocks = blocks.where(id: chosen_blocks)
-
-        # puts chosen_blocks.inspect
-        # puts '----------------------------------------- goes here '
-        # byebug
       end 
       final_blocks = []
       next unless blocks.present?
@@ -314,7 +310,7 @@ class MegaEnv
     @block = blck
     @page_number = pagination.map {|info| info[:page].to_i if info[:kontrlr] == @kontroller_inst + '_page' }.compact.first
     @authorized = authorized?
-    @authorizations = get_authorizations
+    @authorizations = get_authorizations(page_info)
   end
 
   def to_hash
@@ -377,8 +373,7 @@ class MegaEnv
     nested_classes = []
     puts "================="
     puts blck, rout, page_info
-
-    if blck.path_base
+    if blck.path_base.present?
       if page_info[:page_path].starts_with?(blck.path_base) || blck.path_base.starts_with?(page_info[:page_path])
         block_path_vars = blck.path_base.split('/').map{ | m | m if m[0] == ':'} - ["", nil]
         depth = 0
@@ -430,13 +425,15 @@ class MegaEnv
     required.present? ? required <= @user.pll : true
   end
 
-  def get_authorizations
-   { 
-    createAndNew: @block.permCreateAndNew.present? ? @user.pll >= @block.permCreateAndNew : true, 
-    listAndView: @block.permListAndView.present? ? @user.pll >= @block.permListAndView : true,
-    editAndSave: @block.permEditAndSave.present? ? @user.pll >= @block.permEditAndSave : true, 
-    delete: @block.permDelete.present? ? @user.pll >= @block.permDelete : true
-   }
+  def get_authorizations(page_info)
+    { 
+      createAndNew: @block.permCreateAndNew.present? ? @user.pll >= @block.permCreateAndNew : true, 
+      listAndView: @block.permListAndView.present? ? @user.pll >= @block.permListAndView : true,
+      editAndSave: @block.permEditAndSave.present? ? @user.pll >= @block.permEditAndSave : true, 
+      delete: @block.permDelete.present? ? @user.pll >= @block.permDelete : true,
+      block_administrator: @block.administrator.present? ? @user.pll >= @block.administrator : true,
+      page_administrator: page_info[:administrator].present? ? @user.pll >= page_info[:administrator] : true
+    }
   end
 end
 
