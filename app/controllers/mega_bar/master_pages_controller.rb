@@ -21,12 +21,11 @@ module MegaBar
 
       admin_text = page_admin? ? 'Turn off Admin for ' : 'Administer ' 
       
-       
       if request.env[:mega_env].present?
         ActionController::Base.helpers.link_to "#{admin_text} #{@mega_page[:name]} Page", "#{request.env[:mega_page][:page_path]}/administer-page/#{@mega_page[:page_id].to_s}"
-       else
-        ActionController::Base.helpers.link_to "#{admin_text} #{@mega_page[:name]} Page", "#{@mega_page[:page_path]}administer-page/#{@mega_page[:page_id]}"
-        # link_to "#{admin_text} #{@mega_page[:name]} Page", controller: request.env[:mega_env][:kontroller_path], action: 'administer_page', id: @mega_page[:page_id]
+      else
+        link = ['/mega-bar/pages/' + @mega_page[:page_id].to_s  + '/layouts/' + request.env[:mega_layout].id.to_s  + '?return_to=' + request.env['PATH_INFO'], 'Layout Settings'] unless @mega_page.blank?
+        ActionController::Base.helpers.link_to link[1], link[0]
       end
     end
 
