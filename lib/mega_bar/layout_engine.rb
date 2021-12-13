@@ -61,6 +61,7 @@ class LayoutEngine
     # request.env["devise.mapping"] = Devise.mappings[:user]
     # request.env['warden'] = Warden::Proxy.new({}, Warden::Manager.new({})).tap{|i| i.set_user({user: 7}, scope: {user: 7}) }
     request.session[:init] = true #unless request.session
+    request.session[:admin_pages] ||= []
     @user = env[:mega_user] = request.session["user_id"] && MegaBar::User.all.size > 0 ? MegaBar::User.find(request.session["user_id"]) : MegaBar::User.new;
     if page_info.empty? #non megabar pages.
       puts "NON MEGABAR PAGE"
