@@ -17,6 +17,21 @@ module MegaBar
       request.env
     end
 
+    def page_admin_link 
+
+      admin_text = page_admin? ? 'Turn off Admin for ' : 'Administer ' 
+      
+       
+      if request.env[:mega_env].present?
+        ActionController::Base.helpers.link_to "#{admin_text} #{@mega_page[:name]} Page", "#{request.env[:mega_page][:page_path]}/administer-page/#{@mega_page[:page_id].to_s}"
+       else
+        ActionController::Base.helpers.link_to "#{admin_text} #{@mega_page[:name]} Page", "#{@mega_page[:page_path]}administer-page/#{@mega_page[:page_id]}"
+        # link_to "#{admin_text} #{@mega_page[:name]} Page", controller: request.env[:mega_env][:kontroller_path], action: 'administer_page', id: @mega_page[:page_id]
+      end
+    end
+
+    helper_method :page_admin_link
+
     def page_admin?
       session[:admin_pages].include?(@mega_page[:page_id].to_s)
     end

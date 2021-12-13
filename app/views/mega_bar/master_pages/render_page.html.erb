@@ -42,9 +42,7 @@
 
     <%= render partial: 'mega_bar_help_links' , locals: {:links => page_help_links} if page_admin? %>
  
-    <% admin_text = page_admin? ? 'Turn off Admin for ' : 'Administer ' %>
-
-    <%=  link_to "#{admin_text} #{@mega_page[:name]} Page", controller: request.env[:mega_env][:kontroller_path], action: 'administer_page', id: @mega_page[:page_id]%>
+    <%= page_admin_link %>
 
     <nav  style='background-color: #eeeeee'>
       <%= render "page_nav" %>
