@@ -130,13 +130,15 @@ module MegaBar
       links.map{ |l| link_to l[1], l[0], target: :_blank}.join(' | ')
     end
     def reorder_up(field, direction)
+      return '' unless @authorizations[:block_administrator]
       return '' if @mega_display[:displayable_fields].first[:field_display].position == field[:field_display].position
       links = []
       arrow = direction == 'left' ? '<-' : '^'
       links << ["/mega-bar/field_displays/move/#{field[:field_display].id}?method=move_higher&return_to=" + request.env['PATH_INFO'], arrow]
-      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
+      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ') 
     end
     def reorder_down(field, direction)
+      return '' unless @authorizations[:block_administrator]
       return '' if @mega_display[:displayable_fields].last[:field_display].position == field[:field_display].position
       links = []
       arrow = direction == 'right' ? '->' : 'v'
@@ -190,7 +192,11 @@ module MegaBar
     def param_separator(record)
       link_path('move', record.id).include?('?') ? '&' : '?'
     end
-  end
 
+    def block_admin?
+      session[:admin_blocks].include?(@block.id.to_s)
+    end
+
+  end
 
 end

@@ -1,4 +1,4 @@
 <% @mega_layout_sections.each do |layout_section| %>
   <div class='layout_section_partial'><%=layout_section%></div>
 <% end %>
-<%= render partial: 'mega_bar_help_links' ,:locals => {:links => layout_help_links} %>
+<%= render partial: 'mega_bar_help_links' ,:locals => {:links => layout_help_links} if page_admin? %>

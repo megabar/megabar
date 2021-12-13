@@ -12,5 +12,10 @@ module MegaBar
       request.env
     end
 
+    def page_admin?
+      session[:admin_pages].include?(@mega_page[:page_id].to_s)
+    end
+    helper_method :page_admin?
+
   end
 end

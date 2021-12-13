@@ -16,11 +16,11 @@ module MegaBar
         when 'index_model_display'
           true if @mega_instance.model_displays.pluck(:action).include?'index'
         when 'show_model_display'
-         true if @mega_instance.model_displays.pluck(:action).include?'show'
+          true if @mega_instance.model_displays.pluck(:action).include?'show'
         when 'edit_model_display'
-         true if @mega_instance.model_displays.pluck(:action).include?'edit'
+          true if @mega_instance.model_displays.pluck(:action).include?'edit'
         when 'new_model_display'
-         true if @mega_instance.model_displays.pluck(:action).include?'new'
+          true if @mega_instance.model_displays.pluck(:action).include?'new'
         else 
           false
         end
@@ -46,6 +46,8 @@ module MegaBar
         permCreateAndNew: PermissionLevel.all.pluck("level_name, level"),
         permEditAndSave: PermissionLevel.all.pluck("level_name, level"),
         permDelete: PermissionLevel.all.pluck("level_name, level"),
+        administrator: PermissionLevel.all.pluck("level_name, level"),
+
       }
     end
 

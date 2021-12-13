@@ -138,6 +138,7 @@ module MegaBar
       @edit_view_template ||= "mega_bar.html.erb"
       @new_view_template ||= "mega_bar.html.erb"
       session[:mega_filters] ||= {}
+      session[:admin_blocks] ||= []
     end
 
     def unpack_nested_classes(nested_class_infos)
@@ -213,6 +214,26 @@ module MegaBar
 
     def num_per_page
       @mega_displays[0].dig(:collection_settings)&.records_per_page.blank? ? 6  : @mega_displays[0].dig(:collection_settings)&.records_per_page
+    end
+
+    def administer_block
+      block_id = params[:id]
+      if session[:admin_blocks].include?(block_id) 
+        session[:admin_blocks].delete(block_id) 
+       else
+        session[:admin_blocks] << block_id
+      end
+      redirect_back fallback_location: request.referer
+     end
+
+    def administer_page
+      page_id = params[:id]
+      if session[:admin_pages].include?(page_id) 
+        session[:admin_pages].delete(page_id) 
+       else
+        session[:admin_pages] << page_id
+      end
+      redirect_back fallback_location: request.referer
     end
 
     def process_filters(mega_instance)
