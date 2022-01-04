@@ -117,7 +117,7 @@ module MegaBar
       @mega_layout = env[:mega_layout]
       @mega_class = env[:mega_env][:klass]
       @mega_layout_section = env[:mega_layout_section]
-      @block_class =  env['block_class']
+      @block_classes = env['block_classes']
       env[:mega_env].keys.each { | env_var | instance_variable_set('@' + env_var.to_s, env[:mega_env][env_var]) }
       # that line sets these instance vars that were determined in the layout_engine middleware
       # @block,

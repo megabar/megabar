@@ -212,9 +212,14 @@ def set_page_info(rout, rout_terms)
       env[:mega_layout_section] = layout_section
       blocks.each do |blck|
         next if mega_filtered(blck, site)
-        final_blocks << process_block(blck, page_info, rout, orig_query_hash, pagination, env)
+        final_blocks << {
+          id: blck.id, 
+          header: blck.model_displays.where(action: 'index').first&.header, 
+          actions: blck.actions, action: rout[:action], 
+          html: process_block(blck, page_info, rout, orig_query_hash, pagination, env)
+        }
       end
-      env['mega_final_blocks'] = final_blocks #used in master_layouts_controller
+      env['mega_final_blocks'] = final_blocks #used in master_layouts_sections_controller
       @status, @headers, @layout_sections = MegaBar::MasterLayoutSectionsController.action(:render_layout_section_with_blocks).call(env)
       final_layout_sections[template_section] <<  ls = @layout_sections.blank? ? '' : @layout_sections.body.html_safe
     end
@@ -243,11 +248,21 @@ def set_page_info(rout, rout_terms)
       params_hash = params_hash.merge(env['rack.request.form_hash']) if !env['rack.request.form_hash'].nil? # && (mega_env.block_action == 'update' || mega_env.block_action == 'create')
       env['QUERY_STRING'] = params_hash.to_param # 150221!
       env['action_dispatch.request.parameters'] = params_hash
-      env['block_class'] = blck.name.downcase.parameterize.underscore
+      env['block_classes'] = []
+      env['block_classes'] << blck.name.downcase.parameterize.underscore
+      byebug
+      env['block_classes'] << 'active' if first_tab(env, blck);
+
       @status, @headers, @disp_body = mega_env.kontroller_klass.constantize.action(mega_env.block_action).call(env)
       @redirect = [@status, @headers, @disp_body] if @status == 302
       block_body = @disp_body.blank? ? '' : @disp_body.body.html_safe
     end
+  end
+
+  def first_tab(env, blck) 
+    return false if env[:mega_layout_section]&.rules != 'tabs'
+
+    blck.id == MegaBar::Block.by_layout_section(blck.layout_section_id).where(actions: 'show').first&.id
   end
 
   def action_from_path(path, method, path_segments)

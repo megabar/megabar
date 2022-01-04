@@ -1,6 +1,6 @@
 <h3> <%= @layable.layout_section.id %>: <%= @layable.layout_section.code_name %></h3>
 
-<p><%= link_to 'Switch Layout Section', edit_layables_path(@layable), class:'admin_links' %></p>
+<p><%= link_to 'Edit Layout Section', edit_layout_sections_path(@layable.layout_section.id), class:'admin_links' %> | <%= link_to 'Switch Layout Section', edit_layables_path(@layable), class:'admin_links' %></p>
 
 <% if @layable.layout_section.rules == 'specific' %><p>Only the block with the best matching path_base will be shown</p><% end %>
 <% if @layable.layout_section.blocks.present? %>
