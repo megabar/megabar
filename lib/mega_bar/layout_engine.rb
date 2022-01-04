@@ -250,7 +250,6 @@ def set_page_info(rout, rout_terms)
       env['action_dispatch.request.parameters'] = params_hash
       env['block_classes'] = []
       env['block_classes'] << blck.name.downcase.parameterize.underscore
-      byebug
       env['block_classes'] << 'active' if first_tab(env, blck);
 
       @status, @headers, @disp_body = mega_env.kontroller_klass.constantize.action(mega_env.block_action).call(env)

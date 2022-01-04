@@ -6,8 +6,8 @@
   <% end %>
 
   <ul class="megaLayoutSectionTabs">
-    <% @tabs.each do |t|  %>
-      <li><%= t[:header] %></li>
+    <% @tabs.each_with_index do |t, idx|  %>
+      <li class="<%= idx == 0 ? 'active' : '' %>"><%= t[:header] %></li>
     <% end %>
   </ul>
 

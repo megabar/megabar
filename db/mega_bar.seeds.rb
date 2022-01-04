@@ -422,7 +422,7 @@ MegaBar::TmpLayoutSection.create!([
   {id: 5, created_at: "2016-09-17 23:56:14", updated_at: "2016-09-17 23:56:14", code_name: "fields_layout_main", rules: nil},
   {id: 6, created_at: "2016-09-17 23:56:14", updated_at: "2016-09-17 23:56:14", code_name: "fields_layout_full_end", rules: nil},
   {id: 7, created_at: "2016-09-17 23:56:14", updated_at: "2016-09-17 23:56:14", code_name: "model_displays_layout_full_top", rules: nil},
-  {id: 8, created_at: "2016-09-17 23:56:14", updated_at: "2016-09-17 23:56:14", code_name: "model_displays_layout_main", rules: nil},
+  {id: 8, created_at: "2016-09-17 23:56:14", updated_at: "2016-09-17 23:56:14", code_name: "model_displays_layout_main", rules: 'tabs'},
   {id: 9, created_at: "2016-09-17 23:56:14", updated_at: "2016-09-17 23:56:14", code_name: "model_displays_layout_full_end", rules: nil},
   {id: 10, created_at: "2016-09-17 23:56:14", updated_at: "2016-09-17 23:56:14", code_name: "field_displays_layout_full_top", rules: nil},
   {id: 11, created_at: "2016-09-17 23:56:14", updated_at: "2016-09-17 23:56:14", code_name: "field_displays_layout_main", rules: nil},
