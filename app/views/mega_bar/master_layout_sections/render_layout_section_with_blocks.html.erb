@@ -1,3 +1,25 @@
-<% @blocks.each do |block| %>
-  <%=block%>
-<% end %>
+<% if @mega_layout_section.rules == 'tabs' && request.env[:mega_rout][:action] == 'show' %>
+   
+
+  <%  @blocks.select{|blck| blck[:actions] == 'current'}.each do |block| %>
+    <%= block[:html] %>
+  <% end %>
+
+  <ul class="megaLayoutSectionTabs">
+    <% @tabs.each_with_index do |t, idx|  %>
+      <li class="<%= idx == 0 ? 'active' : '' %>"><%= t[:header] %></li>
+    <% end %>
+  </ul>
+
+  <div id="content-tab"> 
+    <% @blocks.select{|blck| blck[:actions] == 'show'}.each do |block| %>
+     <%= block[:html] %>
+    <% end %>
+  </div>
+
+<% else %>
+  <% @blocks.each do |block| %>
+    <%= block[:html] %>
+  <% end %>
+
+<%end %>

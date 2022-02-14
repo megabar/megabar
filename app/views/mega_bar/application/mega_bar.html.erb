@@ -1,4 +1,4 @@
-<div class='block <%= @block_class %>'>
+<div class='block <%= @block_classes.join(' ') %>'>
 <% puts params[:action] + 'was the action' %>
 <% unless ['edit', 'new', 'create'].include? params[:action]%>
 
