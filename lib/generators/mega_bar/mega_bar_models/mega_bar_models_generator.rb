@@ -24,7 +24,7 @@ module MegaBar
         generate 'migration create_' + 'mega_bar_tmp_' + classname.underscore.downcase.pluralize  if modyule == 'MegaBar'
         @@notices <<  "You will have to copy your Migrations manually over to the megabar gem"
       else
-        generate 'migration create_' + the_table_name + ' created_at:datetime updated_at:datetime'
+        generate 'migration create_' + the_table_name
       end
     end
 

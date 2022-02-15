@@ -40,7 +40,7 @@
       <%=layout%>
     <% end %>
 
-    <%= render partial: 'mega_bar_help_links' , locals: {:links => page_help_links} if page_admin? %>
+    <%= render partial: 'mega_bar_help_links' , locals: {:links => page_help_links} if administering_page? %>
  
     <%= page_admin_link %>
 

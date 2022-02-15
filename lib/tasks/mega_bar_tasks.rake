@@ -105,8 +105,8 @@ namespace :mega_bar do
 
     mega_classes.each do |mc|
 
-      mc[:tmp_class].all.each do |tmp|
-        # byebug if  MegaBar::TmpBlock == mc[:tmp_class]
+      mc[:tmp_class].all.order(id: :asc).each do |tmp|
+        # byebug if  MegaBar::TmpModelDisplay == mc[:tmp_class]
         dupe_hash = {}
         tmp.reload
         mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] }
@@ -114,15 +114,18 @@ namespace :mega_bar do
         attributes = tmp.attributes.select { |attr, value|  mc[:tmp_class].column_names.include?(attr.to_s) }
         attributes.delete("id") unless attributes["id"] == 0
         obj.assign_attributes(attributes)
+        # byebug if  MegaBar::TmpModelDisplay == mc[:tmp_class] && attributes["block_id"].to_i > 180
         # puts attributes.to_s
         obj.save
         if obj.id != tmp.id
           # update tmplayouts set page_id to bob.id
-          c = {tmp: tmp, perm: obj, mc: mc}
+          conflict = {tmp: tmp, perm: obj, mc: mc}
           # puts "there was a lil thing. "
-          # puts c.inspect
+          # puts conflict.inspect
           # puts "---------------------------------"
-          @@prex_all << method(mc[:resolver]).call(c)
+          # byebug if  MegaBar::TmpModelDisplay == mc[:tmp_class]
+          # @@prex_all << 
+          method(mc[:resolver]).call(conflict)
         end
       end
       puts 'finished ' + mc[:perm_class].to_s
@@ -136,7 +139,7 @@ namespace :mega_bar do
     MegaBar::Block.set_callback(       'save',   :after, :add_route)
     MegaBar::Field.set_callback(       'create', :after, :make_migration)
     MegaBar::Field.set_callback(       'save',   :after, :make_field_displays)
-    # MegaBar::FieldDisplay.set_callback('save',   :after, :make_data_display)
+    MegaBar::FieldDisplay.set_callback('save',   :after, :make_data_display)
     MegaBar::Model.set_callback(       'create', :after, :make_all_files)
     MegaBar::Model.set_callback(       'create', :before, :standardize_modyule)
     MegaBar::Model.set_callback(       'create', :before, :standardize_classname)

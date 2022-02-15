@@ -4,6 +4,7 @@ module MegaBar
       @mega_layout_sections ||= env['mega_final_layout_sections']
       @mega_layout ||= env[:mega_layout]
       @mega_page = env[:mega_page]
+      @mega_user = env[:mega_user]
       template = Template.find(@mega_layout[:template_id])
       render template.code_name
     end
@@ -12,10 +13,12 @@ module MegaBar
       request.env
     end
 
-    def page_admin?
+    def administering_page?
       session[:admin_pages].include?(@mega_page[:page_id].to_s)
     end
-    helper_method :page_admin?
+
+
+    helper_method :administering_page?
 
   end
 end

@@ -51,7 +51,6 @@ module MegaBar
       before(:each) do
 
         Model.skip_callback('create',:after,:make_all_files)
-        byebug
         create(:template)
         create(:template_section)
         create(:model_with_page)

@@ -9,6 +9,7 @@ end
 
 # options = options.reject{|o| o[1] == 0} #later we may need a field param allowing zero options to show up.
 
+
 include_blank = select.multiple == true ? false : "Select " + displayable_field[:field_display].header
 
 if ActiveModel::Type::Boolean.new.cast(field.accessor) 
