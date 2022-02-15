@@ -6,7 +6,7 @@ require 'pry'
 require 'combustion'
 require 'capybara/rspec'
 require 'simplecov'
-require 'rake'
+# require 'rake'
 require 'rails/all'
 require 'acts_as_list'
 

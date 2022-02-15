@@ -4,7 +4,7 @@ require 'bundler/setup'
 # require 'byebug'
 require 'factory_girl_rails'
 require 'rails/all'
-require 'rake'
+# require 'rake'
 require 'rspec/rails'
 
 require MEGABAR_ROOT + 'spec/controllers/common'
