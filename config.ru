@@ -2,7 +2,7 @@
 
 require "rubygems"
 require "bundler"
-require "byebug"
+# require "byebug"
 
 Bundler.require :default, :development
 
