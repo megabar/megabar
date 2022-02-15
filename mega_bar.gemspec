@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'seedbank'
   s.add_dependency 'slim-rails'
   s.add_dependency 'nandi'
-  s.add_dependency gem 'bcrypt', '~> 3.1.7'
+  s.add_dependency 'bcrypt', '~> 3.1.7'
   
   s.add_development_dependency 'aruba'
   s.add_development_dependency 'bundler' # , '~> 1.7'
