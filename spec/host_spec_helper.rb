@@ -1,7 +1,7 @@
 ENV['RAILS_ENV'] ||= 'test'
 MEGABAR_ROOT=File.join(File.dirname(__FILE__), '../../megabar/') #feel free to modify for your environment.
 require 'bundler/setup'
-require 'byebug'
+# require 'byebug'
 require 'factory_girl_rails'
 require 'rails/all'
 require 'rake'

@@ -1,6 +1,6 @@
 module MegaBar
   class MegaBarModelsGenerator < Rails::Generators::Base
-    require 'byebug'
+    # require 'byebug'
     source_root File.expand_path('../templates', __FILE__)
     argument :modyule, type: :string
     argument :classname, type: :string

@@ -1,5 +1,5 @@
 require "mega_bar/engine"
-require 'byebug'
+# require 'byebug'
 module MegaBar
 
   def MegaBar.hello_b
