@@ -10,6 +10,7 @@
 
 
 */
+
 .admin_links, .admin_links a {
   color: #aaa ;
   font-size: .9em ;
@@ -61,8 +62,8 @@ div.admin_block_divider:nth-child(odd){
 }
 
 .field_instructions {
-  font-weight: normal ;
-  font-size: .8em ;
+  font-weight: normal;
+  font-size: .8em;
   font-style: italic;
 }
 .galleryList {
@@ -82,7 +83,7 @@ ul.galleryList :first-child  {
   margin: 10px;
 }
 .layout_section_admin .layout_section {
-    border: 3px solid blue
+  border: 3px solid blue
 }
 .mega_bar__template_gallery-page .layout-template {
   margin-top: 30px
