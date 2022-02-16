@@ -80,7 +80,7 @@ namespace :mega_bar do
       mc[:tmp_class].delete_all # delete everything that is in the tmp_tables
       mega_ids << mc[:id]
     end
-    file = args[:file] || "../../db/mega_bar.seeds.rb"
+    file = Rails.root.to_s + args[:file] || "../../db/mega_bar.seeds.rb"
     require_relative file #LOADS SEEDS INTO TMP TABLES
     # start conflict resolution
     MegaBar::Block.skip_callback(       'save',   :after, :make_model_displays)
