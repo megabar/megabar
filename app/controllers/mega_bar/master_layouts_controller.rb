@@ -20,5 +20,12 @@ module MegaBar
 
     helper_method :administering_page?
 
+  def page_admin?
+      return true if @mega_page[:administrator].blank? # this line should ultimately go away.   
+      @mega_user.pll >= @mega_page[:administrator]
+    end
+
+    helper_method :page_admin?
+
   end
 end
