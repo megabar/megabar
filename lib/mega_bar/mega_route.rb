@@ -66,11 +66,13 @@ class MegaRoute
                   pf = ''
                   as = nil
                   concerns = nil
+                  constraints = nil
                   case md.action
                   when 'show'
                     pf = p + '/:id'
                     as = path.singularize
                     meth = 'get'
+                    constraints = { id: /\d+/ }
                   when 'index'
                     pf = p
                     as = path
@@ -98,6 +100,7 @@ class MegaRoute
                   route = route.merge({as: as}) if as
                   # byebug if as == 'templates'
                   route = route.merge({concerns: concerns}) if concerns
+                  route = route.merge({contstraints: constraints}) if constraints
                   # route = route.merge({on: x}) if x
                   routes << route
                   # byebug

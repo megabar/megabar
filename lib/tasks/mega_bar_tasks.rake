@@ -67,7 +67,6 @@ namespace :mega_bar do
     #   add it to the mega_bar_classes array
     #   and probably add a resolver function.
     puts "Loading Route Information..." if args[:model_set] == 'routes'
-
     mega_classes = get_mega_classes
     route_classes = [MegaBar::Page, MegaBar::Layout, MegaBar::LayoutSection, MegaBar::Layable, MegaBar::Block, MegaBar::ModelDisplay, MegaBar::Model]
     mega_classes.delete_if { |x| not route_classes.include? x[:perm_class] } if args[:model_set] == 'routes'
@@ -80,7 +79,8 @@ namespace :mega_bar do
       mc[:tmp_class].delete_all # delete everything that is in the tmp_tables
       mega_ids << mc[:id]
     end
-    file = Rails.root.to_s + args[:file] || "../../db/mega_bar.seeds.rb"
+# byebug
+    file = args[:file].nil? ? "../../db/mega_bar.seeds.rb" : Rails.root.to_s + args[:file]
     require_relative file #LOADS SEEDS INTO TMP TABLES
     # start conflict resolution
     MegaBar::Block.skip_callback(       'save',   :after, :make_model_displays)

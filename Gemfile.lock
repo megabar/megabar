@@ -9,7 +9,7 @@ GIT
 PATH
   remote: .
   specs:
-    mega_bar (0.7.0)
+    mega_bar (0.7.3)
       acts_as_list
       jquery-ui-rails
       kaminari
