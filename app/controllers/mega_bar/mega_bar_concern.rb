@@ -189,6 +189,7 @@ module MegaBar
       mega_class.column_names.include?(passed_params[:sort]) ? passed_params[:sort] :  model_properties[:default_sort_field]
     end
     def sort_direction(passed_params, model_properties)
+      # byebug
       %w[asc desc].include?(passed_params[:direction]) ? passed_params[:direction] :  model_properties[:default_sort_order]
     end
 
@@ -290,6 +291,7 @@ module MegaBar
       constant_string
     end
     def column_sorting
+      # byebug
       sort_column(@mega_class, @mega_model_properties, params) + " " + sort_direction(params, @mega_model_properties)
     end
     def redo_setup(action)
