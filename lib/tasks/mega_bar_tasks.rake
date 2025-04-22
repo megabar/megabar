@@ -101,7 +101,7 @@ namespace :mega_bar do
     MegaBar::LayoutSection.skip_callback( 'create', :after,  :create_block_for_section)
 
     # start conflict detection
-    @@prex_all = []
+    # @@prex_all = []
 
     mega_classes.each do |mc|
 

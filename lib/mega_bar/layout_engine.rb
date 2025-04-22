@@ -220,8 +220,14 @@ def set_page_info(rout, rout_terms)
         }
       end
       env['mega_final_blocks'] = final_blocks #used in master_layouts_sections_controller
-      @status, @headers, @layout_sections = MegaBar::MasterLayoutSectionsController.action(:render_layout_section_with_blocks).call(env)
-      final_layout_sections[template_section] <<  ls = @layout_sections.blank? ? '' : @layout_sections.body.html_safe
+      
+      # Check if we're in the admin view
+      if env['PATH_INFO'].include?('/layouts/') && env['rack.request.query_hash']['return_to'].present?
+        final_layout_sections[template_section] << "<!-- Section: #{template_section} -->"
+      else
+        @status, @headers, @layout_sections = MegaBar::MasterLayoutSectionsController.action(:render_layout_section_with_blocks).call(env)
+        final_layout_sections[template_section] <<  ls = @layout_sections.blank? ? '' : @layout_sections.body.html_safe
+      end
     end
     final_layout_sections
   end

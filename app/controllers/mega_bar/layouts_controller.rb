@@ -6,6 +6,7 @@ module MegaBar
       @page_id = params["page_id"] if params["page_id"]
       super
     end
+
     def get_options
       @options[:mega_bar_layouts] =  {
         page_id: Page.all.pluck("name, id"),

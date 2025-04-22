@@ -133,10 +133,10 @@ module MegaBar
       # @authorized
       # @authorizations
       unpack_nested_classes(@nested_class_info)
-      @index_view_template ||= "mega_bar.html.erb"
-      @show_view_template ||= "mega_bar.html.erb"
-      @edit_view_template ||= "mega_bar.html.erb"
-      @new_view_template ||= "mega_bar.html.erb"
+      @index_view_template ||= "mega_bar/application/mega_bar"
+      @show_view_template ||= "mega_bar/application/mega_bar"
+      @edit_view_template ||= "mega_bar/application/mega_bar"
+      @new_view_template ||= "mega_bar/application/mega_bar"
       session[:mega_filters] ||= {}
       session[:admin_blocks] ||= []
     end

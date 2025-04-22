@@ -14,7 +14,7 @@ group :test do
   gem 'simplecov', '~> 0.7.1'
   gem 'jquery-ui-rails'
   gem 'acts_as_list'
-  # gem 'sprockets'
+  gem 'propshaft'
   gem 'kaminari'
   gem 'best_in_place', git: 'https://github.com/mmotherwell/best_in_place'
   gem 'rails-controller-testing'

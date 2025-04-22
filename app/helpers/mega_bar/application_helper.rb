@@ -15,7 +15,7 @@ module MegaBar
       classes.join(" ")
     end
 
-    def field_id(d_f)
+    def mega_field_id(d_f)
       "fd-#{d_f[:field_display].id}-f-#{d_f[:field].id}-df-#{d_f[:data_format].id}"
     end
 

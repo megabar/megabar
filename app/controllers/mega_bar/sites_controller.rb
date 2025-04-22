@@ -1,4 +1,3 @@
-
 module MegaBar 
   class SitesController < MegaBar::ApplicationController
     include MegaBar::MegaBarConcern
