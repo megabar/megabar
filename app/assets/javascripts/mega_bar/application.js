@@ -15,5 +15,4 @@
 //= require best_in_place
 //= require jquery-ui
 //= require best_in_place.jquery-ui
-//= require bootstrap-sprockets
 //= require_tree .
