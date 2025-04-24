@@ -51,7 +51,7 @@ module MegaBar
           html: blck.html || ''
         }
       end)
-      
+      byebug
       # Render the section template
       m_layout_section.render_to_string('render_layout_section_admin')
     end

@@ -4,7 +4,7 @@ source "https://rubygems.org"
 group :test do
   gem 'activerecord'
   gem 'sqlite3'
-  gem 'rails', '~> 6.1.0'
+  gem 'rails', '~> 8.0.2'
   gem 'actionmailer'
   gem 'actionpack'
   gem 'rspec-rails'
@@ -14,7 +14,6 @@ group :test do
   gem 'simplecov', '~> 0.7.1'
   gem 'jquery-ui-rails'
   gem 'acts_as_list'
-  gem 'propshaft'
   gem 'kaminari'
   gem 'best_in_place', git: 'https://github.com/mmotherwell/best_in_place'
   gem 'rails-controller-testing'
@@ -32,3 +31,5 @@ gemspec
 
 # To use debugger
 # gem 'debugger'
+
+gem "seed_dump"

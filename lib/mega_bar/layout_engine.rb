@@ -22,7 +22,7 @@ class LayoutEngine
   def _call(env)
 
     # so.. a lot does go on here... I'll have to write a white paper.
-    if env['PATH_INFO'].end_with?('.css')  || env['PATH_INFO'].end_with?('.js') || env['PATH_INFO'].end_with?('.jpeg') || env['PATH_INFO'].end_with?('.jpg')
+    if env['PATH_INFO'].end_with?('.sass')  ||  env['PATH_INFO'].end_with?('.css')  || env['PATH_INFO'].end_with?('.js') || env['PATH_INFO'].end_with?('.jpeg') || env['PATH_INFO'].end_with?('.jpg')
       @status, @headers, @response = @app.call(env)
       return  [@status, @headers, self]
     end
@@ -222,12 +222,12 @@ def set_page_info(rout, rout_terms)
       env['mega_final_blocks'] = final_blocks #used in master_layouts_sections_controller
       
       # Check if we're in the admin view
-      if env['PATH_INFO'].include?('/layouts/') && env['rack.request.query_hash']['return_to'].present?
-        final_layout_sections[template_section] << "<!-- Section: #{template_section} -->"
-      else
+      # if env['PATH_INFO'].include?('/layouts/') && env['rack.request.query_hash']['return_to'].present?
+      #   final_layout_sections[template_section] << "<!-- Section: #{template_section} -->"
+      # else
         @status, @headers, @layout_sections = MegaBar::MasterLayoutSectionsController.action(:render_layout_section_with_blocks).call(env)
         final_layout_sections[template_section] <<  ls = @layout_sections.blank? ? '' : @layout_sections.body.html_safe
-      end
+      # end
     end
     final_layout_sections
   end
