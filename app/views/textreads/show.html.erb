@@ -1,5 +1,4 @@
 <% final_field = (field.data_type == 'references' && !field.field.ends_with?('_id')) ?  field.field + '_id' : field.field %>
-<% byebug %>
 <% if textread[:transformation].present? %>
   <% 
     value = obj.read_attribute(final_field)

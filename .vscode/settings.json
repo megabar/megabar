@@ -1,3 +1,9 @@
 {
-    "workbench.colorTheme": "Solarized Dark"
+    "workbench.colorTheme": "Solarized Dark",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "[ruby]": {
+        "editor.defaultFormatter": "vscode.ruby"
+    }
 }

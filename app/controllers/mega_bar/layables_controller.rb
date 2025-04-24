@@ -19,41 +19,65 @@ module MegaBar
         final_layout_sections[section.code_name] = []
         final_layout_sections[section.code_name][0] = generate_section(section)
       end
-      
+
       # Build the layout HTML manually
       html = []
-      html << "<div class='layout-settings'>"
-      final_layout_sections.each do |section_name, content|
-        html << "<div class='section #{section_name}'>"
-        html << content[0]
-        html << "</div>"
-      end
-      html << "</div>"
-      
-      html.join("\n")
+
+      m_template = TemplatesController.new
+      m_template.request = request
+      m_template.response = response
+      m_template.instance_variable_set("@mega_layout_sections", final_layout_sections)
+      m_template.instance_variable_set("@mega_layout", @layout)
+      html << m_template.render_template_with_layout_sections
+
+
+
+      "<div class='admin-layout-template'>" + html[0] + "</div>"
+      # Get the blocks for this section
+      # blocks = MegaBar::Block.by_layout_section(template_section.id).order(position: :asc)
+      # m_layout_section.instance_variable_set("@blocks", blocks.map do |blck|
+      #   {
+      #     id: blck.id,
+      #     header: blck.model_displays.where(action: "index").first&.header,
+      #     actions: blck.actions,
+      #     html: blck.html || "",
+      #   }
+      # end)
+      # # Render the section template
+      # m_layout_section.render_to_string("render_layout_section_admin")
+      # byebug
+
+      # html << "<div class='layout-settings'>"
+      # final_layout_sections.each do |section_name, content|
+      #   html << "<div class='section #{section_name}'>"
+      #   html << content[0]
+      #   html << "</div>"
+      # end
+      # html << "</div>"
+
+      # html.join("\n")
     end
 
     def generate_section(template_section)
       m_layout_section = MegaBar::MasterLayoutSectionsController.new
       m_layout_section.request = request
       m_layout_section.response = response
-      m_layout_section.instance_variable_set('@layable', @layable)
-      m_layout_section.instance_variable_set('@mega_layout_section', template_section)
-      m_layout_section.instance_variable_set('@mega_layout', @layout)
-      
+      m_layout_section.instance_variable_set("@layable", @layable)
+      m_layout_section.instance_variable_set("@mega_layout_section", template_section)
+      m_layout_section.instance_variable_set("@mega_layout", @layout)
+
       # Get the blocks for this section
       blocks = MegaBar::Block.by_layout_section(template_section.id).order(position: :asc)
-      m_layout_section.instance_variable_set('@blocks', blocks.map do |blck|
+      m_layout_section.instance_variable_set("@blocks", blocks.map do |blck|
         {
           id: blck.id,
-          header: blck.model_displays.where(action: 'index').first&.header,
+          header: blck.model_displays.where(action: "index").first&.header,
           actions: blck.actions,
-          html: blck.html || ''
+          html: blck.html || "",
         }
       end)
-      byebug
       # Render the section template
-      m_layout_section.render_to_string('render_layout_section_admin')
+      m_layout_section.render_to_string("render_layout_section_admin")
     end
   end
 end
