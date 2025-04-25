@@ -84,7 +84,6 @@ class LayoutEngine
     page_layouts.each do |page_layout|
       next if mega_filtered(page_layout, site)
       env[:mega_layout] = page_layout
-      byebug
       final_layout_sections = process_page_layout(page_layout, page_info, rout, orig_query_hash, pagination, site, env)
 
       env["mega_final_layout_sections"] = final_layout_sections #used in master_layouts_controller
@@ -164,7 +163,6 @@ class LayoutEngine
       template_section = MegaBar::TemplateSection.find(layout_section.layables.where(layout_id: page_layout.id).first.template_section_id).code_name
       blocks = MegaBar::Block.by_layout_section(layout_section.id).order(position: :asc)
       blocks = blocks.by_actions(rout[:action]) unless rout.blank?
-      byebug
       if layout_section.rules == "specific"
         puts "----------------------"
         puts blocks.pluck(:path_base).inspect

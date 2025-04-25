@@ -56,7 +56,6 @@ module MegaBar
 
     def page_class
       return "home-page" if @mega_page[:page_path] == "/"
-      byebug
       @mega_page[:page_path].gsub("/", "__").gsub(":", "").downcase[2..-1] + "-page"
     end
 
