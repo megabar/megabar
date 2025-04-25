@@ -1,33 +1,37 @@
-
-ul.megaLayoutSectionTabs {
+ul.mega-layout-section-tabs {
   list-style-type: none;
+  margin: 0;
   padding: 0;
-}
-ul.megaLayoutSectionTabs li {
-  display: inline-block;
-  background-color: #252525;
-  border-bottom: solid 2px grey;
-  padding: 10px 20px;
-  margin-bottom: 4px;
-  color: #fff;
-  cursor: pointer;
-}
-ul.megaLayoutSectionTabs li:hover {
-  background-color: grey;
-}
-ul.megaLayoutSectionTabs li.active {
-  background-color: #00aeef;
+  overflow: hidden;
+  background-color: #f1f1f1;
 }
 
+ul.mega-layout-section-tabs li {
+  float: left;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  border-bottom: 3px solid transparent;
+}
 
+ul.mega-layout-section-tabs li:hover {
+  background-color: #ddd;
+}
+
+ul.mega-layout-section-tabs li.active {
+  background-color: #ccc;
+  border-bottom: 3px solid red;
+}
 
 #content-tab div {
   display: none;
 }
+
 #content-tab div.active {
   display: block;
 }
 
-#content-tab>div{
-
-}
+#content-tab>div {}

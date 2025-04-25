@@ -1,25 +1,25 @@
 /* MegaBar Styles */
 
-.header_row {
+.header-row {
   white-space: nowrap;
 }
 
-#layout-page-layouts-layout .layout_section.main h1 {
+#layout-page-layouts-layout .layout-section.main h1 {
   font-size: 14px;
 }
 
-#layout-page-layouts-layout .layout_section.main .model_display_instructions {
+#layout-page-layouts-layout .layout-section.main .model-display-instructions {
   display: none;
 }
 
-.admin_links,
-.admin_links a {
+.admin-links,
+.admin-links a {
   color: #aaa;
   font-size: .7em;
   clear: both;
 }
 
-.layout_help_link div a {
+.layout-help-link div a {
   font-size: 16px;
 }
 
@@ -59,55 +59,56 @@ table.profile-table>tbody>tr>td {
   background-color: #f0f0f0;
 }
 
-div.admin_block_divider:nth-child(odd) {
+div.admin-block-divider:nth-child(odd) {
   background-color: #F0F0F0;
 }
 
-.field_instructions {
+.field-instructions {
   font-weight: normal;
   font-size: .8em;
   font-style: italic;
 }
 
-.galleryList {
+.gallery-list {
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
 
-ul.galleryList :first-child {
+ul.gallery-list :first-child {
   margin-left: 0 !important;
 }
 
-.galleryList li {
+.gallery-list li {
   border: 1px solid black;
   float: left;
   padding: 10px;
   margin: 10px;
 }
 
-.layout_section_admin .layout_section {
+.layout-section-admin .layout-section {
   border: 3px solid blue;
 }
 
-.mega_bar__template_gallery-page .layout-template {
+.mega-bar__template-gallery-page .layout-template {
   margin-top: 30px;
 }
 
-.mega_bar__template_gallery-page .no_columns_template .layout_section {
+
+.mega-bar__template-gallery-page .no-columns-template .layout-section {
   border: 3px solid blue;
 }
 
-.mega_bar__template_gallery-page .left_column_template .layout_section {
+.mega-bar__template-gallery-page .left-column-template .layout-section {
   border: 3px solid red;
 }
 
-.mega_bar__template_gallery-page .right_column_template .layout_section {
+.mega-bar__template-gallery-page .right-column-template .layout-section {
   border: 3px solid green;
 }
 
-.mega_bar__template_gallery-page .right_and_left_columns_template .layout_section {
+.mega-bar__template-gallery-page .right-and-left-columns-template .layout-section {
   border: 3px solid black;
 }
 
@@ -115,6 +116,6 @@ h3 {
   font: 8px sans-serif;
 }
 
-.admin-layout-template .layout_section {
+.admin-layout-template .layout-section {
   border: 1px solid green;
 }

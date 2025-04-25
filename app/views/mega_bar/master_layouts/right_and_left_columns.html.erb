@@ -1,19 +1,19 @@
-<div id="layout-<%=@mega_layout.name.gsub(' ', '-').downcase.dasherize %>" class="container right_and_left_columns_template layout-template">
+<div id="layout-<%=@mega_layout.name.gsub(' ', '-').downcase.dasherize %>" class="container right-and-left-columns-template layout-template">
   <div class="row">
     <% if @mega_layout_sections['full_top'].present? %>
-      <div class='layout_section full_top col-12'><%= @mega_layout_sections['full_top'][0]%></div>
+      <div class='layout-section full_top col-12'><%= @mega_layout_sections['full_top'][0]%></div>
     <% end %>
     <% if @mega_layout_sections['left_column'].present? %>
-      <div class='layout_section left_column col-3'><%= @mega_layout_sections['left_column'][0]%></div>
+      <div class='layout-section left_column col-3'><%= @mega_layout_sections['left_column'][0]%></div>
     <% end %>
     <% if @mega_layout_sections['main'].present? %>
-      <div class='layout_section main col-7'><%= @mega_layout_sections['main'][0]%></div>
+      <div class='layout-section main col-7'><%= @mega_layout_sections['main'][0]%></div>
     <% end %>
     <% if @mega_layout_sections['right_column'].present? %>
-      <div class='layout_section right_column col-2'><%= @mega_layout_sections['right_column'][0]%></div>
+      <div class='layout-section right_column col-2'><%= @mega_layout_sections['right_column'][0]%></div>
     <% end %>
     <% if @mega_layout_sections['full_end'].present? %>
-      <div class='layout_section full_end col-12'><%= @mega_layout_sections['full_end'][0]%></div>
+      <div class='layout-section full_end col-12'><%= @mega_layout_sections['full_end'][0]%></div>
     <% end %>
     <% if !defined?(page_admin?).nil? && page_admin? %>
       <div class='links col-12 layout_help_link'><%= render partial: 'mega_bar_help_links' ,:locals => {:links => layout_help_links} %></div>
