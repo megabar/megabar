@@ -7,13 +7,10 @@ module MegaBar
 
     config.autoload_paths << File.expand_path("../*", __FILE__)
 
-
     require File.expand_path('../mega_route.rb', __FILE__)
 
     require File.expand_path('../layout_engine.rb', __FILE__)
     config.app_middleware.use LayoutEngine
-
-
 
     initializer :append_migrations do |app|
       unless app.root.to_s.match root.to_s
@@ -42,6 +39,7 @@ module MegaBar
     config.assets.paths << File.expand_path("../../assets/stylesheets/mega_bar", __FILE__)
     config.assets.paths << File.expand_path("../../assets/javascripts/mega_bar", __FILE__)
     config.assets.precompile += %w( mega_bar.css )
+    config.annotate_rendered_view_with_filenames = false
 
  
   end

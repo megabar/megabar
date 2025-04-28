@@ -11,11 +11,14 @@ module MegaBar
       render
     end
 
-    
     def render_layout_section_admin
-      render 'render_layout_section_admin'
+      # If we're already rendering something, return a placeholder
+      if performed?
+        render plain: "<!-- Section Placeholder -->"
+      else
+        render 'render_layout_section_admin'
+      end
     end
-
 
     def env
       request.env
