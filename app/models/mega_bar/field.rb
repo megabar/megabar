@@ -52,7 +52,7 @@ module MegaBar
       # if self.field.ends_with('_id') byebug
       boolean =   self.data_type == 'boolean' ? ' null: false, default: false' : '' #todo allow default true.
       system 'bundle exec rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + self.data_type + boolean
-      ActiveRecord::MigrationContext.new("db/migrate", ActiveRecord::Base.connection.schema_migration).migrate
+      system 'bundle exec rails db:migrate'
       if self.data_type == 'references' 
         self.field = self.field + "_id"
         self.save

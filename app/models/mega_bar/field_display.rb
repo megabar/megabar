@@ -34,7 +34,7 @@ module MegaBar
         end
         fields_defaults[:field_display_id] = self.id
         fields_defaults[:checked] = 'false' if self.format == 'checkbox'
-        data_display = obj.save(fields_defaults)
+        data_display = obj.update(fields_defaults)
       end
       f = Field.where(id: self.field_id)
     end

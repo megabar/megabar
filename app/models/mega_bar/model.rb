@@ -30,7 +30,7 @@ module MegaBar
       mod = self.modyule.nil? || self.modyule.empty?  ? 'no_mod' : self.modyule
 
       system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s + ' ' + pos
-      ActiveRecord::Base.connection.migration_context.migrate
+      system 'bundle exec rails db:migrate'
       
       # ActiveRecord::MigrationContext.new("db/migrate").migrate
       # ActiveRecord::Migrator.migrate "db/migrate"
