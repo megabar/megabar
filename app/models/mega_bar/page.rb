@@ -4,6 +4,7 @@ module MegaBar
     scope :by_route, ->(route) { where(path: route) if route.present? }
     attr_accessor :make_layout_and_block, :block_text, :model_id, :base_name, :template_id
     after_create :create_layout_for_page
+    after_update :create_layout_for_page
     after_create :add_route
     validates_presence_of :path, :name
     validates_uniqueness_of :path

@@ -1,17 +1,14 @@
 <% admin_text = block_admin? ? 'Turn off Admin for ' : 'Administer ' %>
-
-<%= link_to admin_text + @block.name + ' Block', link_path('administer_block', @block.id.to_s) if @authorizations[:block_administrator] %>
-
-<%= ' | '  if @authorizations[:block_administrator] %> 
-
-<%= link_to 'Create New ' + @mega_model_properties.name.singularize, link_path('new')  if @authorizations[:createAndNew] %> 
-<%= ' | '  if @authorizations[:createAndNew] %> 
-<% if ['show'].include? params[:action] %>
-  <%= link_to 'Edit', link_path('edit', @mega_instance[0].id) if @authorizations[:editAndSave] %>  
-  <%= ' | ' if @authorizations[:editAndSave] %>  
-  <%= link_to 'Show', link_path('show', @mega_instance[0].id) if @authorizations[:listAndView] %>
-  <%= ' | ' if @authorizations[:listAndView] %>  
-
-  <%= link_to "Index", controller: @kontroller_path  if @authorizations[:listAndView] %>
-
-<% end %>
+<% if @block.id.present?%>
+  <%= link_to admin_text + @block.name + ' Block', link_path('administer_block', @block.id.to_s) if @authorizations[:block_administrator] %>
+  <%= ' | '  if @authorizations[:block_administrator] %>
+  <%= link_to 'Create New ' + @mega_model_properties.name.singularize, link_path('new')  if @authorizations[:createAndNew] %>
+  <%= ' | '  if @authorizations[:createAndNew] %>
+  <% if ['show'].include? params[:action] %>
+    <%= link_to 'Edit', link_path('edit', @mega_instance[0].id) if @authorizations[:editAndSave] %>
+    <%= ' | ' if @authorizations[:editAndSave] %>
+    <%= link_to 'Show', link_path('show', @mega_instance[0].id) if @authorizations[:listAndView] %>
+    <%= ' | ' if @authorizations[:listAndView] %>
+    <%= link_to "Index", controller: @kontroller_path  if @authorizations[:listAndView] %>
+  <% end %>
+<% end%>

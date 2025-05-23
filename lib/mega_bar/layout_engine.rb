@@ -112,11 +112,11 @@ class LayoutEngine
     prev_diff = 21
     MegaBar::Page.all.order(id: :desc).pluck(:id, :path, :name, :administrator).each do |page|
       page_path_terms = page[1].split("/").map { |m| m if m[0] != ":" } - ["", nil]
-      puts "a: rout_terms " + rout_terms.inspect
-      puts "b: page_path_terms " + page_path_terms.inspect
-      puts "c: (rout_terms - page_path_terms).size: " + (rout_terms - page_path_terms).size.to_s
-      puts "d: rout_terms.size - page_path_terms.size: " + (rout_terms.size - page_path_terms.size).to_s
-      puts "e: " + ((rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size).to_s
+      # puts "a: rout_terms " + rout_terms.inspect
+      # puts "b: page_path_terms " + page_path_terms.inspect
+      # puts "c: (rout_terms - page_path_terms).size: " + (rout_terms - page_path_terms).size.to_s
+      # puts "d: rout_terms.size - page_path_terms.size: " + (rout_terms.size - page_path_terms.size).to_s
+      # puts "e: " + ((rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size).to_s
 
       next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
 

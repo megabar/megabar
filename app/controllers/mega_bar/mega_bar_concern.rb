@@ -20,8 +20,10 @@ module MegaBar
 
     def new
       session[:return_to] = request.referer
-      instance_variable_set("@" + @kontroller_inst, @mega_class.new)
-      @mega_instance = instance_variable_get("@" + @kontroller_inst)
+      unless @mega_instance.present?
+        instance_variable_set("@" + @kontroller_inst, @mega_class.new)
+        @mega_instance = instance_variable_get("@" + @kontroller_inst)
+      end
       @form_instance_vars = @nested_instance_variables + [@mega_instance]
       render @new_view_template
     end
@@ -40,7 +42,7 @@ module MegaBar
     end
 
     def create
-      @mega_instance = @mega_class.new(_params)
+      @mega_instance = @mega_class.new(_params) unless @mega_instance.present? 
       respond_to do |format|
         if @mega_instance.save
           MegaBar.call_rake("db:schema:dump") if [1, 2].include? @model_id and Rails.env != "test" # gets new models into schema
@@ -296,7 +298,6 @@ module MegaBar
     end
 
     def column_sorting
-      # byebug
       sort_column(@mega_class, @mega_model_properties, params) + " " + sort_direction(params, @mega_model_properties)
     end
 

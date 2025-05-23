@@ -24,8 +24,8 @@ module MegaBar
       @options[:mega_bar_models] =  {
         position_parent: MegaBar::Model.all.pluck(:name, :modyule, :classname).map{|a|  [a[1] + ' - ' + a[0], a[1] +'::' +  a[2]] }.unshift(['Position with No Parent', 'pnp']),
         default_sort_field: Field.by_model(params[:id]).pluck("field, field"),
-        make_page: Template.all.pluck("name, id"),
-      }
+        make_page: Template.all.pluck("name, id")
+            }
     end
   end
 end

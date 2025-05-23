@@ -13,5 +13,9 @@ module MegaBar
     def pln
       permission_level.present? ? permission_level.level_name : 'Unauthenticated'
     end
+
+    def name
+      email
+    end
   end
 end 

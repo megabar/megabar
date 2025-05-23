@@ -12,11 +12,21 @@
   display: none;
 }
 
+a {
+  text-decoration: none;
+}
+
+th a {
+  font-weight: normal;
+}
+
+
 .admin-links,
 .admin-links a {
   color: #aaa;
-  font-size: .7em;
+  font-size: .5em;
   clear: both;
+  text-decoration: none;
 }
 
 .layout-help-link div a {

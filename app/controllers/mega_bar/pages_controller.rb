@@ -3,7 +3,7 @@ module MegaBar
     include MegaBar::MegaBarConcern
 
     def index
-      @mega_instance ||= Page.where("mega_page = 'f' or mega_page is null or mega_page = '' or mega_page = 'regular' or path = '/'").order(column_sorting)
+      @mega_instance ||= Page.where("mega_page = 'f' or mega_page is null or mega_page = '' or mega_page = 'regular' or path = '/' or path = '/mega-bar/users'").order(column_sorting)
       super
     end
     def all
