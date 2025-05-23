@@ -50,6 +50,7 @@ module MegaBar
       return true if ActiveModel::Type::Boolean.new.cast(self.accessor)
       return if Model.connection.column_exists?(self.tablename,  self.field)
       # if self.field.ends_with('_id') byebug
+      byebug if self.data_type == 'datetime' or self.data_type == 'boolean'
       boolean =   self.data_type == 'boolean' ? ' null: false, default: false' : '' #todo allow default true.
       system 'bundle exec rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + self.data_type + boolean
       system 'bundle exec rails db:migrate'
