@@ -312,6 +312,7 @@ namespace :mega_bar do
   task :dump_seeds, [:mega] => :environment do |t, args|
     # Set the file path once
     seed_file = 'db/mega_bar.seeds.rb'
+    File.open(seed_file, 'w') {|file| file.truncate(0) }
 
     if args[:mega].present?
       mega_bar_model_ids = MegaBar::Model.where(modyule: 'MegaBar').order(:id).pluck(:id)
