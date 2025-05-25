@@ -125,6 +125,7 @@ byebug
           # puts "---------------------------------"
           # byebug if  MegaBar::TmpModelDisplay == mc[:tmp_class]
           # @@prex_all << 
+          byebug
           method(mc[:resolver]).call(conflict)
         end
       end
@@ -409,13 +410,13 @@ byebug
     SeedDump.dump(permission_levels, {file: seed_file, append: true})
 
     File.open(Rails.root.join('db', 'mega_bar.seeds.rb'), "r+") do |file|
+      #note, this will change your data! If you wanted to store a string like MegaBar::Whatever in the db, it'll be changed here and you have to fix that in the data_load.
       text = File.read(file)
-      regex = 'MegaBar::(?!Tmp)'  # Only matches MegaBar:: if it's not followed by "Tmp"
+      regex = 'MegaBar::'
       replace = 'MegaBar::Tmp'
       text = text.gsub(regex, replace)
       File.open(file, "w") {|file| file.puts text }
     end
-
 
     puts "dumped seeds"
   end
