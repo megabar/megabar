@@ -298,6 +298,7 @@ namespace :mega_bar do
     mega_classes << {tmp_class: MegaBar::TmpTextarea, perm_class: MegaBar::Textarea, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {tmp_class: MegaBar::TmpTextbox, perm_class: MegaBar::Textbox, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {tmp_class: MegaBar::TmpTextread, perm_class: MegaBar::Textread, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
+    mega_classes << {tmp_class: MegaBar::TmpDate, perm_class: MegaBar::Date, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
 
     mega_classes << {tmp_class: MegaBar::TmpModelDisplayFormat, perm_class: MegaBar::ModelDisplayFormat, unique: [:name], resolver: 'fix_model_display_format', condition: 'tmp.name == perm.name'}
 
@@ -364,6 +365,7 @@ namespace :mega_bar do
     textareas = MegaBar::Textarea.where(field_display_id: mega_bar_field_display_ids).order(:id)
     textboxes = MegaBar::Textbox.where(field_display_id: mega_bar_field_display_ids).order(:id)
     textreads = MegaBar::Textread.where(field_display_id: mega_bar_field_display_ids).order(:id)
+    dates = MegaBar::Date.where(field_display_id: mega_bar_field_display_ids).order(:id)
 
     layables = MegaBar::Layable.where(id: mega_bar_layable_ids).order(:id)
     theme_joins = theme_joins(mega_bar_block_ids, mega_bar_layout_ids).order(:id)
@@ -399,6 +401,7 @@ namespace :mega_bar do
     SeedDump.dump(textareas, {file: seed_file, append: true})
     SeedDump.dump(textboxes, {file: seed_file, append: true})
     SeedDump.dump(textreads, {file: seed_file, append: true})
+    SeedDump.dump(dates, {file: seed_file, append: true})
 
     SeedDump.dump(layables, {file: seed_file, append: true})
     SeedDump.dump(theme_joins, {file: seed_file, append: true})
@@ -428,7 +431,8 @@ namespace :mega_bar do
       {id: 5, classname: "RecordsFormat", schema: "sqlite", tablename: "recordsformats", name: "Records Format", default_sort_field: "name", created_at: "2014-05-05 19:34:38", updated_at: "2014-12-24 07:19:00"},
       {id: 6, classname: "Textbox", schema: "another", tablename: "textboxes", name: "Text Boxes", default_sort_field: "id", created_at: "2014-05-12 17:43:13", updated_at: "2014-05-21 21:51:02"},
       {id: 7, classname: "Textread", schema: "oyyyy", tablename: "textreads", name: "Text Display", default_sort_field: "id", created_at: "2014-05-12 22:59:05", updated_at: "2014-05-23 16:30:59"},
-      {id: 8, classname: "Select", schema: "odfdfd", tablename: "selects", name: "Select Menus", default_sort_field: "id", created_at: "2014-05-12 23:02:23", updated_at: "2014-05-23 16:31:23"}
+      {id: 8, classname: "Select", schema: "odfdfd", tablename: "selects", name: "Select Menus", default_sort_field: "id", created_at: "2014-05-12 23:02:23", updated_at: "2014-05-23 16:31:23"},
+      {id: 9, classname: "Date", schema: "odfdfd", tablename: "dates", name: "Dates", default_sort_field: "id", created_at: "2014-05-12 23:02:23", updated_at: "2014-05-23 16:31:23"}
     ])
   end
 
