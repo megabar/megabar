@@ -74,12 +74,12 @@ namespace :mega_bar do
     all_conflicts = []
     # display_classes = [[MegaBar::TmpTextbox, MegaBar::Textbox, 'TextBox'],[MegaBar::TmpTextread, MegaBar::Textread, 'TextRead']]
     mega_ids = []
-
+byebug
     mega_classes.each do |mc|
       mc[:tmp_class].delete_all # delete everything that is in the tmp_tables
       mega_ids << mc[:id]
     end
-# byebug
+ byebug
     file = args[:file].nil? ? "../../db/mega_bar.seeds.rb" : Rails.root.to_s + args[:file]
     require_relative file #LOADS SEEDS INTO TMP TABLES
     # start conflict resolution
@@ -298,6 +298,7 @@ namespace :mega_bar do
     mega_classes << {tmp_class: MegaBar::TmpTextarea, perm_class: MegaBar::Textarea, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {tmp_class: MegaBar::TmpTextbox, perm_class: MegaBar::Textbox, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
     mega_classes << {tmp_class: MegaBar::TmpTextread, perm_class: MegaBar::Textread, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
+    mega_classes << {tmp_class: MegaBar::TmpDate, perm_class: MegaBar::Date, unique: [:field_display_id], resolver: 'fix_display_class', condition: 'tmp.field_display_id == perm.field_display_id'}
 
     mega_classes << {tmp_class: MegaBar::TmpModelDisplayFormat, perm_class: MegaBar::ModelDisplayFormat, unique: [:name], resolver: 'fix_model_display_format', condition: 'tmp.name == perm.name'}
 
@@ -364,6 +365,7 @@ namespace :mega_bar do
     textareas = MegaBar::Textarea.where(field_display_id: mega_bar_field_display_ids).order(:id)
     textboxes = MegaBar::Textbox.where(field_display_id: mega_bar_field_display_ids).order(:id)
     textreads = MegaBar::Textread.where(field_display_id: mega_bar_field_display_ids).order(:id)
+    dates = MegaBar::Date.where(field_display_id: mega_bar_field_display_ids).order(:id)
 
     layables = MegaBar::Layable.where(id: mega_bar_layable_ids).order(:id)
     theme_joins = theme_joins(mega_bar_block_ids, mega_bar_layout_ids).order(:id)
@@ -399,6 +401,7 @@ namespace :mega_bar do
     SeedDump.dump(textareas, {file: seed_file, append: true})
     SeedDump.dump(textboxes, {file: seed_file, append: true})
     SeedDump.dump(textreads, {file: seed_file, append: true})
+    SeedDump.dump(dates, {file: seed_file, append: true})
 
     SeedDump.dump(layables, {file: seed_file, append: true})
     SeedDump.dump(theme_joins, {file: seed_file, append: true})
@@ -406,13 +409,12 @@ namespace :mega_bar do
     SeedDump.dump(permission_levels, {file: seed_file, append: true})
 
     File.open(Rails.root.join('db', 'mega_bar.seeds.rb'), "r+") do |file|
-      #note, this will change your data! If you wanted to store a string like MegaBar::Whatever in the db, it'll be changed here and you have to fix that in the data_load.
       text = File.read(file)
-      regex = 'MegaBar::'
+      regex = 'MegaBar::(?!Tmp)'  # Only matches MegaBar:: if it's not followed by "Tmp"
       replace = 'MegaBar::Tmp'
       text = text.gsub(regex, replace)
       File.open(file, "w") {|file| file.puts text }
-     end
+    end
 
 
     puts "dumped seeds"
@@ -429,6 +431,7 @@ namespace :mega_bar do
       {id: 6, classname: "Textbox", schema: "another", tablename: "textboxes", name: "Text Boxes", default_sort_field: "id", created_at: "2014-05-12 17:43:13", updated_at: "2014-05-21 21:51:02"},
       {id: 7, classname: "Textread", schema: "oyyyy", tablename: "textreads", name: "Text Display", default_sort_field: "id", created_at: "2014-05-12 22:59:05", updated_at: "2014-05-23 16:30:59"},
       {id: 8, classname: "Select", schema: "odfdfd", tablename: "selects", name: "Select Menus", default_sort_field: "id", created_at: "2014-05-12 23:02:23", updated_at: "2014-05-23 16:31:23"}
+      {id: 9, classname: "Date", schema: "odfdfd", tablename: "dates", name: "Dates", default_sort_field: "id", created_at: "2014-05-12 23:02:23", updated_at: "2014-05-23 16:31:23"}
     ])
   end
 
