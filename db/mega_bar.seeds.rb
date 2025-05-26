@@ -3143,6 +3143,16 @@ MegaBar::TmpTextread.create!([
   {field_display_id: 1073, truncation: nil, truncation_format: "", transformation: "", truncation_separator: " ", editable_in_place: nil},
   {field_display_id: 1074, truncation: nil, truncation_format: "", transformation: "", truncation_separator: " ", editable_in_place: nil}
 ])
+MegaBar::TmpDate.create!([
+  {field_display_id: "1050", format: "", picker_default_view: "month", picker_min_date: nil, picker_max_date: nil, transformation: nil, include_time: nil},
+  {field_display_id: "1051", format: "", picker_default_view: "month", picker_min_date: nil, picker_max_date: nil, transformation: nil, include_time: nil},
+  {field_display_id: "1052", format: "", picker_default_view: "month", picker_min_date: nil, picker_max_date: nil, transformation: nil, include_time: nil},
+  {field_display_id: "1053", format: "", picker_default_view: "month", picker_min_date: nil, picker_max_date: nil, transformation: nil, include_time: nil},
+  {field_display_id: "1055", format: "", picker_default_view: "month", picker_min_date: nil, picker_max_date: nil, transformation: nil, include_time: nil},
+  {field_display_id: "1056", format: "", picker_default_view: "month", picker_min_date: nil, picker_max_date: nil, transformation: nil, include_time: nil},
+  {field_display_id: "1057", format: "", picker_default_view: "month", picker_min_date: nil, picker_max_date: nil, transformation: nil, include_time: nil},
+  {field_display_id: "1058", format: "", picker_default_view: "month", picker_min_date: nil, picker_max_date: nil, transformation: nil, include_time: nil}
+])
 MegaBar::TmpLayable.create!([
   {layout_section_id: 1, template_section_id: 1, layout_id: 1},
   {layout_section_id: 2, template_section_id: 2, layout_id: 1},
