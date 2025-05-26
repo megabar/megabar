@@ -16,7 +16,6 @@ namespace :mega_bar do
     # TODO see if it already was run.
     line = 'Rails.application.routes.draw do'
     text = File.read('config/routes.rb')
-
     new_contents = text.gsub( /(#{Regexp.escape(line)})/mi, "#{line}\n\n  MegaRoute.load(['/mega-bar']).each do |route|\n    match route[:path] => \"\#{route[:controller]}\#\#{route[:action]}\", via: route[:method], as: route[:as]\n  end \n  ##### MEGABAR BEGIN #####\n  mount MegaBar::Engine, at: '/mega-bar'\n  ##### MEGABAR END #####\n")
     File.open('config/routes.rb', "w") {|file| file.puts new_contents }
     unless File.directory?('app/assets/javascripts')
@@ -74,14 +73,45 @@ namespace :mega_bar do
     all_conflicts = []
     # display_classes = [[MegaBar::TmpTextbox, MegaBar::Textbox, 'TextBox'],[MegaBar::TmpTextread, MegaBar::Textread, 'TextRead']]
     mega_ids = []
-byebug
     mega_classes.each do |mc|
       mc[:tmp_class].delete_all # delete everything that is in the tmp_tables
       mega_ids << mc[:id]
     end
- byebug
     file = args[:file].nil? ? "../../db/mega_bar.seeds.rb" : Rails.root.to_s + args[:file]
     require_relative file #LOADS SEEDS INTO TMP TABLES
+    
+    # Check for foreign key mismatches after seed loading
+    puts "=== CHECKING FOR FOREIGN KEY MISMATCHES ==="
+    field_ids = MegaBar::TmpField.pluck(:id)
+    orphaned_options = MegaBar::TmpOption.where.not(field_id: field_ids)
+    orphaned_field_displays = MegaBar::TmpFieldDisplay.where.not(field_id: field_ids)
+    
+    puts "Field IDs in TmpField: #{field_ids.min}-#{field_ids.max} (#{field_ids.count} total)"
+    puts "Orphaned options: #{orphaned_options.pluck(:field_id, :value)}"
+    puts "Orphaned field_displays: #{orphaned_field_displays.pluck(:field_id, :model_display_id)}"
+    
+    # Fix orphaned references by mapping missing field IDs to existing ones
+    if orphaned_options.any? || orphaned_field_displays.any?
+      puts "=== FIXING ORPHANED REFERENCES ==="
+      
+      # Find the actual field mappings by field name
+      transformation_field = MegaBar::TmpField.find_by(field: "transformation")
+      include_time_field = MegaBar::TmpField.find_by(field: "include_time")
+      
+      field_id_mapping = {}
+      field_id_mapping[189] = transformation_field.id if transformation_field
+      field_id_mapping[190] = include_time_field.id if include_time_field
+      
+      puts "  Field mappings: #{field_id_mapping}"
+      
+      field_id_mapping.each do |old_id, new_id|
+        if field_ids.include?(new_id)
+          options_updated = MegaBar::TmpOption.where(field_id: old_id).update_all(field_id: new_id)
+          field_displays_updated = MegaBar::TmpFieldDisplay.where(field_id: old_id).update_all(field_id: new_id)
+          puts "  Mapped field_id #{old_id} → #{new_id}: #{options_updated} options, #{field_displays_updated} field_displays"
+        end
+      end
+    end
     # start conflict resolution
     MegaBar::Block.skip_callback(       'save',   :after, :make_model_displays)
     MegaBar::Block.skip_callback(       'save',   :after, :add_route)
@@ -106,26 +136,65 @@ byebug
     mega_classes.each do |mc|
 
       mc[:tmp_class].all.order(id: :asc).each do |tmp|
-        # byebug if  MegaBar::TmpModelDisplay == mc[:tmp_class]
         dupe_hash = {}
         tmp.reload
         mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] }
         obj = mc[:perm_class].find_or_initialize_by(dupe_hash)
         attributes = tmp.attributes.select { |attr, value|  mc[:tmp_class].column_names.include?(attr.to_s) }
         attributes.delete("id") unless attributes["id"] == 0
+        
+        # Add logging for field processing (only for fields > 185)
+        if mc[:tmp_class] == MegaBar::TmpField && tmp.id > 185
+          puts "Processing field: #{tmp.field} (tmp_id: #{tmp.id})"
+          puts "  dupe_hash: #{dupe_hash.inspect}"
+          puts "  find_or_initialize_by result - obj.id: #{obj.id}, obj.new_record?: #{obj.new_record?}"
+          puts "  attributes to assign: #{attributes.inspect}"
+        end
+        
         obj.assign_attributes(attributes)
-        # byebug if  MegaBar::TmpModelDisplay == mc[:tmp_class] && attributes["block_id"].to_i > 180
-        # puts attributes.to_s
-        obj.save
+        
+        # Add more logging before save (only for fields > 185)
+        if mc[:tmp_class] == MegaBar::TmpField && tmp.id > 185
+          puts "  After assign_attributes - obj.id: #{obj.id}, obj.new_record?: #{obj.new_record?}"
+          puts "  obj.attributes before save: #{obj.attributes.inspect}"
+        end
+        
+        save_result = obj.save
+        
+        # More logging after save (only for fields > 185)
+        if mc[:tmp_class] == MegaBar::TmpField && tmp.id > 185
+          puts "  Save result: #{save_result}"
+          puts "  After save - obj.id: #{obj.id}, tmp.id: #{tmp.id}"
+          puts "  IDs match: #{obj.id == tmp.id}"
+          puts "  obj.attributes after save: #{obj.attributes.inspect}"
+          if !save_result
+            puts "  Save errors: #{obj.errors.full_messages}"
+          end
+          puts "---"
+        end
+        
+        # Add logging for Options and FieldDisplays that reference high-ID fields
+        if mc[:tmp_class] == MegaBar::TmpOption && tmp.field_id > 185
+          puts "Processing Option: field_id=#{tmp.field_id}, value='#{tmp.value}' (tmp_id: #{tmp.id})"
+          puts "  dupe_hash: #{dupe_hash.inspect}"
+          puts "  find_or_initialize_by result - obj.id: #{obj.id}, obj.new_record?: #{obj.new_record?}"
+        end
+        
+        if mc[:tmp_class] == MegaBar::TmpFieldDisplay && tmp.field_id > 185
+          puts "Processing FieldDisplay: field_id=#{tmp.field_id}, model_display_id=#{tmp.model_display_id} (tmp_id: #{tmp.id})"
+          puts "  dupe_hash: #{dupe_hash.inspect}"
+          puts "  find_or_initialize_by result - obj.id: #{obj.id}, obj.new_record?: #{obj.new_record?}"
+        end
+        
+        # Track ALL ID changes (conflicts AND auto-increment reassignments)
         if obj.id != tmp.id
-          # update tmplayouts set page_id to bob.id
           conflict = {tmp: tmp, perm: obj, mc: mc}
-          # puts "there was a lil thing. "
-          # puts conflict.inspect
-          # puts "---------------------------------"
-          # byebug if  MegaBar::TmpModelDisplay == mc[:tmp_class]
-          # @@prex_all << 
-          byebug
+          if mc[:tmp_class] == MegaBar::TmpField
+            puts "=== ID REASSIGNMENT DETECTED ==="
+            puts "  TMP: model_id=#{conflict[:tmp].model_id}, field='#{conflict[:tmp].field}', id=#{conflict[:tmp].id}"
+            puts "  PERM: model_id=#{conflict[:perm].model_id}, field='#{conflict[:perm].field}', id=#{conflict[:perm].id}"
+            puts "  Calling resolver: #{mc[:resolver]}"
+          end
           method(mc[:resolver]).call(conflict)
         end
       end
@@ -168,6 +237,7 @@ byebug
     # puts 'Incoming model ' + c[:tmp].id.to_s + ' with class ' + c[:tmp].classname + ' had to be issued a new id ' + c[:perm].id.to_s + '.'
     ##### FIELDS
 
+    # Update TMP tables (for records not yet processed)
     MegaBar::TmpModelDisplay.where(model_id: c[:tmp].id).update_all(model_id: c[:perm].id)
     MegaBar::TmpField.where(model_id: c[:tmp].id).each { |f| f.update(model_id: c[:perm].id) }
     MegaBar::TmpBlock.where(nest_level_1: c[:tmp].id).each { |f| f.update(nest_level_1: c[:perm].id) }
@@ -176,13 +246,29 @@ byebug
     MegaBar::TmpBlock.where(nest_level_4: c[:tmp].id).each { |f| f.update(nest_level_4: c[:perm].id) }
     MegaBar::TmpBlock.where(nest_level_5: c[:tmp].id).each { |f| f.update(nest_level_5: c[:perm].id) }
     MegaBar::TmpBlock.where(nest_level_6: c[:tmp].id).each { |f| f.update(nest_level_6: c[:perm].id) }
+    
+    # Update permanent tables (for records already processed)
+    MegaBar::ModelDisplay.where(model_id: c[:tmp].id).update_all(model_id: c[:perm].id)
+    MegaBar::Field.where(model_id: c[:tmp].id).update_all(model_id: c[:perm].id)
+    MegaBar::Block.where(nest_level_1: c[:tmp].id).update_all(nest_level_1: c[:perm].id)
+    MegaBar::Block.where(nest_level_2: c[:tmp].id).update_all(nest_level_2: c[:perm].id)
+    MegaBar::Block.where(nest_level_3: c[:tmp].id).update_all(nest_level_3: c[:perm].id)
+    MegaBar::Block.where(nest_level_4: c[:tmp].id).update_all(nest_level_4: c[:perm].id)
+    MegaBar::Block.where(nest_level_5: c[:tmp].id).update_all(nest_level_5: c[:perm].id)
+    MegaBar::Block.where(nest_level_6: c[:tmp].id).update_all(nest_level_6: c[:perm].id)
   end
   # end of model stuff
 
   def fix_fields(c)
+    # Update TMP tables (for records not yet processed)
     MegaBar::TmpFieldDisplay.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
     MegaBar::TmpOption.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
+  
+    # Update permanent tables (for records already processed)
+    MegaBar::FieldDisplay.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
+    MegaBar::Option.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
   end
+
 
   def fix_model_display_format(c)
   end
@@ -191,27 +277,51 @@ byebug
   end
 
   def fix_themes(c)
+    # Update TMP tables (for records not yet processed)
     MegaBar::TmpPortfolio.where(theme_id: c[:tmp].id).update_all(theme_id: c[:perm].id)
     MegaBar::TmpSite.where(theme_id: c[:tmp].id).update_all(theme_id: c[:perm].id)
     MegaBar::TmpThemeJoin.where(theme_id: c[:tmp].id).update_all(theme_id: c[:perm].id)
+    
+    # Update permanent tables (for records already processed)
+    MegaBar::Portfolio.where(theme_id: c[:tmp].id).update_all(theme_id: c[:perm].id)
+    MegaBar::Site.where(theme_id: c[:tmp].id).update_all(theme_id: c[:perm].id)
+    MegaBar::ThemeJoin.where(theme_id: c[:tmp].id).update_all(theme_id: c[:perm].id)
   end
 
   def fix_portfolios(c)
+    # Update TMP tables (for records not yet processed)
     MegaBar::TmpSite.where(portfolio_id: c[:tmp].id).update_all(portfolio_id: c[:perm].id)
+    
+    # Update permanent tables (for records already processed)
+    MegaBar::Site.where(portfolio_id: c[:tmp].id).update_all(portfolio_id: c[:perm].id)
   end
 
   def fix_sites(c)
+    # Update TMP tables (for records not yet processed)
     MegaBar::TmpSiteJoin.where(site_id: c[:tmp].id).update_all(site_id: c[:perm].id)
+    
+    # Update permanent tables (for records already processed)
+    MegaBar::SiteJoin.where(site_id: c[:tmp].id).update_all(site_id: c[:perm].id)
   end
 
   def fix_pages(c)
+    # Update TMP tables (for records not yet processed)
     MegaBar::TmpLayout.where(page_id: c[:tmp].id).update_all(page_id: c[:perm].id)
+    
+    # Update permanent tables (for records already processed)
+    MegaBar::Layout.where(page_id: c[:tmp].id).update_all(page_id: c[:perm].id)
   end
 
   def fix_layouts(c)
+    # Update TMP tables (for records not yet processed)
     MegaBar::TmpLayable.where(layout_id: c[:tmp].id).update_all(layout_id: c[:perm].id)
     MegaBar::TmpThemeJoin.where(themeable_type: 'MegaBar::TmpLayout', themeable_id: c[:tmp].id).update_all(themeable_id: c[:perm].id)
     MegaBar::TmpSiteJoin.where(siteable_type: 'MegaBar::TmpLayout', siteable_id: c[:tmp].id).update_all(siteable_id: c[:perm].id)
+    
+    # Update permanent tables (for records already processed)
+    MegaBar::Layable.where(layout_id: c[:tmp].id).update_all(layout_id: c[:perm].id)
+    MegaBar::ThemeJoin.where(themeable_type: 'MegaBar::Layout', themeable_id: c[:tmp].id).update_all(themeable_id: c[:perm].id)
+    MegaBar::SiteJoin.where(siteable_type: 'MegaBar::Layout', siteable_id: c[:tmp].id).update_all(siteable_id: c[:perm].id)
   end
 
   def fix_layables(c)
@@ -219,24 +329,41 @@ byebug
   end
 
   def fix_layout_sections(c)
-     MegaBar::TmpLayable.where(layout_section_id: c[:tmp].id).update_all(layout_section_id: c[:perm].id)
-     MegaBar::TmpBlock.where(layout_section_id: c[:tmp].id).update_all(layout_section_id: c[:perm].id)
+    # Update TMP tables (for records not yet processed)
+    MegaBar::TmpLayable.where(layout_section_id: c[:tmp].id).update_all(layout_section_id: c[:perm].id)
+    MegaBar::TmpBlock.where(layout_section_id: c[:tmp].id).update_all(layout_section_id: c[:perm].id)
+    
+    # Update permanent tables (for records already processed)
+    MegaBar::Layable.where(layout_section_id: c[:tmp].id).update_all(layout_section_id: c[:perm].id)
+    MegaBar::Block.where(layout_section_id: c[:tmp].id).update_all(layout_section_id: c[:perm].id)
   end
 
   def fix_blocks(c)
     # byebug if MegaBar::TmpModelDisplay(c[:tmp].header == 'Edit Part 2'
+    # Update TMP tables (for records not yet processed)
     MegaBar::TmpModelDisplay.where(block_id: c[:tmp].id).update_all(block_id: c[:perm].id)
     MegaBar::TmpThemeJoin.where(themeable_type: 'MegaBar::TmpBlock', themeable_id: c[:tmp].id).update_all(themeable_id: c[:perm].id)
     MegaBar::TmpSiteJoin.where(siteable_type: 'MegaBar::TmpBlock', siteable_id: c[:tmp].id).update_all(siteable_id: c[:perm].id)
+    
+    # Update permanent tables (for records already processed)
+    MegaBar::ModelDisplay.where(block_id: c[:tmp].id).update_all(block_id: c[:perm].id)
+    MegaBar::ThemeJoin.where(themeable_type: 'MegaBar::Block', themeable_id: c[:tmp].id).update_all(themeable_id: c[:perm].id)
+    MegaBar::SiteJoin.where(siteable_type: 'MegaBar::Block', siteable_id: c[:tmp].id).update_all(siteable_id: c[:perm].id)
   end
 
   def fix_model_displays(c)
+    # Update TMP tables (for records not yet processed)
     MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id).update_all(model_display_id: c[:perm].id)
     MegaBar::TmpModelDisplayCollection.where(model_display_id: c[:tmp].id).update_all(model_display_id: c[:perm].id)
+    
+    # Update permanent tables (for records already processed)
+    MegaBar::FieldDisplay.where(model_display_id: c[:tmp].id).update_all(model_display_id: c[:perm].id)
+    MegaBar::ModelDisplayCollection.where(model_display_id: c[:tmp].id).update_all(model_display_id: c[:perm].id)
     # pprex
   end
 
   def fix_field_displays(c)
+    # Update TMP tables (for records not yet processed)
     MegaBar::TmpCheckbox.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpPasswordField.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpRadio.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
@@ -244,11 +371,26 @@ byebug
     MegaBar::TmpTextarea.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpTextbox.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
     MegaBar::TmpTextread.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    MegaBar::TmpDate.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    
+    # Update permanent tables (for records already processed)
+    MegaBar::Checkbox.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    MegaBar::PasswordField.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    MegaBar::Radio.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    MegaBar::Select.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    MegaBar::Textarea.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    MegaBar::Textbox.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    MegaBar::Textread.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
+    MegaBar::Date.where(field_display_id: c[:tmp].id).update_all(field_display_id: c[:perm].id)
   end
 
 
   def fix_templates(c)
+    # Update TMP tables (for records not yet processed)
     MegaBar::TmpTemplateSection.where(template_id: c[:tmp].id).update_all(template_id: c[:perm].id)
+    
+    # Update permanent tables (for records already processed)
+    MegaBar::TemplateSection.where(template_id: c[:tmp].id).update_all(template_id: c[:perm].id)
   end
 
   def fix_model_display_collections(c)
@@ -373,7 +515,6 @@ byebug
     site_joins = site_joins(mega_bar_block_ids, mega_bar_layout_ids).order(:id)
     permission_levels = MegaBar::PermissionLevel.all.order(:id)
 
-    byebug
     # Then do all the dumps
     SeedDump.dump(themes, {file: seed_file, append: true})
     SeedDump.dump(portfolios, {file: seed_file, append: true})
