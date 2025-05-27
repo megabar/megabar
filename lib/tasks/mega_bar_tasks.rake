@@ -80,6 +80,9 @@ namespace :mega_bar do
     # Initialize model_display_id mapping hash to track reassignments
     @model_display_id_mapping = {}
     
+    # Initialize page_id mapping hash to track reassignments
+    @page_id_mapping = {}
+    
     mega_classes.each do |mc|
       mc[:tmp_class].delete_all # delete everything that is in the tmp_tables
       mega_ids << mc[:id]
@@ -237,6 +240,27 @@ namespace :mega_bar do
           else
             mc[:unique].each { |u| dupe_hash[u] = tmp[u] }
           end
+        # Special handling for Layout: map page_id using our tracking
+        elsif mc[:tmp_class] == MegaBar::TmpLayout
+          original_page_id = tmp.page_id
+          mapped_page_id = @page_id_mapping[original_page_id] || original_page_id
+          
+          if mapped_page_id != original_page_id
+            puts "*** PAGE ID MAPPING FOR LAYOUT ***"
+            puts "  Original page_id: #{original_page_id} -> Mapped page_id: #{mapped_page_id}"
+            puts "  TmpLayout: #{tmp.id}, name: '#{tmp.name}'"
+            
+            # Use the mapped page_id for the dupe_hash lookup
+            mc[:unique].each do |u|
+              if u == :page_id
+                dupe_hash[u] = mapped_page_id
+              else
+                dupe_hash[u] = tmp[u]
+              end
+            end
+          else
+            mc[:unique].each { |u| dupe_hash[u] = tmp[u] }
+          end
         else
           mc[:unique].each { |u| dupe_hash[u] = tmp[u] }
         end
@@ -261,6 +285,15 @@ namespace :mega_bar do
           if mapped_model_display_id != original_model_display_id
             attributes["model_display_id"] = mapped_model_display_id
             puts "  Updated attributes model_display_id: #{original_model_display_id} -> #{mapped_model_display_id}"
+          end
+        # For Layout, also update the page_id in attributes if it was mapped
+        elsif mc[:tmp_class] == MegaBar::TmpLayout
+          original_page_id = tmp.page_id
+          mapped_page_id = @page_id_mapping[original_page_id] || original_page_id
+          
+          if mapped_page_id != original_page_id
+            attributes["page_id"] = mapped_page_id
+            puts "  Updated attributes page_id: #{original_page_id} -> #{mapped_page_id}"
           end
         end
         
@@ -535,11 +568,17 @@ namespace :mega_bar do
   end
 
   def fix_pages(c)
-    # Update TMP tables (for records not yet processed)
-    MegaBar::TmpLayout.where(page_id: c[:tmp].id).update_all(page_id: c[:perm].id)
+    puts "=== FIX_PAGES DEBUG ==="
+    puts "  Page reassignment: tmp_id #{c[:tmp].id} -> perm_id #{c[:perm].id}"
     
-    # Update permanent tables (for records already processed)
-    MegaBar::Layout.where(page_id: c[:tmp].id).update_all(page_id: c[:perm].id)
+    # Track the page_id mapping for later use during Layout processing
+    @page_id_mapping[c[:tmp].id] = c[:perm].id
+    puts "  Added to page mapping: #{c[:tmp].id} -> #{c[:perm].id}"
+    puts "  Current page mappings: #{@page_id_mapping}"
+    
+    # DO NOT update layouts here - they will be handled during Layout processing
+    puts "  Layouts will be updated during Layout processing using mapping"
+    puts "=== END FIX_PAGES DEBUG ==="
   end
 
   def fix_layouts(c)
