@@ -170,6 +170,24 @@ namespace :mega_bar do
 
     mega_classes.each do |mc|
       puts "\n=== PROCESSING #{mc[:perm_class]} ==="
+      
+      # Special debugging for FieldDisplay processing
+      if mc[:tmp_class] == MegaBar::TmpFieldDisplay
+        puts "=== TMP FIELD DISPLAY STATE BEFORE PROCESSING ==="
+        date_model_id = MegaBar::TmpModel.find_by(classname: 'Date')&.id
+        if date_model_id
+          date_field_ids = MegaBar::TmpField.where(model_id: date_model_id).pluck(:id)
+          puts "  Date field IDs: #{date_field_ids}"
+          
+          # Show all TmpFieldDisplays for model_display_id 174
+          fd_174 = MegaBar::TmpFieldDisplay.where(model_display_id: 174).order(:position)
+          puts "  TmpFieldDisplays for model_display_id 174: #{fd_174.count}"
+          fd_174.each do |fd|
+            puts "    ID: #{fd.id}, field_id: #{fd.field_id}, header: '#{fd.header}', position: #{fd.position}"
+          end
+        end
+        puts "=== END TMP FIELD DISPLAY STATE ==="
+      end
 
       mc[:tmp_class].all.order(id: :asc).each do |tmp|
         dupe_hash = {}
@@ -386,15 +404,30 @@ namespace :mega_bar do
   # end of model stuff
 
   def fix_fields(c)
-    # Update TMP tables (for records not yet processed)
-    # NOTE: Do NOT update TmpFieldDisplay here - it will be processed later and needs original field_ids for matching
+    puts "=== FIX_FIELDS DEBUG ==="
+    puts "  Field reassignment: tmp_id #{c[:tmp].id} (#{c[:tmp].field}) -> perm_id #{c[:perm].id} (#{c[:perm].field})"
+    
+    # Check what will be affected before updating
+    tmp_field_displays = MegaBar::TmpFieldDisplay.where(field_id: c[:tmp].id)
+    tmp_options = MegaBar::TmpOption.where(field_id: c[:tmp].id)
+    
+    puts "  TmpFieldDisplays to update: #{tmp_field_displays.count}"
+    tmp_field_displays.each do |fd|
+      puts "    ID: #{fd.id}, model_display_id: #{fd.model_display_id}, header: '#{fd.header}', position: #{fd.position}"
+    end
+    
+    puts "  TmpOptions to update: #{tmp_options.count}"
+    tmp_options.each do |opt|
+      puts "    ID: #{opt.id}, value: '#{opt.value}'"
+    end
+    
+    # Perform the updates
+    MegaBar::TmpFieldDisplay.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
     MegaBar::TmpOption.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
-  
-    # Update permanent tables (for records already processed)
-    MegaBar::FieldDisplay.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
-    MegaBar::Option.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
+    
+    puts "  Updates completed"
+    puts "=== END FIX_FIELDS DEBUG ==="
   end
-
 
   def fix_model_display_format(c)
   end
