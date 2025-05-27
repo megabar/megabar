@@ -77,6 +77,9 @@ namespace :mega_bar do
     # Initialize field ID mapping hash to track reassignments
     @field_id_mapping = {}
     
+    # Initialize model_display_id mapping hash to track reassignments
+    @model_display_id_mapping = {}
+    
     mega_classes.each do |mc|
       mc[:tmp_class].delete_all # delete everything that is in the tmp_tables
       mega_ids << mc[:id]
@@ -179,15 +182,20 @@ namespace :mega_bar do
       if mc[:tmp_class] == MegaBar::TmpFieldDisplay
         puts "=== TMP FIELD DISPLAY STATE BEFORE PROCESSING ==="
         puts "  Field ID mappings: #{@field_id_mapping}"
+        puts "  Model Display ID mappings: #{@model_display_id_mapping}"
         
         date_model_id = MegaBar::TmpModel.find_by(classname: 'Date')&.id
         if date_model_id
           date_field_ids = MegaBar::TmpField.where(model_id: date_model_id).pluck(:id)
           puts "  Date field IDs: #{date_field_ids}"
           
-          # Show all TmpFieldDisplays for model_display_id 174
-          fd_174 = MegaBar::TmpFieldDisplay.where(model_display_id: 174).order(:position)
-          puts "  TmpFieldDisplays for model_display_id 174: #{fd_174.count}"
+          # Show all TmpFieldDisplays for model_display_id 174 (and its mapped version)
+          original_model_display_id = 174
+          mapped_model_display_id = @model_display_id_mapping[original_model_display_id] || original_model_display_id
+          
+          puts "  Looking for TmpFieldDisplays with model_display_id #{original_model_display_id} (maps to #{mapped_model_display_id})"
+          fd_174 = MegaBar::TmpFieldDisplay.where(model_display_id: mapped_model_display_id).order(:position)
+          puts "  TmpFieldDisplays for model_display_id #{mapped_model_display_id}: #{fd_174.count}"
           fd_174.each do |fd|
             original_field_id = fd.field_id
             mapped_field_id = @field_id_mapping[original_field_id] || original_field_id
@@ -202,20 +210,26 @@ namespace :mega_bar do
         dupe_hash = {}
         tmp.reload
         
-        # Special handling for FieldDisplay: map field_id using our tracking
+        # Special handling for FieldDisplay: map field_id and model_display_id using our tracking
         if mc[:tmp_class] == MegaBar::TmpFieldDisplay
           original_field_id = tmp.field_id
           mapped_field_id = @field_id_mapping[original_field_id] || original_field_id
           
-          if mapped_field_id != original_field_id
+          original_model_display_id = tmp.model_display_id
+          mapped_model_display_id = @model_display_id_mapping[original_model_display_id] || original_model_display_id
+          
+          if mapped_field_id != original_field_id || mapped_model_display_id != original_model_display_id
             puts "*** FIELD ID MAPPING FOR FIELDDISPLAY ***"
             puts "  Original field_id: #{original_field_id} -> Mapped field_id: #{mapped_field_id}"
-            puts "  TmpFieldDisplay: #{tmp.id}, model_display_id: #{tmp.model_display_id}, header: '#{tmp.header}'"
+            puts "  Original model_display_id: #{original_model_display_id} -> Mapped model_display_id: #{mapped_model_display_id}"
+            puts "  TmpFieldDisplay: #{tmp.id}, header: '#{tmp.header}'"
             
-            # Use the mapped field_id for the dupe_hash lookup
+            # Use the mapped IDs for the dupe_hash lookup
             mc[:unique].each do |u|
               if u == :field_id
                 dupe_hash[u] = mapped_field_id
+              elsif u == :model_display_id
+                dupe_hash[u] = mapped_model_display_id
               else
                 dupe_hash[u] = tmp[u]
               end
@@ -231,13 +245,22 @@ namespace :mega_bar do
         attributes = tmp.attributes.select { |attr, value|  mc[:tmp_class].column_names.include?(attr.to_s) }
         attributes.delete("id") unless attributes["id"] == 0
         
-        # For FieldDisplay, also update the field_id in attributes if it was mapped
+        # For FieldDisplay, also update the field_id and model_display_id in attributes if they were mapped
         if mc[:tmp_class] == MegaBar::TmpFieldDisplay
           original_field_id = tmp.field_id
           mapped_field_id = @field_id_mapping[original_field_id] || original_field_id
+          
+          original_model_display_id = tmp.model_display_id
+          mapped_model_display_id = @model_display_id_mapping[original_model_display_id] || original_model_display_id
+          
           if mapped_field_id != original_field_id
             attributes["field_id"] = mapped_field_id
             puts "  Updated attributes field_id: #{original_field_id} -> #{mapped_field_id}"
+          end
+          
+          if mapped_model_display_id != original_model_display_id
+            attributes["model_display_id"] = mapped_model_display_id
+            puts "  Updated attributes model_display_id: #{original_model_display_id} -> #{mapped_model_display_id}"
           end
         end
         
@@ -559,6 +582,14 @@ namespace :mega_bar do
   end
 
   def fix_model_displays(c)
+    puts "=== FIX_MODEL_DISPLAYS DEBUG ==="
+    puts "  ModelDisplay reassignment: tmp_id #{c[:tmp].id} -> perm_id #{c[:perm].id}"
+    
+    # Track the model_display_id mapping for later use during FieldDisplay processing
+    @model_display_id_mapping[c[:tmp].id] = c[:perm].id
+    puts "  Added to model_display mapping: #{c[:tmp].id} -> #{c[:perm].id}"
+    puts "  Current model_display mappings: #{@model_display_id_mapping}"
+    
     # Update TMP tables (for records not yet processed)
     MegaBar::TmpFieldDisplay.where(model_display_id: c[:tmp].id).update_all(model_display_id: c[:perm].id)
     MegaBar::TmpModelDisplayCollection.where(model_display_id: c[:tmp].id).update_all(model_display_id: c[:perm].id)
@@ -566,6 +597,8 @@ namespace :mega_bar do
     # Update permanent tables (for records already processed)
     MegaBar::FieldDisplay.where(model_display_id: c[:tmp].id).update_all(model_display_id: c[:perm].id)
     MegaBar::ModelDisplayCollection.where(model_display_id: c[:tmp].id).update_all(model_display_id: c[:perm].id)
+    
+    puts "=== END FIX_MODEL_DISPLAYS DEBUG ==="
     # pprex
   end
 
