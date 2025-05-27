@@ -1,0 +1,15 @@
+<%= format_date_field(obj, field.field, date) %>
+<% content_for :javascript do %>
+  <% if defined?(date) && date && date[:format] == 'datepicker' %>
+    <script>
+      $('.datepicker-input').datetimepicker({
+        format: '<%= date[:include_time] ? 'YYYY-MM-DD HH:mm' : 'YYYY-MM-DD' %>',
+        defaultView: '<%= date[:picker_default_view] || 'month' %>',
+        minDate: '<%= date[:picker_min_date] %>',
+        maxDate: '<%= date[:picker_max_date] %>',
+        useCurrent: true,
+        sideBySide: <%= date[:include_time] ? 'true' : 'false' %>
+      });
+    </script>
+  <% end %>
+<% end %>
