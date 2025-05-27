@@ -387,7 +387,7 @@ namespace :mega_bar do
 
   def fix_fields(c)
     # Update TMP tables (for records not yet processed)
-    MegaBar::TmpFieldDisplay.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
+    # NOTE: Do NOT update TmpFieldDisplay here - it will be processed later and needs original field_ids for matching
     MegaBar::TmpOption.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
   
     # Update permanent tables (for records already processed)
