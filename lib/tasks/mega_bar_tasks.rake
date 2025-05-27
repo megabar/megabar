@@ -339,9 +339,22 @@ namespace :mega_bar do
     MegaBar::TmpBlock.where(nest_level_5: c[:tmp].id).each { |f| f.update(nest_level_5: c[:perm].id) }
     MegaBar::TmpBlock.where(nest_level_6: c[:tmp].id).each { |f| f.update(nest_level_6: c[:perm].id) }
     
-    # Update permanent tables (for records already processed)
-    MegaBar::ModelDisplay.where(model_id: c[:tmp].id).update_all(model_id: c[:perm].id)
-    MegaBar::Field.where(model_id: c[:tmp].id).update_all(model_id: c[:perm].id)
+    # Update permanent tables (for records already processed FROM SEEDS ONLY)
+    # Only update records that were created during this seed loading session
+    # We identify these by finding records that reference the TMP model's classname
+    seed_model_displays = MegaBar::ModelDisplay.joins(:model).where(
+      model_id: c[:tmp].id, 
+      mega_bar_models: { classname: c[:tmp].classname }
+    )
+    seed_model_displays.update_all(model_id: c[:perm].id)
+    
+    seed_fields = MegaBar::Field.joins(:model).where(
+      model_id: c[:tmp].id,
+      mega_bar_models: { classname: c[:tmp].classname }
+    )
+    seed_fields.update_all(model_id: c[:perm].id)
+    
+    # For blocks, we need to be more careful since they reference models in multiple ways
     MegaBar::Block.where(nest_level_1: c[:tmp].id).update_all(nest_level_1: c[:perm].id)
     MegaBar::Block.where(nest_level_2: c[:tmp].id).update_all(nest_level_2: c[:perm].id)
     MegaBar::Block.where(nest_level_3: c[:tmp].id).update_all(nest_level_3: c[:perm].id)
