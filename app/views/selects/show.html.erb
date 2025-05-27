@@ -8,7 +8,7 @@ end
 
 # options = options.reject{|o| o[1] == 0} #later we may need a field param allowing zero options to show up.
 
-include_blank = select.multiple == true ? false : "Select " + displayable_field[:field_display].header
+include_blank = select[:multiple] == true ? false : "Select " + displayable_field[:field_display].header
 
 if ActiveModel::Type::Boolean.new.cast(field.accessor) 
   selected = @mega_instance.send(field.field)
@@ -21,9 +21,9 @@ end
   field.field,
   options,  
   {include_blank: include_blank, selected: selected },
-  {multiple: select.multiple, title: field.tool_tip,  :data => {:toggle => 'tooltip' }}
+  {multiple: select[:multiple], title: field.tool_tip,  :data => {:toggle => 'tooltip' }}
 ) %>
-<% if select.excluder %>
+<% if select[:excluder] %>
   <% value = @mega_instance.send(field.field).include?(0) ? true : false %>
   <%= check_box param_from_tablename(@mega_model_properties, field.tablename) + '_exclude', field.field, {checked: value, id: field.field + '_exclude'}, 0, nil %> Exclude Selected
   <script>
