@@ -73,6 +73,10 @@ namespace :mega_bar do
     all_conflicts = []
     # display_classes = [[MegaBar::TmpTextbox, MegaBar::Textbox, 'TextBox'],[MegaBar::TmpTextread, MegaBar::Textread, 'TextRead']]
     mega_ids = []
+    
+    # Initialize field ID mapping hash to track reassignments
+    @field_id_mapping = {}
+    
     mega_classes.each do |mc|
       mc[:tmp_class].delete_all # delete everything that is in the tmp_tables
       mega_ids << mc[:id]
@@ -174,6 +178,8 @@ namespace :mega_bar do
       # Special debugging for FieldDisplay processing
       if mc[:tmp_class] == MegaBar::TmpFieldDisplay
         puts "=== TMP FIELD DISPLAY STATE BEFORE PROCESSING ==="
+        puts "  Field ID mappings: #{@field_id_mapping}"
+        
         date_model_id = MegaBar::TmpModel.find_by(classname: 'Date')&.id
         if date_model_id
           date_field_ids = MegaBar::TmpField.where(model_id: date_model_id).pluck(:id)
@@ -183,7 +189,10 @@ namespace :mega_bar do
           fd_174 = MegaBar::TmpFieldDisplay.where(model_display_id: 174).order(:position)
           puts "  TmpFieldDisplays for model_display_id 174: #{fd_174.count}"
           fd_174.each do |fd|
-            puts "    ID: #{fd.id}, field_id: #{fd.field_id}, header: '#{fd.header}', position: #{fd.position}"
+            original_field_id = fd.field_id
+            mapped_field_id = @field_id_mapping[original_field_id] || original_field_id
+            mapping_info = mapped_field_id != original_field_id ? " (maps to #{mapped_field_id})" : ""
+            puts "    ID: #{fd.id}, field_id: #{fd.field_id}#{mapping_info}, header: '#{fd.header}', position: #{fd.position}"
           end
         end
         puts "=== END TMP FIELD DISPLAY STATE ==="
@@ -192,10 +201,45 @@ namespace :mega_bar do
       mc[:tmp_class].all.order(id: :asc).each do |tmp|
         dupe_hash = {}
         tmp.reload
-        mc[:unique].each  { |u| dupe_hash[u] =  tmp[u] }
+        
+        # Special handling for FieldDisplay: map field_id using our tracking
+        if mc[:tmp_class] == MegaBar::TmpFieldDisplay
+          original_field_id = tmp.field_id
+          mapped_field_id = @field_id_mapping[original_field_id] || original_field_id
+          
+          if mapped_field_id != original_field_id
+            puts "*** FIELD ID MAPPING FOR FIELDDISPLAY ***"
+            puts "  Original field_id: #{original_field_id} -> Mapped field_id: #{mapped_field_id}"
+            puts "  TmpFieldDisplay: #{tmp.id}, model_display_id: #{tmp.model_display_id}, header: '#{tmp.header}'"
+            
+            # Use the mapped field_id for the dupe_hash lookup
+            mc[:unique].each do |u|
+              if u == :field_id
+                dupe_hash[u] = mapped_field_id
+              else
+                dupe_hash[u] = tmp[u]
+              end
+            end
+          else
+            mc[:unique].each { |u| dupe_hash[u] = tmp[u] }
+          end
+        else
+          mc[:unique].each { |u| dupe_hash[u] = tmp[u] }
+        end
+        
         obj = mc[:perm_class].find_or_initialize_by(dupe_hash)
         attributes = tmp.attributes.select { |attr, value|  mc[:tmp_class].column_names.include?(attr.to_s) }
         attributes.delete("id") unless attributes["id"] == 0
+        
+        # For FieldDisplay, also update the field_id in attributes if it was mapped
+        if mc[:tmp_class] == MegaBar::TmpFieldDisplay
+          original_field_id = tmp.field_id
+          mapped_field_id = @field_id_mapping[original_field_id] || original_field_id
+          if mapped_field_id != original_field_id
+            attributes["field_id"] = mapped_field_id
+            puts "  Updated attributes field_id: #{original_field_id} -> #{mapped_field_id}"
+          end
+        end
         
         # Date-specific logging
         is_date_related = false
@@ -407,11 +451,16 @@ namespace :mega_bar do
     puts "=== FIX_FIELDS DEBUG ==="
     puts "  Field reassignment: tmp_id #{c[:tmp].id} (#{c[:tmp].field}) -> perm_id #{c[:perm].id} (#{c[:perm].field})"
     
-    # Check what will be affected before updating
+    # Track the field ID mapping for later use during FieldDisplay processing
+    @field_id_mapping[c[:tmp].id] = c[:perm].id
+    puts "  Added to field mapping: #{c[:tmp].id} -> #{c[:perm].id}"
+    puts "  Current field mappings: #{@field_id_mapping}"
+    
+    # Check what TmpFieldDisplays reference this field (for debugging only)
     tmp_field_displays = MegaBar::TmpFieldDisplay.where(field_id: c[:tmp].id)
     tmp_options = MegaBar::TmpOption.where(field_id: c[:tmp].id)
     
-    puts "  TmpFieldDisplays to update: #{tmp_field_displays.count}"
+    puts "  TmpFieldDisplays that reference field #{c[:tmp].id}: #{tmp_field_displays.count}"
     tmp_field_displays.each do |fd|
       puts "    ID: #{fd.id}, model_display_id: #{fd.model_display_id}, header: '#{fd.header}', position: #{fd.position}"
     end
@@ -421,11 +470,10 @@ namespace :mega_bar do
       puts "    ID: #{opt.id}, value: '#{opt.value}'"
     end
     
-    # Perform the updates
-    MegaBar::TmpFieldDisplay.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
+    # Only update TmpOptions (NOT TmpFieldDisplay)
     MegaBar::TmpOption.where(field_id: c[:tmp].id).update_all(field_id: c[:perm].id)
     
-    puts "  Updates completed"
+    puts "  TmpOptions updated, TmpFieldDisplay left unchanged"
     puts "=== END FIX_FIELDS DEBUG ==="
   end
 
