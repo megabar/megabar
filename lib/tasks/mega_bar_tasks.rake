@@ -98,7 +98,11 @@ namespace :mega_bar do
       transformation_field = MegaBar::TmpField.find_by(field: "transformation")
       include_time_field = MegaBar::TmpField.find_by(field: "include_time")
       
+      puts "  transformation_field: #{transformation_field&.attributes}"
+      puts "  include_time_field: #{include_time_field&.attributes}"
+      
       field_id_mapping = {}
+      # Map the orphaned IDs to the correct TMP field IDs (not the final PERM IDs)
       field_id_mapping[189] = transformation_field.id if transformation_field
       field_id_mapping[190] = include_time_field.id if include_time_field
       
