@@ -83,6 +83,12 @@ namespace :mega_bar do
     # Initialize page_id mapping hash to track reassignments
     @page_id_mapping = {}
     
+    # Initialize layout_id mapping hash to track reassignments
+    @layout_id_mapping = {}
+    
+    # Initialize layout_section_id mapping hash to track reassignments
+    @layout_section_id_mapping = {}
+    
     mega_classes.each do |mc|
       mc[:tmp_class].delete_all # delete everything that is in the tmp_tables
       mega_ids << mc[:id]
@@ -261,6 +267,55 @@ namespace :mega_bar do
           else
             mc[:unique].each { |u| dupe_hash[u] = tmp[u] }
           end
+        # Special handling for Layable: map layout_id and layout_section_id using our tracking
+        elsif mc[:tmp_class] == MegaBar::TmpLayable
+          original_layout_id = tmp.layout_id
+          mapped_layout_id = @layout_id_mapping[original_layout_id] || original_layout_id
+          
+          original_layout_section_id = tmp.layout_section_id
+          mapped_layout_section_id = @layout_section_id_mapping[original_layout_section_id] || original_layout_section_id
+          
+          if mapped_layout_id != original_layout_id || mapped_layout_section_id != original_layout_section_id
+            puts "*** LAYOUT/LAYOUT_SECTION ID MAPPING FOR LAYABLE ***"
+            puts "  Original layout_id: #{original_layout_id} -> Mapped layout_id: #{mapped_layout_id}"
+            puts "  Original layout_section_id: #{original_layout_section_id} -> Mapped layout_section_id: #{mapped_layout_section_id}"
+            puts "  TmpLayable: #{tmp.id}"
+            
+            # Use the mapped IDs for the dupe_hash lookup
+            mc[:unique].each do |u|
+              if u == :layout_id
+                dupe_hash[u] = mapped_layout_id
+              elsif u == :layout_section_id
+                dupe_hash[u] = mapped_layout_section_id
+              else
+                dupe_hash[u] = tmp[u]
+              end
+            end
+          else
+            mc[:unique].each { |u| dupe_hash[u] = tmp[u] }
+          end
+        elsif mc[:tmp_class] == MegaBar::TmpBlock
+          # Check if this block references Date model displays OR is in Date layout
+          date_block_model_displays = MegaBar::TmpModelDisplay.where(block_id: tmp.id, model_id: date_model_id)
+          date_page = MegaBar::TmpPage.find_by(path: '/mega-bar/dates')
+          date_layout = date_page ? MegaBar::TmpLayout.find_by(page_id: date_page.id) : nil
+          date_layout_sections = date_layout ? MegaBar::TmpLayable.where(layout_id: date_layout.id).pluck(:layout_section_id) : []
+          
+          if date_block_model_displays.any? || date_layout_sections.include?(tmp.layout_section_id)
+            is_date_related = true
+            puts "*** PROCESSING DATE BLOCK: #{tmp.name} (tmp_id: #{tmp.id}) ***"
+            puts "  layout_section_id: #{tmp.layout_section_id}"
+            puts "  date_layout_sections: #{date_layout_sections}"
+          end
+        elsif mc[:tmp_class] == MegaBar::TmpLayable
+          # Check if this layable connects to the Date layout
+          date_page = MegaBar::TmpPage.find_by(path: '/mega-bar/dates')
+          date_layout = date_page ? MegaBar::TmpLayout.find_by(page_id: date_page.id) : nil
+          
+          if date_layout && tmp.layout_id == date_layout.id
+            is_date_related = true
+            puts "*** PROCESSING DATE LAYABLE: layout_id=#{tmp.layout_id}, layout_section_id=#{tmp.layout_section_id} (tmp_id: #{tmp.id}) ***"
+          end
         else
           mc[:unique].each { |u| dupe_hash[u] = tmp[u] }
         end
@@ -295,6 +350,23 @@ namespace :mega_bar do
             attributes["page_id"] = mapped_page_id
             puts "  Updated attributes page_id: #{original_page_id} -> #{mapped_page_id}"
           end
+        # For Layable, also update the layout_id and layout_section_id in attributes if they were mapped
+        elsif mc[:tmp_class] == MegaBar::TmpLayable
+          original_layout_id = tmp.layout_id
+          mapped_layout_id = @layout_id_mapping[original_layout_id] || original_layout_id
+          
+          original_layout_section_id = tmp.layout_section_id
+          mapped_layout_section_id = @layout_section_id_mapping[original_layout_section_id] || original_layout_section_id
+          
+          if mapped_layout_id != original_layout_id
+            attributes["layout_id"] = mapped_layout_id
+            puts "  Updated attributes layout_id: #{original_layout_id} -> #{mapped_layout_id}"
+          end
+          
+          if mapped_layout_section_id != original_layout_section_id
+            attributes["layout_section_id"] = mapped_layout_section_id
+            puts "  Updated attributes layout_section_id: #{original_layout_section_id} -> #{mapped_layout_section_id}"
+          end
         end
         
         # Date-specific logging
@@ -328,19 +400,6 @@ namespace :mega_bar do
           if date_page && tmp.page_id == date_page.id
             is_date_related = true
             puts "*** PROCESSING DATE LAYOUT: #{tmp.name} (tmp_id: #{tmp.id}) ***"
-          end
-        elsif mc[:tmp_class] == MegaBar::TmpBlock
-          # Check if this block references Date model displays OR is in Date layout
-          date_block_model_displays = MegaBar::TmpModelDisplay.where(block_id: tmp.id, model_id: date_model_id)
-          date_page = MegaBar::TmpPage.find_by(path: '/mega-bar/dates')
-          date_layout = date_page ? MegaBar::TmpLayout.find_by(page_id: date_page.id) : nil
-          date_layout_sections = date_layout ? MegaBar::TmpLayable.where(layout_id: date_layout.id).pluck(:layout_section_id) : []
-          
-          if date_block_model_displays.any? || date_layout_sections.include?(tmp.layout_section_id)
-            is_date_related = true
-            puts "*** PROCESSING DATE BLOCK: #{tmp.name} (tmp_id: #{tmp.id}) ***"
-            puts "  layout_section_id: #{tmp.layout_section_id}"
-            puts "  date_layout_sections: #{date_layout_sections}"
           end
         end
         
@@ -582,6 +641,14 @@ namespace :mega_bar do
   end
 
   def fix_layouts(c)
+    puts "=== FIX_LAYOUTS DEBUG ==="
+    puts "  Layout reassignment: tmp_id #{c[:tmp].id} -> perm_id #{c[:perm].id}"
+    
+    # Track the layout_id mapping for later use during Layable processing
+    @layout_id_mapping[c[:tmp].id] = c[:perm].id
+    puts "  Added to layout mapping: #{c[:tmp].id} -> #{c[:perm].id}"
+    puts "  Current layout mappings: #{@layout_id_mapping}"
+    
     # Update TMP tables (for records not yet processed)
     MegaBar::TmpLayable.where(layout_id: c[:tmp].id).update_all(layout_id: c[:perm].id)
     MegaBar::TmpThemeJoin.where(themeable_type: 'MegaBar::TmpLayout', themeable_id: c[:tmp].id).update_all(themeable_id: c[:perm].id)
@@ -591,6 +658,8 @@ namespace :mega_bar do
     MegaBar::Layable.where(layout_id: c[:tmp].id).update_all(layout_id: c[:perm].id)
     MegaBar::ThemeJoin.where(themeable_type: 'MegaBar::Layout', themeable_id: c[:tmp].id).update_all(themeable_id: c[:perm].id)
     MegaBar::SiteJoin.where(siteable_type: 'MegaBar::Layout', siteable_id: c[:tmp].id).update_all(siteable_id: c[:perm].id)
+    
+    puts "=== END FIX_LAYOUTS DEBUG ==="
   end
 
   def fix_layables(c)
@@ -598,6 +667,14 @@ namespace :mega_bar do
   end
 
   def fix_layout_sections(c)
+    puts "=== FIX_LAYOUT_SECTIONS DEBUG ==="
+    puts "  LayoutSection reassignment: tmp_id #{c[:tmp].id} -> perm_id #{c[:perm].id}"
+    
+    # Track the layout_section_id mapping for later use during Layable processing
+    @layout_section_id_mapping[c[:tmp].id] = c[:perm].id
+    puts "  Added to layout_section mapping: #{c[:tmp].id} -> #{c[:perm].id}"
+    puts "  Current layout_section mappings: #{@layout_section_id_mapping}"
+    
     # Update TMP tables (for records not yet processed)
     MegaBar::TmpLayable.where(layout_section_id: c[:tmp].id).update_all(layout_section_id: c[:perm].id)
     MegaBar::TmpBlock.where(layout_section_id: c[:tmp].id).update_all(layout_section_id: c[:perm].id)
@@ -605,6 +682,8 @@ namespace :mega_bar do
     # Update permanent tables (for records already processed)
     MegaBar::Layable.where(layout_section_id: c[:tmp].id).update_all(layout_section_id: c[:perm].id)
     MegaBar::Block.where(layout_section_id: c[:tmp].id).update_all(layout_section_id: c[:perm].id)
+    
+    puts "=== END FIX_LAYOUT_SECTIONS DEBUG ==="
   end
 
   def fix_blocks(c)
