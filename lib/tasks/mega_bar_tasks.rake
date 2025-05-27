@@ -133,7 +133,18 @@ namespace :mega_bar do
     # start conflict detection
     # @@prex_all = []
 
+    # Find Date model ID for logging - check both TMP and permanent tables
+    date_model_tmp = MegaBar::TmpModel.find_by(classname: 'Date')
+    date_model_perm = MegaBar::Model.find_by(classname: 'Date')
+    date_model_id = date_model_tmp&.id
+    puts "=== DATE MODEL TRACKING ==="
+    puts "  TMP Date model: #{date_model_tmp ? "ID #{date_model_tmp.id}" : "NOT FOUND"}"
+    puts "  PERM Date model: #{date_model_perm ? "ID #{date_model_perm.id}" : "NOT FOUND"}"
+    puts "  Using date_model_id: #{date_model_id}"
+    puts "=========================="
+
     mega_classes.each do |mc|
+      puts "\n=== PROCESSING #{mc[:perm_class]} ==="
 
       mc[:tmp_class].all.order(id: :asc).each do |tmp|
         dupe_hash = {}
@@ -142,6 +153,56 @@ namespace :mega_bar do
         obj = mc[:perm_class].find_or_initialize_by(dupe_hash)
         attributes = tmp.attributes.select { |attr, value|  mc[:tmp_class].column_names.include?(attr.to_s) }
         attributes.delete("id") unless attributes["id"] == 0
+        
+        # Date-specific logging
+        is_date_related = false
+        if mc[:tmp_class] == MegaBar::TmpModel && tmp.classname == 'Date'
+          is_date_related = true
+          puts "*** PROCESSING DATE MODEL ***"
+          puts "  tmp.id: #{tmp.id}, tmp.classname: #{tmp.classname}"
+        elsif mc[:tmp_class] == MegaBar::TmpField && tmp.model_id == date_model_id
+          is_date_related = true
+          puts "*** PROCESSING DATE FIELD: #{tmp.field} (tmp_id: #{tmp.id}) ***"
+        elsif mc[:tmp_class] == MegaBar::TmpModelDisplay && tmp.model_id == date_model_id
+          is_date_related = true
+          puts "*** PROCESSING DATE MODEL DISPLAY: #{tmp.action} (tmp_id: #{tmp.id}) ***"
+        elsif mc[:tmp_class] == MegaBar::TmpFieldDisplay
+          # Check if this field display references a Date field
+          date_field_ids = MegaBar::TmpField.where(model_id: date_model_id).pluck(:id) if date_model_id
+          if date_field_ids&.include?(tmp.field_id)
+            is_date_related = true
+            puts "*** PROCESSING DATE FIELD DISPLAY: field_id=#{tmp.field_id}, model_display_id=#{tmp.model_display_id} (tmp_id: #{tmp.id}) ***"
+          end
+        elsif mc[:tmp_class] == MegaBar::TmpPage && tmp.path == '/mega-bar/dates'
+          is_date_related = true
+          puts "*** PROCESSING DATE PAGE: #{tmp.path} (tmp_id: #{tmp.id}) ***"
+        elsif mc[:tmp_class] == MegaBar::TmpLayout
+          # Check if this layout belongs to the Date page
+          date_page = MegaBar::TmpPage.find_by(path: '/mega-bar/dates')
+          if date_page && tmp.page_id == date_page.id
+            is_date_related = true
+            puts "*** PROCESSING DATE LAYOUT: #{tmp.name} (tmp_id: #{tmp.id}) ***"
+          end
+        elsif mc[:tmp_class] == MegaBar::TmpBlock
+          # Check if this block references Date model displays OR is in Date layout
+          date_block_model_displays = MegaBar::TmpModelDisplay.where(block_id: tmp.id, model_id: date_model_id)
+          date_page = MegaBar::TmpPage.find_by(path: '/mega-bar/dates')
+          date_layout = date_page ? MegaBar::TmpLayout.find_by(page_id: date_page.id) : nil
+          date_layout_sections = date_layout ? MegaBar::TmpLayable.where(layout_id: date_layout.id).pluck(:layout_section_id) : []
+          
+          if date_block_model_displays.any? || date_layout_sections.include?(tmp.layout_section_id)
+            is_date_related = true
+            puts "*** PROCESSING DATE BLOCK: #{tmp.name} (tmp_id: #{tmp.id}) ***"
+            puts "  layout_section_id: #{tmp.layout_section_id}"
+            puts "  date_layout_sections: #{date_layout_sections}"
+          end
+        end
+        
+        if is_date_related
+          puts "  dupe_hash: #{dupe_hash.inspect}"
+          puts "  find_or_initialize_by result - obj.id: #{obj.id}, obj.new_record?: #{obj.new_record?}"
+          puts "  attributes to assign: #{attributes.inspect}"
+        end
         
         # Add logging for field processing (only for fields > 185)
         if mc[:tmp_class] == MegaBar::TmpField && tmp.id > 185
@@ -153,6 +214,12 @@ namespace :mega_bar do
         
         obj.assign_attributes(attributes)
         
+        # Date-specific logging after assign_attributes
+        if is_date_related
+          puts "  After assign_attributes - obj.id: #{obj.id}, obj.new_record?: #{obj.new_record?}"
+          puts "  obj.attributes: #{obj.attributes.inspect}"
+        end
+        
         # Add more logging before save (only for fields > 185)
         if mc[:tmp_class] == MegaBar::TmpField && tmp.id > 185
           puts "  After assign_attributes - obj.id: #{obj.id}, obj.new_record?: #{obj.new_record?}"
@@ -160,6 +227,18 @@ namespace :mega_bar do
         end
         
         save_result = obj.save
+        
+        # Date-specific logging after save
+        if is_date_related
+          puts "  Save result: #{save_result}"
+          puts "  After save - obj.id: #{obj.id}, tmp.id: #{tmp.id}"
+          puts "  IDs match: #{obj.id == tmp.id}"
+          if !save_result
+            puts "  Save errors: #{obj.errors.full_messages}"
+          end
+          puts "  Final obj.attributes: #{obj.attributes.inspect}"
+          puts "---"
+        end
         
         # More logging after save (only for fields > 185)
         if mc[:tmp_class] == MegaBar::TmpField && tmp.id > 185
@@ -193,6 +272,12 @@ namespace :mega_bar do
             puts "=== ID REASSIGNMENT DETECTED ==="
             puts "  TMP: model_id=#{conflict[:tmp].model_id}, field='#{conflict[:tmp].field}', id=#{conflict[:tmp].id}"
             puts "  PERM: model_id=#{conflict[:perm].model_id}, field='#{conflict[:perm].field}', id=#{conflict[:perm].id}"
+            puts "  Calling resolver: #{mc[:resolver]}"
+          end
+          if is_date_related
+            puts "=== DATE-RELATED ID REASSIGNMENT ==="
+            puts "  TMP: #{tmp.attributes.inspect}"
+            puts "  PERM: #{obj.attributes.inspect}"
             puts "  Calling resolver: #{mc[:resolver]}"
           end
           method(mc[:resolver]).call(conflict)
