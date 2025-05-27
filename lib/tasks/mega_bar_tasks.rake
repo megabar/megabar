@@ -116,6 +116,27 @@ namespace :mega_bar do
         end
       end
     end
+    
+    # Debug: Show what field displays exist after orphaned reference fixing
+    puts "=== TMP FIELD DISPLAYS AFTER ORPHANED REFERENCE FIXING ==="
+    tmp_field_displays_174 = MegaBar::TmpFieldDisplay.where(model_display_id: 174)
+    puts "Field displays for model_display_id 174: #{tmp_field_displays_174.count}"
+    tmp_field_displays_174.each do |fd|
+      puts "  ID: #{fd.id}, field_id: #{fd.field_id}, header: '#{fd.header}', position: #{fd.position}"
+    end
+    
+    # Show all unique field_ids in TmpFieldDisplay
+    all_field_ids = MegaBar::TmpFieldDisplay.pluck(:field_id).uniq.sort
+    puts "All field_ids in TmpFieldDisplay: #{all_field_ids}"
+    
+    # Show field displays by field_id for Date fields
+    date_field_ids = MegaBar::TmpField.where(model_id: 29).pluck(:id).sort
+    puts "Date field IDs in TmpField: #{date_field_ids}"
+    date_field_ids.each do |field_id|
+      count = MegaBar::TmpFieldDisplay.where(field_id: field_id).count
+      puts "  Field #{field_id}: #{count} field displays"
+    end
+    puts "============================================================"
     # start conflict resolution
     MegaBar::Block.skip_callback(       'save',   :after, :make_model_displays)
     MegaBar::Block.skip_callback(       'save',   :after, :add_route)
