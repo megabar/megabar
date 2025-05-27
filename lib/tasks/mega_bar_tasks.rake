@@ -170,12 +170,15 @@ namespace :mega_bar do
         elsif mc[:tmp_class] == MegaBar::TmpModelDisplay && tmp.model_id == date_model_id
           is_date_related = true
           puts "*** PROCESSING DATE MODEL DISPLAY: #{tmp.action} (tmp_id: #{tmp.id}) ***"
+        elsif mc[:tmp_class] == MegaBar::TmpModelDisplay && tmp.id == 174
+          is_date_related = true
+          puts "*** PROCESSING MODEL DISPLAY 174: #{tmp.action} (model_id: #{tmp.model_id}, block_id: #{tmp.block_id}) ***"
         elsif mc[:tmp_class] == MegaBar::TmpFieldDisplay
-          # Check if this field display references a Date field
+          # Check if this field display references a Date field OR ModelDisplay 174
           date_field_ids = MegaBar::TmpField.where(model_id: date_model_id).pluck(:id) if date_model_id
-          if date_field_ids&.include?(tmp.field_id)
+          if date_field_ids&.include?(tmp.field_id) || tmp.model_display_id == 174
             is_date_related = true
-            puts "*** PROCESSING DATE FIELD DISPLAY: field_id=#{tmp.field_id}, model_display_id=#{tmp.model_display_id} (tmp_id: #{tmp.id}) ***"
+            puts "*** PROCESSING DATE/174 FIELD DISPLAY: field_id=#{tmp.field_id}, model_display_id=#{tmp.model_display_id} (tmp_id: #{tmp.id}) ***"
           end
         elsif mc[:tmp_class] == MegaBar::TmpPage && tmp.path == '/mega-bar/dates'
           is_date_related = true
