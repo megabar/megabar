@@ -63,6 +63,7 @@ namespace :mega_bar do
       
       # 6. UI Components (depend on FieldDisplays)
       dump_model_deterministic(MegaBar::Checkbox.where(field_display_id: mega_bar_field_display_ids).order(:id), file)
+      dump_model_deterministic(MegaBar::Date.where(field_display_id: mega_bar_field_display_ids).order(:id), file)
       dump_model_deterministic(MegaBar::PasswordField.where(field_display_id: mega_bar_field_display_ids).order(:id), file)
       dump_model_deterministic(MegaBar::Radio.where(field_display_id: mega_bar_field_display_ids).order(:id), file)
       dump_model_deterministic(MegaBar::Select.where(field_display_id: mega_bar_field_display_ids).order(:id), file)
@@ -196,7 +197,7 @@ namespace :mega_bar do
       { model_display_id: record.model_display_id }
     when 'MegaBar::FieldDisplay'
       { model_display_id: record.model_display_id, field_id: record.field_id }
-    when 'MegaBar::Checkbox', 'MegaBar::PasswordField', 'MegaBar::Radio', 'MegaBar::Select', 'MegaBar::Textarea', 'MegaBar::Textbox', 'MegaBar::Textread'
+    when 'MegaBar::Checkbox', 'MegaBar::Date', 'MegaBar::PasswordField', 'MegaBar::Radio', 'MegaBar::Select', 'MegaBar::Textarea', 'MegaBar::Textbox', 'MegaBar::Textread'
       { field_display_id: record.field_display_id }
     when 'MegaBar::Layable'
       { layout_id: record.layout_id, layout_section_id: record.layout_section_id }
