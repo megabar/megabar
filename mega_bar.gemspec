@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'nandi'
   s.add_development_dependency 'aruba'
   s.add_development_dependency 'bundler' # , '~> 1.7'
+  s.add_development_dependency 'byebug'
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'combustion', '~> 1.3'
   # s.add_development_dependency 'cucumber'
