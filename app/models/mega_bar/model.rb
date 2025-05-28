@@ -46,11 +46,65 @@ module MegaBar
       logger.info("creating scaffold for " + self.classname + 'via: ' + 'rails g mega_bar:mega_bar ' + self.classname + ' ' + self.id.to_s)
       mod = self.modyule.nil? || self.modyule.empty?  ? 'no_mod' : self.modyule
 
-      system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s + ' ' + pos
-      system 'bundle exec rails db:migrate'
+      # Generate model files and migrations using direct Rails generator invocation (more reliable)
+      begin
+        logger.info("Invoking MegaBar generator for #{self.classname}...")
+        generator_args = [mod, self.classname, self.id.to_s, pos]
+        
+        # Use Rails::Generators.invoke to call the generator directly
+        Rails::Generators.invoke('mega_bar:mega_bar_models', generator_args, {
+          behavior: :invoke,
+          destination_root: Rails.root
+        })
+        
+        logger.info("✅ Generator completed successfully for #{self.classname}")
+        
+      rescue => e
+        logger.warn("Direct generator invocation failed: #{e.message}, falling back to system call")
+        
+        # Fallback to system call if direct invocation fails
+        generator_result = system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s + ' ' + pos
+        logger.info("Fallback generator result: #{generator_result}")
+      end
       
-      # ActiveRecord::MigrationContext.new("db/migrate").migrate
-      # ActiveRecord::Migrator.migrate "db/migrate"
+      # Run migrations using Rails internal methods (more reliable than system calls)
+      logger.info("Running migrations for #{self.classname}...")
+      
+      begin
+        # Method 1: Use ActiveRecord::MigrationContext directly
+        migration_context = ActiveRecord::MigrationContext.new("db/migrate", ActiveRecord::SchemaMigration)
+        pending_migrations = migration_context.migrations.reject { |m| migration_context.get_all_versions.include?(m.version) }
+        
+        if pending_migrations.any?
+          logger.info("Found #{pending_migrations.count} pending migration(s), running them...")
+          migration_context.migrate
+          logger.info("✅ Migrations completed successfully for #{self.classname}")
+        else
+          logger.info("ℹ️  No pending migrations found for #{self.classname}")
+        end
+        
+      rescue => e
+        logger.error("❌ Direct migration failed for #{self.classname}: #{e.message}")
+        
+        # Method 2: Fallback to Rails.application.load_tasks approach
+        begin
+          logger.info("Trying fallback migration approach...")
+          Rails.application.load_tasks
+          Rake::Task['db:migrate'].invoke
+          logger.info("✅ Fallback migration approach succeeded for #{self.classname}")
+        rescue => e2
+          logger.error("❌ Fallback migration also failed for #{self.classname}: #{e2.message}")
+          
+          # Method 3: Last resort - system call with better error handling
+          logger.info("Trying system call as last resort...")
+          result = system("cd #{Rails.root} && bundle exec rails db:migrate")
+          if result
+            logger.info("✅ System call migration succeeded for #{self.classname}")
+          else
+            logger.error("❌ All migration approaches failed for #{self.classname}")
+          end
+        end
+      end
     end
 
     def pos

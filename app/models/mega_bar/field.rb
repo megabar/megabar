@@ -77,13 +77,60 @@ module MegaBar
       # if self.field.ends_with('_id') byebug
       byebug if self.data_type == 'datetime' or self.data_type == 'boolean'
       boolean =   self.data_type == 'boolean' ? ' null: false, default: false' : '' #todo allow default true.
-      system 'bundle exec rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + self.data_type + boolean
-      system 'bundle exec rails db:migrate'
+      
+      # Generate the field migration using direct Rails generator invocation (more reliable)
+      begin
+        logger.info("Invoking MegaBar field generator for #{self.field} on #{self.tablename}...")
+        generator_args = [self.tablename, self.field, self.data_type + boolean]
+        
+        # Use Rails::Generators.invoke to call the generator directly
+        Rails::Generators.invoke('mega_bar:mega_bar_fields', generator_args, {
+          behavior: :invoke,
+          destination_root: Rails.root
+        })
+        
+        logger.info("✅ Field generator completed successfully for #{self.field}")
+        
+      rescue => e
+        logger.warn("Direct field generator invocation failed: #{e.message}, falling back to system call")
+        
+        # Fallback to system call if direct invocation fails
+        generator_result = system 'bundle exec rails g mega_bar:mega_bar_fields ' + self.tablename + ' ' + self.field + ' ' + self.data_type + boolean
+        logger.info("Fallback field generator result: #{generator_result}")
+      end
+      
+      # Run migrations using Rails internal methods (more reliable than system calls)
+      logger.info("Running field migrations for #{self.field} on #{self.tablename}...")
+      
+      begin
+        # Method 1: Use ActiveRecord::MigrationContext (most reliable)
+        migration_context = ActiveRecord::MigrationContext.new(Rails.root.join('db/migrate'))
+        migration_context.migrate
+        logger.info("Field migrations completed successfully using MigrationContext")
+      rescue => e
+        logger.warn("MigrationContext failed: #{e.message}, trying Rails::Command::DbCommand")
+        
+        begin
+          # Method 2: Use Rails command system
+          Rails::Command::DbCommand.new.migrate
+          logger.info("Field migrations completed successfully using Rails::Command")
+        rescue => e2
+          logger.warn("Rails::Command failed: #{e2.message}, falling back to system call")
+          
+          # Method 3: Fallback to system call with better error handling
+          migration_result = system 'bundle exec rails db:migrate'
+          if migration_result
+            logger.info("Field migrations completed successfully using system call")
+          else
+            logger.error("All migration methods failed for field #{self.field}")
+          end
+        end
+      end
+      
       if self.data_type == 'references' 
         self.field = self.field + "_id"
         self.save
       end
-        
     end
     def delete_field_displays
       FieldDisplay.by_fields(self.id).destroy_all
