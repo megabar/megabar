@@ -35,8 +35,8 @@ namespace :mega_bar do
     
     # Generate kaminari views to fix missing template errors
     begin
-      system("rails generate kaminari:views")
-      puts "generated kaminari views"
+      system("rails generate kaminari:views bootstrap4")
+      puts "generated kaminari views with bootstrap4 theme"
     rescue => e
       puts "Note: kaminari view generation skipped (#{e.message})"
     end
@@ -835,7 +835,7 @@ namespace :mega_bar do
   end
 
 
-  task :dump_seeds, [:mega] => :environment do |t, args|
+  task :dump_seeds, [:mega] => :environment do
     # Set the file path once
     seed_file = 'db/mega_bar.seeds.rb'
     File.open(seed_file, 'w') {|file| file.truncate(0) }
