@@ -1,5 +1,4 @@
-<%=
-
+<%
 if field.option_borrow.nil?
   options =  (!@options[field.tablename.to_sym].nil? && !@options[field.tablename.to_sym][field.field.to_sym].nil?) ? @options[field.tablename.to_sym][field.field.to_sym] : displayable_field[:options]
  else
@@ -9,27 +8,22 @@ end
 
 # options = options.reject{|o| o[1] == 0} #later we may need a field param allowing zero options to show up.
 
-
-include_blank = select.multiple == true ? false : "Select " + displayable_field[:field_display].header
+include_blank = select[:multiple] == true ? false : "Select " + displayable_field[:field_display].header
 
 if ActiveModel::Type::Boolean.new.cast(field.accessor) 
   selected = @mega_instance.send(field.field)
 else 
   selected =  @default_options[field.field.to_sym] ? @default_options[field.field.to_sym] : value
 end
-
-
-select(
+%>
+<%= select(
   param_from_tablename(@mega_model_properties, field.tablename),
   field.field,
   options,  
   {include_blank: include_blank, selected: selected },
-  {multiple: select.multiple, title: field.tool_tip,  :data => {:toggle => 'tooltip' }},
-
-)
-%>
-
-<% if select.excluder %>
+  {multiple: select[:multiple], title: field.tool_tip,  :data => {:toggle => 'tooltip' }}
+) %>
+<% if select[:excluder] %>
   <% value = @mega_instance.send(field.field).include?(0) ? true : false %>
   <%= check_box param_from_tablename(@mega_model_properties, field.tablename) + '_exclude', field.field, {checked: value, id: field.field + '_exclude'}, 0, nil %> Exclude Selected
   <script>
@@ -48,4 +42,3 @@ select(
     });
   </script>
 <% end %>
-

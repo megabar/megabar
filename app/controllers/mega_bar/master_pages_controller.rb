@@ -37,6 +37,7 @@ module MegaBar
     end
 
     def page_admin?
+      
       return true if @mega_page[:administrator].blank? # this line should ultimately go away.
 
       @mega_user.pll >= @mega_page[:administrator]
