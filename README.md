@@ -73,7 +73,9 @@ The new deterministic system:
 
 ### Creating New Seeds (New Deterministic System)
 
-If you have additions to the 'core data' and would like them to be a part of the 'mega_bar seeds', run this command:
+If you have additions to the 'core data' and would like them to be a part of the 'mega_bar seeds', follow these steps:
+
+#### 1. Dump Seeds from Your Application
 
 ```bundle exec rake mega_bar:dump_deterministic_seeds```
 
@@ -82,8 +84,58 @@ This creates `db/mega_bar_deterministic.seeds.rb` with the revolutionary new for
 - Includes deterministic ID generation
 - Eliminates all tmp table complexity
 
-Then copy the seeds to the megabar repo:
-```cp db/mega_bar_deterministic.seeds.rb ../megabar/db/.```
+#### 2. Copy Seeds to MegaBar Repository
+
+Copy the generated seeds file to the megabar repository:
+
+```bash
+# From your application directory
+cp db/mega_bar_deterministic.seeds.rb ../megabar/db/
+
+# Or with full paths if needed
+cp db/mega_bar_deterministic.seeds.rb /path/to/megabar/db/
+```
+
+#### 3. Commit to MegaBar Repository
+
+Navigate to the megabar repository and commit the new seeds:
+
+```bash
+cd ../megabar
+git add db/mega_bar_deterministic.seeds.rb
+git commit -m "🌱 Update deterministic seeds with new core data
+
+- Added new [describe your changes]
+- Generated from [your app name] 
+- Uses deterministic IDs for conflict-free loading
+- Ready for distribution to all applications"
+```
+
+#### 4. Push and Create Pull Request
+
+```bash
+git push origin your-branch-name
+```
+
+Then create a pull request on GitHub to merge your seeds into the main megabar repository.
+
+#### 5. Distribute to Other Applications
+
+Once merged, other applications can get the latest seeds:
+
+```bash
+# In any megabar application
+cd ../megabar && git pull
+cd ../your-app
+bundle exec rake mega_bar:load_deterministic_seeds
+```
+
+### Important Notes
+
+- **Always test** your dumped seeds in a fresh application before committing
+- **Document changes** in your commit message for team awareness  
+- **Coordinate with team** when making significant seed changes
+- **Use branches** for seed updates to allow review before merging
 
 ### Legacy System (Deprecated)
 
