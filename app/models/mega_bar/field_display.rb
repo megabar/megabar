@@ -4,17 +4,46 @@ module MegaBar
     after_save :make_data_display
     belongs_to :model_display
     validates_presence_of :model_display_id, :field_id
+    before_create :set_deterministic_id
     has_many :textboxes, dependent: :destroy
     has_many :textreads, dependent: :destroy
     has_many :selects, dependent: :destroy
     has_many :textareas, dependent: :destroy
     has_many :checkboxes, dependent: :destroy
 
+    # Deterministic ID generation for FieldDisplays
+    # ID range: 3000-3999
+    def self.deterministic_id(model_display_id, field_id, position = nil)
+      # Include position to make field displays unique per position
+      identifier = position ? "#{model_display_id}_#{field_id}_#{position}" : "#{model_display_id}_#{field_id}"
+      hash = Digest::MD5.hexdigest(identifier)
+      base_id = 3000 + (hash.to_i(16) % 1000)
+      
+      # Check for collisions and increment if needed
+      while MegaBar::FieldDisplay.exists?(id: base_id)
+        base_id += 1
+        break if base_id >= 4000  # Don't overflow into next range
+      end
+      
+      base_id
+    end
+
     scope :by_fields, ->(fields) { where(field_id: fields) }
     scope :by_action, ->(action) { where(action: action) }
     scope :by_model_display_id, ->(model_display_id) { where(model_display_id: model_display_id) }
     validates_uniqueness_of :field_id, scope: :model_display_id
     acts_as_list scope: :model_display unless Rails.env.test?
+
+    private
+
+    def set_deterministic_id
+      # Only set deterministic ID if not already set
+      unless self.id
+        self.id = self.class.deterministic_id(self.model_display_id, self.field_id, self.position)
+      end
+    end
+
+    public
 
     def make_data_display
       return if self.format.to_s == 'off'

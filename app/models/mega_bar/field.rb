@@ -5,15 +5,40 @@ module MegaBar
     after_save    :make_field_displays
     attr_accessor :model_display_ids, :new_field_display, :edit_field_display, :index_field_display, :show_field_display, :block_id
     before_create :handle_simple_relation
+    before_create :set_deterministic_id
     belongs_to    :model
     has_many      :options, dependent: :destroy
     scope         :by_model, ->(model_id) { where(model_id: model_id) if model_id.present? }
     validate      :table_exists, on: :create unless Rails.env.test?
     validates_format_of :tablename, on: [:create, :update], :multiline => true, allow_nil: false, with: /[a-z]+/, message: 'no caps'
     validates_presence_of :model_id, :tablename, :field, :default_data_format, :default_data_format_edit
-    validates_uniqueness_of :field, scope: :model_id,  message: "dupe field for this model"
+    validates_uniqueness_of :field, scope: :model_id,  message: "dupe field for this model"
+
+    # Deterministic ID generation for Fields
+    # ID range: 1000-1999
+    def self.deterministic_id(name, field_type, model_id = nil)
+      # Include model_id to make fields unique per model
+      identifier = model_id ? "#{name}_#{field_type}_#{model_id}" : "#{name}_#{field_type}"
+      hash = Digest::MD5.hexdigest(identifier)
+      base_id = 1000 + (hash.to_i(16) % 1000)
+      
+      # Check for collisions and increment if needed
+      while MegaBar::Field.exists?(id: base_id)
+        base_id += 1
+        break if base_id >= 2000  # Don't overflow into next range
+      end
+      
+      base_id
+    end
 
     private
+
+    def set_deterministic_id
+      # Only set deterministic ID if not already set
+      unless self.id
+        self.id = self.class.deterministic_id(self.field, self.data_type, self.model_id)
+      end
+    end
 
     def table_exists
       return true if self.tablename == 'accessor'

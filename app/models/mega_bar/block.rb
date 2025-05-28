@@ -10,12 +10,30 @@ module MegaBar
     scope :by_layout_section, ->(layout_section_id) { where(layout_section_id: layout_section_id) if layout_section_id.present? }
     has_many :model_displays, dependent: :destroy
     scope :by_model, ->(model_id) { where(id: model_id) if model_id.present? }
+    before_create :set_deterministic_id
     after_save :make_model_displays
     after_save :add_route
     attr_accessor  :model_id, :new_model_display, :edit_model_display, :index_model_display, :show_model_display
     # validates_uniqueness_of :name, scope: :layout_id
     validates_presence_of :layout_section_id, allow_blank: false
     acts_as_list scope: :layout_section unless Rails.env.test?
+
+    # Deterministic ID generation for Blocks
+    # ID range: 7000-7999
+    def self.deterministic_id(layout_section_id, name)
+      # Use layout_section_id and name to create unique identifier
+      identifier = "#{layout_section_id}_#{name}"
+      hash = Digest::MD5.hexdigest(identifier)
+      base_id = 7000 + (hash.to_i(16) % 1000)
+      
+      # Check for collisions and increment if needed
+      while MegaBar::Block.exists?(id: base_id)
+        base_id += 1
+        break if base_id >= 8000  # Don't overflow into next range
+      end
+      
+      base_id
+    end
 
     def self.by_actions(action)
       if action.present?
@@ -58,6 +76,14 @@ module MegaBar
       return unless saved_changes["path_base"].present? and saved_changes["path_base"][1].present?
       return if ENV['RAILS_ENV'] == 'test'
       Rails.application.reload_routes!
+    end
+
+    private
+
+    def set_deterministic_id
+      unless self.id
+        self.id = self.class.deterministic_id(self.layout_section_id, self.name)
+      end
     end
   end
 end

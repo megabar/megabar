@@ -3,6 +3,10 @@ module MegaBar
 
     include MegaBar::MegaBarModelConcern
 
+    before_create :set_deterministic_id
+    before_create :standardize_modyule
+    before_create :standardize_classname
+    before_create :standardize_tablename
     after_create  :make_all_files
     after_save  :make_page_for_model
 
@@ -12,9 +16,6 @@ module MegaBar
     after_save    :make_position_field
     attr_accessor :make_page
     attr_writer   :model_id
-    before_create :standardize_modyule
-    before_create :standardize_classname
-    before_create :standardize_tablename
     has_many      :fields, dependent: :destroy
     has_many      :model_displays, dependent: :destroy # or after_destroy delete_model_displays. see field model example
     scope         :by_model, ->(model_id) { where(id: model_id) if model_id.present? }
@@ -22,6 +23,22 @@ module MegaBar
     validates_presence_of :default_sort_field, :name
     validates_uniqueness_of :classname
 
+    # Deterministic ID generation for Models
+    # ID range: 9000-9999
+    def self.deterministic_id(classname)
+      # Use classname to create unique identifier
+      identifier = classname.to_s
+      hash = Digest::MD5.hexdigest(identifier)
+      base_id = 9000 + (hash.to_i(16) % 1000)
+      
+      # Check for collisions and increment if needed
+      while MegaBar::Model.exists?(id: base_id)
+        base_id += 1
+        break if base_id >= 10000  # Don't overflow into next range
+      end
+      
+      base_id
+    end
 
     def make_all_files
       make_position_field
@@ -109,6 +126,14 @@ module MegaBar
         parent.send(self.classname.underscore.downcase.pluralize.to_sym).order(:id).each_with_index do |child, i|
           child.update_columns(position: i + 1)
         end
+      end
+    end
+
+    private
+
+    def set_deterministic_id
+      unless self.id
+        self.id = self.class.deterministic_id(self.classname)
       end
     end
   end

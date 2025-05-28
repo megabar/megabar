@@ -3,11 +3,40 @@ module MegaBar
     has_many :layouts, dependent: :destroy
     scope :by_route, ->(route) { where(path: route) if route.present? }
     attr_accessor :make_layout_and_block, :block_text, :model_id, :base_name, :template_id
+    before_create :set_deterministic_id
     after_create :create_layout_for_page
     after_update :create_layout_for_page
     after_create :add_route
     validates_presence_of :path, :name
     validates_uniqueness_of :path
+
+    # Deterministic ID generation for Pages
+    # ID range: 4000-4999
+    def self.deterministic_id(path, name)
+      # Use path and name to create unique identifier
+      identifier = "#{path}_#{name}"
+      hash = Digest::MD5.hexdigest(identifier)
+      base_id = 4000 + (hash.to_i(16) % 1000)
+      
+      # Check for collisions and increment if needed
+      while MegaBar::Page.exists?(id: base_id)
+        base_id += 1
+        break if base_id >= 5000  # Don't overflow into next range
+      end
+      
+      base_id
+    end
+
+    private
+
+    def set_deterministic_id
+      # Only set deterministic ID if not already set
+      unless self.id
+        self.id = self.class.deterministic_id(self.path, self.name)
+      end
+    end
+
+    public
 
     def create_layout_for_page
       base_name = (self.base_name.nil? || self.base_name.empty?) ? self.name : self.base_name
