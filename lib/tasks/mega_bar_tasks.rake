@@ -32,6 +32,15 @@ namespace :mega_bar do
     }
 
     Rake::Task["db:migrate"].invoke
+    
+    # Generate kaminari views to fix missing template errors
+    begin
+      system("rails generate kaminari:views")
+      puts "generated kaminari views"
+    rescue => e
+      puts "Note: kaminari view generation skipped (#{e.message})"
+    end
+    
     # REVOLUTIONARY CHANGE: Use deterministic seed loading instead of old conflict resolution
     Rake::Task['mega_bar:load_deterministic_seeds'].invoke
 
