@@ -182,8 +182,16 @@ The new system uses specific ID ranges for each model type:
 - **Templates**: 12000-12999
 - **TemplateSections**: 13000-13999
 - **Portfolios**: 14000-14999
-- **UI Components**: 15000-19999
+- **UI Components**: 15000-28999
+  - Textbox: 15000-15999
+  - Textarea: 16000-16999
+  - Checkbox: 17000-17999
+  - Select: 18000-18999
+  - Radio: 19000-19999
+  - PasswordField: 23000-23999
+  - Textread: 24000-24999
+  - Date: 28000-28999
 - **Join Tables**: 20000-22999
-- **Additional Models**: 23000+
+- **Additional Models**: 29000+
 
 This ensures no ID conflicts between different model types and provides room for growth. 
