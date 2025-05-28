@@ -91,7 +91,33 @@ namespace :mega_bar do
     puts "🚀 REVOLUTIONARY SEED LOADING - Direct to Permanent Tables"
     puts "=" * 60
     
-    file = args[:file] || 'db/mega_bar_deterministic.seeds.rb'
+    # Try multiple locations for the seed file
+    if args[:file]
+      file_path = args[:file]
+    else
+      # First try the gem directory (where seeds are generated)
+      gem_root = File.expand_path('../../../', __FILE__)
+      gem_seed_file = File.join(gem_root, 'db', 'mega_bar_deterministic.seeds.rb')
+      
+      # Then try the application directory (for custom seeds)
+      app_seed_file = Rails.root.join('db', 'mega_bar_deterministic.seeds.rb').to_s
+      
+      if File.exist?(gem_seed_file)
+        file_path = gem_seed_file
+        puts "📍 Using gem seeds: #{file_path}"
+      elsif File.exist?(app_seed_file)
+        file_path = app_seed_file
+        puts "📍 Using app seeds: #{file_path}"
+      else
+        puts "❌ ERROR: No deterministic seed file found!"
+        puts "   Looked for:"
+        puts "   - #{gem_seed_file}"
+        puts "   - #{app_seed_file}"
+        puts ""
+        puts "💡 Generate seeds first with: rake mega_bar:dump_deterministic_seeds"
+        exit 1
+      end
+    end
     
     # Disable callbacks during loading (same as original system)
     disable_megabar_callbacks
@@ -104,11 +130,11 @@ namespace :mega_bar do
       end
     end
     
-    puts "Loading seeds from: #{file}"
+    puts "Loading seeds from: #{file_path}"
     start_time = Time.current
     
     # Load the seeds directly - they use find_or_create_by with deterministic IDs
-    require_relative Rails.root.join(file).to_s
+    require file_path
     
     # Re-enable callbacks and restore validation
     enable_megabar_callbacks

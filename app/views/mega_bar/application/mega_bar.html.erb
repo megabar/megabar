@@ -3,7 +3,6 @@
   <% unless ['edit', 'new', 'create'].include? params[:action]%>
     <% # INDEX AND SHOW STUFF %>
     <% @mega_displays.each do |mega_display| %>
-      <% byebug%>
       <% next if mega_display[:collection_settings] && mega_display[:collection_settings][:display_if_empty] == false && @mega_instance.empty? %>
       <%
       @mega_display= mega_display
