@@ -1,4 +1,3 @@
-
 Rails.application.routes.draw do
   MegaBar::Engine.routes.draw do
 
@@ -14,6 +13,8 @@ Rails.application.routes.draw do
       # end
     end
 
+    # Temporary route to clear session filters
+    get '/clear_session', to: 'application#clear_session'
 
     resources :sessions
   

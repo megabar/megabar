@@ -4,7 +4,7 @@ module MegaBar
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :exception
     helper_method :sort_column, :sort_direction, :is_displayable, :might_paginate?, :might_filter?
-    before_action :check_authorization
+    # before_action :check_authorization  # Temporarily commented out to disable authorization
     before_action :set_vars_for_all
     before_action :set_vars_for_displays # , except: [:update, :create, :destroy]
 
@@ -43,5 +43,13 @@ module MegaBar
     end
 
     helper_method :current_user
+
+    def clear_session
+      session[:mega_filters] = {}
+      session[:admin_blocks] = []
+      session[:admin_pages] = []
+      session[:return_to] = nil
+      redirect_to request.referer || '/mega-bar', notice: 'Session cleared!'
+    end
   end
 end

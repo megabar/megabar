@@ -11,6 +11,53 @@
     <%= csrf_meta_tags %>
     <%# Bootstrap JS Bundle with Popper %>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <%# Tab functionality for MegaBar %>
+    <script>
+      // Initialize tab functionality when DOM is ready
+      document.addEventListener('DOMContentLoaded', function () {
+        console.log('Loading tab functionality...');
+
+        const tabItems = document.querySelectorAll('.mega-layout-section-tabs li');
+        console.log('Found', tabItems.length, 'tabs');
+
+        tabItems.forEach((tab, index) => {
+          tab.style.cursor = 'pointer';
+          tab.addEventListener('click', function (e) {
+            console.log('Tab clicked:', index, this.textContent);
+
+            if (!this.classList.contains('active')) {
+              // Remove active class from all tabs and content
+              document.querySelectorAll('.mega-layout-section-tabs li.active').forEach(el => el.classList.remove('active'));
+              document.querySelectorAll('#content-tab .tab-content.active').forEach(el => {
+                el.classList.remove('active');
+                el.style.display = 'none';
+              });
+
+              // Add active class to clicked tab
+              this.classList.add('active');
+
+              // Show corresponding content
+              const contentDiv = document.querySelector(`#content-tab .tab-content:nth-child(${index + 1})`);
+              if (contentDiv) {
+                contentDiv.classList.add('active');
+                contentDiv.style.display = 'block';
+                console.log('Showing content for tab', index);
+              } else {
+                console.log('No content found for tab', index);
+              }
+            } else {
+              // Toggle off if clicking active tab
+              this.classList.remove('active');
+              const activeContent = document.querySelector('#content-tab .tab-content.active');
+              if (activeContent) {
+                activeContent.classList.remove('active');
+                activeContent.style.display = 'none';
+              }
+            }
+          });
+        });
+      });
+    </script>
   </head>
   <body class='<%= @page_classes %>'>
     <h1 class='site_name' style=" margin-left: 18px;"><%= @site_name %></h1>

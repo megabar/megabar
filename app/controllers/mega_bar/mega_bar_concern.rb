@@ -244,14 +244,17 @@ module MegaBar
     end
 
     def process_filters(mega_instance)
-      if params["commit"] == "clear_filters"
-        session[:mega_filters] = {}
+      if params["commit"] == "clear_filters" || params["commit"] == "Clear All Filters"
+        # Clear only this controller's filters, not all filters
+        session[:mega_filters][@kontroller_inst] = {} if session[:mega_filters]
+        logger.info "Cleared filters for #{@kontroller_inst}"
       end
       session[:mega_filters] ||= {}
       return mega_instance unless params[@kontroller_inst] || session[:mega_filters][@kontroller_inst]
       #cache me.
       if params[@kontroller_inst]
-        session[:mega_filters] = {}
+        # Don't clear all filters when applying new ones - just update this controller's filters
+        session[:mega_filters][@kontroller_inst] = {}
         filter_types = MegaBar::Field.includes(:options).find_by(field: "filter_type", tablename: "mega_bar_fields").options.pluck(:value)
         filters = session[:mega_filters][@kontroller_inst.to_sym] = collect_filters(filter_types)
       elsif session[:mega_filters][@kontroller_inst]

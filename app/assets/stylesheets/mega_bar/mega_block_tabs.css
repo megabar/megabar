@@ -26,11 +26,11 @@ ul.mega-layout-section-tabs li.active {
   border-bottom: 3px solid red;
 }
 
-#content-tab div {
+#content-tab>div.tab-content {
   display: none;
 }
 
-#content-tab div.active {
+#content-tab>div.tab-content.active {
   display: block;
 }
 
