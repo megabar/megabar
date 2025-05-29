@@ -19,7 +19,7 @@ namespace :mega_bar do
     mega_bar_fields = MegaBar::Field.where(model_id: mega_bar_model_ids).order(:id).pluck(:id)
     mega_bar_layout_ids = MegaBar::Layout.where(page_id: mega_bar_page_ids).order(:id).pluck(:id)
     mega_bar_layable_ids = MegaBar::Layable.where(layout_id: mega_bar_layout_ids).order(:id).pluck(:id)
-    mega_bar_layout_section_ids = MegaBar::LayoutSection.where(id: MegaBar::Layable.where(layout_section_id: mega_bar_layable_ids).order(:id)).order(:id).pluck(:id)
+    mega_bar_layout_section_ids = MegaBar::LayoutSection.joins(:layables).where(layables: { layout_id: mega_bar_layout_ids }).distinct.order(:id).pluck(:id)
     mega_bar_block_ids = MegaBar::Block.where(layout_section_id: mega_bar_layout_section_ids).order(:id).pluck(:id)
     mega_bar_model_display_ids = MegaBar::ModelDisplay.where(block_id: mega_bar_block_ids).order(:id).pluck(:id)
     mega_bar_model_display_collection_ids = MegaBar::ModelDisplayCollection.where(model_display_id: mega_bar_model_display_ids).order(:id).pluck(:id)

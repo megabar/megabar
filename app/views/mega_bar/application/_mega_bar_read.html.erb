@@ -61,7 +61,7 @@
             <td><%= link_to 'Edit&nbsp;'.html_safe, link_path('edit', mega_record.id) %></td>
           <% end %>
           <%if @authorizations[:delete] %>
-            <td><%= link_to 'Destroy&nbsp;'.html_safe, mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <td><%= link_to 'Destroy&nbsp;'.html_safe, '#', onclick: "if(confirm('Are you sure?')) { document.getElementById('destroy_form_#{mega_record.id}').submit(); return false; }" %></td>
           <% end %>
           <% if @mega_model_properties.position_parent.present?
       # not sure why this was part of the above condition. will leave it for now. && @nested_ids.map{|nid| true if nid.key?((@mega_model_properties.position_parent.split("::").last.underscore.downcase + "_id")) }.first 
@@ -102,4 +102,9 @@
 <% if might_paginate?('bottom') %>
   <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>
   <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} if block_admin? %>
+<% end %>
+<%# Hidden destroy forms to avoid nested form issues %>
+<% @mega_instance.each do |mega_record| %>
+  <%= form_with url: link_path('destroy', mega_record.id), method: :delete, local: true, id: "destroy_form_#{mega_record.id}", style: 'display: none;' do |form| %>
+  <% end %>
 <% end %>
