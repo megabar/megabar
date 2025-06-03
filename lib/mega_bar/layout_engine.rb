@@ -14,6 +14,31 @@ class LayoutEngine
   # this does set some environment variables that are then used in your controllers, but inspect them there.
   # if you've set up your page->layouts->blocks->model_displays->field_displays properly this should just work.
   # if you've created a page using the gui and its not working.. check it's path setting and check your routes file to see that they are looking right.
+
+  def initialize(app = nil, message = "Response Time")
+    @app = app
+    @message = message
+  end
+
+  def call(env)
+    dup._call(env)
+  end
+
+  def _call(env)
+    return handle_static_assets(env) if static_asset?(env)
+    
+    setup_request_environment(env)
+    return handle_non_megabar_page(env) if env[:mega_page].empty?
+    
+    render_megabar_page(env)
+  end
+
+  def each(&display)
+    display.call("<!-- #{@message}: #{@stop - @start} -->\n") if (!@headers["Content-Type"].nil? && @headers["Content-Type"].include?("text/html"))
+    @response.each(&display)
+  end
+
+
   module RequestProcessing
     def static_asset?(env)
       env["PATH_INFO"].end_with?(".sass", ".css", ".js", ".jpeg", ".jpg", ".json")
@@ -291,28 +316,6 @@ class LayoutEngine
   include PageProcessing
   include BlockProcessing
 
-  def initialize(app = nil, message = "Response Time")
-    @app = app
-    @message = message
-  end
-
-  def call(env)
-    dup._call(env)
-  end
-
-  def _call(env)
-    return handle_static_assets(env) if static_asset?(env)
-    
-    setup_request_environment(env)
-    return handle_non_megabar_page(env) if env[:mega_page].empty?
-    
-    render_megabar_page(env)
-  end
-
-  def each(&display)
-    display.call("<!-- #{@message}: #{@stop - @start} -->\n") if (!@headers["Content-Type"].nil? && @headers["Content-Type"].include?("text/html"))
-    @response.each(&display)
-  end
 end
 
 class FlatsController < ActionController::Base
