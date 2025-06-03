@@ -160,105 +160,170 @@ class LayoutEngine
 
   def process_page_layout(page_layout, page_info, rout, orig_query_hash, pagination, site, env)
     final_layout_sections = {}
+    
     page_layout.layout_sections.each do |layout_section|
-      template_section = MegaBar::TemplateSection.find(layout_section.layables.where(layout_id: page_layout.id).first.template_section_id).code_name
-      blocks = MegaBar::Block.by_layout_section(layout_section.id).order(position: :asc)
-      blocks = blocks.by_actions(rout[:action]) unless rout.blank?
-      if layout_section.rules == "specific"
-        puts "----------------------"
-        puts blocks.pluck(:path_base).inspect
-        puts "-----------------------"
-        diff = 20
-        prev_diff = 21
-        rout_terms = env["REQUEST_URI"].split("/").reject! { |c| (c.nil? || c.empty?) }
-        best = {}
-        blocks.each do |block|
-          page_path_terms = block.path_base.split("/").map { |m| m if m[0] != ":" } - ["", nil]
-
-          puts "a: rout_terms " + rout_terms.inspect
-          puts "b: page_path_terms " + page_path_terms.inspect
-          puts "c: (rout_terms - page_path_terms).size: " + (rout_terms - page_path_terms).size.to_s
-          puts "d: rout_terms.size - page_path_terms.size: " + (rout_terms.size - page_path_terms.size).to_s
-          puts "e: " + ((rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size).to_s
-          next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
-
-          next if (page_path_terms.empty? && !rout_terms.empty?) # home page /
-          diff = (rout_terms - page_path_terms).size
-          page_terms = block.path_base.split("/").reject! { |c| (c.nil? || c.empty?) }
-          page_terms ||= []
-          variable_segments = []
-          page_terms.each_with_index do |v, k|
-            variable_segments << rout_terms[k] if page_terms[k].starts_with?(":")
-          end
-          variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
-          best = block if diff < prev_diff
-          prev_diff = diff if diff < prev_diff
-        end
-        blocks = blocks.reject { |b| b.id != best.id }
-      end
-      if layout_section.rules == "chosen"
-        # puts 'the chosen'
-        chosen_fields = MegaBar::Model.where(classname: page_info[:terms][0].classify).first.fields.where("field LIKE ?", "%template%").pluck(:field)
-        chosen_obj = page_info[:terms][0].classify.constantize.find(page_info[:vars][0].to_i)
-        chosen_blocks = chosen_fields.map { |f| chosen_obj.send(f) }
-        blocks = blocks.where(id: chosen_blocks)
-      end
-      final_blocks = []
-      next unless blocks.present?
-      final_layout_sections[template_section] = []
-      env[:mega_layout_section] = layout_section
-      blocks.each do |blck|
-        next if mega_filtered(blck, site)
-        final_blocks << {
-          id: blck.id,
-          header: blck.model_displays.where(action: "index").first&.header,
-          actions: blck.actions, action: rout[:action],
-          html: process_block(blck, page_info, rout, orig_query_hash, pagination, env),
-        }
-      end
-      env["mega_final_blocks"] = final_blocks #used in master_layouts_sections_controller
-
-      # Check if we're in the admin view
-      # if env['PATH_INFO'].include?('/layouts/') && env['rack.request.query_hash']['return_to'].present?
-      #   final_layout_sections[template_section] << "<!-- Section: #{template_section} -->"
-      # else
-      @status, @headers, @layout_sections = MegaBar::MasterLayoutSectionsController.action(:render_layout_section_with_blocks).call(env)
-      final_layout_sections[template_section] << ls = @layout_sections.blank? ? "" : @layout_sections.body.html_safe
-      # end
+      process_layout_section(layout_section, page_layout, page_info, rout, orig_query_hash, pagination, site, env, final_layout_sections)
     end
+    
     final_layout_sections
   end
 
-  def process_block(blck, page_info, rout, orig_query_hash, pagination, env)
-    if !blck.html.nil? && !blck.html.empty?
-      # bip = '<span data-bip-type="textarea" data-bip-attribute="html" data-bip-object="block" data-bip-original-content="' +  blck.html + '" data-bip-skip-blur="false" data-bip-url="/mega-bar/blocks/' + blck.id.to_s + '" data-bip-value="' +  blck.html + '" class="best_in_place" id="best_in_place_block_' + blck.id.to_s + '_html">' + blck.html + '</span>'
-      # bip.html_safe
-      blck.html.html_safe
-    elsif blck.model_displays.empty?
-      ""
-    else
-      params_hash = {} # used to set params var for controllers
-      params_hash_arr = [] #used to collect 'params_hash' pieces
-      mega_env = MegaBar::MegaEnv.new(blck, rout, page_info, pagination, @user) # added to env for use in controllers
-      params_hash_arr = mega_env.params_hash_arr
-      env[:mega_env] = mega_env.to_hash
-      params_hash_arr << { action: mega_env.block_action }
-      params_hash_arr << { controller: mega_env.kontroller_path }
-      params_hash_arr.each do |param|
-        params_hash = params_hash.merge(param)
-      end
-      params_hash = params_hash.merge(orig_query_hash)
-      params_hash = params_hash.merge(env["rack.request.form_hash"]) if !env["rack.request.form_hash"].nil? # && (mega_env.block_action == 'update' || mega_env.block_action == 'create')
-      env["QUERY_STRING"] = params_hash.to_param # 150221!
-      env["action_dispatch.request.parameters"] = params_hash
-      env["block_classes"] = []
-      env["block_classes"] << blck.name.downcase.parameterize.underscore
-      env["block_classes"] << "active" if first_tab(env, blck)
+  private
 
-      @status, @headers, @disp_body = mega_env.kontroller_klass.constantize.action(mega_env.block_action).call(env)
-      @redirect = [@status, @headers, @disp_body] if @status == 302
-      block_body = @disp_body.blank? ? "" : @disp_body.body.html_safe
+  def process_layout_section(layout_section, page_layout, page_info, rout, orig_query_hash, pagination, site, env, final_layout_sections)
+    template_section = get_template_section(layout_section, page_layout)
+    blocks = get_filtered_blocks(layout_section, rout, page_info)
+    return unless blocks.present?
+
+    final_layout_sections[template_section] = []
+    env[:mega_layout_section] = layout_section
+    
+    process_blocks(blocks, page_info, rout, orig_query_hash, pagination, site, env, final_layout_sections, template_section)
+  end
+
+  def get_template_section(layout_section, page_layout)
+    MegaBar::TemplateSection.find(
+      layout_section.layables.where(layout_id: page_layout.id).first.template_section_id
+    ).code_name
+  end
+
+  def get_filtered_blocks(layout_section, rout, page_info)
+    blocks = MegaBar::Block.by_layout_section(layout_section.id).order(position: :asc)
+    blocks = blocks.by_actions(rout[:action]) unless rout.blank?
+    
+    case layout_section.rules
+    when "specific"
+      filter_specific_blocks(blocks, page_info)
+    when "chosen"
+      filter_chosen_blocks(blocks, page_info)
+    else
+      blocks
     end
+  end
+
+  def filter_specific_blocks(blocks, page_info)
+    rout_terms = page_info[:page_path].split("/").reject! { |c| (c.nil? || c.empty?) }
+    best_block = find_best_matching_block(blocks, rout_terms)
+    blocks.reject { |b| b.id != best_block.id }
+  end
+
+  def find_best_matching_block(blocks, rout_terms)
+    diff = 20
+    prev_diff = 21
+    best = nil
+
+    blocks.each do |block|
+      page_path_terms = block.path_base.split("/").map { |m| m if m[0] != ":" } - ["", nil]
+      next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
+      next if (page_path_terms.empty? && !rout_terms.empty?)
+
+      current_diff = (rout_terms - page_path_terms).size
+      if current_diff < prev_diff
+        best = block
+        prev_diff = current_diff
+      end
+    end
+
+    best
+  end
+
+  def filter_chosen_blocks(blocks, page_info)
+    model = MegaBar::Model.where(classname: page_info[:terms][0].classify).first
+    chosen_fields = model.fields.where("field LIKE ?", "%template%").pluck(:field)
+    chosen_obj = page_info[:terms][0].classify.constantize.find(page_info[:vars][0].to_i)
+    chosen_blocks = chosen_fields.map { |f| chosen_obj.send(f) }
+    blocks.where(id: chosen_blocks)
+  end
+
+  def process_blocks(blocks, page_info, rout, orig_query_hash, pagination, site, env, final_layout_sections, template_section)
+    final_blocks = blocks.map do |blck|
+      next if mega_filtered(blck, site)
+      build_block_info(blck, page_info, rout, orig_query_hash, pagination, env)
+    end.compact
+
+    env["mega_final_blocks"] = final_blocks
+    render_layout_section(env, final_layout_sections, template_section)
+  end
+
+  def build_block_info(blck, page_info, rout, orig_query_hash, pagination, env)
+    {
+      id: blck.id,
+      header: blck.model_displays.where(action: "index").first&.header,
+      actions: blck.actions,
+      action: rout[:action],
+      html: process_block(blck, page_info, rout, orig_query_hash, pagination, env)
+    }
+  end
+
+  def render_layout_section(env, final_layout_sections, template_section)
+    @status, @headers, @layout_sections = MegaBar::MasterLayoutSectionsController
+      .action(:render_layout_section_with_blocks)
+      .call(env)
+    
+    final_layout_sections[template_section] << (
+      @layout_sections.blank? ? "" : @layout_sections.body.html_safe
+    )
+  end
+
+  def process_block(blck, page_info, rout, orig_query_hash, pagination, env)
+    return render_html_block(blck) if has_html_content?(blck)
+    return "" if blck.model_displays.empty?
+    
+    process_model_display_block(blck, page_info, rout, orig_query_hash, pagination, env)
+  end
+
+  private
+
+  def has_html_content?(blck)
+    blck.html.present? && !blck.html.empty?
+  end
+
+  def render_html_block(blck)
+    blck.html.html_safe
+  end
+
+  def process_model_display_block(blck, page_info, rout, orig_query_hash, pagination, env)
+    mega_env = MegaBar::MegaEnv.new(blck, rout, page_info, pagination, @user)
+    setup_environment(mega_env, orig_query_hash, env)
+    render_block_content(mega_env, blck, env)
+  end
+
+  def setup_environment(mega_env, orig_query_hash, env)
+    params_hash = build_params_hash(mega_env, orig_query_hash, env)
+    env[:mega_env] = mega_env.to_hash
+    env["QUERY_STRING"] = params_hash.to_param
+    env["action_dispatch.request.parameters"] = params_hash
+    setup_block_classes(env, mega_env.block)
+  end
+
+  def build_params_hash(mega_env, orig_query_hash, env)
+    params_hash = {}
+    params_hash_arr = mega_env.params_hash_arr + [
+      { action: mega_env.block_action },
+      { controller: mega_env.kontroller_path }
+    ]
+    
+    params_hash_arr.each { |param| params_hash.merge!(param) }
+    params_hash.merge!(orig_query_hash)
+    params_hash.merge!(env["rack.request.form_hash"]) if env["rack.request.form_hash"].present?
+    
+    params_hash
+  end
+
+  def setup_block_classes(env, blck)
+    env["block_classes"] = [
+      blck.name.downcase.parameterize.underscore,
+      ("active" if first_tab(env, blck))
+    ].compact
+  end
+
+  def render_block_content(mega_env, blck, env)
+    @status, @headers, @disp_body = mega_env.kontroller_klass.constantize
+      .action(mega_env.block_action)
+      .call(env)
+    
+    @redirect = [@status, @headers, @disp_body] if @status == 302
+    @disp_body.blank? ? "" : @disp_body.body.html_safe
   end
 
   def first_tab(env, blck)
