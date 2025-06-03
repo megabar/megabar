@@ -109,32 +109,64 @@ class LayoutEngine
   def set_page_info(rout, rout_terms)
     page_info = {}
     rout_terms ||= []
-    diff = 20
-    prev_diff = 21
+    @prev_diff = Float::INFINITY  # Initialize with infinity to ensure first match is accepted
+    
     MegaBar::Page.all.order(id: :desc).pluck(:id, :path, :name, :administrator).each do |page|
-      page_path_terms = page[1].split("/").map { |m| m if m[0] != ":" } - ["", nil]
-      # puts "a: rout_terms " + rout_terms.inspect
-      # puts "b: page_path_terms " + page_path_terms.inspect
-      # puts "c: (rout_terms - page_path_terms).size: " + (rout_terms - page_path_terms).size.to_s
-      # puts "d: rout_terms.size - page_path_terms.size: " + (rout_terms.size - page_path_terms.size).to_s
-      # puts "e: " + ((rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size).to_s
-
-      next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
-
-      next if (page_path_terms.empty? && !rout_terms.empty?) # home page /
-      diff = (rout_terms - page_path_terms).size
-      page_terms = page[1].split("/").reject! { |c| (c.nil? || c.empty?) }
-      page_terms ||= []
-      variable_segments = []
-      page_terms.each_with_index do |v, k|
-        variable_segments << rout_terms[k] if page_terms[k].starts_with?(":")
+      next unless page_matches_rout_terms?(page[1], rout_terms)
+      
+      page_terms = page[1].split("/").reject! { |c| (c.nil? || c.empty?) } || []
+      variable_segments = extract_variable_segments(page_terms, rout_terms)
+      
+      current_diff = calculate_path_difference(rout_terms, page_terms)
+      if current_diff < @prev_diff
+        page_info = build_page_info(page, page_terms, variable_segments)
+        @prev_diff = current_diff
       end
-      variable_segments << rout_terms[page_terms.size] if Integer(rout_terms[page_terms.size]) rescue false
-      page_info = { page_id: page[0], page_path: page[1], terms: page_terms, vars: variable_segments, name: page[2], administrator: page[3] } if diff < prev_diff
-      prev_diff = diff if diff < prev_diff
     end
-
+    
     page_info
+  end
+
+  private
+
+  def page_matches_rout_terms?(page_path, rout_terms)
+    page_path_terms = page_path.split("/").map { |m| m if m[0] != ":" } - ["", nil]
+    return false if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
+    return false if (page_path_terms.empty? && !rout_terms.empty?)
+    true
+  end
+
+  def extract_variable_segments(page_terms, rout_terms)
+    segments = []
+    page_terms.each_with_index do |term, index|
+      segments << rout_terms[index] if term.starts_with?(":")
+    end
+    
+    # Add numeric segment if present
+    begin
+      if rout_terms[page_terms.size] && Integer(rout_terms[page_terms.size])
+        segments << rout_terms[page_terms.size]
+      end
+    rescue ArgumentError
+      # Not a valid integer, skip it
+    end
+    
+    segments
+  end
+
+  def calculate_path_difference(rout_terms, page_terms)
+    (rout_terms - page_terms).size
+  end
+
+  def build_page_info(page, page_terms, variable_segments)
+    {
+      page_id: page[0],
+      page_path: page[1],
+      terms: page_terms,
+      vars: variable_segments,
+      name: page[2],
+      administrator: page[3]
+    }
   end
 
   def set_rout(request, env)
@@ -146,16 +178,29 @@ class LayoutEngine
   end
 
   def set_pagination_info(env, rout_terms)
-    rout_terms ||= []
     pagination_info = []
-    rout_terms.map.with_index do |x, i|
-      pagination_info << { kontrlr: x, page: rout_terms[i + 1] } if /_page/ =~ x
-    end
-    q_hash = Rack::Utils.parse_nested_query(env["QUERY_STRING"])
-    q_hash.keys.map do |key|
-      pagination_info << { kontrlr: key, page: q_hash[key] } if /_page/ =~ key
-    end
+    pagination_info.concat(extract_pagination_from_rout_terms(rout_terms))
+    pagination_info.concat(extract_pagination_from_query_string(env))
     pagination_info
+  end
+
+  private
+
+  def extract_pagination_from_rout_terms(rout_terms)
+    return [] unless rout_terms.present?
+    
+    rout_terms.map.with_index do |term, index|
+      next unless term.match?(/_page$/)
+      { kontrlr: term, page: rout_terms[index + 1] }
+    end.compact
+  end
+
+  def extract_pagination_from_query_string(env)
+    query_hash = Rack::Utils.parse_nested_query(env["QUERY_STRING"])
+    query_hash.map do |key, value|
+      next unless key.match?(/_page$/)
+      { kontrlr: key, page: value }
+    end.compact
   end
 
   def process_page_layout(page_layout, page_info, rout, orig_query_hash, pagination, site, env)
@@ -167,8 +212,6 @@ class LayoutEngine
     
     final_layout_sections
   end
-
-  private
 
   def process_layout_section(layout_section, page_layout, page_info, rout, orig_query_hash, pagination, site, env, final_layout_sections)
     template_section = get_template_section(layout_section, page_layout)
