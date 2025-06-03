@@ -21,89 +21,109 @@ class LayoutEngine
   end
 
   def _call(env)
-
-    # so.. a lot does go on here... I'll have to write a white paper.
-    if env["PATH_INFO"].end_with?(".sass") || env["PATH_INFO"].end_with?(".css") || env["PATH_INFO"].end_with?(".js") || env["PATH_INFO"].end_with?(".jpeg") || env["PATH_INFO"].end_with?(".jpg")
-      @status, @headers, @response = @app.call(env)
-      return [@status, @headers, self]
-    end
-    if env["PATH_INFO"].end_with?(".json")
-      @status, @headers, @response = @app.call(env)
-      return [@status, @headers, self]
-    end
-    env["REQUEST_METHOD"] = "PATCH" if env["REQUEST_METHOD"] == "PUT"
-    @redirect = false
-    request = Rack::Request.new(env)
-    request.params # strangely this needs to be here for best_in_place updates.
-    # MegaBar::Engine.routes.routes.named_routes.values.map do |route|
-    site = MegaBar::Site.where(domains: request.host).first
-    site.present? ? site : MegaBar::Site.where(domains: "base").first
-    env[:mega_site] = site
-    #   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + "#{route.defaults[:controller]}##{route.defaults[:action]}"
-    # end #vs. Rails.application.routes.routes.named_routes.values.map
-    # Rails.application.routes.routes.named_routes.values.map do |route|
-    #   puts  route.instance_variable_get(:@constraints)[:request_method].to_s + "#{route.defaults[:controller]}##{route.defaults[:action]}"
-    # end #vs. Rails.application.routes.routes.named_routes.values.map
-    ################################
-    ## figure out what page it is
-    # the general strategy is..
-    # have rails recognize the path_info..
-    # tbcontinued.
-    request.session[:return_to] = env["rack.request.query_hash"]["return_to"] unless env["rack.request.query_hash"]["return_to"].blank?
-    request.session[:return_to] = nil if env["rack.request.query_hash"]["method"].present?
-    rout_terms = request.path_info.split("/").reject! { |c| (c.nil? || c.empty?) }
-    env[:mega_rout] = rout = set_rout(request, env)
-    env[:mega_page] = page_info = set_page_info(rout, rout_terms)
-    pagination = set_pagination_info(env, rout_terms)
-    puts "-----------------------------"
-    puts "mega_rout: " + env[:mega_rout].inspect
-    puts "mega_page: " + env[:mega_page].inspect
-    puts "-----------------------------"
-    # request.env["devise.mapping"] = Devise.mappings[:user]
-    # request.env['warden'] = Warden::Proxy.new({}, Warden::Manager.new({})).tap{|i| i.set_user({user: 7}, scope: {user: 7}) }
-    request.session[:init] = true #unless request.session
-    request.session[:admin_pages] ||= []
-    @user = env[:mega_user] = request.session["user_id"] && MegaBar::User.all.size > 0 ? MegaBar::User.find(request.session["user_id"]) : MegaBar::User.new
-    if page_info.empty? #non megabar pages.
-      puts "NON MEGABAR PAGE"
-      gotta_be_an_array = []
-      if rout[:controller].nil?
-        rout[:controller] = "flats"
-        rout[:action] = "index"
-      end
-      # request.session["warden.user.user.key"] = nil if ( rout[:controller] == 'sessions' && rout[:action] == 'destroy')
-      @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)
-      gotta_be_an_array << page = @page.blank? ? "" : @page.body.html_safe
-      return @status, @headers, gotta_be_an_array
-    end
-    ################################
-    orig_query_hash = Rack::Utils.parse_nested_query(env["QUERY_STRING"])
-    final_layouts = []
-
-    page_layouts = MegaBar::Layout.by_page(page_info[:page_id]).includes(:sites, :themes)
-
-    page_layouts.each do |page_layout|
-      next if mega_filtered(page_layout, site)
-      env[:mega_layout] = page_layout
-      final_layout_sections = process_page_layout(page_layout, page_info, rout, orig_query_hash, pagination, site, env)
-
-      env["mega_final_layout_sections"] = final_layout_sections #used in master_layouts_controller
-      @status, @headers, @layouts = MegaBar::MasterLayoutsController.action(:render_layout_with_sections).call(env)
-      final_layouts << l = @layouts.blank? ? "" : @layouts.body.html_safe
-    end
-
-    env["mega_final_layouts"] = final_layouts
-    @status, @headers, @page = MegaBar::MasterPagesController.action(:render_page).call(env)
-    final_page = []
-    final_page_content = @page.blank? ? "" : @page.body.html_safe
-    # final_page_content = @page.instance_variable_get(:@response).nil? ? @page.instance_variable_get(:@body).instance_variable_get(:@stream).instance_variable_get(:@buf)[0] : @page.instance_variable_get(:@response).instance_variable_get(:@stream).instance_variable_get(:@buf)[0]
-    final_page << final_page_content
-    return @redirect ? [@redirect[0], @redirect[1], ["you are being redirected"]] : [@status, @headers, final_page]
+    return handle_static_assets(env) if static_asset?(env)
+    
+    setup_request_environment(env)
+    return handle_non_megabar_page(env) if env[:mega_page].empty?
+    
+    render_megabar_page(env)
   end
 
   def each(&display)
     display.call("<!-- #{@message}: #{@stop - @start} -->\n") if (!@headers["Content-Type"].nil? && @headers["Content-Type"].include?("text/html"))
     @response.each(&display)
+  end
+
+  private
+
+  def static_asset?(env)
+    env["PATH_INFO"].end_with?(".sass", ".css", ".js", ".jpeg", ".jpg", ".json")
+  end
+
+  def handle_static_assets(env)
+    @status, @headers, @response = @app.call(env)
+    [@status, @headers, self]
+  end
+
+  def setup_request_environment(env)
+    env["REQUEST_METHOD"] = "PATCH" if env["REQUEST_METHOD"] == "PUT"
+    @redirect = false
+    
+    request = Rack::Request.new(env)
+    request.params # needed for best_in_place updates
+    
+    setup_site(request, env)
+    setup_session(request, env)
+    setup_routing(request, env)
+    setup_user(request, env)
+  end
+
+  def setup_site(request, env)
+    site = MegaBar::Site.where(domains: request.host).first
+    env[:mega_site] = site.present? ? site : MegaBar::Site.where(domains: "base").first
+  end
+
+  def setup_session(request, env)
+    request.session[:return_to] = env["rack.request.query_hash"]["return_to"] unless env["rack.request.query_hash"]["return_to"].blank?
+    request.session[:return_to] = nil if env["rack.request.query_hash"]["method"].present?
+    request.session[:init] = true
+    request.session[:admin_pages] ||= []
+  end
+
+  def setup_routing(request, env)
+    rout_terms = request.path_info.split("/").reject! { |c| (c.nil? || c.empty?) }
+    env[:mega_rout] = set_rout(request, env)
+    env[:mega_page] = set_page_info(env[:mega_rout], rout_terms)
+    env[:mega_pagination] = set_pagination_info(env, rout_terms)
+  end
+
+  def setup_user(request, env)
+    @user = env[:mega_user] = if request.session["user_id"] && MegaBar::User.all.size > 0
+      MegaBar::User.find(request.session["user_id"])
+    else
+      MegaBar::User.new
+    end
+  end
+
+  def handle_non_megabar_page(env)
+    rout = env[:mega_rout]
+    rout[:controller] ||= "flats"
+    rout[:action] ||= "index"
+    
+    @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)
+    page_content = @page.blank? ? "" : @page.body.html_safe
+    [@status, @headers, [page_content]]
+  end
+
+  def render_megabar_page(env)
+    orig_query_hash = Rack::Utils.parse_nested_query(env["QUERY_STRING"])
+    final_layouts = process_layouts(env, orig_query_hash)
+    
+    env["mega_final_layouts"] = final_layouts
+    @status, @headers, @page = MegaBar::MasterPagesController.action(:render_page).call(env)
+    
+    final_page_content = @page.blank? ? "" : @page.body.html_safe
+    final_page = [final_page_content]
+    
+    @redirect ? [@redirect[0], @redirect[1], ["you are being redirected"]] : [@status, @headers, final_page]
+  end
+
+  def process_layouts(env, orig_query_hash)
+    page_layouts = MegaBar::Layout.by_page(env[:mega_page][:page_id]).includes(:sites, :themes)
+    final_layouts = []
+    
+    page_layouts.each do |page_layout|
+      next if mega_filtered(page_layout, env[:mega_site])
+      
+      env[:mega_layout] = page_layout
+      final_layout_sections = process_page_layout(page_layout, env[:mega_page], env[:mega_rout], orig_query_hash, env[:mega_pagination], env[:mega_site], env)
+      
+      env["mega_final_layout_sections"] = final_layout_sections
+      @status, @headers, @layouts = MegaBar::MasterLayoutsController.action(:render_layout_with_sections).call(env)
+      final_layouts << (@layouts.blank? ? "" : @layouts.body.html_safe)
+    end
+    
+    final_layouts
   end
 
   def set_page_info(rout, rout_terms)
