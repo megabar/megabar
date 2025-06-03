@@ -2,6 +2,9 @@ require "active_record"
 # require 'sqlite3'
 require "logger"
 require_relative 'mega_env'
+require_relative 'block_filter'
+require_relative 'page_info_processor'
+require_relative 'pagination_processor'
 
 class LayoutEngine
   # honestly, this is a hugely important file, but there shouldn't be anything in this file that concerns regular developers or users.
@@ -80,73 +83,14 @@ class LayoutEngine
     end
 
     def set_page_info(rout, rout_terms)
-      page_info = {}
-      rout_terms ||= []
-      @prev_diff = Float::INFINITY
-      
-      MegaBar::Page.all.order(id: :desc).pluck(:id, :path, :name, :administrator).each do |page|
-        next unless page_matches_rout_terms?(page[1], rout_terms)
-        
-        page_terms = page[1].split("/").reject! { |c| (c.nil? || c.empty?) } || []
-        variable_segments = extract_variable_segments(page_terms, rout_terms)
-        
-        current_diff = calculate_path_difference(rout_terms, page_terms)
-        if current_diff < @prev_diff
-          page_info = build_page_info(page, page_terms, variable_segments)
-          @prev_diff = current_diff
-        end
-      end
-      
-      page_info
+      MegaBar::PageInfoProcessor.new(rout, rout_terms).process
     end
 
     def set_pagination_info(env, rout_terms)
-      pagination_info = []
-      pagination_info.concat(extract_pagination_from_rout_terms(rout_terms))
-      pagination_info.concat(extract_pagination_from_query_string(env))
-      pagination_info
+      MegaBar::PaginationProcessor.new(env, rout_terms).process
     end
 
     private
-
-    def page_matches_rout_terms?(page_path, rout_terms)
-      page_path_terms = page_path.split("/").map { |m| m if m[0] != ":" } - ["", nil]
-      return false if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
-      return false if (page_path_terms.empty? && !rout_terms.empty?)
-      true
-    end
-
-    def extract_variable_segments(page_terms, rout_terms)
-      segments = []
-      page_terms.each_with_index do |term, index|
-        segments << rout_terms[index] if term.starts_with?(":")
-      end
-      
-      begin
-        if rout_terms[page_terms.size] && Integer(rout_terms[page_terms.size])
-          segments << rout_terms[page_terms.size]
-        end
-      rescue ArgumentError
-        # Not a valid integer, skip it
-      end
-      
-      segments
-    end
-
-    def calculate_path_difference(rout_terms, page_terms)
-      (rout_terms - page_terms).size
-    end
-
-    def build_page_info(page, page_terms, variable_segments)
-      {
-        page_id: page[0],
-        page_path: page[1],
-        terms: page_terms,
-        vars: variable_segments,
-        name: page[2],
-        administrator: page[3]
-      }
-    end
 
     def extract_pagination_from_rout_terms(rout_terms)
       return [] unless rout_terms.present?
@@ -228,51 +172,7 @@ class LayoutEngine
 
   module BlockProcessing
     def get_filtered_blocks(layout_section, rout, page_info)
-      blocks = MegaBar::Block.by_layout_section(layout_section.id).order(position: :asc)
-      blocks = blocks.by_actions(rout[:action]) unless rout.blank?
-      
-      case layout_section.rules
-      when "specific"
-        filter_specific_blocks(blocks, page_info)
-      when "chosen"
-        filter_chosen_blocks(blocks, page_info)
-      else
-        blocks
-      end
-    end
-
-    def filter_specific_blocks(blocks, page_info)
-      rout_terms = page_info[:page_path].split("/").reject! { |c| (c.nil? || c.empty?) }
-      best_block = find_best_matching_block(blocks, rout_terms)
-      blocks.reject { |b| b.id != best_block.id }
-    end
-
-    def find_best_matching_block(blocks, rout_terms)
-      diff = 20
-      prev_diff = 21
-      best = nil
-
-      blocks.each do |block|
-        page_path_terms = block.path_base.split("/").map { |m| m if m[0] != ":" } - ["", nil]
-        next if (rout_terms - page_path_terms).size != rout_terms.size - page_path_terms.size
-        next if (page_path_terms.empty? && !rout_terms.empty?)
-
-        current_diff = (rout_terms - page_path_terms).size
-        if current_diff < prev_diff
-          best = block
-          prev_diff = current_diff
-        end
-      end
-
-      best
-    end
-
-    def filter_chosen_blocks(blocks, page_info)
-      model = MegaBar::Model.where(classname: page_info[:terms][0].classify).first
-      chosen_fields = model.fields.where("field LIKE ?", "%template%").pluck(:field)
-      chosen_obj = page_info[:terms][0].classify.constantize.find(page_info[:vars][0].to_i)
-      chosen_blocks = chosen_fields.map { |f| chosen_obj.send(f) }
-      blocks.where(id: chosen_blocks)
+      MegaBar::BlockFilter.new(layout_section, rout, page_info).filter
     end
 
     def process_blocks(blocks, page_info, rout, orig_query_hash, pagination, site, env, final_layout_sections, template_section)
