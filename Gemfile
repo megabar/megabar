@@ -1,11 +1,11 @@
 source "https://rubygems.org"
 
 group :test do
-  gem "activerecord"
+  gem "rails", "~> 8.0.2"
+  gem "activerecord", "~> 8.0.2"
+  gem "actionmailer", "~> 8.0.2"
+  gem "actionpack", "~> 8.0.2"
   gem "sqlite3"
-  gem "rails", "~> 6.1.4.6"
-  gem "actionmailer"
-  gem "actionpack"
   gem "rspec-rails"
   gem "factory_bot_rails"
   gem "byebug"

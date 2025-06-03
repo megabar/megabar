@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'jquery-rails'
   s.add_dependency 'jquery-ui-rails'
   s.add_dependency 'kaminari', '~> 1.2'
-  s.add_dependency 'rails'
+  s.add_dependency 'rails', '~> 8.0.2'
   s.add_dependency 'seed_dump'
   s.add_dependency 'seedbank'
   s.add_dependency 'slim-rails'

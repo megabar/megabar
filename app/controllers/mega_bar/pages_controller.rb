@@ -1,6 +1,7 @@
 module MegaBar
   class PagesController < MegaBar::ApplicationController
     include MegaBar::MegaBarConcern
+    skip_before_action :check_authorization, only: [:index]
 
     def index
       @mega_instance ||= Page.where("mega_page = 'f' or mega_page is null or mega_page = '' or mega_page = 'regular' or path = '/' or path = '/mega-bar/users'").order(column_sorting)

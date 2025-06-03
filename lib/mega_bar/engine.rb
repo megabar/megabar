@@ -23,25 +23,15 @@ module MegaBar
     initializer "model_core.factories", :after => "factory_girl.set_factory_paths" do
       FactoryBot.definition_file_paths << File.expand_path('../../../spec/factories', __FILE__) if defined?(FactoryBot)
     end
+
     config.generators do |g|
       g.test_framework :rspec
       g.fixture_replacement :factory_girl, :dir => 'spec/factories'
-      g.assets false
       g.helper false
     end
-    ### taskrabbit: http://tech.taskrabbit.com/blog/2014/02/11/rails-4-engines/
-    ### http://pivotallabs.com/leave-your-migrations-in-your-rails-engines/
 
     config.action_view.logger = nil
-
-    config.assets.paths << File.expand_path("../../assets/stylesheets", __FILE__)
-    config.assets.paths << File.expand_path("../../assets/javascripts", __FILE__)
-    config.assets.paths << File.expand_path("../../assets/stylesheets/mega_bar", __FILE__)
-    config.assets.paths << File.expand_path("../../assets/javascripts/mega_bar", __FILE__)
-    config.assets.precompile += %w( mega_bar.css )
     config.annotate_rendered_view_with_filenames = false
-
- 
   end
 end
 
