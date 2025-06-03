@@ -48,7 +48,7 @@ class MegaRoute
             # byebug if pg.id > 29 || pg.id == 13 || pg.id == 10
             if block.html?
               p = block.path_base? ? block.path_base : pg.path
-              routes << {path: p, method: 'get', controller: 'flats', action: 'index', as: 'flats_' + block.id.to_s}
+              routes << {path: p, method: 'get', controller: 'mega_bar/master_pages', action: 'render_page', as: 'flats_' + block.id.to_s}
               # puts 'block html path. ' + p.to_s
             else
               if MegaBar::ModelDisplay.by_block(block.id).size > 0

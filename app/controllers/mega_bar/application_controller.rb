@@ -16,15 +16,18 @@ module MegaBar
       permits << 'page'
       permits << 'sort'
       permits << 'direction'
-      MegaBar::Field.by_model(env[:mega_env][:modle_id]).order('data_type desc').each do |att|
-        case att.data_type
-        when 'array'
-          permits << { att.field => [] }
-        else
-          permits << att.field unless ['id', 'created_at', 'updated_at', :id].include?(att)
-          permits << att.field + '___filter'
+      
+      # Add nil safety but keep original modle_id spelling
+      if env[:mega_env] && env[:mega_env][:modle_id]
+        MegaBar::Field.by_model(env[:mega_env][:modle_id]).order('data_type desc').each do |att|
+          case att.data_type
+          when 'array'
+            permits << { att.field => [] }
+          else
+            permits << att.field unless ['id', 'created_at', 'updated_at', :id].include?(att)
+            permits << att.field + '___filter'
+          end
         end
-
       end
 
       if params[controller_name.singularize]
