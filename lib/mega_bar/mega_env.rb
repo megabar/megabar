@@ -12,9 +12,8 @@ module MegaBar
       @modle_id = @modle.id
       @modyule = @modle.modyule.empty? ? "" : @modle.modyule + "::"
       @kontroller_klass = @modyule + @modle.classname.classify.pluralize + "Controller"
-      @kontroller_path = @modle.modyule.nil? || @modle.modyule.empty? ? @modle.classname.pluralize.underscore : @modyule.split("::").map { |m| m = m.underscore }.join("/") + "/" + @modle.classname.pluralize.underscore
+      @kontroller_path = build_kontroller_path
       @klass = (@modyule + @modle.classname.classify).constantize
-      meta_programming(@klass, @modle)
       @kontroller_inst = @modle.classname.underscore
       @mega_displays = set_mega_displays(@displays)
       @nested_ids, @params_hash_arr, @nested_classes = nest_info(blck, rout, page_info)
@@ -43,85 +42,132 @@ module MegaBar
       }
     end
 
-    def meta_programming(klass, modle)
-      # position_parent_method = modle.position_parent.split("::").last.underscore.downcase.to_sym unless modle.position_parent.blank? || modle.position_parent == 'pnp'
-      # klass.class_eval{ acts_as_list scope: position_parent_method, add_new_at: :bottom } if position_parent_method
+    private
+
+    def build_kontroller_path
+      if @modle.modyule.nil? || @modle.modyule.empty?
+        @modle.classname.pluralize.underscore
+      else
+        @modyule.split("::").map { |m| m.underscore }.join("/") + "/" + @modle.classname.pluralize.underscore
+      end
     end
 
     def set_mega_displays(displays)
-      mega_displays_info = [] # collects model and field display settings
-      displays.each do |display|
-        display.authorized = display.permission_level ? @user.pll >= display.permission_level ? true : false : true
-        model_display_format = MegaBar::ModelDisplayFormat.find(display.format)
-        model_display_collection_settings = MegaBar::ModelDisplayCollection.by_model_display_id(display.id).first if display.collection_or_member == "collection"
-        field_displays = MegaBar::FieldDisplay.by_model_display_id(display.id).order("position asc")
-        displayable_fields = []
-        field_displays.each do |field_disp|
-          field = MegaBar::Field.find(field_disp.field_id)
-          if is_displayable?(field_disp.format)
-            data_format = Object.const_get("MegaBar::" + field_disp.format.classify).by_field_display_id(field_disp.id).last #data_display models have to have this scope!
-            if field_disp.format == "select"
-              options = MegaBar::Option.where(field_id: field.id).collect { |o| [o.text, o.value] }
-            end
-            displayable_fields << { field_display: field_disp, field: field, data_format: data_format, options: options, obj: @mega_instance }
-          end
-        end
-        info = {
-          :model_display_format => model_display_format,
-          :displayable_fields => displayable_fields,
-          :model_display => display,
-          :collection_settings => model_display_collection_settings,
+      displays.map do |display|
+        {
+          model_display_format: find_model_display_format(display),
+          displayable_fields: build_displayable_fields(display),
+          model_display: display,
+          collection_settings: find_collection_settings(display)
         }
-        mega_displays_info << info
       end
-      mega_displays_info
+    end
+
+    def find_model_display_format(display)
+      display.authorized = check_display_authorization(display)
+      MegaBar::ModelDisplayFormat.find(display.format)
+    end
+
+    def check_display_authorization(display)
+      return true unless display.permission_level
+      @user.pll >= display.permission_level
+    end
+
+    def find_collection_settings(display)
+      return nil unless display.collection_or_member == "collection"
+      MegaBar::ModelDisplayCollection.by_model_display_id(display.id).first
+    end
+
+    def build_displayable_fields(display)
+      field_displays = MegaBar::FieldDisplay.by_model_display_id(display.id).order("position asc")
+      field_displays.map do |field_disp|
+        build_field_display_info(field_disp)
+      end.compact
+    end
+
+    def build_field_display_info(field_disp)
+      field = MegaBar::Field.find(field_disp.field_id)
+      return nil unless is_displayable?(field_disp.format)
+
+      {
+        field_display: field_disp,
+        field: field,
+        data_format: find_data_format(field_disp),
+        options: find_field_options(field_disp, field),
+        obj: @mega_instance
+      }
+    end
+
+    def find_data_format(field_disp)
+      Object.const_get("MegaBar::" + field_disp.format.classify)
+            .by_field_display_id(field_disp.id)
+            .last
+    end
+
+    def find_field_options(field_disp, field)
+      return nil unless field_disp.format == "select"
+      MegaBar::Option.where(field_id: field.id).collect { |o| [o.text, o.value] }
     end
 
     def nest_info(blck, rout, page_info)
+      return handle_path_based_nesting(blck, page_info) if blck.path_base.present?
+      handle_simple_nesting(blck, rout)
+    end
+
+    def handle_path_based_nesting(blck, page_info)
+      return [[], [], []] unless page_info[:page_path].starts_with?(blck.path_base) || blck.path_base.starts_with?(page_info[:page_path])
+      
       params_hash_arr = []
       nested_ids = []
       nested_classes = []
-      puts "================="
-      puts blck, rout, page_info
-      if blck.path_base.present?
-        if page_info[:page_path].starts_with?(blck.path_base) || blck.path_base.starts_with?(page_info[:page_path])
-          block_path_vars = blck.path_base.split("/").map { |m| m if m[0] == ":" } - ["", nil]
-          depth = 0
-          puts "bpv" + block_path_vars.to_s
-          until depth == block_path_vars.size + 1
-            blck_model = depth == 0 ? modle : MegaBar::Model.find(blck.send("nest_level_#{depth}"))
-            fk_field = depth == 0 ? "id" : blck_model.classname.underscore.downcase + "_id"
-            new_hash = { fk_field => page_info[:vars][block_path_vars.size - depth] }
-            params_hash_arr << new_hash
-            nested_ids << new_hash if depth > 0
-            nested_classes << blck_model
-            depth += 1
-          end
-        end
-      else
-        params_hash_arr << h = (rout[:id] && blck.nest_level_1.nil?) ? { id: rout[:id] } : { id: nil }
-        params_hash_arr << i = { MegaBar::Model.find(blck.nest_level_1).classname.underscore + "_id" => rout[:id] } if !blck.nest_level_1.nil?
-        nested_ids << i if i
+      block_path_vars = blck.path_base.split("/").map { |m| m if m[0] == ":" } - ["", nil]
+      
+      (0..block_path_vars.size).each do |depth|
+        blck_model = depth == 0 ? modle : MegaBar::Model.find(blck.send("nest_level_#{depth}"))
+        fk_field = depth == 0 ? "id" : blck_model.classname.underscore.downcase + "_id"
+        new_hash = { fk_field => page_info[:vars][block_path_vars.size - depth] }
+        
+        params_hash_arr << new_hash
+        nested_ids << new_hash if depth > 0
+        nested_classes << blck_model
       end
-      return nested_ids, params_hash_arr, nested_classes
+      
+      [nested_ids, params_hash_arr, nested_classes]
+    end
+
+    def handle_simple_nesting(blck, rout)
+      params_hash_arr = []
+      nested_ids = []
+      
+      if rout[:id] && blck.nest_level_1.nil?
+        params_hash_arr << { id: rout[:id] }
+      else
+        params_hash_arr << { id: nil }
+      end
+      
+      if blck.nest_level_1.present?
+        model = MegaBar::Model.find(blck.nest_level_1)
+        nested_hash = { model.classname.underscore + "_id" => rout[:id] }
+        params_hash_arr << nested_hash
+        nested_ids << nested_hash
+      end
+      
+      [nested_ids, params_hash_arr, []]
     end
 
     def set_nested_class_info(nested_classes)
-      nested_class_info = []
-      nested_classes.each_with_index do |nc, idx|
+      nested_classes.each_with_index.map do |nc, idx|
+        next if idx == 0
         modyule = nc.modyule.empty? ? "" : nc.modyule + "::"
-        klass = modyule + nc.classname.classify
-        nested_class_info << [klass, nc.classname.underscore] if idx != 0
-      end
-      nested_class_info
+        [modyule + nc.classname.classify, nc.classname.underscore]
+      end.compact
     end
 
     def is_displayable?(format)
-      return (format == "hidden" || format == "off") ? false : true
+      !["hidden", "off"].include?(format)
     end
 
     def authorized?
-      puts "hmm"
       required = case @block_action
         when "index", "show", "all"
           @block.permListAndView
@@ -130,20 +176,25 @@ module MegaBar
         when "create", "new"
           @block.permCreateAndNew
         else
-          # tbd for custom actions.
-        end
+          nil
+      end
       required.present? ? required <= @user.pll : true
     end
 
     def get_authorizations(page_info)
       {
-        createAndNew: @block.permCreateAndNew.present? ? @user.pll >= @block.permCreateAndNew : true,
-        listAndView: @block.permListAndView.present? ? @user.pll >= @block.permListAndView : true,
-        editAndSave: @block.permEditAndSave.present? ? @user.pll >= @block.permEditAndSave : true,
-        delete: @block.permDelete.present? ? @user.pll >= @block.permDelete : true,
-        block_administrator: @block.administrator.present? ? @user.pll >= @block.administrator : true,
-        page_administrator: page_info[:administrator].present? ? @user.pll >= page_info[:administrator] : true,
+        createAndNew: check_authorization(@block.permCreateAndNew),
+        listAndView: check_authorization(@block.permListAndView),
+        editAndSave: check_authorization(@block.permEditAndSave),
+        delete: check_authorization(@block.permDelete),
+        block_administrator: check_authorization(@block.administrator),
+        page_administrator: check_authorization(page_info[:administrator])
       }
+    end
+
+    def check_authorization(permission_level)
+      return true unless permission_level.present?
+      @user.pll >= permission_level
     end
   end
 end 
