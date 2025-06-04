@@ -16,3 +16,10 @@
 # Rails.application.config.assets.precompile += %w( search.js )
 
 # Rails.application.config.assets.precompile += %w( mega_bar/mega_bar.css )
+
+# Add additional paths to the asset load paths.
+Rails.application.config.assets.paths << Rails.root.join("app", "assets", "stylesheets")
+Rails.application.config.assets.paths << Rails.root.join("app", "assets", "javascripts")
+
+# Add additional assets to the precompile list.
+Rails.application.config.assets.precompile += %w( mega_bar.css mega_bar.js )

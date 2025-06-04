@@ -21,8 +21,23 @@ echo ""
 echo "🚀 Creating new MegaBar application: $APP_NAME"
 echo "================================================"
 
+# Ask for database preference
+echo ""
+echo "📦 Choose your database:"
+echo "1) SQLite (default)"
+echo "2) PostgreSQL"
+read -p "Enter your choice [1]: " DB_CHOICE
+
+DB_OPTION=""
+if [ "$DB_CHOICE" = "2" ]; then
+    DB_OPTION="--database=postgresql"
+    echo "✅ Selected PostgreSQL database"
+else
+    echo "✅ Selected SQLite database"
+fi
+
 # Create Rails app
-rails new $APP_NAME --skip-git
+rails new $APP_NAME --skip-git $DB_OPTION
 
 # Navigate to app directory
 cd $APP_NAME
