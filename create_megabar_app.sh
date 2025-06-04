@@ -37,7 +37,7 @@ else
 fi
 
 # Create Rails app
-rails new $APP_NAME --skip-git $DB_OPTION
+rails new $APP_NAME  $DB_OPTION
 
 # Navigate to app directory
 cd $APP_NAME
@@ -48,6 +48,9 @@ sed -i '' 's/config.action_view.annotate_rendered_view_with_filenames = true/con
 
 # Add megabar gem
 echo 'gem "mega_bar", path: "../megabar"' >> Gemfile
+
+# Add byebug gem to development and test groups
+echo -e '\ngroup :development, :test do\n  gem "byebug"\nend\n' >> Gemfile
 
 # Install dependencies
 bundle install

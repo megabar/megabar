@@ -52,13 +52,18 @@ module MegaBar
       Select.by_field_display_id(self.id).delete_all unless self.format == 'select'
       Textarea.by_field_display_id(self.id).delete_all unless self.format == 'textarea'
       Checkbox.by_field_display_id(self.id).delete_all unless self.format == 'checkbox'
+      Date.by_field_display_id(self.id).delete_all unless self.format == 'date'
       obj = ("MegaBar::" + self.format.to_s.classify).constantize.where(:field_display_id => self.id).first_or_initialize()
       unless obj.id.present?
         fields = Field.by_model(get_model_id)
         fields_defaults = {}
         fields.each do |field|
+          byebug
           unless (field.default_value.nil? || field.default_value == 'off')
-            fields_defaults[field.field.parameterize.underscore.to_sym] = field.default_value
+            # Only set attributes that exist in the model's schema
+            if obj.respond_to?("#{field.field.parameterize.underscore}=")
+              fields_defaults[field.field.parameterize.underscore.to_sym] = field.default_value
+            end
           end
         end
         fields_defaults[:field_display_id] = self.id
