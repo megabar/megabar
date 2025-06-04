@@ -58,7 +58,6 @@ module MegaBar
         fields = Field.by_model(get_model_id)
         fields_defaults = {}
         fields.each do |field|
-          byebug
           unless (field.default_value.nil? || field.default_value == 'off')
             # Only set attributes that exist in the model's schema
             if obj.respond_to?("#{field.field.parameterize.underscore}=")
@@ -68,6 +67,14 @@ module MegaBar
         end
         fields_defaults[:field_display_id] = self.id
         fields_defaults[:checked] = 'false' if self.format == 'checkbox'
+        
+        # Auto-configure Date records to use datepicker format
+        if self.format == 'date'
+          fields_defaults[:format] = 'datepicker'
+          # Set other sensible defaults for date pickers
+          fields_defaults[:transformation] = 'fuzzy' unless fields_defaults[:transformation].present?
+        end
+        
         data_display = obj.update(fields_defaults)
       end
       f = Field.where(id: self.field_id)
