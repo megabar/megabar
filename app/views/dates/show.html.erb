@@ -1,0 +1,148 @@
+<%= format_date_field(obj, field.field, date) %>
+<% content_for :head do %>
+  <!-- Date Picker CSS -->
+  <style>
+    .datepicker-input {
+      cursor: pointer;
+      min-width: 150px;
+    }
+
+    .datepicker-input:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+
+    .date-field-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .date-field-wrapper .date-info {
+      font-size: 0.875rem;
+      color: #6c757d;
+      margin-top: 0.25rem;
+    }
+
+    /* Enhanced styling for date inputs */
+    input[type="date"], input[type="datetime-local"] {
+      padding: 0.375rem 0.75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      border: 1px solid #ced4da;
+      border-radius: 0.375rem;
+      background-color: #fff;
+      background-clip: padding-box;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+  </style>
+<% end %>
+<% content_for :javascript do %>
+  <script>
+    $(document).ready(function() {
+      // Enhanced date picker functionality
+      $('.datepicker-input').each(function() {
+        var $input = $(this);
+        var includeTime = $input.data('include-time') === true || $input.data('include-time') === 'true';
+        var minDate = $input.data('min-date');
+        var maxDate = $input.data('max-date');
+        var format = $input.data('format');
+
+        // Wrap the input for additional functionality
+        if (!$input.parent().hasClass('date-field-wrapper')) {
+          $input.wrap('<div class="date-field-wrapper"></div>');
+        }
+
+        // Set HTML5 constraints
+        if (minDate) {
+          $input.attr('min', minDate);
+        }
+        if (maxDate) {
+          $input.attr('max', maxDate);
+        }
+
+        // Add today button functionality
+        if (format === 'datepicker') {
+          var todayBtn = '<button type="button" class="btn btn-sm btn-outline-secondary ms-2 today-btn">Today</button>';
+          if ($input.siblings('.today-btn').length === 0) {
+            $input.after(todayBtn);
+          }
+
+          // Today button click handler
+          $input.siblings('.today-btn').on('click', function(e) {
+            e.preventDefault();
+            var today = new Date();
+            if (includeTime) {
+              // For datetime-local format: YYYY-MM-DDTHH:MM
+              var formattedDate = today.getFullYear() + '-' +
+                                String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                                String(today.getDate()).padStart(2, '0') + 'T' +
+                                String(today.getHours()).padStart(2, '0') + ':' +
+                                String(today.getMinutes()).padStart(2, '0');
+            } else {
+              // For date format: YYYY-MM-DD
+              var formattedDate = today.getFullYear() + '-' +
+                                String(today.getMonth() + 1).padStart(2, '0') + '-' +
+                                String(today.getDate()).padStart(2, '0');
+            }
+            $input.val(formattedDate);
+            $input.trigger('change');
+          });
+        }
+
+        // Add clear button
+        if ($input.siblings('.clear-btn').length === 0) {
+          var clearBtn = '<button type="button" class="btn btn-sm btn-outline-danger ms-1 clear-btn">Clear</button>';
+          $input.parent().append(clearBtn);
+        }
+
+        // Clear button click handler
+        $input.siblings('.clear-btn').on('click', function(e) {
+          e.preventDefault();
+          $input.val('');
+          $input.trigger('change');
+        });
+
+        // Add date info display
+        $input.on('change', function() {
+          var value = $(this).val();
+          var infoDiv = $input.siblings('.date-info');
+
+          if (value) {
+            try {
+              var date = new Date(value);
+              var dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
+              var monthName = date.toLocaleDateString('en-US', { month: 'long' });
+              var info = dayName + ', ' + monthName + ' ' + date.getDate() + ', ' + date.getFullYear();
+
+              if (includeTime) {
+                var timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                info += ' at ' + timeStr;
+              }
+
+              if (infoDiv.length === 0) {
+                $input.parent().append('<div class="date-info">' + info + '</div>');
+              } else {
+                infoDiv.text(info);
+              }
+            } catch (e) {
+              if (infoDiv.length > 0) {
+                infoDiv.remove();
+              }
+            }
+          } else {
+            if (infoDiv.length > 0) {
+              infoDiv.remove();
+            }
+          }
+        });
+
+        // Trigger change event on load to show initial info
+        $input.trigger('change');
+
+        // Mark as initialized
+        $input.addClass('datepicker-initialized');
+      });
+    });
+  </script>
+<% end %>

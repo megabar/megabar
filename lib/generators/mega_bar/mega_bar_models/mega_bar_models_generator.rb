@@ -10,18 +10,46 @@ module MegaBar
 
     # in generators, all public methods are run. Weird, huh?
     def create_controller_file
+      # Check if the controller class already exists
+      full_controller_class_name = the_module_name ? "#{the_module_name}::#{the_controller_name}" : the_controller_name
+      
+      begin
+        full_controller_class_name.constantize
+        @@notices << "Controller #{full_controller_class_name} already exists, skipping controller file creation"
+        return
+      rescue NameError
+        # Controller doesn't exist, proceed with creation
+      end
+      
       @@notices << "You will have to copy your controller manually over to the megabar gem" if gem_path == '' && modyule == 'MegaBar'
       template 'generic_controller.rb', "#{gem_path}#{the_controller_file_path}#{the_controller_file_name}.rb"
     end
+    
     def create_model_file
+      # Check if the model class already exists
+      full_class_name = the_module_name ? "#{the_module_name}::#{classname}" : classname
+      
+      begin
+        full_class_name.constantize
+        @@notices << "Model #{full_class_name} already exists, skipping model file creation"
+        return
+      rescue NameError
+        # Class doesn't exist, proceed with creation
+      end
+      
       template 'generic_model.rb', "#{gem_path}#{the_model_file_path}#{the_model_file_name}.rb"
       @@notices <<  "You will have to copy your model files manually over to the megabar gem" if gem_path == '' && modyule == 'MegaBar'
-      template "generic_tmp_model.rb", "#{gem_path}#{the_model_file_path}tmp_#{the_model_file_name}.rb" if modyule == 'MegaBar'
     end
+    
     def generate_migration
+      # Check if the table already exists
+      if ActiveRecord::Base.connection.table_exists?(the_table_name)
+        @@notices << "Table #{the_table_name} already exists, skipping migration creation"
+        return
+      end
+      
       if the_module_name
         generate 'migration create_' + the_table_name
-        generate 'migration create_' + 'mega_bar_tmp_' + classname.underscore.downcase.pluralize  if modyule == 'MegaBar'
         @@notices <<  "You will have to copy your Migrations manually over to the megabar gem"
       else
         generate 'migration create_' + the_table_name
@@ -29,13 +57,27 @@ module MegaBar
     end
 
     def create_controller_spec_file
-      template 'generic_controller_spec.rb', "#{gem_path}#{the_controller_spec_file_path}#{the_controller_spec_file_name}.rb"
+      # Check if the spec file already exists
+      spec_file_path = "#{gem_path}#{the_controller_spec_file_path}#{the_controller_spec_file_name}.rb"
+      if File.exist?(spec_file_path)
+        @@notices << "Controller spec file already exists, skipping spec file creation"
+        return
+      end
+      
+      template 'generic_controller_spec.rb', spec_file_path
       @@notices <<  "You will have to copy the spec file yourself manually to the megabar repo's spec/controllers directory" if gem_path == '' && modyule == 'MegaBar'
     end
 
     def create_factory
+      # Check if the factory file already exists
+      factory_file_path = "#{gem_path}#{the_factory_file_path}#{the_model_file_name}.rb"
+      if File.exist?(factory_file_path)
+        @@notices << "Factory file already exists, skipping factory file creation"
+        return
+      end
+      
       @@notices <<  "You will have to copy the factory file yourself manually to the megabar repo's spec/internal/factories directory" if gem_path == '' && modyule == 'MegaBar'
-      template 'generic_factory.rb', "#{gem_path}#{the_factory_file_path}#{the_model_file_name}.rb"
+      template 'generic_factory.rb', factory_file_path
     end
 
     def write_notices

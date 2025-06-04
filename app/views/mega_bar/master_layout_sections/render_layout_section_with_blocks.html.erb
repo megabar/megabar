@@ -8,8 +8,10 @@
     <% end %>
   </ul>
   <div id="content-tab">
-    <% @blocks.select{|blck| blck[:actions] == 'show'}.each do |block| %>
-      <%= block[:html] %>
+    <% @tabs.each_with_index do |tab, idx| %>
+      <div class="tab-content <%= idx == 0 ? 'active' : '' %>" style="<%= idx == 0 ? 'display: block;' : 'display: none;' %>">
+        <%= tab[:html] %>
+      </div>
     <% end %>
   </div>
 <% else %>

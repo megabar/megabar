@@ -28,7 +28,7 @@
 <% end %>
 <% if field_display.link_type == 'link_field_value' && field_display.format == 'textread' %>
   <%= value %>
-<% elsif field.default_data_format_edit == 'textbox' && field.data_type == 'string' and textread.editable_in_place %>
+<% elsif field.default_data_format_edit == 'textbox' && field.data_type == 'string' and textread[:editable_in_place] %>
   <%= best_in_place obj, final_field, value: value  %>
 <% elsif field.default_data_format_edit == 'textbox' && field.data_type == 'string' %>
   <%= value %>
