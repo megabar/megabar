@@ -67,7 +67,6 @@ module MegaBar
     end
 
     def link_path(action = nil, id = nil)
-      byebug
       # application helper
       param_hash = {}
       @nested_ids.each do |param|

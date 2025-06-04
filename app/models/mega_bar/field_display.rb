@@ -61,19 +61,23 @@ module MegaBar
           unless (field.default_value.nil? || field.default_value == 'off')
             # Only set attributes that exist in the model's schema
             if obj.respond_to?("#{field.field.parameterize.underscore}=")
-              fields_defaults[field.field.parameterize.underscore.to_sym] = field.default_value
+              field_value = field.default_value
+              
+              # Special handling for date format field based on action
+              if self.format == 'date' && field.field.parameterize.underscore == 'format'
+                model_display_action = self.model_display.action
+                if ['edit', 'new'].include?(model_display_action)
+                  field_value = 'datepicker'  # Override for edit/new forms
+                end
+                # For index/show, use the field's default_value as-is
+              end
+              
+              fields_defaults[field.field.parameterize.underscore.to_sym] = field_value
             end
           end
         end
         fields_defaults[:field_display_id] = self.id
         fields_defaults[:checked] = 'false' if self.format == 'checkbox'
-        
-        # Auto-configure Date records to use datepicker format
-        if self.format == 'date'
-          fields_defaults[:format] = 'datepicker'
-          # Set other sensible defaults for date pickers
-          fields_defaults[:transformation] = 'fuzzy' unless fields_defaults[:transformation].present?
-        end
         
         data_display = obj.update(fields_defaults)
       end

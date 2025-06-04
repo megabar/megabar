@@ -56,7 +56,6 @@
           <% end %>
         <% end %>
         <% if @mf.name == 'GridHtml' %>
-          <% byebug %>
           <td><%= link_to 'Show&nbsp;'.html_safe, link_path('show', mega_record.id) %></td>
           <%if @authorizations[:editAndSave] %>
             <td><%= link_to 'Edit&nbsp;'.html_safe, link_path('edit', mega_record.id) %></td>
