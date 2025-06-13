@@ -131,6 +131,16 @@ module MegaBar
         self.field = self.field + "_id"
         self.save
       end
+      
+      # ✅ CRITICAL FIX: Reload the target model class to recognize new column
+      begin
+        target_model_name = self.tablename.classify
+        target_model_class = target_model_name.constantize
+        target_model_class.reset_column_information
+        logger.info("✅ Model #{target_model_name} column information reloaded - new field '#{self.field}' should now be available")
+      rescue => e
+        logger.warn("Failed to reload model class #{target_model_name}: #{e.message}")
+      end
     end
     def delete_field_displays
       FieldDisplay.by_fields(self.id).destroy_all

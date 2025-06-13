@@ -42,7 +42,7 @@ module MegaBar
     end
 
     def create
-      @mega_instance = @mega_class.new(_params) unless @mega_instance.present? 
+q      @mega_instance = @mega_class.new(_params) unless @mega_instance.present? 
       respond_to do |format|
         if @mega_instance.save
           MegaBar.call_rake("db:schema:dump") if [1, 2].include? @model_id and Rails.env != "test" # gets new models into schema
