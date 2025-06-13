@@ -3,6 +3,10 @@ module MegaBar
 
     include MegaBar::MegaBarModelConcern
 
+    before_create :set_deterministic_id
+    before_create :standardize_modyule
+    before_create :standardize_classname
+    before_create :standardize_tablename
     after_create  :make_all_files
     after_save  :make_page_for_model
 
@@ -12,9 +16,6 @@ module MegaBar
     after_save    :make_position_field
     attr_accessor :make_page
     attr_writer   :model_id
-    before_create :standardize_modyule
-    before_create :standardize_classname
-    before_create :standardize_tablename
     has_many      :fields, dependent: :destroy
     has_many      :model_displays, dependent: :destroy # or after_destroy delete_model_displays. see field model example
     scope         :by_model, ->(model_id) { where(id: model_id) if model_id.present? }
@@ -22,6 +23,22 @@ module MegaBar
     validates_presence_of :default_sort_field, :name
     validates_uniqueness_of :classname
 
+    # Deterministic ID generation for Models
+    # ID range: 9000-9999
+    def self.deterministic_id(classname)
+      # Use classname to create unique identifier
+      identifier = classname.to_s
+      hash = Digest::MD5.hexdigest(identifier)
+      base_id = 9000 + (hash.to_i(16) % 1000)
+      
+      # Check for collisions and increment if needed
+      while MegaBar::Model.exists?(id: base_id)
+        base_id += 1
+        break if base_id >= 10000  # Don't overflow into next range
+      end
+      
+      base_id
+    end
 
     def make_all_files
       make_position_field
@@ -29,11 +46,65 @@ module MegaBar
       logger.info("creating scaffold for " + self.classname + 'via: ' + 'rails g mega_bar:mega_bar ' + self.classname + ' ' + self.id.to_s)
       mod = self.modyule.nil? || self.modyule.empty?  ? 'no_mod' : self.modyule
 
-      system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s + ' ' + pos
-      system 'bundle exec rails db:migrate'
+      # Generate model files and migrations using direct Rails generator invocation (more reliable)
+      begin
+        logger.info("Invoking MegaBar generator for #{self.classname}...")
+        generator_args = [mod, self.classname, self.id.to_s, pos]
+        
+        # Use Rails::Generators.invoke to call the generator directly
+        Rails::Generators.invoke('mega_bar:mega_bar_models', generator_args, {
+          behavior: :invoke,
+          destination_root: Rails.root
+        })
+        
+        logger.info("✅ Generator completed successfully for #{self.classname}")
+        
+      rescue => e
+        logger.warn("Direct generator invocation failed: #{e.message}, falling back to system call")
+        
+        # Fallback to system call if direct invocation fails
+        generator_result = system 'rails g mega_bar:mega_bar_models ' + mod + ' ' + self.classname + ' ' + self.id.to_s + ' ' + pos
+        logger.info("Fallback generator result: #{generator_result}")
+      end
       
-      # ActiveRecord::MigrationContext.new("db/migrate").migrate
-      # ActiveRecord::Migrator.migrate "db/migrate"
+      # Run migrations using Rails internal methods (more reliable than system calls)
+      logger.info("Running migrations for #{self.classname}...")
+      
+      begin
+        # Method 1: Use ActiveRecord::MigrationContext directly
+        migration_context = ActiveRecord::MigrationContext.new("db/migrate", ActiveRecord::SchemaMigration)
+        pending_migrations = migration_context.migrations.reject { |m| migration_context.get_all_versions.include?(m.version) }
+        
+        if pending_migrations.any?
+          logger.info("Found #{pending_migrations.count} pending migration(s), running them...")
+          migration_context.migrate
+          logger.info("✅ Migrations completed successfully for #{self.classname}")
+        else
+          logger.info("ℹ️  No pending migrations found for #{self.classname}")
+        end
+        
+      rescue => e
+        logger.error("❌ Direct migration failed for #{self.classname}: #{e.message}")
+        
+        # Method 2: Fallback to Rails.application.load_tasks approach
+        begin
+          logger.info("Trying fallback migration approach...")
+          Rails.application.load_tasks
+          Rake::Task['db:migrate'].invoke
+          logger.info("✅ Fallback migration approach succeeded for #{self.classname}")
+        rescue => e2
+          logger.error("❌ Fallback migration also failed for #{self.classname}: #{e2.message}")
+          
+          # Method 3: Last resort - system call with better error handling
+          logger.info("Trying system call as last resort...")
+          result = system("cd #{Rails.root} && bundle exec rails db:migrate")
+          if result
+            logger.info("✅ System call migration succeeded for #{self.classname}")
+          else
+            logger.error("❌ All migration approaches failed for #{self.classname}")
+          end
+        end
+      end
     end
 
     def pos
@@ -109,6 +180,14 @@ module MegaBar
         parent.send(self.classname.underscore.downcase.pluralize.to_sym).order(:id).each_with_index do |child, i|
           child.update_columns(position: i + 1)
         end
+      end
+    end
+
+    private
+
+    def set_deterministic_id
+      unless self.id
+        self.id = self.class.deterministic_id(self.classname)
       end
     end
   end

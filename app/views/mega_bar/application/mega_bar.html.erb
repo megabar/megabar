@@ -1,51 +1,51 @@
 <div class='block <%= @block_classes.join(' ') %>'>
-<% puts params[:action] + 'was the action' %>
-<% unless ['edit', 'new', 'create'].include? params[:action]%>
-
-  <% # INDEX AND SHOW STUFF %>
-  <% @mega_displays.each do |mega_display| %>
-    <% next if mega_display[:collection_settings] && mega_display[:collection_settings][:display_if_empty] == false && @mega_instance.empty? %>
-    <%
+  <% puts params[:action] + 'was the action' %>
+  <% unless ['edit', 'new', 'create'].include? params[:action]%>
+    <% # INDEX AND SHOW STUFF %>
+    <% @mega_displays.each do |mega_display| %>
+      <% next if mega_display[:collection_settings] && mega_display[:collection_settings][:display_if_empty] == false && @mega_instance.empty? %>
+      <%
       @mega_display= mega_display
       @mf = @mega_display[:model_display_format]
       @model_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/model_displays', action: 'show', id: @mega_display[:model_display].id, :only_path=> true)
     %>
-    <%= render partial: "mega_bar_read" %>
-    <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_help_links} if block_admin?%>
-  <% end %>
-<% else %>
-  <% if @mega_instance.errors.any? %>
-    <div class="error_messages">
-      <h2>Form is Invalid</h2>
-      <ul>
-        <% @mega_instance.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <%end%>
-      </ul>
-    </div>
-  <%end%>
-  <%= form_for(@form_instance_vars) do |f| %>
-    <% @the_form = f %>
-    <% @mega_displays.each do |mega_display| %>
-      <%
+      <%= render partial: "mega_bar_read" %>
+      <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_help_links} if block_admin?%>
+    <% end %>
+  <% else %>
+    <% if @mega_instance.errors.any? %>
+      <div class="error_messages">
+        <h2>Form is Invalid</h2>
+        <ul>
+          <% @mega_instance.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <%end%>
+        </ul>
+      </div>
+    <%end%>
+    <%= form_for(@form_instance_vars) do |f| %>
+      <% @the_form = f %>
+      <% @mega_displays.each do |mega_display| %>
+        <%
         @mega_display = mega_display
         @mf = @mega_display[:model_display_format]
         @model_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/model_displays', action: 'show', id: @mega_display[:model_display].id, :only_path=> true)
       %>
-
-      <h1><%= best_in_place @mega_display[:model_display], :header, url: @model_display_path %></h1>
-      <div class="model_display_instructions"><%= best_in_place @mega_display[:model_display], :instructions, url: @model_display_path, as: :textarea %></div>
-
-      <<%=@mf.app_wrapper.html_safe%> class="<%=model_display_classnames%> banana">
-      <%= render partial: "mega_bar_write" %>
-      </<%=@mf.app_wrapper_end.html_safe%>>
-      <%= render partial: "mega_bar_help_links",:locals => {:links => model_display_help_links} if block_admin? %>
+        <h1><%= best_in_place @mega_display[:model_display], :header, url: @model_display_path %></h1>
+        <div class="model_display_instructions"><%= best_in_place @mega_display[:model_display], :instructions, url: @model_display_path, as: :textarea %></div>
+        <<%=@mf.app_wrapper.html_safe%> class="<%=model_display_classnames%> banana">
+          <%= render partial: "mega_bar_write" %>
+        </<%=@mf.app_wrapper_end.html_safe%>>
+        <%= render partial: "mega_bar_help_links",:locals => {:links => model_display_help_links} if block_admin? %>
+      <% end %>
+      <table>
+        <tr>
+          <th>Save</th>
+          <td><%= submit_tag %></td>
+          <th></tr>
+        </table>
+      <% end%>
     <% end %>
-    <table><tr><th>Save</th><td><%= submit_tag %></td><th></tr></table>
-  <% end%>
-<% end %>
-
-<%= render partial: "mega_bar_help_links", :locals => {:links => block_help_links} if block_admin? %>
-<%= render partial: "mega_bar_block_links" %>
-
-</div>
+    <%= render partial: "mega_bar_help_links", :locals => {:links => block_help_links} if block_admin? %>
+    <%= render partial: "mega_bar_block_links" %>
+  </div>

@@ -16,7 +16,8 @@ module MegaBar
     end
 
     def mega_field_id(d_f)
-      "fd-#{d_f[:field_display].id}-f-#{d_f[:field].id}-df-#{d_f[:data_format].id}"
+      data_format_id = d_f[:data_format]&.id || 'none'
+      "fd-#{d_f[:field_display].id}-f-#{d_f[:field].id}-df-#{data_format_id}"
     end
 
     def field_wrapper(d_f)
@@ -166,7 +167,15 @@ module MegaBar
 
     def data_format_locals(mega_record, displayable_field, value=nil, mega_bar=nil?)
       local = {obj: mega_record, displayable_field: displayable_field, field: displayable_field[:field], field_display: displayable_field[:field_display], options: displayable_field[:options], mega_bar: mega_bar, value: value }
-      local[displayable_field[:data_format].class.name.downcase.sub('::', '_').sub('megabar_', '').to_sym] = displayable_field[:data_format]
+      
+      if displayable_field[:data_format].present?
+        local[displayable_field[:data_format].class.name.downcase.sub('::', '_').sub('megabar_', '').to_sym] = displayable_field[:data_format]
+      else
+        # Create empty data format object for the template if none exists
+        format_name = displayable_field[:field_display].format.downcase.to_sym
+        local[format_name] = {}
+      end
+      
       local
     end
 

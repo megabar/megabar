@@ -26,9 +26,9 @@ ul.mega-layout-section-tabs li.active {
   border-bottom: 3px solid red;
 }
 
-#content-tab div {
+/* #content-tab div {
   display: none;
-}
+} */
 
 #content-tab div.active {
   display: block;
