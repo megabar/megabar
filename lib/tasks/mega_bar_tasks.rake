@@ -44,6 +44,22 @@ namespace :mega_bar do
     # REVOLUTIONARY CHANGE: Use deterministic seed loading instead of old conflict resolution
     Rake::Task['mega_bar:load_deterministic_seeds'].invoke
 
+    # Precompile assets
+    puts "Precompiling MegaBar assets..."
+    begin
+      Rake::Task['assets:precompile'].invoke
+      puts "✅ MegaBar assets precompiled successfully"
+    rescue RuntimeError => e
+      if e.message.include?("Don't know how to build task 'assets:precompile'")
+        puts "⚠️  Assets precompile task not available (this is normal in some contexts)"
+        puts "ℹ️  Assets will be compiled automatically when the server starts"
+      else
+        puts "❌ Error precompiling assets: #{e.message}"
+      end
+    rescue => e
+      puts "❌ Unexpected error during asset precompilation: #{e.message}"
+    end
+
     puts "mounted the engine in the routes file"
     puts 'added mega_bar assets to the pipeline'
     puts " migrated the mega_bar db. "
