@@ -790,10 +790,6 @@ namespace :mega_bar do
     # purposefully blank
   end
 
-  def fix_permission_levels(c)
-    # purposefully blank
-  end
-
   def get_mega_classes
     mega_classes = []
     mega_classes << {tmp_class: MegaBar::TmpModel, perm_class: MegaBar::Model, unique: [:classname], resolver: 'fix_model', condition: 'tmp.classname == perm.classname'}
@@ -830,7 +826,6 @@ namespace :mega_bar do
     mega_classes << {tmp_class: MegaBar::TmpLayable, perm_class: MegaBar::Layable, unique: [:layout_id, :layout_section_id], resolver: 'fix_joins', condition: 'tmp.layout_id == perm.layout_id && tmp.layout_section_id == perm.layout_section_id'}
     mega_classes << {tmp_class: MegaBar::TmpThemeJoin, perm_class: MegaBar::ThemeJoin, unique: [:theme_id, :themeable_type, :themeable_id], resolver: 'fix_joins', condition: 'tmp.theme_id == perm.theme_id && tmp.themeable_type == perm.themeable_type && tmp.themeable_id = perm.themeable_id'}
     mega_classes << {tmp_class: MegaBar::TmpSiteJoin, perm_class: MegaBar::SiteJoin, unique: [:site_id, :siteable_type, :siteable_id], resolver: 'fix_joins', condition: 'tmp.site_id == perm.site_id && tmp.siteable_type == perm.siteable_type && tmp.siteable_id = perm.siteable_id'}
-    mega_classes << {tmp_class: MegaBar::TmpPermissionLevel, perm_class: MegaBar::PermissionLevel, unique: [:level_name], resolver: 'fix_permission_levels', condition: 'tmp.level_name == perm.level_name'}
     return mega_classes
   end
 
@@ -895,7 +890,6 @@ namespace :mega_bar do
     layables = MegaBar::Layable.where(id: mega_bar_layable_ids).order(:id)
     theme_joins = theme_joins(mega_bar_block_ids, mega_bar_layout_ids).order(:id)
     site_joins = site_joins(mega_bar_block_ids, mega_bar_layout_ids).order(:id)
-    permission_levels = MegaBar::PermissionLevel.all.order(:id)
 
     # Then do all the dumps
     SeedDump.dump(themes, {file: seed_file, append: true})
@@ -930,7 +924,6 @@ namespace :mega_bar do
     SeedDump.dump(layables, {file: seed_file, append: true})
     SeedDump.dump(theme_joins, {file: seed_file, append: true})
     SeedDump.dump(site_joins, {file: seed_file, append: true})
-    SeedDump.dump(permission_levels, {file: seed_file, append: true})
 
     File.open(Rails.root.join('db', 'mega_bar.seeds.rb'), "r+") do |file|
       #note, this will change your data! If you wanted to store a string like MegaBar::Whatever in the db, it'll be changed here and you have to fix that in the data_load.

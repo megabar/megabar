@@ -8,10 +8,8 @@ module MegaBar
 
     def process
       page_info = {}
-      
-      MegaBar::Page.all.order(id: :desc).pluck(:id, :path, :name, :administrator).each do |page|
+      MegaBar::Page.all.order(id: :desc).pluck(:id, :path, :name).each do |page|
         next unless page_matches_rout_terms?(page[1])
-        
         page_terms = page[1].split("/").reject! { |c| (c.nil? || c.empty?) } || []
         variable_segments = extract_variable_segments(page_terms)
         

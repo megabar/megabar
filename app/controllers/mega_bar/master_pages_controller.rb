@@ -4,7 +4,7 @@ module MegaBar
       @page_layouts = env["mega_final_layouts"]
       @mega_page = env[:mega_page]
       @mega_site = env[:mega_site]
-      @mega_user = env[:mega_user]
+      # @mega_user = env[:mega_user]
       @page_classes = page_classes
       @site_name = site_name
       session[:admin_pages] ||= []
@@ -37,10 +37,10 @@ module MegaBar
     end
 
     def page_admin?
-      
-      return true if @mega_page[:administrator].blank? # this line should ultimately go away.
+      return true 
+      # return true if @mega_page[:administrator].blank? # this line should ultimately go away.
 
-      @mega_user.pll >= @mega_page[:administrator]
+      # @mega_user.pll >= @mega_page[:administrator]
     end
 
     helper_method :page_admin?

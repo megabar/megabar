@@ -27,10 +27,20 @@ class LayoutEngine
   def _call(env)
     return handle_static_assets(env) if static_asset?(env)
     
+    # Ensure Warden is set up before processing
+    setup_warden(env)
+    
     setup_request_environment(env)
     return handle_non_megabar_page(env) if env[:mega_page].empty?
-    
     render_megabar_page(env)
+  end
+
+  def setup_warden(env)
+    # Ensure Warden proxy is available
+    unless env['warden']
+      # Create a minimal Warden proxy for Devise helpers
+      env['warden'] = Warden::Proxy.new(env, Warden::Manager.new(nil))
+    end
   end
 
   def each(&display)
@@ -59,7 +69,6 @@ class LayoutEngine
       setup_site(request, env)
       setup_session(request, env)
       setup_routing(request, env)
-      setup_user(request, env)
     end
 
     def setup_site(request, env)
@@ -75,28 +84,61 @@ class LayoutEngine
     end
 
     def setup_routing(request, env)
+
       rout_terms = request.path_info.split("/").reject! { |c| (c.nil? || c.empty?) }
       env[:mega_rout] = set_rout(request, env)
       env[:mega_page] = set_page_info(env[:mega_rout], rout_terms)
       env[:mega_pagination] = set_pagination_info(env, rout_terms)
     end
 
-    def setup_user(request, env)
-      @user = env[:mega_user] = if request.session["user_id"] && MegaBar::User.all.size > 0
-        MegaBar::User.find(request.session["user_id"])
-      else
-        MegaBar::User.new
-      end
-    end
+    # def setup_user(request, env)
+    #   @user = env[:mega_user] = if request.session["user_id"] && MegaBar::User.all.size > 0
+    #     MegaBar::User.find(request.session["user_id"])
+    #   else
+    #     MegaBar::User.new
+    #   end
+    # end
 
     def handle_non_megabar_page(env)
       rout = env[:mega_rout]
       rout[:controller] ||= "flats"
       rout[:action] ||= "index"
       
-      @status, @headers, @page = (rout[:controller].classify.pluralize + "Controller").constantize.action(rout[:action]).call(env)
-      page_content = @page.blank? ? "" : @page.body.html_safe
-      [@status, @headers, [page_content]]
+      puts "🔍 DEBUG: handle_non_megabar_page called"
+      puts "🔍 DEBUG: rout = #{rout.inspect}"
+      puts "🔍 DEBUG: PATH_INFO = #{env['PATH_INFO']}"
+      puts "🔍 DEBUG: REQUEST_METHOD = #{env['REQUEST_METHOD']}"
+      
+      # Check if the controller and action actually exist
+      controller_name = (rout[:controller].classify.pluralize + "Controller")
+      puts "🔍 DEBUG: controller_name = #{controller_name}"
+      
+      begin
+        controller_class = controller_name.constantize
+        puts "🔍 DEBUG: controller_class = #{controller_class}"
+        puts "🔍 DEBUG: available methods = #{controller_class.instance_methods.grep(/^#{rout[:action]}$/)}"
+        
+        if controller_class.instance_methods.include?(rout[:action].to_sym)
+          puts "🔍 DEBUG: Action exists, processing normally"
+          # Controller and action exist, process normally
+          @status, @headers, @page = controller_class.action(rout[:action]).call(env)
+          page_content = @page.blank? ? "" : @page.body.html_safe
+          [@status, @headers, [page_content]]
+        else
+          puts "🔍 DEBUG: Action doesn't exist, falling back to Rails routing"
+          # Action doesn't exist, fall back to normal Rails routing
+          @app.call(env)
+        end
+      rescue NameError => e
+        puts "🔍 DEBUG: Controller doesn't exist: #{e.message}"
+        puts "🔍 DEBUG: Falling back to Rails routing"
+        # Controller doesn't exist, fall back to normal Rails routing
+        @app.call(env)
+      rescue => e
+        puts "🔍 DEBUG: Other error: #{e.class} - #{e.message}"
+        puts "🔍 DEBUG: Falling back to Rails routing"
+        @app.call(env)
+      end
     end
 
     def set_rout(request, env)

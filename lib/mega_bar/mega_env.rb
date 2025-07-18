@@ -69,8 +69,8 @@ module MegaBar
     end
 
     def check_display_authorization(display)
-      return true unless display.permission_level
-      @user.pll >= display.permission_level
+      return true # unless display.permission_level
+      # @user.pll >= display.permission_level
     end
 
     def find_collection_settings(display)
@@ -168,6 +168,7 @@ module MegaBar
     end
 
     def authorized?
+      return true
       required = case @block_action
         when "index", "show", "all"
           @block.permListAndView
@@ -183,16 +184,25 @@ module MegaBar
 
     def get_authorizations(page_info)
       {
-        createAndNew: check_authorization(@block.permCreateAndNew),
-        listAndView: check_authorization(@block.permListAndView),
-        editAndSave: check_authorization(@block.permEditAndSave),
-        delete: check_authorization(@block.permDelete),
-        block_administrator: check_authorization(@block.administrator),
-        page_administrator: check_authorization(page_info[:administrator])
+        createAndNew: true,
+        listAndView: true,
+        editAndSave: true,
+        delete: true,
+        block_administrator: true,
+        page_administrator: true
       }
+      # {
+      #   createAndNew: check_authorization(@block.permCreateAndNew),
+      #   listAndView: check_authorization(@block.permListAndView),
+      #   editAndSave: check_authorization(@block.permEditAndSave),
+      #   delete: check_authorization(@block.permDelete),
+      #   block_administrator: check_authorization(@block.administrator),
+      #   page_administrator: check_authorization(page_info[:administrator])
+      # }
     end
 
     def check_authorization(permission_level)
+      return true
       return true unless permission_level.present?
       @user.pll >= permission_level
     end
