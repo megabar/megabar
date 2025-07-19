@@ -25,12 +25,24 @@ class LayoutEngine
   end
 
   def _call(env)
+    puts "🔍 DEBUG: _call - PATH_INFO: #{env['PATH_INFO']}, METHOD: #{env['REQUEST_METHOD']}"
+    
     return handle_static_assets(env) if static_asset?(env)
+    
+    # Check if this is a Devise route early and pass it through immediately
+    path_info = env['PATH_INFO']
+    if is_devise_route?(path_info)
+      puts "🔍 DEBUG: Early Devise route detection: #{path_info}"
+      puts "🔍 DEBUG: Passing through to host application immediately"
+      return @app.call(env)
+    end
     
     # Ensure Warden is set up before processing
     setup_warden(env)
     
     setup_request_environment(env)
+    puts "🔍 DEBUG: _call - mega_page: #{env[:mega_page].inspect}"
+    
     return handle_non_megabar_page(env) if env[:mega_page].empty?
     render_megabar_page(env)
   end
@@ -38,10 +50,12 @@ class LayoutEngine
   def setup_warden(env)
     # Ensure Warden proxy is available
     unless env['warden']
+      puts "🔍 DEBUG: Setting up Warden proxy"
       # Create a minimal Warden proxy for Devise helpers
       env['warden'] = Warden::Proxy.new(env, Warden::Manager.new(nil))
     end
   end
+
 
   def each(&display)
     display.call("<!-- #{@message}: #{@stop - @start} -->\n") if (!@headers["Content-Type"].nil? && @headers["Content-Type"].include?("text/html"))
@@ -101,6 +115,18 @@ class LayoutEngine
 
     def handle_non_megabar_page(env)
       rout = env[:mega_rout]
+      puts "🔍 DEBUG: handle_non_megabar_page - rout: #{rout.inspect}"
+      puts "🔍 DEBUG: handle_non_megabar_page - PATH_INFO: #{env['PATH_INFO']}"
+      puts "🔍 DEBUG: handle_non_megabar_page - REQUEST_METHOD: #{env['REQUEST_METHOD']}"
+      
+      # If we have a recognized route, let Rails handle it normally
+      if rout[:controller].present? && rout[:action].present?
+        puts "🔍 DEBUG: Recognized route: #{rout[:controller]}##{rout[:action]}"
+        puts "🔍 DEBUG: Falling back to Rails routing for recognized route"
+        return @app.call(env)
+      end
+      
+      # Default fallback for unrecognized routes
       rout[:controller] ||= "flats"
       rout[:action] ||= "index"
       
@@ -141,16 +167,27 @@ class LayoutEngine
       end
     end
 
+
+
     def set_rout(request, env)
       request_path_info = request.path_info.dup
+      puts "🔍 DEBUG: set_rout - PATH_INFO: #{request_path_info}, METHOD: #{env['REQUEST_METHOD']}"
+      
       rout = (Rails.application.routes.recognize_path request_path_info, method: env["REQUEST_METHOD"] rescue {}) || {}
+      puts "🔍 DEBUG: set_rout - Rails routes result: #{rout.inspect}"
+      
       rout = (MegaBar::Engine.routes.recognize_path request_path_info rescue {}) || {} if rout.empty? && request_path_info == "/mega-bar"
       rout = (MegaBar::Engine.routes.recognize_path request_path_info.sub!("/mega-bar/", ""), method: env["REQUEST_METHOD"] rescue {}) || {} if rout.empty?
+      
+      puts "🔍 DEBUG: set_rout - Final rout: #{rout.inspect}"
       rout
     end
 
     def set_page_info(rout, rout_terms)
-      MegaBar::PageInfoProcessor.new(rout, rout_terms).process
+      puts "🔍 DEBUG: set_page_info - rout: #{rout.inspect}, rout_terms: #{rout_terms.inspect}"
+      result = MegaBar::PageInfoProcessor.new(rout, rout_terms).process
+      puts "🔍 DEBUG: set_page_info - result: #{result.inspect}"
+      result
     end
 
     def set_pagination_info(env, rout_terms)
@@ -357,6 +394,28 @@ class LayoutEngine
   include RequestProcessing
   include PageProcessing
   include BlockProcessing
+
+  def is_devise_route?(path_info)
+    # Check for common Devise route patterns
+    devise_patterns = [
+      /^\/users\/sign_in$/,
+      /^\/users\/sign_up$/,
+      /^\/users\/sign_out$/,
+      /^\/users\/password\/new$/,
+      /^\/users\/password$/,
+      /^\/users\/password\/edit$/,
+      /^\/users\/confirmation$/,
+      /^\/users\/confirmation\/new$/,
+      /^\/users\/unlock\/new$/,
+      /^\/users\/unlock$/,
+      /^\/users\/edit$/,
+      /^\/users\/cancel$/,
+      /^\/users\/sign_up\/.*$/,  # For custom registration paths
+      /^\/users\/sign_in\/.*$/   # For custom session paths
+    ]
+    
+    devise_patterns.any? { |pattern| path_info.match?(pattern) }
+  end
 
 end
 
