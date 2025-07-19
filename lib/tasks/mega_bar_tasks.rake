@@ -121,15 +121,12 @@ namespace :mega_bar do
       begin
         system("bundle exec rake cccux:setup")
         if $?.success?
-          puts "✅ CCCUX setup completed successfully!"
           puts ""
           puts "🎉 Your Rails app now has both MegaBar and CCCUX!"
           puts "   - MegaBar: Visit /mega-bar for admin interface"
           puts "   - CCCUX: Visit /cccux for authorization management"
           puts "   - Sign in with your admin account to access both"
         else
-          puts "⚠️  CCCUX setup had some issues"
-          puts "💡 You can run 'bundle exec rake cccux:setup' manually to complete setup"
           puts ""
           puts "🎉 Your Rails app now has MegaBar!"
           puts "   - MegaBar: Visit /mega-bar for admin interface"
