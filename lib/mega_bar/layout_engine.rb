@@ -52,6 +52,9 @@ module MegaBar
   end
 
   def setup_warden(env)
+    # Only set up Warden if Devise is available
+    return unless defined?(Warden)
+    
     # Ensure Warden proxy is available
     unless env['warden']
       puts "🔍 DEBUG: Setting up Warden proxy"

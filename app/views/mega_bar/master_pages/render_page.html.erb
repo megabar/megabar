@@ -73,10 +73,10 @@
         <%= link_to 'My Models', mega_bar.models_path %> | 
       </span>
       <span style="float: right; margin-right: 18px;">
-         <% if user_signed_in? %>
+         <% if defined?(Devise) && user_signed_in? %>
            Logged in as <%= current_user.email %>  | 
            <%= link_to 'Log Out', main_app.destroy_user_session_path, method: :delete, data: { turbo_method: :delete } %> 
-        <% else %>
+        <% elsif defined?(Devise) %>
           <%= link_to 'Sign Up', main_app.new_user_registration_path %> | 
           <%= link_to 'Log In', main_app.new_user_session_path %> 
         <% end %>
@@ -93,7 +93,7 @@
     <% end %>
     <%= render partial: 'mega_bar_help_links' , locals: {:links => page_help_links} if administering_page? %>
     <%= page_admin_link %>
-    <%= render partial: 'shared/footer' %>
+    <%= render partial: 'shared/footer' if lookup_context.template_exists?('shared/footer') %>
     
     <nav  style='background-color: #eeeeee'>
       <%= render "page_nav" %>
