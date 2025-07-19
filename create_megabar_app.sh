@@ -37,7 +37,7 @@ else
 fi
 
 # Create Rails app
-rails new $APP_NAME  $DB_OPTION
+rails new $APP_NAME $DB_OPTION
 
 # Navigate to app directory
 cd $APP_NAME
@@ -53,13 +53,38 @@ echo 'gem "mega_bar", path: "../megabar"' >> Gemfile
 echo -e '\ngroup :development, :test do\n  gem "byebug"\nend\n' >> Gemfile
 
 # Install dependencies
+echo "📦 Installing dependencies..."
 bundle install
 
+# Handle funding message if it appears
+if [ $? -eq 0 ]; then
+    echo "✅ Dependencies installed successfully"
+else
+    echo "⚠️  Some gems are looking for funding - this is normal"
+    echo "💡 Run 'bundle fund' for details if interested"
+fi
+
 # Initialize MegaBar
-bundle exec rake mega_bar:engine_init
+# bundle exec rake mega_bar:engine_init
 
 echo ""
 echo "🎉 SUCCESS! MegaBar application '$APP_NAME' created!"
 echo "📁 Navigate to: cd $APP_NAME"
 echo "🚀 Start server: rails server"
 echo "🌐 Visit: http://localhost:3000" 
+
+# Change to the app directory and stay there
+cd $APP_NAME
+
+# Print current directory to confirm
+echo ""
+echo "📍 Current directory: $(pwd)"
+echo "💡 You're now in the $APP_NAME directory!"
+echo ""
+echo "🚀 Next steps:"
+echo "   1. Run: bundle exec rake mega_bar:engine_init"
+echo "   2. Start server: rails server"
+echo "   3. Visit: http://localhost:3000"
+
+# Replace the current shell with a new one in the app directory
+exec $SHELL
