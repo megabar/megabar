@@ -82,8 +82,21 @@ module MegaBar
     def pre_render
     end
     def filter_contains
-      filterr = text_field_tag(param_from_tablename(@mega_model_properties, @displayable_field[:field].tablename) + "[" + @displayable_field[:field].field + "___filter]", '', size: 15 )
-
+      # Get current filter value from session
+      current_value = ''
+      if session[:mega_filters] && session[:mega_filters][@kontroller_inst.to_sym]
+        filters = session[:mega_filters][@kontroller_inst.to_sym]
+        if filters['contains']
+          filters['contains'].each do |filter_hash|
+            if filter_hash[@displayable_field[:field].field]
+              current_value = filter_hash[@displayable_field[:field].field]
+              break
+            end
+          end
+        end
+      end
+      
+      filterr = text_field_tag(param_from_tablename(@mega_model_properties, @displayable_field[:field].tablename) + "[" + @displayable_field[:field].field + "___filter]", current_value, size: 15 )
     end
 
     def model_display_help_links

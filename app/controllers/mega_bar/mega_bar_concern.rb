@@ -244,16 +244,46 @@ module MegaBar
     end
 
     def process_filters(mega_instance)
-      if params["commit"] == "clear_filters"
+      if params["clear_filters"] == "clear_filters"
         session[:mega_filters] = {}
+        return mega_instance  # Return early when clearing filters
       end
       session[:mega_filters] ||= {}
       return mega_instance unless params[@kontroller_inst] || session[:mega_filters][@kontroller_inst]
       #cache me.
       if params[@kontroller_inst]
-        session[:mega_filters] = {}
+        # Initialize session filters if needed
+        session[:mega_filters][@kontroller_inst.to_sym] ||= {}
+        
+        # Get current session filters
+        current_filters = session[:mega_filters][@kontroller_inst.to_sym].dup
+        
+        # Get new filters from form submission
         filter_types = MegaBar::Field.includes(:options).find_by(field: "filter_type", tablename: "mega_bar_fields").options.pluck(:value)
-        filters = session[:mega_filters][@kontroller_inst.to_sym] = collect_filters(filter_types)
+        new_filters = collect_filters(filter_types)
+        
+        # Merge: keep existing filters, update with new ones
+        new_filters.each do |filter_type, filter_array|
+          current_filters[filter_type] ||= []
+          
+          # For each new filter in the array, add it to the current filters
+          filter_array.each do |new_filter|
+            # Check if this field already exists in current filters
+            existing_index = current_filters[filter_type].find_index { |existing| existing.keys.first == new_filter.keys.first }
+            
+            if existing_index
+              # Update existing filter
+              current_filters[filter_type][existing_index] = new_filter
+            else
+              # Add new filter
+              current_filters[filter_type] << new_filter
+            end
+          end
+        end
+        
+        # Store merged filters back to session
+        session[:mega_filters][@kontroller_inst.to_sym] = current_filters
+        filters = current_filters
       elsif session[:mega_filters][@kontroller_inst]
         filters = session[:mega_filters][@kontroller_inst]
       end
@@ -277,10 +307,14 @@ module MegaBar
     def collect_filters(filter_types)
       filters = Hash[filter_types.map { |v| [v, []] }]
       params[@kontroller_inst].each do |key, value|
+        # Only process non-empty values
+        next if value.blank?
+        
         @mega_displays.each do |md|
           md[:displayable_fields].each do |df|
-            filters[df[:field].filter_type] << { df[:field].field => value } if !df[:field].filter_type.blank? && key.sub("___filter", "") == df[:field].field
-            # @mega_displays[0][:displayable_fields][0][:field].filter_type
+            if !df[:field].filter_type.blank? && key.sub("___filter", "") == df[:field].field
+              filters[df[:field].filter_type] << { df[:field].field => value }
+            end
           end
         end
       end
