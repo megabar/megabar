@@ -22,10 +22,21 @@ module MegaBar
       if page_admin?
         admin_text = administering_page? ? "Turn off Admin for " : "Administer "
         if request.env[:mega_env].present?
-          ActionController::Base.helpers.link_to "#{admin_text} #{@mega_page[:name]} Page", "#{request.env[:mega_page][:page_path]}/administer-page/#{@mega_page[:page_id].to_s}"
+          ActionController::Base.helpers.content_tag :div, class: "admin_links" do
+            ActionController::Base.helpers.link_to "#{admin_text} #{@mega_page[:name]} Page", "#{request.env[:mega_page][:page_path]}/administer-page/#{@mega_page[:page_id].to_s}", class: "admin-links"
+          end
         else
-          link = ["/mega-bar/pages/" + @mega_page[:page_id].to_s + "/layouts/" + request.env[:mega_layout].id.to_s + "?return_to=" + request.env["PATH_INFO"], "Layout Settings"] unless @mega_page.blank?
-          ActionController::Base.helpers.link_to link[1], link[0]
+          # Only show Layout Settings link if user is administering the page
+          if administering_page?
+            link = ["/mega-bar/pages/" + @mega_page[:page_id].to_s + "/layouts/" + request.env[:mega_layout].id.to_s + "?return_to=" + request.env["PATH_INFO"], "Layout Settings"] unless @mega_page.blank?
+            ActionController::Base.helpers.content_tag :div, class: "admin_links" do
+              ActionController::Base.helpers.link_to link[1], link[0], class: "admin-links"
+            end
+          else
+            ActionController::Base.helpers.content_tag :div, class: "admin_links" do
+              ActionController::Base.helpers.link_to "#{admin_text} #{@mega_page[:name]} Page", "/mega-bar/pages/#{@mega_page[:page_id].to_s}/administer-page?return_to=#{request.env['PATH_INFO']}", class: "admin-links"
+            end
+          end
         end
       end
     end
@@ -37,7 +48,8 @@ module MegaBar
     end
 
     def page_admin?
-      return true 
+      return false unless defined?(Devise) && user_signed_in?
+      current_user.has_role?('Mega Role')
       # return true if @mega_page[:administrator].blank? # this line should ultimately go away.
 
       # @mega_user.pll >= @mega_page[:administrator]

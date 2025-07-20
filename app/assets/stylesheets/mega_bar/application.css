@@ -17,3 +17,17 @@
  *= require mega_block_tabs
  *= require_tree .
  */
+
+/* Admin Links Styles */
+.admin-links,
+.admin-links a {
+    color: #aaa;
+    font-size: .6em;
+    clear: both;
+    text-decoration: none;
+}
+
+.admin-links a:hover {
+    color: #666;
+    text-decoration: underline;
+}

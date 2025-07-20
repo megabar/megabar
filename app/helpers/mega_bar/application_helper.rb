@@ -119,7 +119,10 @@ module MegaBar
     end
     def layout_help_links
       links = []
-      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s  + '/layouts/' + @mega_layout.id.to_s  + '?return_to=' + request.env['PATH_INFO'], 'Layout Settings'] unless @mega_page.blank?
+      # Only show Layout Settings link if user has admin permissions and is administering the page
+      if defined?(Devise) && user_signed_in? && current_user.has_role?('Mega Role') && session[:admin_pages]&.include?(@mega_page[:page_id].to_s)
+        links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s  + '/layouts/' + @mega_layout.id.to_s  + '?return_to=' + request.env['PATH_INFO'], 'Layout Settings'] unless @mega_page.blank?
+      end
       # links << ['/mega-bar/layouts/' + @mega_layout.id.to_s + '/edit', 'Edit Layout']
       links.map{ |l| link_to l[1], l[0], target: :_blank}.join(' | ')
     end
@@ -128,7 +131,7 @@ module MegaBar
       styleClass = @mega_page[:page_path].starts_with?('/mega-bar/') ? 'megaSetting' : ''
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '?return_to=' + request.env['PATH_INFO'], 'Layouts on the "' + @mega_page[:name] + '" Page']
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/edit/', 'Edit Page']
-      links.map{ |l| link_to l[1], l[0], target: :_blank, class: styleClass}.join(' | ')
+      links.map{ |l| link_to l[1], l[0], target: :_blank, class: "#{styleClass} admin-links"}.join(' <span class="admin-links">|</span> ')
     end
     def field_help_links(field)
       links = []
@@ -216,6 +219,8 @@ module MegaBar
     end
 
     def block_admin?
+      return false unless defined?(Devise) && user_signed_in?
+      current_user.has_role?('Mega Role')
       session[:admin_blocks].include?(@block.id.to_s)
     end
 
