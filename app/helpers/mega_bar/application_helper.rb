@@ -101,7 +101,7 @@ module MegaBar
 
     def model_display_help_links
       links = []
-      styleClass = @mega_display[:model_display].model.mega_model == 'mega' ? 'megaSetting' : ''
+      styleClass = @mega_display[:model_display].model.mega_model == 'mega' ? 'admin-links' : ''
       links << ['/mega-bar/model_displays/' + @mega_display[:model_display].id.to_s  + '?return_to=' + request.env['PATH_INFO'], 'Field Displays for the "' + @mega_display[:model_display].header.to_s +  '" model display']
       # links << ['/mega-bar/model_displays/' + @mega_display[:model_display].id.to_s  + '/edit' , 'Edit Model Display']
       links.map{ |l| link_to l[1], l[0], target: :_blank, class: styleClass}.join(' | ')
@@ -152,7 +152,7 @@ module MegaBar
       links = []
       arrow = direction == 'left' ? '<-' : '^'
       links << ["/mega-bar/field_displays/move/#{field[:field_display].id}?method=move_higher&return_to=" + request.env['PATH_INFO'], arrow]
-      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ') 
+      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin-links'}}.join(' | ') 
     end
     def reorder_down(field, direction)
       # return '' unless @authorizations[:block_administrator]
@@ -160,7 +160,7 @@ module MegaBar
       links = []
       arrow = direction == 'right' ? '->' : 'v'
       links << ["/mega-bar/field_displays/move/#{field[:field_display].id}?method=move_lower&return_to=" + request.env['PATH_INFO'] , arrow]
-      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
+      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin-links'}}.join(' | ')
     end
 
     def reorder_block_up(block)
@@ -169,7 +169,7 @@ module MegaBar
       links = []
       arrow = '^'
       links << ["/mega-bar/blocks/move/#{block.id}?method=move_higher&return_to=" + request.env['PATH_INFO'] , arrow]
-      links.map { |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
+      links.map { |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin-links'}}.join(' | ')
     end
 
     def reorder_block_down(block)
@@ -178,7 +178,7 @@ module MegaBar
       links = []
       arrow =  'v'
       links << ["/mega-bar/blocks/move/#{block.id}?method=move_lower&return_to=" + request.env['PATH_INFO'] , arrow]
-      links.map { |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
+      links.map { |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin-links'}}.join(' | ')
     end
 
     def data_format_locals(mega_record, displayable_field, value=nil, mega_bar=nil?)
