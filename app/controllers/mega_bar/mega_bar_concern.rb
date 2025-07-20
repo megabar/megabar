@@ -232,7 +232,7 @@ module MegaBar
       #     return
       #   end
       # end
-      
+      byebug
       block_id = params[:id]
       if session[:admin_blocks].include?(block_id)
         session[:admin_blocks].delete(block_id)
