@@ -1,0 +1,56 @@
+module MegaBar
+  module AuthorizationConcern
+    extend ActiveSupport::Concern
+
+    included do
+      # Only include CCCUX if it's available
+      if defined?(Cccux::ApplicationControllerConcern)
+        include Cccux::ApplicationControllerConcern
+        
+        # Only set up authorization for controllers that have models
+        # Skip ApplicationController and other base controllers
+        unless self.name.end_with?('ApplicationController')
+          setup_authorization
+        end
+      end
+    end
+
+    class_methods do
+      def setup_authorization
+        # Determine the model class from the controller name
+        model_class = determine_model_class
+        
+        # Set up load_and_authorize_resource if CCCUX is available
+        if model_class && defined?(CanCan::Ability)
+          load_and_authorize_resource class: model_class, except: [:administer_block, :administer_page]
+        end
+      end
+
+      def determine_model_class
+        # Extract the model name from the controller class name
+        # e.g., ModelsController -> MegaBar::Model
+        # e.g., PagesController -> MegaBar::Page
+        controller_name = self.name
+        model_name = controller_name.gsub(/Controller$/, '').split('::').last
+        
+        # Convert to singular and classify
+        # e.g., Models -> Model, Pages -> Page
+        singular_model = model_name.singularize
+        
+        # Build the full class name
+        full_class_name = "MegaBar::#{singular_model}"
+        
+        # Check if the class exists
+        if Object.const_defined?(full_class_name)
+          full_class_name.constantize
+        else
+          Rails.logger.warn "MegaBar::AuthorizationConcern: Could not determine model class for #{controller_name}"
+          nil
+        end
+      rescue => e
+        Rails.logger.warn "MegaBar::AuthorizationConcern: Error determining model class: #{e.message}"
+        nil
+      end
+    end
+  end
+end 

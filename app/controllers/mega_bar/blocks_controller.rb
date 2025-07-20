@@ -1,6 +1,7 @@
 module MegaBar 
   class BlocksController < MegaBar::ApplicationController
     include MegaBar::MegaBarConcern
+    include MegaBar::AuthorizationConcern
     
     def new
       @layout_id = params["layout_id"] if params["layout_id"]

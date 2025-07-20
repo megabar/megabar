@@ -1,6 +1,7 @@
 module MegaBar
   class LayablesController < MegaBar::ApplicationController
     include MegaBar::MegaBarConcern
+    include MegaBar::AuthorizationConcern
 
     def index
       if @layout

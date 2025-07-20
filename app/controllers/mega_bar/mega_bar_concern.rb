@@ -224,6 +224,15 @@ module MegaBar
     end
 
     def administer_block
+      
+      # Check authorization for custom action
+      # if defined?(CanCan::Ability) && respond_to?(:current_user) && current_user
+      #   unless current_user.can?(:administer_block, MegaBar::Page)
+      #     redirect_to root_path, alert: 'Not authorized to administer blocks'
+      #     return
+      #   end
+      # end
+      
       block_id = params[:id]
       if session[:admin_blocks].include?(block_id)
         session[:admin_blocks].delete(block_id)
@@ -234,6 +243,14 @@ module MegaBar
     end
 
     def administer_page
+      # Check authorization for custom action
+      # if defined?(CanCan::Ability) && respond_to?(:current_user) && current_user
+      #   unless current_user.can?(:administer_page, MegaBar::Page)
+      #     redirect_to root_path, alert: 'Not authorized to administer pages'
+      #     return
+      #   end
+      # end
+      
       page_id = params[:id]
       if session[:admin_pages].include?(page_id)
         session[:admin_pages].delete(page_id)

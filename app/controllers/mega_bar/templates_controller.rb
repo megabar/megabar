@@ -1,6 +1,7 @@
 module MegaBar
   class TemplatesController < MegaBar::ApplicationController
     include MegaBar::MegaBarConcern
+    include MegaBar::AuthorizationConcern
 
     def render_template_with_layout_sections
       # @blocks = env["mega_final_blocks"]

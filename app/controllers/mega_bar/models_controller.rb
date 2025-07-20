@@ -1,9 +1,7 @@
 module MegaBar
   class ModelsController < ApplicationController
     include MegaBarConcern
-    include Cccux::ApplicationControllerConcern
-    
-    load_and_authorize_resource class: 'MegaBar::Model'
+    include MegaBar::AuthorizationConcern
 
     def index
       @mega_instance ||= Model.where.not(modyule: 'MegaBar').order(column_sorting)

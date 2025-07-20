@@ -1,6 +1,7 @@
-module MegaBar 
+module MegaBar
   class TemplateSectionsController < MegaBar::ApplicationController
     include MegaBar::MegaBarConcern
+    include MegaBar::AuthorizationConcern
 
     def new
       @template_id = params["template_id"] if params["template_id"]
