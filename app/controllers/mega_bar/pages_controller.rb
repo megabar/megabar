@@ -3,11 +3,9 @@ module MegaBar
     include MegaBar::MegaBarConcern
     include Cccux::ApplicationControllerConcern
     
-    # Remove old authorization skip and add CanCanCan authorization
-    # skip_before_action :check_authorization, only: [:index, :all, :show]
-    load_and_authorize_resource
+    load_and_authorize_resource class: 'MegaBar::Page'
 
-    def index
+    def index  
       @mega_instance ||= Page.where("mega_page = 'f' or mega_page is null or mega_page = '' or mega_page = 'regular' or path = '/'").order(column_sorting)
       super
     end
@@ -29,5 +27,6 @@ module MegaBar
         # administrator: PermissionLevel.all.pluck("level_name, level"),
       }
     end
+
   end
 end
