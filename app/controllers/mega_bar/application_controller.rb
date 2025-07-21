@@ -6,7 +6,10 @@ module MegaBar
     protect_from_forgery with: :exception
     helper_method :sort_column, :sort_direction, :is_displayable, :might_paginate?, :might_filter?
     
-    # Include CCCUX functionality
+    # Include MegaBar authorization helpers (works with or without CCCUX)
+    helper MegaBar::AuthorizationHelper
+    
+    # Include CCCUX functionality if available
     include Cccux::ApplicationControllerConcern if defined?(Cccux::ApplicationControllerConcern)
     
     # Remove old authorization and replace with CCCUX

@@ -1,7 +1,10 @@
 module MegaBar
   class MasterPagesController < ActionController::Base
     
-    # Include CCCUX functionality
+    # Include MegaBar authorization helpers (works with or without CCCUX)
+    helper MegaBar::AuthorizationHelper
+    
+    # Include CCCUX functionality if available
     include Cccux::ApplicationControllerConcern if defined?(Cccux::ApplicationControllerConcern)
     
     def render_page
