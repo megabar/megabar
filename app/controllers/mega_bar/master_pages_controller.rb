@@ -95,5 +95,25 @@ module MegaBar
 
       env[:mega_site]&.theme&.code_name + "-theme"
     end
+
+    def should_show_admin_login_prompt?
+      return false unless defined?(Devise)
+      return false if user_signed_in?
+      return false unless defined?(User)
+      
+      # Check if there's only one user
+      user_count = User.count
+      return false unless user_count == 1
+      
+      # Check if CCCUX Role Manager exists
+      if defined?(Cccux::Role)
+        role_manager = Cccux::Role.find_by(name: 'Role Manager')
+        return role_manager.present?
+      end
+      
+      false
+    end
+
+    helper_method :should_show_admin_login_prompt?
   end
 end

@@ -1,3 +1,4 @@
+<% if can_perform_action?(:index, MegaBar::Page) %>
 Go to: <select onChange="window.location.href=this.value">
   <option selected disabled>Choose a Page</option>
   <option value="/">Home</option>
@@ -40,3 +41,4 @@ Go to: <select onChange="window.location.href=this.value">
   </optgroup>
 
 </select>
+<% end %>
