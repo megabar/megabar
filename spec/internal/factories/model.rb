@@ -2,7 +2,6 @@
 
 FactoryBot.define do
   factory :model, class: MegaBar::Model do
-    id {1}
     classname {'Model'}
     schema  {'deeper'}
     tablename {'mega_bar_models'}
@@ -10,8 +9,11 @@ FactoryBot.define do
     default_sort_field {'id'}
     modyule {'MegaBar'}
     default_sort_order {'desc'}
+    # Let deterministic ID system handle the ID
+    
     factory :model_with_page do
-      make_page  { 1 }
+      # This will be set by the test to use the actual created template
+      make_page { 1 }  # Default fallback, should be overridden in tests
     end
   end
 end

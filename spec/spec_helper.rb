@@ -21,6 +21,9 @@ Bundler.require :default, :development
 # SimpleCov.start
 Combustion.initialize! :all
 
+# Require MegaBar specific classes needed for testing
+require_relative '../lib/mega_bar/mega_env'
+
 
 # after combustion has initialized the routes, we have to delete all the data
 # that the seeds added so that the tests run with empty databases.
@@ -78,14 +81,15 @@ end
 =end
 
 def blck
-  MegaBar::Block.find(1)
+  # Use the first available block or create one
+  MegaBar::Block.first || FactoryBot.create(:block)
 end
 
 def get_env(args)
   env = Rack::MockRequest.env_for(args[:uri], params: args[:params])
   env[:mega_page] = args[:page]
   env[:mega_rout] = args[:rout]
-  env[:mega_env] = MegaEnv.new(blck, args[:rout], args[:page], []).to_hash # added to env for use in controllers
+  env[:mega_env] = MegaBar::MegaEnv.new(blck, args[:rout], args[:page], []).to_hash # added to env for use in controllers
   request = Rack::Request.new(env)
   request.session[:return_to] = url_for(uri);
   env

@@ -41,7 +41,16 @@ module MegaBar
     def create_layout_for_page
       base_name = (self.base_name.nil? || self.base_name.empty?) ? self.name : self.base_name
       template_id = self.template_id.present? ? self.template_id : self.make_layout_and_block
-      layout_hash = {page_id: self.id, name: base_name.humanize + ' Layout', base_name: base_name, make_block: true, model_id: self.model_id, template_id: template_id}
+      
+      # Preserve case in layout name, and pass make_layout_and_block setting
+      layout_hash = {
+        page_id: self.id, 
+        name: base_name + ' Layout', 
+        base_name: base_name, 
+        make_block: self.make_layout_and_block, 
+        model_id: self.model_id, 
+        template_id: template_id
+      }
       layout_hash = layout_hash.merge({block_text: self.block_text}) if self.block_text
       _layout = Layout.create(layout_hash)  if (!Layout.by_page(self.id).present? && template_id.present?)
     end

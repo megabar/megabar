@@ -9,7 +9,7 @@ module MegaBar
     let(:controlller) { 'mega_bar/blocks' }
     let(:invalid_attributes) { { 'layout_section_id' => '' }  }
     let(:invalid_new) { {name: 'Block Block', make_block: ''} }
-    let(:model_and_page) { create(:model_with_page, classname: 'Block', tablename: 'mega_bar_blocks', name: 'Blocks') }
+    let(:model_and_page) { create(:model_with_page, classname: 'Block', tablename: 'mega_bar_blocks', name: 'Blocks', make_page: template.id) }
     let(:page_name) { 'Block Page' }
     let(:page_terms) { ['mega-bar', 'blocks'] }
     let(:skip_invalids) { false }

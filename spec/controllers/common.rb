@@ -27,7 +27,7 @@ RSpec.shared_context "common", :a => :b do
   let(:rout_for_member) { {action: 'index', controller: controlller, id: 1} }
   let(:rout_for_update) { {controller: controlller, action: 'update', id: 1} }
   let(:template) { create(:template) }
-  let(:template_section) { create(:template_section) }
+  let(:template_section) { create(:template_section, template: template) }
   context 'with mega_env' do
     before(:each) do
       test_setup

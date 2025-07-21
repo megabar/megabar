@@ -25,23 +25,27 @@ module MegaBar
     end
 
     initializer "mega_bar.assets" do |app|
-      # For Propshaft (Rails 8 default), add the engine's asset directory to the load path
-      if defined?(Propshaft)
-        app.config.assets.paths << root.join('app', 'assets')
-      else
-        # Fallback for Sprockets if needed
-        app.config.assets.paths << root.join("app", "assets", "javascripts")
-        app.config.assets.paths << root.join("app", "assets", "stylesheets")
-        app.config.assets.paths << root.join("app", "assets", "images")
-        
-        # Precompile assets (Sprockets only)
-        app.config.assets.precompile += %w( mega_bar/mega_bar.css )
-        app.config.assets.precompile += %w( mega_bar/mega_block_tabs.css )
-        app.config.assets.precompile += %w( mega_bar/tabs.js )
-        app.config.assets.precompile += %w( mega_bar/layout.js )
-        app.config.assets.precompile += %w( mega_bar/jquery.best_in_place.js )
-        app.config.assets.precompile += %w( mega_bar/best_in_place.js )
-      end
+      # Rails 8+ uses Propshaft by default, not Sprockets
+      # Asset configuration is now handled differently in Rails 8
+      # If you need asset management, use Propshaft, jsbundling-rails, or importmap-rails
+      
+      # The following lines are disabled for Rails 8 compatibility:
+      # if defined?(Propshaft)
+      #   app.config.assets.paths << root.join('app', 'assets')
+      # else
+      #   # Fallback for Sprockets if needed
+      #   app.config.assets.paths << root.join("app", "assets", "javascripts")
+      #   app.config.assets.paths << root.join("app", "assets", "stylesheets")
+      #   app.config.assets.paths << root.join("app", "assets", "images")
+      #   
+      #   # Precompile assets (Sprockets only)
+      #   app.config.assets.precompile += %w( mega_bar/mega_bar.css )
+      #   app.config.assets.precompile += %w( mega_bar/mega_block_tabs.css )
+      #   app.config.assets.precompile += %w( mega_bar/tabs.js )
+      #   app.config.assets.precompile += %w( mega_bar/layout.js )
+      #   app.config.assets.precompile += %w( mega_bar/jquery.best_in_place.js )
+      #   app.config.assets.precompile += %w( mega_bar/best_in_place.js )
+      # end
     end
 
     # initializer "mega_bar.best_in_place" do |app|
