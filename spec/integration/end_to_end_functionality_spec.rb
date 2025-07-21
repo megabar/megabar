@@ -231,11 +231,12 @@ RSpec.describe "End-to-End MegaBar Functionality", type: :integration do
       puts "-" * 60
 
       # Create model first (but focus on field functionality)
-      model = MegaBar::Model.create!(
+            model = MegaBar::Model.create!(
         name: "Customer",
-        classname: "Customer", 
+        classname: "Customer",
         tablename: "customers",
-        make_page: test_template.id
+        make_page: test_template.id,
+        default_sort_field: "id"
       )
 
       # Wait for initial setup to complete

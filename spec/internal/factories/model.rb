@@ -12,8 +12,29 @@ FactoryBot.define do
     # Let deterministic ID system handle the ID
     
     factory :model_with_page do
-      # This will be set by the test to use the actual created template
-      make_page { 1 }  # Default fallback, should be overridden in tests
+      # Use deterministic ID system - create template first, then reference it
+      transient do
+        template_code_name { 'default_test_template' }
+      end
+      
+      make_page do
+        # Create template with deterministic ID if it doesn't exist
+        template = MegaBar::Template.find_by(code_name: template_code_name) ||
+                   FactoryBot.create(:template, code_name: template_code_name)
+        template.id
+      end
+      
+      # Ensure template section exists for the template
+      after(:create) do |model, evaluator|
+        template = MegaBar::Template.find(model.make_page)
+        unless template.template_sections.any?
+          FactoryBot.create(:template_section, 
+            template: template, 
+            code_name: 'main_section',
+            position: 1
+          )
+        end
+      end
     end
   end
 end

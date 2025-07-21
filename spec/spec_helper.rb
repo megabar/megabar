@@ -1,4 +1,15 @@
 ENV['RAILS_ENV'] ||= 'test'
+
+# Suppress DidYouMean deprecation warnings
+Warning[:deprecated] = false
+
+# Suppress specific DidYouMean warnings
+original_warn = Warning.method(:warn)
+Warning.define_singleton_method(:warn) do |message|
+  return if message.include?('DidYouMean::SPELL_CHECKERS.merge!')
+  original_warn.call(message)
+end
+
 require 'byebug'
 require 'rubygems'
 require 'bundler/setup'
