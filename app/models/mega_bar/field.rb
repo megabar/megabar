@@ -53,7 +53,7 @@ module MegaBar
     def make_field_displays
       return unless self.model_display_ids.present?
       self.model_display_ids = self.model_display_ids.reject(&:blank?)
-      mds = ModelDisplay.find(self.model_display_ids) if self.model_display_ids.present?
+      mds = MegaBar::ModelDisplay.find(self.model_display_ids) if self.model_display_ids.present?
       return unless mds
       mds.each do | md |
         data_display = ['new', 'edit'].include?(md.action) ? self.default_data_format_edit :  self.default_data_format
@@ -63,7 +63,7 @@ module MegaBar
         elsif md.action == 'show'
           wrapper = self.default_show_wrapper.present? ? self.default_show_wrapper : 'div'
         end
-        FieldDisplay.create(model_display_id: md.id, field_id: self.id, format:data_display, header: self.field.humanize, wrapper: wrapper) #note that index_wrapper should be refactored to just be wrapper.
+        MegaBar::FieldDisplay.create(model_display_id: md.id, field_id: self.id, format:data_display, header: self.field.humanize, wrapper: wrapper) #note that index_wrapper should be refactored to just be wrapper.
       end
     end
 
@@ -143,7 +143,7 @@ module MegaBar
       end
     end
     def delete_field_displays
-      FieldDisplay.by_fields(self.id).destroy_all
+      MegaBar::FieldDisplay.by_fields(self.id).destroy_all
     end
   end
 end

@@ -185,7 +185,7 @@ RSpec.describe "Model Creation Integration", type: :integration do
       puts "🏗️ Created Model #{model.id} with multi-column template"
 
       # Verify page and layout creation
-      expected_path = "/#{model.classname.underscore.pluralize}"
+      expected_path = "/#{model.classname.underscore.pluralize.dasherize}"
       page = MegaBar::Page.find_by(path: expected_path)
       expect(page).to be_present
 
@@ -240,9 +240,11 @@ RSpec.describe "Model Creation Integration", type: :integration do
       puts "🏗️ Using Model #{model.id} with existing page and displays"
 
              # Find the existing model displays via the model's auto-created page
-       expected_path = "/#{model.classname.underscore.pluralize}"
+       expected_path = "/#{model.classname.underscore.pluralize.dasherize}"
        page = MegaBar::Page.find_by(path: expected_path)
+       expect(page).to be_present
        layout = MegaBar::Layout.find_by(page: page)
+       expect(layout).to be_present
        main_section = layout.layout_sections.find { |ls| ls.code_name.include?('main') }
        main_block = main_section.blocks.first
        model_displays = main_block.model_displays
@@ -257,7 +259,8 @@ RSpec.describe "Model Creation Integration", type: :integration do
         model_id: model.id,
         tablename: model.tablename,
         default_data_format: 'textread',
-        default_data_format_edit: 'textbox'
+        default_data_format_edit: 'textbox',
+        model_display_ids: model_displays.map(&:id)
       )
 
       puts "📋 Created Field #{field.id}: '#{field.field}' (#{field.data_type})"

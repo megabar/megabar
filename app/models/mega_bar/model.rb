@@ -142,7 +142,7 @@ module MegaBar
         mod = self.modyule.nil? || self.modyule.empty?  ? '' : self.modyule.underscore + '/'
         path = '/' + mod.dasherize + self.classname.underscore.dasherize.pluralize
         # path = self.make_page == 'default_model_path' ? path : self.make_page
-        page = Page.find_or_initialize_by(path: path)
+        page = MegaBar::Page.find_or_initialize_by(path: path)
         page.assign_attributes(name: self.name + ' Model Page', path: path, make_layout_and_block: self.make_page, mega_page: self.mega_model, base_name: self.name, model_id: self.id)
         page.save unless page.id
       end
