@@ -1,5 +1,9 @@
 module MegaBar
   class MasterPagesController < ActionController::Base
+    
+    # Include CCCUX functionality
+    include Cccux::ApplicationControllerConcern if defined?(Cccux::ApplicationControllerConcern)
+    
     def render_page
       @page_layouts = env["mega_final_layouts"]
       @mega_page = env[:mega_page]
@@ -28,7 +32,7 @@ module MegaBar
         else
           # Only show Layout Settings link if user is administering the page
           if administering_page?
-            link = ["/mega-bar/pages/" + @mega_page[:page_id].to_s + "/layouts/" + request.env[:mega_layout].id.to_s + "?return_to=" + request.env["PATH_INFO"], "Layout Settings"] unless @mega_page.blank?
+          link = ["/mega-bar/pages/" + @mega_page[:page_id].to_s + "/layouts/" + request.env[:mega_layout].id.to_s + "?return_to=" + request.env["PATH_INFO"], "Layout Settings"] unless @mega_page.blank?
             ActionController::Base.helpers.content_tag :div, class: "admin_links" do
               ActionController::Base.helpers.link_to link[1], link[0], class: "admin-links"
             end

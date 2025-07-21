@@ -110,10 +110,6 @@ module MegaBar
       @mega_displays = env[:mega_env][:mega_displays]
     end
 
-    def check_authorization
-      render json: "Unauthorized", status: 401 unless env[:mega_env][:authorized]
-    end
-
     def set_vars_for_all
       @mega_page = env[:mega_page]
       @mega_rout = env[:mega_rout]
