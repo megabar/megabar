@@ -30,7 +30,17 @@ Bundler.require :default, :development
 
 
 # SimpleCov.start
-Combustion.initialize! :all
+begin
+  Combustion.initialize! :active_record, :action_controller, :action_view
+rescue => e
+  puts "⚠️  Combustion error: #{e.message}"
+  puts "🔄 Trying alternative initialization..."
+  # Fallback to basic Rails initialization
+  require 'rails'
+  require 'active_record'
+  require 'action_controller'
+  require 'action_view'
+end
 
 # Require MegaBar specific classes needed for testing
 require_relative '../lib/mega_bar/mega_env'

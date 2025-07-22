@@ -9,6 +9,9 @@ module MegaBar
     # Include MegaBar authorization helpers (works with or without CCCUX)
     helper MegaBar::AuthorizationHelper
     
+    # Make authorization methods available to controllers
+    include MegaBar::AuthorizationHelper
+    
     # Include CCCUX functionality if available
     include Cccux::ApplicationControllerConcern if defined?(Cccux::ApplicationControllerConcern)
     

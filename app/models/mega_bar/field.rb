@@ -73,9 +73,9 @@ module MegaBar
 
     def make_migration
       return true if ActiveModel::Type::Boolean.new.cast(self.accessor)
-      return if Model.connection.column_exists?(self.tablename,  self.field)
+      return if MegaBar::Model.connection.column_exists?(self.tablename,  self.field)
       # if self.field.ends_with('_id') byebug
-      byebug if self.data_type == 'datetime' or self.data_type == 'boolean'
+      # byebug if self.data_type == 'datetime' or self.data_type == 'boolean'
       boolean =   self.data_type == 'boolean' ? ' null: false, default: false' : '' #todo allow default true.
       
       # Generate the field migration using direct Rails generator invocation (more reliable)

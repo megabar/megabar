@@ -86,46 +86,13 @@ module MegaBar
       rescue => e
         logger.error("❌ Direct migration failed for #{self.classname}: #{e.message}")
         
-                  # Method 2: Fallback to Rails.application.load_tasks approach
-          begin
-            logger.info("Trying fallback migration approach...")
-            # Only run migrations in test environment (internal app context)
-            if Rails.env.test?
-              internal_app_path = File.expand_path('../../../spec/internal', __FILE__)
-              Dir.chdir(internal_app_path) do
-                Rails.application.load_tasks
-                Rake::Task['db:migrate'].invoke
-              end
-            else
-              # In production, use the current Rails application context
-              Rails.application.load_tasks
-              Rake::Task['db:migrate'].invoke
-            end
-            logger.info("✅ Fallback migration approach succeeded for #{self.classname}")
-          rescue => e2
-            logger.error("❌ Fallback migration also failed for #{self.classname}: #{e2.message}")
-          
-            # Method 3: Last resort - system call with better error handling
-            logger.info("Trying system call as last resort...")
-            # Only run migrations in test environment (internal app context)
-            if Rails.env.test?
-              internal_app_path = File.expand_path('../../../spec/internal', __FILE__)
-              # Ensure the path exists before trying to cd to it
-              if Dir.exist?(internal_app_path)
-                result = system("cd #{internal_app_path} && bundle exec rails db:migrate")
-              else
-                logger.error("❌ Internal app path not found: #{internal_app_path}")
-                result = false
-              end
-            else
-            # In production, use the current Rails application context
-            result = system("cd #{Rails.root} && bundle exec rails db:migrate")
-          end
-          if result
-            logger.info("✅ System call migration succeeded for #{self.classname}")
-          else
-            logger.error("❌ All migration approaches failed for #{self.classname}")
-          end
+        # Method 2: System call with better error handling
+        logger.info("Trying system call migration approach...")
+        result = system("cd #{Rails.root} && bundle exec rails db:migrate")
+        if result
+          logger.info("✅ System call migration succeeded for #{self.classname}")
+        else
+          logger.error("❌ System call migration failed for #{self.classname}")
         end
       end
     end

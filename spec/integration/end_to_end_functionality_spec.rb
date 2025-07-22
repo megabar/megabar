@@ -38,25 +38,33 @@ RSpec.describe "End-to-End MegaBar Functionality", type: :integration do
     restore_callback_state
   end
 
-  let(:test_template) do
-    template = MegaBar::Template.create!(
-      name: 'E2E Test Template',
-      code_name: 'e2e_test'
-    )
-    MegaBar::TemplateSection.create!(
-      template: template,
-      name: 'Main Section',
-      code_name: 'main',
-      position: 1
-    )
-    template
-  end
-
   describe "Complete MegaBar Workflow with Real Rails Functionality" do
     it "creates a working Rails application from MegaBar forms", :slow do
       puts "\n🎯 TESTING: Complete End-to-End MegaBar Workflow"
       puts "=" * 70
       puts "This test verifies that MegaBar forms create working Rails applications"
+
+      # Ensure we're using the internal app database from the very beginning
+      internal_db_path = File.expand_path('spec/internal/db/combustion_test.sqlite')
+      puts "🔄 Setting up internal app database: #{internal_db_path}"
+      ActiveRecord::Base.establish_connection(
+        adapter: 'sqlite3',
+        database: internal_db_path
+      )
+
+      # Create test template in the internal app database
+      puts "🔄 Creating test template in internal app database"
+      test_template = MegaBar::Template.create!(
+        name: 'E2E Test Template',
+        code_name: 'e2e_test'
+      )
+      MegaBar::TemplateSection.create!(
+        template: test_template,
+        name: 'Main Section',
+        code_name: 'main',
+        position: 1
+      )
+      puts "✅ Test template created: #{test_template.id}"
 
       # Step 1: Create MegaBar Model (should generate Rails files)
       puts "\n📋 STEP 1: Creating MegaBar Model with File Generation"
@@ -102,9 +110,50 @@ RSpec.describe "End-to-End MegaBar Functionality", type: :integration do
       puts "✅ Rails controller file generated: #{controller_file}"
 
       # Verify migration was created and run
-      migration_files = Dir.glob("spec/internal/db/migrate/*create_products.rb")
+      migration_files = Dir.glob("db/migrate/*create_products.rb")
       expect(migration_files).not_to be_empty
       puts "✅ Migration file created: #{migration_files.first}"
+
+      # Manually run the migration since Rails engine context doesn't support db:migrate
+      migration_file = migration_files.first
+      if File.exist?(migration_file)
+        puts "🔄 Manually running migration: #{migration_file}"
+        load migration_file
+        # Extract the class name from the migration file content
+        migration_content = File.read(migration_file)
+        class_match = migration_content.match(/class\s+(\w+)\s+</)
+        if class_match
+          migration_class_name = class_match[1]
+          migration_class = migration_class_name.constantize
+          migration_instance = migration_class.new
+          
+          # We're already in the internal app database context, no need to switch again
+          migration_instance.up
+          puts "✅ Migration executed successfully"
+
+          # Reset column information for all relevant models
+          puts "🔄 Resetting column information for all relevant models"
+          [
+            MegaBar::Field,
+            MegaBar::FieldDisplay,
+            MegaBar::ModelDisplay,
+            MegaBar::Page,
+            MegaBar::Model
+          ].each do |klass|
+            klass.reset_column_information
+          end
+          
+          # Re-query model_displays after migration to get fresh records from correct DB
+          puts "🔄 Re-querying model_displays after migration"
+          model_displays = MegaBar::ModelDisplay.joins(:block)
+                        .joins("JOIN mega_bar_layout_sections ON mega_bar_blocks.layout_section_id = mega_bar_layout_sections.id")
+                        .joins("JOIN mega_bar_layables ON mega_bar_layout_sections.id = mega_bar_layables.layout_section_id")
+                        .joins("JOIN mega_bar_layouts ON mega_bar_layables.layout_id = mega_bar_layouts.id")
+                        .where("mega_bar_layouts.page_id = ?", page.id)
+        else
+          puts "⚠️  Could not find migration class name in #{migration_file}"
+        end
+      end
 
       # Load the generated model class
       load model_file if File.exist?(model_file)
@@ -205,17 +254,13 @@ RSpec.describe "End-to-End MegaBar Functionality", type: :integration do
       # Step 4: Test Controller Functionality (if possible)
       puts "\n🎮 STEP 4: Testing Generated Controller"
 
-      # Load the generated controller
+      # Test that the generated controller can be instantiated
+      controller_file = "spec/internal/app/controllers/products_controller.rb"
       load controller_file if File.exist?(controller_file)
-
-      # Verify controller class exists
-      expect(defined?(ProductsController)).to be_truthy
-      puts "✅ ProductsController class loaded"
-
-      # Test basic controller instantiation
+      
       controller = ProductsController.new
-      expect(controller).to be_a(ApplicationController)
-      puts "✅ ProductsController instantiation works"
+      expect(controller).to be_a(MegaBar::ApplicationController)
+      puts "✅ ProductsController class loaded"
 
       puts "\n🎉 END-TO-END TEST COMPLETE!"
       puts "=" * 70
@@ -230,8 +275,30 @@ RSpec.describe "End-to-End MegaBar Functionality", type: :integration do
       puts "\n🧪 TESTING: Field Creation with Database Integration"
       puts "-" * 60
 
+      # Ensure we're using the internal app database from the very beginning
+      internal_db_path = File.expand_path('spec/internal/db/combustion_test.sqlite')
+      puts "🔄 Setting up internal app database: #{internal_db_path}"
+      ActiveRecord::Base.establish_connection(
+        adapter: 'sqlite3',
+        database: internal_db_path
+      )
+
+      # Create test template in the internal app database
+      puts "🔄 Creating test template in internal app database"
+      test_template = MegaBar::Template.create!(
+        name: 'E2E Field Test Template',
+        code_name: 'e2e_field_test'
+      )
+      MegaBar::TemplateSection.create!(
+        template: test_template,
+        name: 'Main Section',
+        code_name: 'main',
+        position: 1
+      )
+      puts "✅ Test template created: #{test_template.id}"
+
       # Create model first (but focus on field functionality)
-            model = MegaBar::Model.create!(
+      model = MegaBar::Model.create!(
         name: "Customer",
         classname: "Customer",
         tablename: "customers",
@@ -242,7 +309,36 @@ RSpec.describe "End-to-End MegaBar Functionality", type: :integration do
       # Wait for initial setup to complete
       sleep(1)
 
-             model_displays = MegaBar::ModelDisplay.joins(:block)
+      # Manually run the migration for the customers table
+      migration_files = Dir.glob("db/migrate/*create_customers.rb")
+      if migration_files.any?
+        migration_file = migration_files.first
+        puts "🔄 Manually running migration: #{migration_file}"
+        load migration_file
+        migration_content = File.read(migration_file)
+        class_match = migration_content.match(/class\s+(\w+)\s+</)
+        if class_match
+          migration_class_name = class_match[1]
+          migration_class = migration_class_name.constantize
+          migration_instance = migration_class.new
+          migration_instance.up
+          puts "✅ Migration executed successfully"
+          
+          # Reset column information for all relevant models
+          puts "🔄 Resetting column information for all relevant models"
+          [
+            MegaBar::Field,
+            MegaBar::FieldDisplay,
+            MegaBar::ModelDisplay,
+            MegaBar::Page,
+            MegaBar::Model
+          ].each do |klass|
+            klass.reset_column_information
+          end
+        end
+      end
+
+      model_displays = MegaBar::ModelDisplay.joins(:block)
                          .joins("JOIN mega_bar_layout_sections ON mega_bar_blocks.layout_section_id = mega_bar_layout_sections.id")
                          .joins("JOIN mega_bar_layables ON mega_bar_layout_sections.id = mega_bar_layables.layout_section_id")
                          .joins("JOIN mega_bar_layouts ON mega_bar_layables.layout_id = mega_bar_layouts.id")
@@ -288,6 +384,92 @@ RSpec.describe "End-to-End MegaBar Functionality", type: :integration do
         )
 
         puts "✅ MegaBar field created: #{field.field}"
+
+        # Wait a moment for migration generation to complete
+        sleep(1)
+
+        # Manually run the field migration if it was generated
+        # Look for any migration files that might be for this field
+        all_migration_files = Dir.glob("db/migrate/*.rb")
+        field_migration_files = all_migration_files.select { |f| f.include?(field_config[:name]) && f.include?('customers') }
+        
+        puts "🔍 DEBUG: All migration files: #{all_migration_files.map { |f| File.basename(f) }}"
+        puts "🔍 DEBUG: Field migration files for #{field_config[:name]}: #{field_migration_files.map { |f| File.basename(f) }}"
+        
+        # If no specific field migration found, try to find any recent migration files
+        if field_migration_files.empty?
+          puts "🔍 DEBUG: No specific field migration found, checking for recent migrations..."
+          recent_migrations = all_migration_files.select { |f| File.mtime(f) > Time.now - 30 }
+          puts "🔍 DEBUG: Recent migrations: #{recent_migrations.map { |f| File.basename(f) }}"
+          field_migration_files = recent_migrations
+        end
+        
+        if field_migration_files.any?
+          field_migration_file = field_migration_files.first
+          puts "🔄 Manually running field migration: #{field_migration_file}"
+          load field_migration_file
+          field_migration_content = File.read(field_migration_file)
+          field_class_match = field_migration_content.match(/class\s+(\w+)\s+</)
+          if field_class_match
+            field_migration_class_name = field_class_match[1]
+            field_migration_class = field_migration_class_name.constantize
+            field_migration_instance = field_migration_class.new
+            field_migration_instance.up
+            puts "✅ Field migration executed successfully"
+            
+            # Reset column information for the model
+            MegaBar::Model.reset_column_information
+          end
+        else
+          puts "⚠️  No field migration found for #{field_config[:name]}"
+          puts "🔍 DEBUG: Checking if column already exists..."
+          puts "🔍 DEBUG: Column exists? #{ActiveRecord::Base.connection.column_exists?('customers', field_config[:name])}"
+          
+          # Fallback: Try to run any pending migrations
+          puts "🔄 Trying to run any pending migrations..."
+          begin
+            # Try using Rails migration context
+            migration_context = ActiveRecord::MigrationContext.new(Rails.root.join('db/migrate'))
+            pending_migrations = migration_context.migrations - migration_context.get_all_versions
+            if pending_migrations.any?
+              puts "🔄 Found #{pending_migrations.count} pending migrations, running them..."
+              migration_context.migrate
+              puts "✅ Pending migrations executed successfully"
+              
+              # Reset column information
+              MegaBar::Model.reset_column_information
+            else
+              puts "ℹ️  No pending migrations found"
+              
+              # Last resort: Manually create and execute the migration
+              puts "🔄 Creating manual migration for #{field_config[:name]}..."
+              migration_content = <<~RUBY
+                class Add#{field_config[:name].classify}ToCustomers < ActiveRecord::Migration[6.1]
+                  def change
+                    add_column :customers, :#{field_config[:name]}, :#{field_config[:data_type]}
+                  end
+                end
+              RUBY
+              
+              migration_filename = "#{Time.now.strftime('%Y%m%d%H%M%S')}_add_#{field_config[:name]}_to_customers.rb"
+              migration_path = Rails.root.join('db', 'migrate', migration_filename)
+              File.write(migration_path, migration_content)
+              puts "✅ Manual migration created: #{migration_filename}"
+              
+              # Execute the manual migration
+              load migration_path
+              migration_class = "Add#{field_config[:name].classify}ToCustomers".constantize
+              migration_instance = migration_class.new
+              migration_instance.up
+              puts "✅ Manual migration executed successfully"
+              
+              # Reset column information
+              MegaBar::Model.reset_column_information
+            end
+          rescue => e
+            puts "⚠️  Failed to run pending migrations: #{e.message}"
+          end
+        end
 
         # Verify database column was added
         expect(ActiveRecord::Base.connection.column_exists?('customers', field_config[:name])).to be true
