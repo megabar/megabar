@@ -110,7 +110,7 @@ RSpec.describe "End-to-End MegaBar Functionality", type: :integration do
       puts "✅ Rails controller file generated: #{controller_file}"
 
       # Verify migration was created and run
-      migration_files = Dir.glob("db/migrate/*create_products.rb")
+      migration_files = Dir.glob("spec/internal/db/migrate/*create_products.rb")
       expect(migration_files).not_to be_empty
       puts "✅ Migration file created: #{migration_files.first}"
 
@@ -204,6 +204,23 @@ RSpec.describe "End-to-End MegaBar Functionality", type: :integration do
       price_field_displays = MegaBar::FieldDisplay.where(field_id: price_field.id)
       expect(price_field_displays.count).to eq(3)  # new, edit, show only
       puts "✅ Price field displays created: #{price_field_displays.count}"
+
+      # Execute field migrations
+      puts "🔄 Executing field migrations..."
+      field_migrations = Dir.glob("spec/internal/db/migrate/*add_*_to_products.rb")
+      field_migrations.each do |migration_file|
+        puts "🔄 Running field migration: #{File.basename(migration_file)}"
+        load migration_file
+        migration_content = File.read(migration_file)
+        class_match = migration_content.match(/class\s+(\w+)\s+</)
+        if class_match
+          migration_class_name = class_match[1]
+          migration_class = migration_class_name.constantize
+          migration_instance = migration_class.new
+          migration_instance.up
+          puts "✅ Field migration executed: #{File.basename(migration_file)}"
+        end
+      end
 
       # Verify database columns were added
       expect(ActiveRecord::Base.connection.column_exists?('products', 'name')).to be true
@@ -310,7 +327,7 @@ RSpec.describe "End-to-End MegaBar Functionality", type: :integration do
       sleep(1)
 
       # Manually run the migration for the customers table
-      migration_files = Dir.glob("db/migrate/*create_customers.rb")
+      migration_files = Dir.glob("spec/internal/db/migrate/*create_customers.rb")
       if migration_files.any?
         migration_file = migration_files.first
         puts "🔄 Manually running migration: #{migration_file}"
@@ -390,7 +407,7 @@ RSpec.describe "End-to-End MegaBar Functionality", type: :integration do
 
         # Manually run the field migration if it was generated
         # Look for any migration files that might be for this field
-        all_migration_files = Dir.glob("db/migrate/*.rb")
+        all_migration_files = Dir.glob("spec/internal/db/migrate/*.rb")
         field_migration_files = all_migration_files.select { |f| f.include?(field_config[:name]) && f.include?('customers') }
         
         puts "🔍 DEBUG: All migration files: #{all_migration_files.map { |f| File.basename(f) }}"
@@ -429,7 +446,7 @@ RSpec.describe "End-to-End MegaBar Functionality", type: :integration do
           puts "🔄 Trying to run any pending migrations..."
           begin
             # Try using Rails migration context
-            migration_context = ActiveRecord::MigrationContext.new(Rails.root.join('db/migrate'))
+            migration_context = ActiveRecord::MigrationContext.new(Rails.root.join('spec/internal/db/migrate'))
             pending_migrations = migration_context.migrations - migration_context.get_all_versions
             if pending_migrations.any?
               puts "🔄 Found #{pending_migrations.count} pending migrations, running them..."
@@ -452,7 +469,7 @@ RSpec.describe "End-to-End MegaBar Functionality", type: :integration do
               RUBY
               
               migration_filename = "#{Time.now.strftime('%Y%m%d%H%M%S')}_add_#{field_config[:name]}_to_customers.rb"
-              migration_path = Rails.root.join('db', 'migrate', migration_filename)
+              migration_path = Rails.root.join('spec', 'internal', 'db', 'migrate', migration_filename)
               File.write(migration_path, migration_content)
               puts "✅ Manual migration created: #{migration_filename}"
               

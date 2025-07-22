@@ -1,5 +1,6 @@
 module MegaBar
   class MegaBarModelsGenerator < Rails::Generators::Base
+    require 'fileutils'
     # require 'byebug'
     source_root File.expand_path('../templates', __FILE__)
     argument :modyule, type: :string
@@ -45,13 +46,10 @@ module MegaBar
       # Check if the table already exists
       # In test environment, skip the table check since we're in the engine context
       if Rails.env.test?
-        # Just generate the migration without checking if table exists
-        if the_module_name
-          generate 'migration create_' + the_table_name
-          @@notices <<  "You will have to copy your Migrations manually over to the megabar gem"
-        else
-          generate 'migration create_' + the_table_name
-        end
+        # Generate migration in test-specific directory
+        migration_name = "create_#{the_table_name}"
+        migration_file = generate_migration_file(migration_name)
+        @@notices << "Migration created in test directory: #{migration_file}"
       else
         # In production, check if table exists
         if ActiveRecord::Base.connection.table_exists?(the_table_name)
@@ -185,6 +183,37 @@ module MegaBar
     def use_route
       return '' if the_module_name.nil? || the_module_name.empty?
       the_module_name.split('::').size == 1 ? 'use_route: ' + the_module_name + ', ' : '' #else might could be improved for other modules.
+    end
+
+    def generate_migration_file(migration_name)
+      # Create migration in test-specific directory
+      timestamp = Time.now.strftime('%Y%m%d%H%M%S')
+      migration_filename = "#{timestamp}_#{migration_name}.rb"
+      migration_path = File.expand_path('../../../../../spec/internal/db/migrate', __FILE__)
+      
+      # Ensure the directory exists
+      FileUtils.mkdir_p(migration_path)
+      
+      # Create the migration file
+      migration_file = File.join(migration_path, migration_filename)
+      
+      # Generate migration content
+      migration_content = <<~RUBY
+        class #{migration_name.classify} < ActiveRecord::Migration[#{Rails.version.split('.')[0..1].join('.')}]
+          def up
+            create_table :#{the_table_name} do |t|
+              t.timestamps
+            end
+          end
+          
+          def down
+            drop_table :#{the_table_name}
+          end
+        end
+      RUBY
+      
+      File.write(migration_file, migration_content)
+      migration_file
     end
   end
 end

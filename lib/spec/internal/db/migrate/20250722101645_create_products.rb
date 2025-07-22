@@ -1,4 +1,4 @@
-class CreateProducts < ActiveRecord::Migration[8.0]
+class CreateProduct < ActiveRecord::Migration[8]
   def change
     create_table :products do |t|
       t.timestamps

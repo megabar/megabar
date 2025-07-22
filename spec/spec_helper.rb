@@ -77,6 +77,30 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = false
   config.order = "random"
   config.include FactoryBot::Syntax::Methods
+  
+  # Clean up test migrations after all specs complete
+  config.after(:suite) do
+    # Clean up test-specific migrations
+    test_migration_dir = File.expand_path('../internal/db/migrate', __FILE__)
+    if Dir.exist?(test_migration_dir)
+      Dir.glob(File.join(test_migration_dir, '*.rb')).each do |migration_file|
+        File.delete(migration_file)
+        puts "🧹 Cleaned up test migration: #{File.basename(migration_file)}"
+      end
+    end
+    
+    # Clean up any test migrations that might have been created in main db/migrate
+    main_migration_dir = File.expand_path('../db/migrate', __FILE__)
+    if Dir.exist?(main_migration_dir)
+      Dir.glob(File.join(main_migration_dir, '*_create_*.rb')).each do |migration_file|
+        # Only delete migrations created during this test run (today's date)
+        if File.basename(migration_file).start_with?(Time.now.strftime('%Y%m%d'))
+          File.delete(migration_file)
+          puts "🧹 Cleaned up main migration: #{File.basename(migration_file)}"
+        end
+      end
+    end
+  end
 end
 
 def hello_bob
