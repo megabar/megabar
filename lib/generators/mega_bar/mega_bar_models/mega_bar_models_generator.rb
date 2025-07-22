@@ -98,7 +98,7 @@ module MegaBar
     private
 
     def gem_path
-      return 'spec/internal/' if Rails.env == 'test'
+      return '' if Rails.env == 'test'
       File.directory?(Rails.root + '../megabar/')  && modyule == 'MegaBar' ? Rails.root + '../megabar/' : ''
     end
 
@@ -135,7 +135,9 @@ module MegaBar
     end
 
     def the_factory_file_path
-      if the_module_name == 'MegaBar'
+      if Rails.env.test?
+        'spec/internal/factories/'
+      elsif the_module_name == 'MegaBar'
         'spec/internal/factories/'
       else
         'spec/factories/'

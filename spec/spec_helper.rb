@@ -100,6 +100,42 @@ RSpec.configure do |config|
         end
       end
     end
+    
+    # Clean up any test-generated files that might have been created in wrong places
+    test_internal_dir = File.expand_path('../internal', __FILE__)
+    
+    # Clean up test-generated app files (controllers, models)
+    ['app/controllers', 'app/models'].each do |app_dir|
+      full_app_dir = File.join(test_internal_dir, app_dir)
+      if Dir.exist?(full_app_dir)
+        Dir.glob(File.join(full_app_dir, '**/*.rb')).each do |file|
+          File.delete(file)
+          puts "🧹 Cleaned up test-generated file: #{file}"
+        end
+        # Remove empty directories
+        Dir.glob(File.join(full_app_dir, '**/*')).reverse.each do |dir|
+          Dir.rmdir(dir) if Dir.exist?(dir) && Dir.empty?(dir)
+        end
+      end
+    end
+    
+    # Clean up test-generated spec files (but keep factories)
+    spec_dir = File.join(test_internal_dir, 'spec')
+    if Dir.exist?(spec_dir)
+      ['controllers', 'models'].each do |spec_subdir|
+        full_spec_subdir = File.join(spec_dir, spec_subdir)
+        if Dir.exist?(full_spec_subdir)
+          Dir.glob(File.join(full_spec_subdir, '**/*.rb')).each do |file|
+            File.delete(file)
+            puts "🧹 Cleaned up test-generated spec file: #{file}"
+          end
+          # Remove empty directories
+          Dir.glob(File.join(full_spec_subdir, '**/*')).reverse.each do |dir|
+            Dir.rmdir(dir) if Dir.exist?(dir) && Dir.empty?(dir)
+          end
+        end
+      end
+    end
   end
 end
 
