@@ -111,7 +111,9 @@ module MegaBar
     end
 
     def the_controller_file_path
-      if the_module_name
+      if Rails.env.test?
+        'spec/internal/app/controllers/'
+      elsif the_module_name
         'app/controllers/' + the_module_path + '/'
       else
         'app/controllers/'
@@ -127,7 +129,9 @@ module MegaBar
     end
 
     def the_controller_spec_file_path
-      if the_module_name && gem_path == ''
+      if Rails.env.test?
+        'spec/internal/spec/controllers/'
+      elsif the_module_name && gem_path == ''
         'spec/controllers/' + the_module_path + '/'
       else
         'spec/controllers/'
@@ -136,7 +140,7 @@ module MegaBar
 
     def the_factory_file_path
       if Rails.env.test?
-        'spec/internal/factories/'
+        'spec/internal/test_factories/'
       elsif the_module_name == 'MegaBar'
         'spec/internal/factories/'
       else
@@ -149,7 +153,9 @@ module MegaBar
     end
 
     def the_model_file_path
-      if the_module_name
+      if Rails.env.test?
+        'spec/internal/app/models/'
+      elsif the_module_name
         'app/models/' + the_module_path + '/'
       else
         'app/models/'

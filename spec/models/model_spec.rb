@@ -99,7 +99,7 @@ module MegaBar
         File.delete('spec/internal/app/models/test_case.rb') rescue nil
         File.delete('spec/internal/app/controllers/test_cases_controller.rb') rescue nil
         File.delete('spec/internal/spec/controllers/test_cases_controller_spec.rb') rescue nil
-        File.delete('spec/internal/spec/factories/test_case.rb') rescue nil
+        File.delete('spec/internal/test_factories/test_case.rb') rescue nil
         File.delete(Dir.glob('spec/internal/db/migrate/*create_test_cases.rb')[0]) rescue nil
         # Find and destroy the model if it exists
         model = Model.first
@@ -111,7 +111,7 @@ module MegaBar
         expect(File).to exist('spec/internal/app/models/test_case.rb')
         expect(File).to exist('spec/internal/app/controllers/test_cases_controller.rb')
         expect(File).to exist('spec/internal/spec/controllers/test_cases_controller_spec.rb')
-        expect(File).to exist('spec/internal/spec/factories/test_case.rb')
+        expect(File).to exist('spec/internal/test_factories/test_case.rb')
         expect(Dir.glob('spec/internal/db/migrate/*create_test_cases.rb').empty?).to be_falsey
         # cant test routes here.. boo. expect(:get => "/test-cases").to route_to(:controller => 'test_cases#index')
       end

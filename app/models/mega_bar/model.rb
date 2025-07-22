@@ -84,13 +84,16 @@ module MegaBar
           # Method 2: Try ActiveRecord::MigrationContext with proper error handling
           logger.info("Trying ActiveRecord::MigrationContext approach...")
           
+          # Use the correct migration path based on environment
+          migration_path = Rails.env.test? ? "spec/internal/db/migrate" : "db/migrate"
+          
           # Check if we're in a Rails version that supports the new API
           if ActiveRecord::MigrationContext.instance_method(:initialize).arity == 1
             # Newer Rails version (single parameter)
-            migration_context = ActiveRecord::MigrationContext.new("db/migrate")
+            migration_context = ActiveRecord::MigrationContext.new(migration_path)
           else
             # Older Rails version (two parameters)
-            migration_context = ActiveRecord::MigrationContext.new("db/migrate", ActiveRecord::SchemaMigration)
+            migration_context = ActiveRecord::MigrationContext.new(migration_path, ActiveRecord::SchemaMigration)
           end
           
           pending_migrations = migration_context.migrations.reject { |m| migration_context.get_all_versions.include?(m.version) }
@@ -106,13 +109,17 @@ module MegaBar
         rescue => e2
           logger.error("❌ ActiveRecord::MigrationContext failed for #{self.classname}: #{e2.message}")
           
-          # Method 3: System call as last resort
-          logger.info("Trying system call migration approach...")
-          result = system("cd #{Rails.root} && bundle exec rails db:migrate")
-          if result
-            logger.info("✅ System call migration succeeded for #{self.classname}")
+          # Method 3: System call as last resort (but skip in test environment)
+          if Rails.env.test?
+            logger.info("⏭️  Skipping system call migration in test environment")
           else
-            logger.error("❌ System call migration failed for #{self.classname}")
+            logger.info("Trying system call migration approach...")
+            result = system("cd #{Rails.root} && bundle exec rails db:migrate")
+            if result
+              logger.info("✅ System call migration succeeded for #{self.classname}")
+            else
+              logger.error("❌ System call migration failed for #{self.classname}")
+            end
           end
         end
       end

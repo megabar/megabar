@@ -65,6 +65,12 @@ MegaBar::Model.connection.execute('delete from sqlite_sequence where name="mega_
 
 require 'rspec/rails'
 require 'capybara/rails'
+
+# Configure FactoryBot to use the correct factories directory before loading factory_bot_rails
+FactoryBot.definition_file_paths = [
+  File.expand_path('../internal/factories', __FILE__),
+  File.expand_path('../internal/test_factories', __FILE__)
+]
 require 'factory_bot_rails'
 
 
@@ -87,6 +93,17 @@ RSpec.configure do |config|
         File.delete(migration_file)
         puts "🧹 Cleaned up test migration: #{File.basename(migration_file)}"
       end
+    end
+    
+    # Clean up test-generated factories
+    test_factories_dir = File.expand_path('../internal/test_factories', __FILE__)
+    if Dir.exist?(test_factories_dir)
+      Dir.glob(File.join(test_factories_dir, '*.rb')).each do |factory_file|
+        File.delete(factory_file)
+        puts "🧹 Cleaned up test factory: #{File.basename(factory_file)}"
+      end
+      # Remove empty directory
+      Dir.rmdir(test_factories_dir) if Dir.exist?(test_factories_dir) && Dir.empty?(test_factories_dir)
     end
     
     # Clean up any test migrations that might have been created in main db/migrate

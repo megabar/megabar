@@ -118,6 +118,15 @@ RSpec.describe MegaBar::MegaBarConcern, type: :controller do
       allow(controller).to receive(:env).and_return(mock_env)
     end
     
+    after(:each) do
+      # Re-enable callbacks for other tests
+      MegaBar::Field.set_callback("create", :after, :make_migration) rescue nil
+      MegaBar::Field.set_callback("save", :after, :make_field_displays) rescue nil
+      MegaBar::Field.set_callback("create", :after, :make_field_displays) rescue nil
+      MegaBar::Model.set_callback("create", :after, :make_all_files) rescue nil
+      MegaBar::Model.set_callback("save", :after, :make_page_for_model) rescue nil
+    end
+    
     describe "#index" do
       it "can execute index action with minimal setup" do
         puts "\n🧪 Testing MegaBarConcern#index in isolation"

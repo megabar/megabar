@@ -73,6 +73,13 @@ module MegaBar
 
     def make_migration
       return true if ActiveModel::Type::Boolean.new.cast(self.accessor)
+      
+      # Check if table exists before checking if column exists
+      unless MegaBar::Model.connection.table_exists?(self.tablename)
+        logger.info("⚠️  Table #{self.tablename} doesn't exist yet - skipping column check for field #{self.field}")
+        return
+      end
+      
       return if MegaBar::Model.connection.column_exists?(self.tablename,  self.field)
       # if self.field.ends_with('_id') byebug
       # byebug if self.data_type == 'datetime' or self.data_type == 'boolean'
