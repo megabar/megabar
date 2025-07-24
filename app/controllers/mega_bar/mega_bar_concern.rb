@@ -59,7 +59,11 @@ module MegaBar
             param_hash[:action] = "index"
           end
           param_hash[:only_path] = true
-          format.html { redirect_to url_for(param_hash), notice: "It was successfully created." }
+          # Check for CCCUX setup message
+          notice_message = @mega_instance.respond_to?(:cccux_setup_message) && @mega_instance.cccux_setup_message ? 
+                          @mega_instance.cccux_setup_message : 
+                          "It was successfully created."
+          format.html { redirect_to url_for(param_hash), notice: notice_message }
           format.json { render action: "show", status: :created, location: @mega_instance }
         else
           format.html {

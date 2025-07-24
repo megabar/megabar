@@ -169,6 +169,9 @@ module MegaBar
       
       # Trigger model reloading for CCCUX discovery
       reload_new_model_for_discovery
+      
+      # Create CCCUX permissions and assign to Mega Role if CCCUX is available
+      create_cccux_permissions_for_model
     end
 
     def pos
@@ -358,6 +361,80 @@ module MegaBar
       rescue => e
         logger.error("❌ Migration verification failed: #{e.message}")
       end
+    end
+
+    def create_cccux_permissions_for_model
+      # Skip if CCCUX is not available
+      return unless defined?(Cccux::Ability)
+      
+      logger.info("🔐 Creating CCCUX permissions for #{self.classname}...")
+      
+      begin
+        # Get the model class name - only add :: if there's actually a module
+        model_class_name = if self.modyule && !self.modyule.empty?
+          "#{self.modyule}::#{self.classname}"
+        else
+          self.classname
+        end
+        
+        logger.info("📝 Using model class name: #{model_class_name}")
+        
+        # Create CRUD permissions for the model
+        crud_actions = ['read', 'create', 'update', 'destroy']
+        permissions_created = []
+        
+        crud_actions.each do |action|
+          permission = Cccux::AbilityPermission.find_or_create_by(
+            subject: model_class_name,
+            action: action
+          )
+          permissions_created << permission
+          logger.info("✅ Created permission: #{action} #{model_class_name}")
+        end
+        
+        # Find or create the Mega Role
+        mega_role = Cccux::Role.find_or_create_by(name: 'Mega Role') do |role|
+          role.description = 'Full access to all MegaBar functionality'
+          logger.info("✅ Created Mega Role")
+        end
+        
+        logger.info("🔍 Found Mega Role: #{mega_role.id}")
+        
+        # Add all permissions to the Mega Role
+        permissions_created.each do |permission|
+          role_ability = Cccux::RoleAbility.find_or_create_by(
+            role: mega_role,
+            ability_permission: permission,
+            context: 'global',
+            owned: false
+          )
+          if role_ability.persisted?
+            logger.info("✅ Added #{permission.action} permission to Mega Role")
+          else
+            logger.error("❌ Failed to add #{permission.action} permission to Mega Role: #{role_ability.errors.full_messages.join(', ')}")
+          end
+        end
+        
+        # Store message for display in controller
+        @cccux_setup_message = "🎉 Model '#{self.name}' created successfully! " +
+                              "Only users with 'Mega Role' can access it. " +
+                              "Visit <a href='/cccux/roles'>CCCUX Roles page</a> to add these permissions to other roles."
+        
+        # Try to add flash message if we're in a controller context
+        if defined?(flash)
+          flash[:notice] = @cccux_setup_message
+        end
+        
+        logger.info("✅ CCCUX permissions setup completed for #{self.classname}")
+        
+      rescue => e
+        logger.error("❌ Failed to create CCCUX permissions for #{self.classname}: #{e.message}")
+        logger.error(e.backtrace.join("\n"))
+      end
+    end
+
+    def cccux_setup_message
+      @cccux_setup_message
     end
   end
 end
