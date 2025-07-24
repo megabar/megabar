@@ -43,25 +43,54 @@ module MegaBar
     end
     
     def generate_migration
-      # Check if the table already exists
-      # In test environment, skip the table check since we're in the engine context
-      if Rails.env.test?
-        # Generate migration in test-specific directory
-        migration_name = "create_#{the_table_name}"
-        migration_file = generate_migration_file(migration_name)
-        @@notices << "Migration created in test directory: #{migration_file}"
-      else
-        # In production, check if table exists
+      # Check if the table already exists (skip in test environment to avoid connection issues)
+      begin
         if ActiveRecord::Base.connection.table_exists?(the_table_name)
           @@notices << "Table #{the_table_name} already exists, skipping migration creation"
           return
         end
-        
-        if the_module_name
-          generate 'migration create_' + the_table_name
-          @@notices <<  "You will have to copy your Migrations manually over to the megabar gem"
+      rescue => e
+        # In test environment, connection might not be available, so skip the check
+        if Rails.env.test?
+          @@notices << "Skipping table existence check in test environment: #{e.message}"
         else
+          raise e
+        end
+      end
+      
+      # In test environment, generate migration in test-specific directory
+      if Rails.env.test?
+        migration_name = "create_#{the_table_name}"
+        migration_file = generate_migration_file(migration_name)
+        @@notices << "Migration created in test directory: #{migration_file}"
+      else
+        # In production, try multiple approaches to generate migration
+        migration_created = false
+        
+        # Method 1: Try Rails generator
+        begin
           generate 'migration create_' + the_table_name
+          migration_created = true
+          @@notices << "Migration created via Rails generator"
+        rescue => e
+          @@notices << "Rails generator failed: #{e.message}"
+        end
+        
+        # Method 2: If Rails generator failed, create migration manually
+        unless migration_created
+          begin
+            migration_name = "create_#{the_table_name}"
+            migration_file = generate_migration_file_production(migration_name)
+            @@notices << "Migration created manually: #{migration_file}"
+            migration_created = true
+          rescue => e
+            @@notices << "Manual migration creation failed: #{e.message}"
+          end
+        end
+        
+        # Method 3: If module name exists, note that manual copying might be needed
+        if the_module_name && migration_created
+          @@notices << "You may need to copy migrations manually to the megabar gem"
         end
       end
     end
@@ -198,6 +227,37 @@ module MegaBar
       timestamp = Time.now.strftime('%Y%m%d%H%M%S')
       migration_filename = "#{timestamp}_#{migration_name}.rb"
       migration_path = File.expand_path('../../../../../spec/internal/db/migrate', __FILE__)
+      
+      # Ensure the directory exists
+      FileUtils.mkdir_p(migration_path)
+      
+      # Create the migration file
+      migration_file = File.join(migration_path, migration_filename)
+      
+      # Generate migration content
+      migration_content = <<~RUBY
+        class #{migration_name.classify} < ActiveRecord::Migration[#{Rails.version.split('.')[0..1].join('.')}]
+          def up
+            create_table :#{the_table_name} do |t|
+              t.timestamps
+            end
+          end
+          
+          def down
+            drop_table :#{the_table_name}
+          end
+        end
+      RUBY
+      
+      File.write(migration_file, migration_content)
+      migration_file
+    end
+
+    def generate_migration_file_production(migration_name)
+      # Create migration in production db/migrate directory
+      timestamp = Time.now.strftime('%Y%m%d%H%M%S')
+      migration_filename = "#{timestamp}_#{migration_name}.rb"
+      migration_path = Rails.root.join('db', 'migrate')
       
       # Ensure the directory exists
       FileUtils.mkdir_p(migration_path)

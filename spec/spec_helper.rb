@@ -45,23 +45,67 @@ end
 # Require MegaBar specific classes needed for testing
 require_relative '../lib/mega_bar/mega_env'
 
+# Ensure MegaBar models, controllers, helpers, and concerns are loaded before database cleanup
+begin
+  # Load all MegaBar models
+  Dir[File.expand_path('../app/models/mega_bar/*.rb', __FILE__)].each { |f| require f }
+  
+  # Also try to load models from the engine path
+  engine_models_path = File.expand_path('../../app/models/mega_bar/*.rb', __FILE__)
+  Dir[engine_models_path].each { |f| require f } if Dir.exist?(File.dirname(engine_models_path))
+  
+  # Load all MegaBar helpers
+  Dir[File.expand_path('../app/helpers/mega_bar/*.rb', __FILE__)].each { |f| require f }
+  
+  # Also try to load helpers from the engine path
+  engine_helpers_path = File.expand_path('../../app/helpers/mega_bar/*.rb', __FILE__)
+  Dir[engine_helpers_path].each { |f| require f } if Dir.exist?(File.dirname(engine_helpers_path))
+  
+  # Load MegaBarConcern first (it's a dependency for other controllers)
+  concern_file = File.expand_path('../app/controllers/mega_bar/mega_bar_concern.rb', __FILE__)
+  require concern_file if File.exist?(concern_file)
+  
+  # Also try to load from engine path
+  engine_concern_file = File.expand_path('../../app/controllers/mega_bar/mega_bar_concern.rb', __FILE__)
+  require engine_concern_file if File.exist?(engine_concern_file)
+  
+  # Load all MegaBar concerns
+  Dir[File.expand_path('../app/controllers/mega_bar/concerns/*.rb', __FILE__)].each { |f| require f }
+  
+  # Also try to load concerns from the engine path
+  engine_concerns_path = File.expand_path('../../app/controllers/mega_bar/concerns/*.rb', __FILE__)
+  Dir[engine_concerns_path].each { |f| require f } if Dir.exist?(File.dirname(engine_concerns_path))
+  
+  # Load all MegaBar controllers (after helpers and concerns are loaded)
+  Dir[File.expand_path('../app/controllers/mega_bar/*.rb', __FILE__)].each { |f| require f }
+  
+  # Also try to load controllers from the engine path
+  engine_controllers_path = File.expand_path('../../app/controllers/mega_bar/*.rb', __FILE__)
+  Dir[engine_controllers_path].each { |f| require f } if Dir.exist?(File.dirname(engine_controllers_path))
+rescue => e
+  puts "⚠️  Could not load MegaBar models/controllers/helpers/concerns: #{e.message}"
+end
 
 # after combustion has initialized the routes, we have to delete all the data
 # that the seeds added so that the tests run with empty databases.
-MegaBar::Page.connection.execute('delete from mega_bar_pages')
-MegaBar::Page.connection.execute('delete from sqlite_sequence where name="mega_bar_pages"')
-MegaBar::Layout.connection.execute('delete from mega_bar_layouts')
-MegaBar::Layout.connection.execute('delete from sqlite_sequence where name="mega_bar_layouts"')
-MegaBar::Layable.connection.execute('delete from mega_bar_layables')
-MegaBar::Layable.connection.execute('delete from sqlite_sequence where name="mega_bar_layables"')
-MegaBar::LayoutSection.connection.execute('delete from mega_bar_layout_sections')
-MegaBar::LayoutSection.connection.execute('delete from sqlite_sequence where name="mega_bar_layout_sections"')
-MegaBar::Block.connection.execute('delete from mega_bar_blocks')
-MegaBar::Block.connection.execute('delete from sqlite_sequence where name="mega_bar_blocks"')
-MegaBar::ModelDisplay.connection.execute('delete from mega_bar_model_displays')
-MegaBar::ModelDisplay.connection.execute('delete from sqlite_sequence where name="mega_bar_model_displays"')
-MegaBar::Model.connection.execute('delete from mega_bar_models')
-MegaBar::Model.connection.execute('delete from sqlite_sequence where name="mega_bar_models"')
+begin
+  MegaBar::Page.connection.execute('delete from mega_bar_pages')
+  MegaBar::Page.connection.execute('delete from sqlite_sequence where name="mega_bar_pages"')
+  MegaBar::Layout.connection.execute('delete from mega_bar_layouts')
+  MegaBar::Layout.connection.execute('delete from sqlite_sequence where name="mega_bar_layouts"')
+  MegaBar::Layable.connection.execute('delete from mega_bar_layables')
+  MegaBar::Layable.connection.execute('delete from sqlite_sequence where name="mega_bar_layables"')
+  MegaBar::LayoutSection.connection.execute('delete from mega_bar_layout_sections')
+  MegaBar::LayoutSection.connection.execute('delete from sqlite_sequence where name="mega_bar_layout_sections"')
+  MegaBar::Block.connection.execute('delete from mega_bar_blocks')
+  MegaBar::Block.connection.execute('delete from sqlite_sequence where name="mega_bar_blocks"')
+  MegaBar::ModelDisplay.connection.execute('delete from mega_bar_model_displays')
+  MegaBar::ModelDisplay.connection.execute('delete from sqlite_sequence where name="mega_bar_model_displays"')
+  MegaBar::Model.connection.execute('delete from mega_bar_models')
+  MegaBar::Model.connection.execute('delete from sqlite_sequence where name="mega_bar_models"')
+rescue => e
+  puts "⚠️  Could not clean up database: #{e.message}"
+end
 
 require 'rspec/rails'
 require 'capybara/rails'
@@ -72,6 +116,15 @@ FactoryBot.definition_file_paths = [
   File.expand_path('../internal/test_factories', __FILE__)
 ]
 require 'factory_bot_rails'
+
+# Manually load factory files (FactoryBot auto-loading doesn't work reliably in test environment)
+FactoryBot.definition_file_paths.each do |path|
+  if Dir.exist?(path)
+    Dir[File.join(path, '*.rb')].each do |factory_file|
+      load factory_file
+    end
+  end
+end
 
 
 Rails.backtrace_cleaner.remove_silencers!

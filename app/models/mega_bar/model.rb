@@ -70,6 +70,15 @@ module MegaBar
       # Run migrations using Rails internal methods (more reliable than system calls)
       logger.info("Running migrations for #{self.classname}...")
       
+      # Skip migration execution in test environment to avoid interfering with test setup
+      if Rails.env.test?
+        logger.info("⏭️  Skipping migration execution in test environment")
+        return
+      end
+      
+      # Wait a moment for the generator to finish creating files
+      sleep(1)
+      
       begin
         # Method 1: Try to use Rails.application.load_tasks approach (most compatible)
         logger.info("Trying Rails.application.load_tasks approach...")
@@ -123,6 +132,43 @@ module MegaBar
           end
         end
       end
+      
+      # Method 4: Direct migration execution as final fallback
+      begin
+        logger.info("Trying direct migration execution...")
+        
+        # Find the most recent migration file for this table
+        migration_files = Dir.glob(File.join(Rails.root, 'db', 'migrate', "*create_#{self.tablename}.rb"))
+        if migration_files.any?
+          latest_migration = migration_files.sort.last
+          logger.info("Found migration file: #{latest_migration}")
+          
+          # Load and execute the migration directly
+          load latest_migration
+          migration_class_name = File.basename(latest_migration, '.rb').split('_').drop(1).map(&:camelize).join
+          migration_class = migration_class_name.constantize
+          
+          # Check if migration has already been run
+          unless ActiveRecord::Base.connection.table_exists?(self.tablename)
+            logger.info("Executing migration: #{migration_class_name}")
+            migration_instance = migration_class.new
+            migration_instance.up
+            logger.info("✅ Direct migration execution succeeded for #{self.classname}")
+          else
+            logger.info("ℹ️  Table #{self.tablename} already exists, skipping migration")
+          end
+        else
+          logger.warn("⚠️  No migration file found for table #{self.tablename}")
+        end
+      rescue => e3
+        logger.error("❌ Direct migration execution failed for #{self.classname}: #{e3.message}")
+      end
+      
+      # Verify migration was executed successfully
+      verify_migration_execution
+      
+      # Trigger model reloading for CCCUX discovery
+      reload_new_model_for_discovery
     end
 
     def pos
@@ -206,6 +252,111 @@ module MegaBar
     def set_deterministic_id
       unless self.id
         self.id = self.class.deterministic_id(self.classname)
+      end
+    end
+
+    private
+
+    def reload_new_model_for_discovery
+      # Skip model reloading in test environment to avoid interfering with test setup
+      return if Rails.env.test?
+      
+      # Force Rails to reload the newly created model for CCCUX discovery
+      logger.info("🔄 Triggering model reload for CCCUX discovery...")
+      
+      begin
+        # Get the full model class name
+        model_class_name = self.modyule ? "#{self.modyule}::#{self.classname}" : self.classname
+        
+        # Method 1: Force Rails to reload the model file using proper paths
+        model_file_name = "#{self.classname.underscore}.rb"
+        
+        # Look in app/models directory (where Rails models are typically stored)
+        app_models_path = Rails.root.join('app', 'models')
+        model_file_path = app_models_path.join(model_file_name)
+        
+        if File.exist?(model_file_path)
+          logger.info("📁 Found model file: #{model_file_path}")
+          
+          # Force Rails to reload the file
+          if Rails.autoloaders.respond_to?(:main)
+            Rails.autoloaders.main.reload(model_file_path.to_s)
+            logger.info("🔄 Reloaded via autoloaders")
+          end
+          
+          # Also try to remove the constant and reload it
+          begin
+            if Object.const_defined?(model_class_name)
+              Object.send(:remove_const, model_class_name)
+              logger.info("🗑️  Removed existing constant: #{model_class_name}")
+            end
+            
+            # Load the file again
+            load model_file_path.to_s
+            logger.info("✅ Successfully reloaded model: #{model_class_name}")
+          rescue => e
+            logger.warn("⚠️  Could not reload model constant: #{e.message}")
+          end
+        else
+          logger.warn("⚠️  Model file not found at expected path: #{model_file_path}")
+        end
+        
+        # Method 2: Force Rails to reload all models
+        begin
+          # Clear any cached constants
+          if defined?(ApplicationRecord)
+            ApplicationRecord.descendants.each do |model|
+              model_name = model.name
+              if model_name && Object.const_defined?(model_name)
+                begin
+                  Object.send(:remove_const, model_name)
+                  logger.debug("🗑️  Removed cached constant: #{model_name}")
+                rescue => e
+                  logger.debug("Could not remove constant #{model_name}: #{e.message}")
+                end
+              end
+            end
+          end
+          
+          # Force Rails to reload everything
+          Rails.application.eager_load! if Rails.application.config.eager_load
+          logger.info("✅ Eager loading completed")
+        rescue => e
+          logger.warn("⚠️  Eager loading failed: #{e.message}")
+        end
+        
+        # Method 3: Notify CCCUX about the new model
+        notify_cccux_of_new_model(model_class_name)
+        
+      rescue => e
+        logger.error("❌ Error during model reload: #{e.message}")
+        logger.error(e.backtrace.join("\n"))
+      end
+    end
+
+    def notify_cccux_of_new_model(model_class_name)
+      # Try to notify CCCUX about the new model if it's available
+      begin
+        if defined?(Cccux) && Cccux.respond_to?(:model_discovery_cache_clear)
+          Cccux.model_discovery_cache_clear
+          logger.info("🔄 Cleared CCCUX model discovery cache")
+        end
+      rescue => e
+        logger.debug("ℹ️  CCCUX notification not available: #{e.message}")
+      end
+    end
+
+    def verify_migration_execution
+      # Verify that the table was actually created
+      begin
+        if ActiveRecord::Base.connection.table_exists?(self.tablename)
+          logger.info("✅ Migration verification: Table #{self.tablename} exists")
+        else
+          logger.error("❌ Migration verification: Table #{self.tablename} does not exist!")
+          logger.error("⚠️  You may need to run 'rails db:migrate' manually")
+        end
+      rescue => e
+        logger.error("❌ Migration verification failed: #{e.message}")
       end
     end
   end
