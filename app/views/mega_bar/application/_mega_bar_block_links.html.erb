@@ -1,14 +1,22 @@
 <% admin_text = block_admin? ? 'Turn off Admin for ' : 'Administer ' %>
 <% if @block.id.present?%>
-  <%= link_if_can_create @klass, 'Create New ' + @mega_model_properties.name.singularize, link_path('new') %>
-  <%= ' | '   %>
+  <% links = [] %>
+  <% create_link = link_if_can_create @klass, 'Create New ' + @mega_model_properties.name.singularize, link_path('new') %>
+  <% links << create_link if create_link.present? %>
+  
   <% if ['show'].include? params[:action] %>
-    <%= link_if_can_edit @klass, 'Edit', link_path('edit', @mega_instance[0].id)  %>
-    <%= ' | '  %>
-    <%= link_if_can_show @klass, 'Show', link_path('show', @mega_instance[0].id)  %>
-    <%= ' | ' %>
-    <%= link_if_can_index @klass, "Index", link_path('index')  %>
-    <%= ' | ' %>
+    <% edit_link = link_if_can_edit @klass, 'Edit', link_path('edit', @mega_instance[0].id) %>
+    <% links << edit_link if edit_link.present? %>
+    
+    <% show_link = link_if_can_show @klass, 'Show', link_path('show', @mega_instance[0].id) %>
+    <% links << show_link if show_link.present? %>
+    
+    <% index_link = link_if_can_index @klass, "Index", link_path('index') %>
+    <% links << index_link if index_link.present? %>
   <% end %>
-  <%= link_to admin_text + @block.name + ' Block', link_path('administer_block', @block.id.to_s), class: 'admin-links'  %>
+  
+  <% admin_link = link_to admin_text + @block.name + ' Block', link_path('administer_block', @block.id.to_s), class: 'admin-links' if has_mega_role? %>
+  <% links << admin_link if admin_link.present? %>
+  
+  <%= links.join(' | ').html_safe %>
 <% end%>

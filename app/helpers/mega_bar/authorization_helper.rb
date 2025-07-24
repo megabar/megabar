@@ -79,5 +79,11 @@ module MegaBar
     def can_destroy?(subject)
       can_perform_action?(:destroy, subject)
     end
+
+    # Check if user has Mega Role for admin access
+    def has_mega_role?
+      return false unless defined?(Devise) && user_signed_in?
+      current_user.has_role?('Mega Role')
+    end
   end
 end 
