@@ -102,8 +102,13 @@ module MegaBar
       return false unless defined?(User)
       
       # Check if there's only one user
-      user_count = User.count
-      return false unless user_count == 1
+      begin
+        user_count = User.count
+        return false unless user_count == 1
+      rescue => e
+        # If User class isn't fully loaded yet, return false
+        return false
+      end
       
       # Check if CCCUX Role Manager exists
       if defined?(Cccux::Role)
