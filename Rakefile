@@ -33,7 +33,7 @@ Bundler::GemHelper.install_tasks
 APP_RAKEFILE = File.expand_path("../spec/dummy/Rakefile", __FILE__)
 load 'rails/tasks/engine.rake'
 Bundler::GemHelper.install_tasks
-Dir[File.join(File.dirname(__FILE__), 'tasks/**/*.rake')].each {|f| load f }
+Dir[File.join(File.dirname(__FILE__), 'lib/tasks/**/*.rake')].each {|f| load f }
 
 begin
   require 'rspec/core'
@@ -43,5 +43,5 @@ rescue LoadError => e
 end
 
 desc "Run all specs in spec directory (excluding plugin specs)"
-RSpec::Core::RakeTask.new(:spec => 'app:db:test:prepare')
+RSpec::Core::RakeTask.new(:spec)
 task :default => :spec

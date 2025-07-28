@@ -76,7 +76,7 @@ namespace :mega_bar do
       dump_model_deterministic(MegaBar::Layable.where(id: mega_bar_layable_ids).order(:id), file)
       dump_model_deterministic(theme_joins(mega_bar_block_ids, mega_bar_layout_ids).order(:id), file)
       dump_model_deterministic(site_joins(mega_bar_block_ids, mega_bar_layout_ids).order(:id), file)
-      dump_model_deterministic(MegaBar::PermissionLevel.all.order(:id), file)
+      # dump_model_deterministic(MegaBar::PermissionLevel.all.order(:id), file)
     end
     
     puts "✅ Deterministic seeds dumped to: #{file_path}"

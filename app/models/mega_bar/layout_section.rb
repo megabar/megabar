@@ -1,6 +1,6 @@
 module MegaBar
   class LayoutSection < ActiveRecord::Base
-    attr_accessor :template_section_id, :model_id, :block_text, :base_name, :new_model_display, :edit_model_display, :index_model_display, :show_model_display
+    attr_accessor :template_section_id, :model_id, :block_text, :base_name, :make_block, :new_model_display, :edit_model_display, :index_model_display, :show_model_display
 
     has_many :layables, dependent: :destroy
     has_many :layouts, through: :layables
@@ -30,10 +30,35 @@ module MegaBar
     end
 
     def create_block_for_section
+      # Only create blocks if make_block is explicitly true (from the page form checkbox)
+      return unless self.make_block
+      
       # path_base:  MegaBar::Page.find(self.page_id).path, # could be added in below. but doesnt look necessary.
-      block_hash = {layout_section_id: self.id, name: self.code_name.humanize + ' Block', actions: 'current', model_id: self.model_id, new_model_display: true, edit_model_display: true, index_model_display: true, show_model_display: true}
-      block_hash = block_hash.merge(html: self.block_text) if self.block_text
-      Block.create(block_hash)
+      
+      # Separate database attributes from attr_accessors
+      db_attributes = {
+        layout_section_id: self.id, 
+        name: self.code_name.humanize + ' Block', 
+        actions: 'current'
+      }
+      db_attributes[:html] = self.block_text if self.block_text
+
+      # Create the block with database attributes only
+      block = Block.new(db_attributes)
+      
+      # Set the attr_accessor attributes if we have a model
+      if self.model_id
+        block.model_id = self.model_id
+        # For model-based pages, create all CRUD displays
+        block.new_model_display = true
+        block.edit_model_display = true
+        block.index_model_display = true
+        block.show_model_display = true
+      end
+      
+      # Save the block (this will trigger callbacks that use the attr_accessors)
+      block.save!
+      block
     end
 
     private

@@ -1,6 +1,7 @@
-module MegaBar 
+module MegaBar
   class LayoutSectionsController < MegaBar::ApplicationController
     include MegaBar::MegaBarConcern
+    include MegaBar::AuthorizationConcern
     
     def get_options
  

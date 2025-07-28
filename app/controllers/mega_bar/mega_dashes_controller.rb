@@ -1,6 +1,7 @@
 module MegaBar 
   class MegaDashesController < MegaBar::ApplicationController
     include MegaBarConcern
+    include MegaBar::AuthorizationConcern
 
     
     def dashboards_init

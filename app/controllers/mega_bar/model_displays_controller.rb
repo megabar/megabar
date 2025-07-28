@@ -1,6 +1,7 @@
 module MegaBar
   class ModelDisplaysController < ApplicationController
     include MegaBarConcern
+    include MegaBar::AuthorizationConcern
 
     def get_options
       @options[:mega_bar_model_displays] =  {

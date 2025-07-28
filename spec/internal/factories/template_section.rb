@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :template_section, class: MegaBar::TemplateSection do
-    template_id {1}
+    association :template
     position {1}
     name {'main'}
     code_name {'main'}

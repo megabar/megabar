@@ -1,6 +1,7 @@
 module MegaBar
   class ModelsController < ApplicationController
     include MegaBarConcern
+    include MegaBar::AuthorizationConcern
 
     def index
       @mega_instance ||= Model.where.not(modyule: 'MegaBar').order(column_sorting)
@@ -22,7 +23,10 @@ module MegaBar
 
     def get_options
       @options[:mega_bar_models] =  {
-        position_parent: MegaBar::Model.all.pluck(:name, :modyule, :classname).map{|a|  [a[1] + ' - ' + a[0], a[1] +'::' +  a[2]] }.unshift(['Position with No Parent', 'pnp']),
+        position_parent: MegaBar::Model.all.pluck(:name, :modyule, :classname).map{|a|  
+          modyule = a[1] || 'No Module'
+          [modyule + ' - ' + a[0], modyule + '::' + a[2]]
+        }.unshift(['Position with No Parent', 'pnp']),
         default_sort_field: Field.by_model(params[:id]).pluck("field, field"),
         make_page: Template.all.pluck("name, id")
             }

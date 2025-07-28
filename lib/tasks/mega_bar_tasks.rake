@@ -44,11 +44,102 @@ namespace :mega_bar do
     # REVOLUTIONARY CHANGE: Use deterministic seed loading instead of old conflict resolution
     Rake::Task['mega_bar:load_deterministic_seeds'].invoke
 
+    # Precompile assets
+    puts "Precompiling MegaBar assets..."
+    begin
+      Rake::Task['assets:precompile'].invoke
+      puts "✅ MegaBar assets precompiled successfully"
+    rescue RuntimeError => e
+      if e.message.include?("Don't know how to build task 'assets:precompile'")
+        puts "⚠️  Assets precompile task not available (this is normal in some contexts)"
+        puts "ℹ️  Assets will be compiled automatically when the server starts"
+      else
+        puts "❌ Error precompiling assets: #{e.message}"
+      end
+    rescue => e
+      puts "❌ Unexpected error during asset precompilation: #{e.message}"
+    end
+
     puts "mounted the engine in the routes file"
     puts 'added mega_bar assets to the pipeline'
     puts " migrated the mega_bar db. "
     puts " and loaded the data with REVOLUTIONARY deterministic IDs!"
     puts "Yer all set!"
+    
+    # Offer CCCUX integration
+    puts ""
+    puts "🔐 CCCUX Authorization Engine Integration"
+    puts "=" * 50
+    puts "Would you like to add CCCUX (Clean CanCan User eXperience) authorization engine?"
+    puts "This will provide:"
+    puts "  ✅ Role-based authorization with CanCanCan"
+    puts "  ✅ User management with Devise integration"
+    puts "  ✅ Admin interface for managing roles and permissions"
+    puts "  ✅ Clean, modern UI for authorization management"
+    puts ""
+    puts "Type 'y' to add CCCUX, or press Enter to skip:"
+    
+    # Get user input
+    response = STDIN.gets.chomp.downcase
+    
+    if response == 'y' || response == 'yes'
+      puts ""
+      puts "🚀 Adding CCCUX authorization engine..."
+      
+      # Check if CCCUX gem is already in Gemfile
+      gemfile_path = Rails.root.join('Gemfile')
+      gemfile_content = File.read(gemfile_path)
+      
+      unless gemfile_content.include?('cccux')
+        puts "📦 Adding CCCUX gem to Gemfile..."
+        
+        # Add CCCUX gem with local path
+        cccux_gem_line = "gem 'cccux', path: '../cccux'"
+        
+        # Add to Gemfile
+        File.open(gemfile_path, 'a') do |f|
+          f.puts ""
+          f.puts "# CCCUX Authorization Engine"
+          f.puts cccux_gem_line
+        end
+        
+        puts "✅ Added CCCUX gem to Gemfile"
+        
+        # Install the gem
+        puts "🔄 Installing CCCUX gem..."
+        system("bundle install")
+        
+        puts "✅ CCCUX gem installed"
+      else
+        puts "ℹ️  CCCUX gem already in Gemfile"
+      end
+      
+      # Run CCCUX setup
+      puts "🔧 Running CCCUX setup..."
+      
+      # Try to run the setup task directly
+      begin
+        system("bundle exec rake cccux:setup")
+        if $?.success?
+          puts ""
+          puts "🎉 Your Rails app now has both MegaBar and CCCUX!"
+          puts "   - MegaBar: Visit /mega-bar for admin interface"
+          puts "   - CCCUX: Visit /cccux for authorization management"
+          puts "   - Sign in with your admin account to access both"
+        else
+          puts ""
+          puts "🎉 Your Rails app now has MegaBar!"
+          puts "   - MegaBar: Visit /mega-bar for admin interface"
+          puts "   - CCCUX: Will be available after setup completion"
+        end
+      rescue => e
+        puts "❌ CCCUX setup failed: #{e.message}"
+        puts "💡 You can run 'bundle exec rake cccux:setup' manually later"
+      end
+    else
+      puts "ℹ️  Skipping CCCUX integration"
+      puts "💡 You can add CCCUX later by running: rails cccux:setup"
+    end
   end
 
   # LEGACY TASK - REPLACED BY DETERMINISTIC APPROACH
@@ -790,10 +881,6 @@ namespace :mega_bar do
     # purposefully blank
   end
 
-  def fix_permission_levels(c)
-    # purposefully blank
-  end
-
   def get_mega_classes
     mega_classes = []
     mega_classes << {tmp_class: MegaBar::TmpModel, perm_class: MegaBar::Model, unique: [:classname], resolver: 'fix_model', condition: 'tmp.classname == perm.classname'}
@@ -830,7 +917,6 @@ namespace :mega_bar do
     mega_classes << {tmp_class: MegaBar::TmpLayable, perm_class: MegaBar::Layable, unique: [:layout_id, :layout_section_id], resolver: 'fix_joins', condition: 'tmp.layout_id == perm.layout_id && tmp.layout_section_id == perm.layout_section_id'}
     mega_classes << {tmp_class: MegaBar::TmpThemeJoin, perm_class: MegaBar::ThemeJoin, unique: [:theme_id, :themeable_type, :themeable_id], resolver: 'fix_joins', condition: 'tmp.theme_id == perm.theme_id && tmp.themeable_type == perm.themeable_type && tmp.themeable_id = perm.themeable_id'}
     mega_classes << {tmp_class: MegaBar::TmpSiteJoin, perm_class: MegaBar::SiteJoin, unique: [:site_id, :siteable_type, :siteable_id], resolver: 'fix_joins', condition: 'tmp.site_id == perm.site_id && tmp.siteable_type == perm.siteable_type && tmp.siteable_id = perm.siteable_id'}
-    mega_classes << {tmp_class: MegaBar::TmpPermissionLevel, perm_class: MegaBar::PermissionLevel, unique: [:level_name], resolver: 'fix_permission_levels', condition: 'tmp.level_name == perm.level_name'}
     return mega_classes
   end
 
@@ -895,7 +981,6 @@ namespace :mega_bar do
     layables = MegaBar::Layable.where(id: mega_bar_layable_ids).order(:id)
     theme_joins = theme_joins(mega_bar_block_ids, mega_bar_layout_ids).order(:id)
     site_joins = site_joins(mega_bar_block_ids, mega_bar_layout_ids).order(:id)
-    permission_levels = MegaBar::PermissionLevel.all.order(:id)
 
     # Then do all the dumps
     SeedDump.dump(themes, {file: seed_file, append: true})
@@ -930,7 +1015,6 @@ namespace :mega_bar do
     SeedDump.dump(layables, {file: seed_file, append: true})
     SeedDump.dump(theme_joins, {file: seed_file, append: true})
     SeedDump.dump(site_joins, {file: seed_file, append: true})
-    SeedDump.dump(permission_levels, {file: seed_file, append: true})
 
     File.open(Rails.root.join('db', 'mega_bar.seeds.rb'), "r+") do |file|
       #note, this will change your data! If you wanted to store a string like MegaBar::Whatever in the db, it'll be changed here and you have to fix that in the data_load.

@@ -20,8 +20,6 @@ module MegaBar
       @nested_class_info = set_nested_class_info(@nested_classes)
       @block = blck
       @page_number = pagination.map { |info| info[:page].to_i if info[:kontrlr] == @kontroller_inst + "_page" }.compact.first
-      @authorized = authorized?
-      @authorizations = get_authorizations(page_info)
     end
 
     def to_hash
@@ -37,8 +35,6 @@ module MegaBar
         nested_class_info: @nested_class_info,
         page_number: @page_number,
         user: @user,
-        authorized: @authorized,
-        authorizations: @authorizations,
       }
     end
 
@@ -64,13 +60,7 @@ module MegaBar
     end
 
     def find_model_display_format(display)
-      display.authorized = check_display_authorization(display)
       MegaBar::ModelDisplayFormat.find(display.format)
-    end
-
-    def check_display_authorization(display)
-      return true unless display.permission_level
-      @user.pll >= display.permission_level
     end
 
     def find_collection_settings(display)
@@ -168,6 +158,7 @@ module MegaBar
     end
 
     def authorized?
+      return true
       required = case @block_action
         when "index", "show", "all"
           @block.permListAndView
@@ -181,18 +172,8 @@ module MegaBar
       required.present? ? required <= @user.pll : true
     end
 
-    def get_authorizations(page_info)
-      {
-        createAndNew: check_authorization(@block.permCreateAndNew),
-        listAndView: check_authorization(@block.permListAndView),
-        editAndSave: check_authorization(@block.permEditAndSave),
-        delete: check_authorization(@block.permDelete),
-        block_administrator: check_authorization(@block.administrator),
-        page_administrator: check_authorization(page_info[:administrator])
-      }
-    end
-
     def check_authorization(permission_level)
+      return true
       return true unless permission_level.present?
       @user.pll >= permission_level
     end

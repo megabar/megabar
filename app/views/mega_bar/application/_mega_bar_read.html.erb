@@ -2,9 +2,10 @@
 <div class='model_display_instructions'><%= best_in_place @mega_display[:model_display], :instructions, url: @model_display_path, as: :textarea %> </div>
 <%= form_tag @mega_display[:form_path] + '/filter' do  %>
   <<%=@mf.app_wrapper.html_safe%> class="<%=model_display_classnames%>">
-    <% if @filter_text && might_filter? %>
-      Current Filters: <%= @filter_text.join(', ') %><br>
-      <%= submit_tag 'clear_filters' %>
+    <% if ((@filter_text && @filter_text.any?) || (session[:mega_filters] && session[:mega_filters][@kontroller_inst.to_sym])) && might_filter? %>
+      <% if @filter_text && @filter_text.any? %>
+        Current Filters: <%= @filter_text.join(', ') %><br>
+      <% end %>
     <% end %>
     <% if might_paginate?('top') %>
       <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page", theme: @mega_display[:collection_settings]&.pagination_theme %>
@@ -56,13 +57,9 @@
           <% end %>
         <% end %>
         <% if @mf.name == 'GridHtml' %>
-          <td><%= link_to 'Show&nbsp;'.html_safe, link_path('show', mega_record.id) %></td>
-          <%if @authorizations[:editAndSave] %>
-            <td><%= link_to 'Edit&nbsp;'.html_safe, link_path('edit', mega_record.id) %></td>
-          <% end %>
-          <%if @authorizations[:delete] %>
-            <td><%= link_to 'Destroy&nbsp;'.html_safe, mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-          <% end %>
+          <td><%= link_if_can_show @klass, 'Show&nbsp;'.html_safe, link_path('show', mega_record.id) %></td>
+          <td><%= link_if_can_edit @klass, 'Edit&nbsp;'.html_safe, link_path('edit', mega_record.id) %></td>
+          <td><%= link_if_can_destroy @klass, 'Destroy&nbsp;'.html_safe, mega_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
           <% if @mega_model_properties.position_parent.present?
       # not sure why this was part of the above condition. will leave it for now. && @nested_ids.map{|nid| true if nid.key?((@mega_model_properties.position_parent.split("::").last.underscore.downcase + "_id")) }.first 
        %>
@@ -94,7 +91,14 @@
           <% end %>
         </td>
       <% end %>
-      <td><%= submit_tag 'Filter' %></td>
+      <td><%= submit_tag 'Filter', name: 'apply_filters' %></td>
+    </tr>
+  <% end %>
+  <% if ((@filter_text && @filter_text.any?) || (session[:mega_filters] && session[:mega_filters][@kontroller_inst.to_sym])) && might_filter? %>
+    <tr>
+      <td colspan="<%= @mega_display[:displayable_fields].length + 1 %>">
+        <%= submit_tag 'clear_filters', name: 'clear_filters' %>
+      </td>
     </tr>
   <% end %>
 </<%=@mf.app_wrapper_end.html_safe%>>

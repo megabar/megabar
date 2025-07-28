@@ -82,13 +82,26 @@ module MegaBar
     def pre_render
     end
     def filter_contains
-      filterr = text_field_tag(param_from_tablename(@mega_model_properties, @displayable_field[:field].tablename) + "[" + @displayable_field[:field].field + "___filter]", '', size: 15 )
-
+      # Get current filter value from session
+      current_value = ''
+      if session[:mega_filters] && session[:mega_filters][@kontroller_inst.to_sym]
+        filters = session[:mega_filters][@kontroller_inst.to_sym]
+        if filters['contains']
+          filters['contains'].each do |filter_hash|
+            if filter_hash[@displayable_field[:field].field]
+              current_value = filter_hash[@displayable_field[:field].field]
+              break
+            end
+          end
+        end
+      end
+      
+      filterr = text_field_tag(param_from_tablename(@mega_model_properties, @displayable_field[:field].tablename) + "[" + @displayable_field[:field].field + "___filter]", current_value, size: 15 )
     end
 
     def model_display_help_links
       links = []
-      styleClass = @mega_display[:model_display].model.mega_model == 'mega' ? 'megaSetting' : ''
+      styleClass = @mega_display[:model_display].model.mega_model == 'mega' ? 'admin-links' : ''
       links << ['/mega-bar/model_displays/' + @mega_display[:model_display].id.to_s  + '?return_to=' + request.env['PATH_INFO'], 'Field Displays for the "' + @mega_display[:model_display].header.to_s +  '" model display']
       # links << ['/mega-bar/model_displays/' + @mega_display[:model_display].id.to_s  + '/edit' , 'Edit Model Display']
       links.map{ |l| link_to l[1], l[0], target: :_blank, class: styleClass}.join(' | ')
@@ -106,7 +119,10 @@ module MegaBar
     end
     def layout_help_links
       links = []
-      links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s  + '/layouts/' + @mega_layout.id.to_s  + '?return_to=' + request.env['PATH_INFO'], 'Layout Settings'] unless @mega_page.blank?
+      # Only show Layout Settings link if user has admin permissions and is administering the page
+      if defined?(Devise) && user_signed_in? && current_user.has_role?('Mega Role') && session[:admin_pages]&.include?(@mega_page[:page_id].to_s)
+        links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s  + '/layouts/' + @mega_layout.id.to_s  + '?return_to=' + request.env['PATH_INFO'], 'Layout Settings'] unless @mega_page.blank?
+      end
       # links << ['/mega-bar/layouts/' + @mega_layout.id.to_s + '/edit', 'Edit Layout']
       links.map{ |l| link_to l[1], l[0], target: :_blank}.join(' | ')
     end
@@ -115,7 +131,7 @@ module MegaBar
       styleClass = @mega_page[:page_path].starts_with?('/mega-bar/') ? 'megaSetting' : ''
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '?return_to=' + request.env['PATH_INFO'], 'Layouts on the "' + @mega_page[:name] + '" Page']
       links << ['/mega-bar/pages/' + @mega_page[:page_id].to_s + '/edit/', 'Edit Page']
-      links.map{ |l| link_to l[1], l[0], target: :_blank, class: styleClass}.join(' | ')
+      links.map{ |l| link_to l[1], l[0], target: :_blank, class: "#{styleClass} admin-links"}.join(' <span class="admin-links">|</span> ')
     end
     def field_help_links(field)
       links = []
@@ -131,20 +147,20 @@ module MegaBar
       links.map{ |l| link_to l[1], l[0], target: :_blank}.join(' | ')
     end
     def reorder_up(field, direction)
-      return '' unless @authorizations[:block_administrator]
+      # return '' unless @authorizations[:block_administrator]
       return '' if @mega_display[:displayable_fields].first[:field_display].position == field[:field_display].position
       links = []
       arrow = direction == 'left' ? '<-' : '^'
       links << ["/mega-bar/field_displays/move/#{field[:field_display].id}?method=move_higher&return_to=" + request.env['PATH_INFO'], arrow]
-      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ') 
+      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin-links'}}.join(' | ') 
     end
     def reorder_down(field, direction)
-      return '' unless @authorizations[:block_administrator]
+      # return '' unless @authorizations[:block_administrator]
       return '' if @mega_display[:displayable_fields].last[:field_display].position == field[:field_display].position
       links = []
       arrow = direction == 'right' ? '->' : 'v'
       links << ["/mega-bar/field_displays/move/#{field[:field_display].id}?method=move_lower&return_to=" + request.env['PATH_INFO'] , arrow]
-      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
+      links.map{ |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin-links'}}.join(' | ')
     end
 
     def reorder_block_up(block)
@@ -153,7 +169,7 @@ module MegaBar
       links = []
       arrow = '^'
       links << ["/mega-bar/blocks/move/#{block.id}?method=move_higher&return_to=" + request.env['PATH_INFO'] , arrow]
-      links.map { |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
+      links.map { |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin-links'}}.join(' | ')
     end
 
     def reorder_block_down(block)
@@ -162,7 +178,7 @@ module MegaBar
       links = []
       arrow =  'v'
       links << ["/mega-bar/blocks/move/#{block.id}?method=move_lower&return_to=" + request.env['PATH_INFO'] , arrow]
-      links.map { |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin_links'}}.join(' | ')
+      links.map { |l| link_to l[1], l[0], {data: { turbolinks: false }, class: 'admin-links'}}.join(' | ')
     end
 
     def data_format_locals(mega_record, displayable_field, value=nil, mega_bar=nil?)
@@ -203,6 +219,8 @@ module MegaBar
     end
 
     def block_admin?
+      return false unless defined?(Devise) && user_signed_in?
+      current_user.has_role?('Mega Role')
       session[:admin_blocks].include?(@block.id.to_s)
     end
 

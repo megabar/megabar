@@ -1,6 +1,7 @@
 module MegaBar 
   class BlocksController < MegaBar::ApplicationController
     include MegaBar::MegaBarConcern
+    include MegaBar::AuthorizationConcern
     
     def new
       @layout_id = params["layout_id"] if params["layout_id"]
@@ -42,11 +43,11 @@ module MegaBar
         theme_ids: Theme.all.pluck("name, id"),
         site_ids: Site.all.pluck("name, id"),
         layout_section_id: LayoutSection.all.pluck("code_name, id"),
-        permListAndView: PermissionLevel.all.pluck("level_name, level"),
-        permCreateAndNew: PermissionLevel.all.pluck("level_name, level"),
-        permEditAndSave: PermissionLevel.all.pluck("level_name, level"),
-        permDelete: PermissionLevel.all.pluck("level_name, level"),
-        administrator: PermissionLevel.all.pluck("level_name, level"),
+        # permListAndView: PermissionLevel.all.pluck("level_name, level"),
+        # permCreateAndNew: PermissionLevel.all.pluck("level_name, level"),
+        # permEditAndSave: PermissionLevel.all.pluck("level_name, level"),
+        # permDelete: PermissionLevel.all.pluck("level_name, level"),
+        # administrator: PermissionLevel.all.pluck("level_name, level"),
 
       }
     end

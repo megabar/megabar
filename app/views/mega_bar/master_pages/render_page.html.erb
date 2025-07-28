@@ -5,15 +5,32 @@
     <%# Bootstrap CSS %>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "mega_bar/mega_bar", media: "all", "data-turbo-track": "reload" %>
-    <%= stylesheet_link_tag "mega_bar/mega_block_tabs", media: "all", "data-turbo-track": "reload" %>
-    
+    <%# Include MegaBar stylesheets dynamically %>
+    <% mega_bar_css_files = Dir.glob(Rails.root.join('public', 'assets', 'stylesheets', 'mega_bar', 'mega_bar-*.css')) %>
+    <% if mega_bar_css_files.any? %>
+      <% css_file = mega_bar_css_files.sort_by { |f| File.mtime(f) }.last %>
+      <% filename = File.basename(css_file) %>
+      <link rel="stylesheet" href="/assets/stylesheets/mega_bar/<%= filename %>" media="all" data-turbo-track="reload">
+    <% end %>
+    <% mega_block_tabs_css_files = Dir.glob(Rails.root.join('public', 'assets', 'stylesheets', 'mega_bar', 'mega_block_tabs-*.css')) %>
+    <% if mega_block_tabs_css_files.any? %>
+      <% css_file = mega_block_tabs_css_files.sort_by { |f| File.mtime(f) }.last %>
+      <% filename = File.basename(css_file) %>
+      <link rel="stylesheet" href="/assets/stylesheets/mega_bar/<%= filename %>" media="all" data-turbo-track="reload">
+    <% end %>
+    <%# Include CCCUX engine stylesheet %>
+    <% cccux_css_files = Dir.glob(Rails.root.join('public', 'assets', 'stylesheets', 'cccux', 'application-*.css')) %>
+    <% if cccux_css_files.any? %>
+      <% css_file = cccux_css_files.sort_by { |f| File.mtime(f) }.last %>
+      <% filename = File.basename(css_file) %>
+      <link rel="stylesheet" href="/assets/stylesheets/cccux/<%= filename %>" media="all" data-turbo-track="reload">
+    <% end %>
     <%= csrf_meta_tags %>
     
     <%# jQuery and its plugins - load these first %>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/2.0.1/jquery.pjax.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ujs/1.2.3/rails.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.ujs/1.2.3/rails.min.js"></script>
     
     <%# Bootstrap JS Bundle with Popper %>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
@@ -22,31 +39,54 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
     
     <%# Mega Bar JS %>
-    <%= javascript_include_tag "mega_bar/tabs", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "mega_bar/layout", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "mega_bar/jquery.best_in_place", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "mega_bar/best_in_place", "data-turbo-track": "reload" %>
+    <% mega_bar_js_files = Dir.glob(Rails.root.join('public', 'assets', 'javascripts', 'mega_bar', 'tabs-*.js')) %>
+    <% if mega_bar_js_files.any? %>
+      <% js_file = mega_bar_js_files.sort_by { |f| File.mtime(f) }.last %>
+      <% filename = File.basename(js_file) %>
+      <script src="/assets/javascripts/mega_bar/<%= filename %>" data-turbo-track="reload"></script>
+    <% end %>
+    <% mega_bar_layout_js_files = Dir.glob(Rails.root.join('public', 'assets', 'javascripts', 'mega_bar', 'layout-*.js')) %>
+    <% if mega_bar_layout_js_files.any? %>
+      <% js_file = mega_bar_layout_js_files.sort_by { |f| File.mtime(f) }.last %>
+      <% filename = File.basename(js_file) %>
+      <script src="/assets/javascripts/mega_bar/<%= filename %>" data-turbo-track="reload"></script>
+    <% end %>
+    <% mega_bar_jquery_bip_js_files = Dir.glob(Rails.root.join('public', 'assets', 'javascripts', 'mega_bar', 'jquery.best_in_place-*.js')) %>
+    <% if mega_bar_jquery_bip_js_files.any? %>
+      <% js_file = mega_bar_jquery_bip_js_files.sort_by { |f| File.mtime(f) }.last %>
+      <% filename = File.basename(js_file) %>
+      <script src="/assets/javascripts/mega_bar/<%= filename %>" data-turbo-track="reload"></script>
+    <% end %>
+    <% mega_bar_bip_js_files = Dir.glob(Rails.root.join('public', 'assets', 'javascripts', 'mega_bar', 'best_in_place-*.js')) %>
+    <% if mega_bar_bip_js_files.any? %>
+      <% js_file = mega_bar_bip_js_files.sort_by { |f| File.mtime(f) }.last %>
+      <% filename = File.basename(js_file) %>
+      <script src="/assets/javascripts/mega_bar/<%= filename %>" data-turbo-track="reload"></script>
+    <% end %>
   </head>
   <body class='<%= @page_classes %>'>
     <h1 class='site_name' style=" margin-left: 18px;"><%= @site_name %></h1>
     <nav style='background-color: #eeeeee'>
       <span style=" margin-left: 18px;">
-        <%= link_to 'Home', '/' %> | 
-        <%= link_to 'My Pages', mega_bar.pages_path %> |  
-        <%= link_to 'My Models', mega_bar.models_path %> | 
+        <%= link_to 'Home', '/' %>
+        <%= link_if_can_index(MegaBar::Page, 'My Pages', mega_bar.pages_path, prepend: ' | ') %>
+        <%= link_if_can_index(MegaBar::Model, 'My Models', mega_bar.models_path, prepend: ' | ') %>
       </span>
-      <% @current_user = @current_user  ? @current_user : MegaBar::User.find_by_id(session[:user_id]) if session[:user_id] %>
       <span style="float: right; margin-right: 18px;">
-        <% if @current_user %>
-          Logged in as <%= @current_user.email %> (<%= @current_user.pln %>) |
-          <%= link_to 'Log Out', session_path("current"), method: "delete" %>
-        <% else %>
-          <%= link_to 'Sign Up', mega_bar.new_users_path %> | 
-          <%= link_to 'Log In', "/mega-bar/sessions/new" %>
+         <% if defined?(Devise) && user_signed_in? %>
+           Logged in as <%= current_user.email %>  | 
+           <%= link_to 'Log Out', main_app.destroy_user_session_path, method: :delete, data: { turbo_method: :delete } %> 
+        <% elsif defined?(Devise) %>
+          <% if should_show_admin_login_prompt? %>
+            <span style="color: black;">Log in with your CCCUX admin role</span> | 
+            <%= link_to 'Log In', main_app.new_user_session_path %> 
+          <% else %>
+            <%= link_to 'Sign Up', main_app.new_user_registration_path %> | 
+            <%= link_to 'Log In', main_app.new_user_session_path %> 
+          <% end %>
         <% end %>
       </span>
     </nav>
-    <%# = image_tag "music-warehouse.jpeg" %>
     <% flash.each do |key, msg| %>
       <div id="<%= key %>">
         <p><%= msg %></p>
@@ -58,9 +98,11 @@
     <% end %>
     <%= render partial: 'mega_bar_help_links' , locals: {:links => page_help_links} if administering_page? %>
     <%= page_admin_link %>
-    <nav  style='background-color: #eeeeee'>
+    <%= render partial: 'shared/footer' if File.exist?(Rails.root.join('app', 'views', 'shared', '_footer.html.erb')) %>
+    
+    <nav id="mega_bar_footer_nav" style='background-color: #eeeeee'>
       <%= render "page_nav" %>
-      <div class='admin_links'>To replace this global template, create a file at myapp/app/views/mega_bar/master_pages/render_page.html.erb that contains at least this: <span>&lt;% @page_layouts.each{ |layout| puts "&lt;div class='layout'&gt;#{layout}&lt;/div&gt;"  } %&gt;</span></div>
+      <div class='admin-links'>To replace this global template, create a file at myapp/app/views/mega_bar/master_pages/render_page.html.erb that contains at least this: <span>&lt;% @page_layouts.each{ |layout| puts "&lt;div class='layout'&gt;#{layout}&lt;/div&gt;"  } %&gt;</span></div>
     </nav>
     <div>&nbsp;</div>
   </body>

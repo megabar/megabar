@@ -17,9 +17,11 @@
 
 # Rails.application.config.assets.precompile += %w( mega_bar/mega_bar.css )
 
-# Add additional paths to the asset load paths.
-Rails.application.config.assets.paths << Rails.root.join("app", "assets", "stylesheets")
-Rails.application.config.assets.paths << Rails.root.join("app", "assets", "javascripts")
+# Rails 8+ uses Propshaft by default, not Sprockets
+# Asset configuration is now handled differently in Rails 8
+# If you need asset management, use Propshaft, jsbundling-rails, or importmap-rails
 
-# Add additional assets to the precompile list.
-Rails.application.config.assets.precompile += %w( mega_bar.css mega_bar.js )
+# The following lines are disabled for Rails 8 compatibility:
+# Rails.application.config.assets.paths << Rails.root.join("app", "assets", "stylesheets")
+# Rails.application.config.assets.paths << Rails.root.join("app", "assets", "javascripts")
+# Rails.application.config.assets.precompile += %w( mega_bar.css mega_bar.js )

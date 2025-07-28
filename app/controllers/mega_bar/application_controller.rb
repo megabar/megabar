@@ -1,10 +1,22 @@
 module MegaBar
   class ApplicationController < ActionController::Base
+    
     # Prevent CSRF attacks by raising an exception.
     # For APIs, you may want to use :null_session instead.
     protect_from_forgery with: :exception
     helper_method :sort_column, :sort_direction, :is_displayable, :might_paginate?, :might_filter?
-    before_action :check_authorization
+    
+    # Include MegaBar authorization helpers (works with or without CCCUX)
+    helper MegaBar::AuthorizationHelper
+    
+    # Make authorization methods available to controllers
+    include MegaBar::AuthorizationHelper
+    
+    # Include CCCUX functionality if available
+    include Cccux::ApplicationControllerConcern if defined?(Cccux::ApplicationControllerConcern)
+    
+    # Remove old authorization and replace with CCCUX
+    # before_action :check_authorization
     before_action :set_vars_for_all
     before_action :set_vars_for_displays # , except: [:update, :create, :destroy]
 
@@ -16,15 +28,20 @@ module MegaBar
       permits << 'page'
       permits << 'sort'
       permits << 'direction'
-      MegaBar::Field.by_model(env[:mega_env][:modle_id]).order('data_type desc').each do |att|
-        case att.data_type
-        when 'array'
-          permits << { att.field => [] }
-        else
-          permits << att.field unless ['id', 'created_at', 'updated_at', :id].include?(att)
-          permits << att.field + '___filter'
+      permits << 'id'  # Always permit id parameter
+      permits << 'action'  # Always permit action parameter
+      
+      # Only query fields if we have a valid model ID
+      if env[:mega_env] && env[:mega_env][:modle_id]
+        MegaBar::Field.by_model(env[:mega_env][:modle_id]).order('data_type desc').each do |att|
+          case att.data_type
+          when 'array'
+            permits << { att.field => [] }
+          else
+            permits << att.field unless ['id', 'created_at', 'updated_at', :id].include?(att)
+            permits << att.field + '___filter'
+          end
         end
-
       end
 
       if params[controller_name.singularize]
@@ -38,10 +55,5 @@ module MegaBar
      request.env
     end
 
-    def current_user
-      @current_user || MegaBar::User.find(session[:user_id]) if session[:user_id]
-    end
-
-    helper_method :current_user
-  end
+     end
 end

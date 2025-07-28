@@ -10,5 +10,5 @@ end
 %>
 
 <% options.each do | rad | %>
-  <%= @the_form.radio_button  field.field, rad[1] %> <%= rad[0] %><br />
+  <%= @the_form.radio_button field.field, rad[1], checked: (rad[1].to_s == field.default_value.to_s) %> <%= rad[0] %><br />
 <% end %>

@@ -1,10 +1,17 @@
 module MegaBar
   class MasterPagesController < ActionController::Base
+    
+    # Include MegaBar authorization helpers (works with or without CCCUX)
+    helper MegaBar::AuthorizationHelper
+    
+    # Include CCCUX functionality if available
+    include Cccux::ApplicationControllerConcern if defined?(Cccux::ApplicationControllerConcern)
+    
     def render_page
       @page_layouts = env["mega_final_layouts"]
       @mega_page = env[:mega_page]
       @mega_site = env[:mega_site]
-      @mega_user = env[:mega_user]
+      # @mega_user = env[:mega_user]
       @page_classes = page_classes
       @site_name = site_name
       session[:admin_pages] ||= []
@@ -22,10 +29,21 @@ module MegaBar
       if page_admin?
         admin_text = administering_page? ? "Turn off Admin for " : "Administer "
         if request.env[:mega_env].present?
-          ActionController::Base.helpers.link_to "#{admin_text} #{@mega_page[:name]} Page", "#{request.env[:mega_page][:page_path]}/administer-page/#{@mega_page[:page_id].to_s}"
+          ActionController::Base.helpers.content_tag :div, class: "admin_links" do
+            ActionController::Base.helpers.link_to "#{admin_text} #{@mega_page[:name]} Page", "#{request.env[:mega_page][:page_path]}/administer-page/#{@mega_page[:page_id].to_s}", class: "admin-links"
+          end
         else
+          # Only show Layout Settings link if user is administering the page
+          if administering_page?
           link = ["/mega-bar/pages/" + @mega_page[:page_id].to_s + "/layouts/" + request.env[:mega_layout].id.to_s + "?return_to=" + request.env["PATH_INFO"], "Layout Settings"] unless @mega_page.blank?
-          ActionController::Base.helpers.link_to link[1], link[0]
+            ActionController::Base.helpers.content_tag :div, class: "admin_links" do
+              ActionController::Base.helpers.link_to link[1], link[0], class: "admin-links"
+            end
+          else
+            ActionController::Base.helpers.content_tag :div, class: "admin_links" do
+              ActionController::Base.helpers.link_to "#{admin_text} #{@mega_page[:name]} Page", "/mega-bar/pages/#{@mega_page[:page_id].to_s}/administer-page?return_to=#{request.env['PATH_INFO']}", class: "admin-links"
+            end
+          end
         end
       end
     end
@@ -37,10 +55,11 @@ module MegaBar
     end
 
     def page_admin?
-      
-      return true if @mega_page[:administrator].blank? # this line should ultimately go away.
+      return false unless defined?(Devise) && user_signed_in?
+      current_user.has_role?('Mega Role')
+      # return true if @mega_page[:administrator].blank? # this line should ultimately go away.
 
-      @mega_user.pll >= @mega_page[:administrator]
+      # @mega_user.pll >= @mega_page[:administrator]
     end
 
     helper_method :page_admin?
@@ -76,5 +95,30 @@ module MegaBar
 
       env[:mega_site]&.theme&.code_name + "-theme"
     end
+
+    def should_show_admin_login_prompt?
+      return false unless defined?(Devise)
+      return false if user_signed_in?
+      return false unless defined?(User)
+      
+      # Check if there's only one user
+      begin
+        user_count = User.count
+        return false unless user_count == 1
+      rescue => e
+        # If User class isn't fully loaded yet, return false
+        return false
+      end
+      
+      # Check if CCCUX Role Manager exists
+      if defined?(Cccux::Role)
+        role_manager = Cccux::Role.find_by(name: 'Role Manager')
+        return role_manager.present?
+      end
+      
+      false
+    end
+
+    helper_method :should_show_admin_login_prompt?
   end
 end

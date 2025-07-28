@@ -1,6 +1,7 @@
 module MegaBar
   class FieldsController < ApplicationController
     include MegaBarConcern
+    include MegaBar::AuthorizationConcern
 
     def new
       @default_options[:model_id] = @nested_instance_variables[0]&.id

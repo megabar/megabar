@@ -1,6 +1,7 @@
 module MegaBar 
   class LayoutsController < MegaBar::ApplicationController
     include MegaBar::MegaBarConcern
+    include MegaBar::AuthorizationConcern
     
     def new
       @page_id = params["page_id"] if params["page_id"]
