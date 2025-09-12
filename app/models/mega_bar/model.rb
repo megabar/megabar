@@ -710,9 +710,15 @@ module MegaBar
         
         # Create CRUD permissions for the model
         crud_actions = ['read', 'create', 'update', 'destroy']
+        
+        # Add MegaBar-specific custom actions
+        megabar_actions = ['administer_page', 'administer_block', 'move']
+        
+        # Combine all actions
+        all_actions = crud_actions + megabar_actions
         permissions_created = []
         
-        crud_actions.each do |action|
+        all_actions.each do |action|
           permission = Cccux::AbilityPermission.find_or_create_by(
             subject: model_class_name,
             action: action
