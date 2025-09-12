@@ -20,8 +20,6 @@ module MegaBar
     before_action :set_vars_for_all
     before_action :set_vars_for_displays # , except: [:update, :create, :destroy]
 
-    skip_before_action :verify_authenticity_token
-
     def _params
       permits = []
       permits << 'controller'

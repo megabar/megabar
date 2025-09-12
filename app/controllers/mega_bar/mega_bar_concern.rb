@@ -265,7 +265,7 @@ module MegaBar
       else
         session[:admin_pages] << page_id
       end
-      redirect_back fallback_location: root_path
+      redirect_back fallback_location: '/'
     end
 
     def process_filters(mega_instance)
