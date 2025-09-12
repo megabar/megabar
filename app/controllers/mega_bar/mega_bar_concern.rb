@@ -1,6 +1,14 @@
 module MegaBar
   module MegaBarConcern
     extend ActiveSupport::Concern
+    
+    included do
+      # Exclude MegaBar custom actions from load_and_authorize_resource
+      # These actions don't operate on the controller's main resource
+      if defined?(Cccux::ApplicationControllerConcern)
+        load_and_authorize_resource(except: [:administer_page, :administer_block])
+      end
+    end
 
     def index
       records = @mega_class.where(@conditions).where(@conditions_array).order(column_sorting)
@@ -251,12 +259,13 @@ module MegaBar
       # end
       
       page_id = params[:id]
+      session[:admin_pages] ||= []
       if session[:admin_pages].include?(page_id)
         session[:admin_pages].delete(page_id)
       else
         session[:admin_pages] << page_id
       end
-      redirect_back fallback_location: request.referer
+      redirect_back fallback_location: root_path
     end
 
     def process_filters(mega_instance)
