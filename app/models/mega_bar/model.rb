@@ -189,11 +189,9 @@ module MegaBar
     end
 
     def find_model_displays_for_position_fields
-      mds = []
-      Block.find(ModelDisplay.by_model(self.id).by_action("index").pluck(:block_id)).each do |block|
-        mds << block.model_displays.by_action("index").pluck(:id).first
-      end
-      mds
+      # Position fields should not be displayed in any UI - they're for internal ordering only
+      # Move arrows handle the user interface for reordering
+      []
     end
     def populate_positions(parent_model)
       # modle = Model.find(model_id)
@@ -228,8 +226,8 @@ module MegaBar
             field: 'id',
             data_type: 'integer',
             tablename: self.tablename,
-            default_data_format: 'textread',
-            default_data_format_edit: 'textread'
+            default_data_format: 'off',
+            default_data_format_edit: 'off'
           )
           logger.info("✅ Created id field for #{self.classname} (ID: #{id_field.id})")
         rescue => e
@@ -253,7 +251,7 @@ module MegaBar
             field: 'name',
             data_type: 'string',
             tablename: self.tablename,
-            default_data_format: 'textread',
+            default_data_format: 'textbox',
             default_data_format_edit: 'textbox'
           )
           logger.info("✅ Created name field for #{self.classname} (ID: #{name_field.id})")
@@ -415,8 +413,8 @@ module MegaBar
             field: 'id',
             data_type: 'integer',
             tablename: self.tablename,
-            default_data_format: 'textread',
-            default_data_format_edit: 'textread'
+            default_data_format: 'off',
+            default_data_format_edit: 'off'
           )
           
           # Skip validation for essential fields that will be created after migration
@@ -444,7 +442,7 @@ module MegaBar
             field: 'name',
             data_type: 'string',
             tablename: self.tablename,
-            default_data_format: 'textread',
+            default_data_format: 'textbox',
             default_data_format_edit: 'textbox'
           )
           
