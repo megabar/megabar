@@ -66,80 +66,8 @@ namespace :mega_bar do
     puts " and loaded the data with REVOLUTIONARY deterministic IDs!"
     puts "Yer all set!"
     
-    # Offer CCCUX integration
     puts ""
-    puts "🔐 CCCUX Authorization Engine Integration"
-    puts "=" * 50
-    puts "Would you like to add CCCUX (Clean CanCan User eXperience) authorization engine?"
-    puts "This will provide:"
-    puts "  ✅ Role-based authorization with CanCanCan"
-    puts "  ✅ User management with Devise integration"
-    puts "  ✅ Admin interface for managing roles and permissions"
-    puts "  ✅ Clean, modern UI for authorization management"
-    puts ""
-    puts "Type 'y' to add CCCUX, or press Enter to skip:"
-    
-    # Get user input
-    response = STDIN.gets.chomp.downcase
-    
-    if response == 'y' || response == 'yes'
-      puts ""
-      puts "🚀 Adding CCCUX authorization engine..."
-      
-      # Check if CCCUX gem is already in Gemfile
-      gemfile_path = Rails.root.join('Gemfile')
-      gemfile_content = File.read(gemfile_path)
-      
-      unless gemfile_content.include?('cccux')
-        puts "📦 Adding CCCUX gem to Gemfile..."
-        
-        # Add CCCUX gem with local path
-        cccux_gem_line = "gem 'cccux', path: '../cccux'"
-        
-        # Add to Gemfile
-        File.open(gemfile_path, 'a') do |f|
-          f.puts ""
-          f.puts "# CCCUX Authorization Engine"
-          f.puts cccux_gem_line
-        end
-        
-        puts "✅ Added CCCUX gem to Gemfile"
-        
-        # Install the gem
-        puts "🔄 Installing CCCUX gem..."
-        system("bundle install")
-        
-        puts "✅ CCCUX gem installed"
-      else
-        puts "ℹ️  CCCUX gem already in Gemfile"
-      end
-      
-      # Run CCCUX setup
-      puts "🔧 Running CCCUX setup..."
-      
-      # Try to run the setup task directly
-      begin
-        system("bundle exec rake cccux:setup")
-        if $?.success?
-          puts ""
-          puts "🎉 Your Rails app now has both MegaBar and CCCUX!"
-          puts "   - MegaBar: Visit /mega-bar for admin interface"
-          puts "   - CCCUX: Visit /cccux for authorization management"
-          puts "   - Sign in with your admin account to access both"
-        else
-          puts ""
-          puts "🎉 Your Rails app now has MegaBar!"
-          puts "   - MegaBar: Visit /mega-bar for admin interface"
-          puts "   - CCCUX: Will be available after setup completion"
-        end
-      rescue => e
-        puts "❌ CCCUX setup failed: #{e.message}"
-        puts "💡 You can run 'bundle exec rake cccux:setup' manually later"
-      end
-    else
-      puts "ℹ️  Skipping CCCUX integration"
-      puts "💡 You can add CCCUX later by running: rails cccux:setup"
-    end
+    puts "💡 To add authorization, run: ../cccux/add_cccux.sh"
   end
 
   # LEGACY TASK - REPLACED BY DETERMINISTIC APPROACH

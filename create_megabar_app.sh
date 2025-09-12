@@ -69,9 +69,7 @@ fi
 
 echo ""
 echo "🎉 SUCCESS! MegaBar application '$APP_NAME' created!"
-echo "📁 Navigate to: cd $APP_NAME"
-echo "🚀 Start server: rails server"
-echo "🌐 Visit: http://localhost:3000" 
+echo "=================================================="
 
 # Change to the app directory and stay there
 cd $APP_NAME
@@ -81,10 +79,16 @@ echo ""
 echo "📍 Current directory: $(pwd)"
 echo "💡 You're now in the $APP_NAME directory!"
 echo ""
-echo "🚀 Next steps:"
-echo "   1. Run: bundle exec rake mega_bar:engine_init"
-echo "   2. Start server: rails server"
-echo "   3. Visit: http://localhost:3000"
+echo "🚀 BASIC MEGABAR:"
+echo "   bundle exec rake mega_bar:engine_init"
+echo "   rails server"
+echo "   Visit: http://localhost:3000/mega-bar"
+echo ""
+echo "🔐 MEGABAR + CCCUX (with authorization):"
+echo "   bundle add devise && rails generate devise:install && rails generate devise User && rails db:migrate"
+echo "   ../cccux/add_cccux.sh"
+echo "   rails server"
+echo "   Visit: http://localhost:3000/mega-bar and http://localhost:3000/cccux"
 
 # Replace the current shell with a new one in the app directory
 exec $SHELL
