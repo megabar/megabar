@@ -189,10 +189,13 @@ module MegaBar
     end
 
     def find_model_displays_for_position_fields
-      # Position fields should not be displayed in any UI - they're for internal ordering only
-      # Move arrows handle the user interface for reordering
-      []
+      mds = []
+      Block.find(ModelDisplay.by_model(self.id).by_action("index").pluck(:block_id)).each do |block|
+        mds << block.model_displays.by_action("index").pluck(:id).first
+      end
+      mds
     end
+    
     def populate_positions(parent_model)
       # modle = Model.find(model_id)
       # modle_name = modle.modyule ? modle.modyule + "::" + modle.classname : modle.classname
