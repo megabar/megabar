@@ -4,6 +4,7 @@ module <%=m %>
 
 class <%= the_controller_name %> < MegaBar::ApplicationController
     include MegaBar::MegaBarConcern
+    include MegaBar::AuthorizationConcern
 end
 
 <% the_module_array.each do | m | %>

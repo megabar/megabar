@@ -157,8 +157,8 @@ module MegaBar
         mds = find_model_displays_for_position_fields
         logger.info("🔍 Found model displays for position field: #{mds.inspect}")
         
-        # Temporarily skip table validation for position field
-        position_field = MegaBar::Field.new(
+        # Use Field.create! to trigger all callbacks including make_migration
+        position_field = MegaBar::Field.create!(
           model_id: self.id, 
           field: 'position', 
           tablename: self.tablename, 
@@ -167,9 +167,6 @@ module MegaBar
           default_data_format_edit: 'textbox', 
           model_display_ids: mds
         )
-        
-        # Skip validation for position field that will be created after migration
-        position_field.save!(validate: false)
         logger.info("✅ Created position field for #{self.classname} (ID: #{position_field.id})")
         
         parent_model = MegaBar::Model.find_by(
@@ -224,6 +221,7 @@ module MegaBar
       unless id_field_exists
         logger.info("📝 Creating id field for #{self.classname}")
         begin
+          # Use Field.create! to trigger all callbacks including make_migration
           id_field = MegaBar::Field.create!(
             model_id: self.id,
             field: 'id',
@@ -410,8 +408,8 @@ module MegaBar
       unless id_field_exists
         logger.info("📝 Creating id field for #{self.classname}")
         begin
-          # Temporarily skip table validation for essential fields
-          id_field = MegaBar::Field.new(
+          # Use Field.create! to trigger all callbacks including make_migration
+          id_field = MegaBar::Field.create!(
             model_id: self.id,
             field: 'id',
             data_type: 'integer',
@@ -419,9 +417,6 @@ module MegaBar
             default_data_format: 'off',
             default_data_format_edit: 'off'
           )
-          
-          # Skip validation for essential fields that will be created after migration
-          id_field.save!(validate: false)
           logger.info("✅ Created id field for #{self.classname} (ID: #{id_field.id})")
         rescue => e
           logger.warn("⚠️  Could not create id field (table may not exist yet): #{e.message}")
@@ -439,8 +434,8 @@ module MegaBar
       unless name_field_exists
         logger.info("📝 Creating name field for #{self.classname}")
         begin
-          # Temporarily skip table validation for essential fields
-          name_field = MegaBar::Field.new(
+          # Use Field.create! to trigger all callbacks including make_migration
+          name_field = MegaBar::Field.create!(
             model_id: self.id,
             field: 'name',
             data_type: 'string',
@@ -448,9 +443,6 @@ module MegaBar
             default_data_format: 'textbox',
             default_data_format_edit: 'textbox'
           )
-          
-          # Skip validation for essential fields that will be created after migration
-          name_field.save!(validate: false)
           logger.info("✅ Created name field for #{self.classname} (ID: #{name_field.id})")
         rescue => e
           logger.warn("⚠️  Could not create name field (table may not exist yet): #{e.message}")
