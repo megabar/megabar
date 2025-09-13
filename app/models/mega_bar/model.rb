@@ -427,30 +427,31 @@ module MegaBar
         logger.info("ℹ️  ID field already exists for #{self.classname}")
       end
       
-      # Always create name field if it doesn't exist
-      name_field_exists = MegaBar::Field.by_model(self.id).where(field: 'name').exists?
-      logger.info("🔍 Name field exists: #{name_field_exists}")
-      
-      unless name_field_exists
-        logger.info("📝 Creating name field for #{self.classname}")
+      # Create title field if title_field_id is provided
+      if self.title_field_id.present?
+        logger.info("📝 Creating title field '#{self.title_field_id}' for #{self.classname}")
         begin
           # Use Field.create! to trigger all callbacks including make_migration
-          name_field = MegaBar::Field.create!(
+          title_field = MegaBar::Field.create!(
             model_id: self.id,
-            field: 'name',
+            field: self.title_field_id,
             data_type: 'string',
             tablename: self.tablename,
             default_data_format: 'textbox',
             default_data_format_edit: 'textbox'
           )
-          logger.info("✅ Created name field for #{self.classname} (ID: #{name_field.id})")
+          logger.info("✅ Created title field '#{self.title_field_id}' for #{self.classname} (ID: #{title_field.id})")
+          
+          # Update the model with the ID of the newly created field
+          self.update_column(:title_field_id, title_field.id)
+          logger.info("✅ Updated model with title_field_id: #{title_field.id}")
         rescue => e
-          logger.warn("⚠️  Could not create name field (table may not exist yet): #{e.message}")
+          logger.warn("⚠️  Could not create title field (table may not exist yet): #{e.message}")
           logger.warn("⚠️  Error class: #{e.class}")
           logger.warn("⚠️  Error backtrace: #{e.backtrace.first(3).join(', ')}")
         end
       else
-        logger.info("ℹ️  Name field already exists for #{self.classname}")
+        logger.info("ℹ️  No title_field_id provided for #{self.classname}, skipping title field creation")
       end
       
       # Create position field if position_parent is set

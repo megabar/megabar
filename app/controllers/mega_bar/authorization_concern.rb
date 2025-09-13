@@ -28,25 +28,29 @@ module MegaBar
 
       def determine_model_class
         # Extract the model name from the controller class name
-        # e.g., ModelsController -> MegaBar::Model
-        # e.g., PagesController -> MegaBar::Page
         controller_name = self.name
         model_name = controller_name.gsub(/Controller$/, '').split('::').last
         
         # Convert to singular and classify
-        # e.g., Models -> Model, Pages -> Page
+        # e.g., Models -> Model, Pages -> Page, Dogs -> Dog
         singular_model = model_name.singularize
         
-        # Build the full class name
-        full_class_name = "MegaBar::#{singular_model}"
+        # Try multiple possible class names:
+        # 1. MegaBar::Model (for MegaBar controllers)
+        # 2. Just Model (for host app controllers)
+        possible_class_names = [
+          "MegaBar::#{singular_model}",
+          singular_model
+        ]
         
-        # Check if the class exists
-        if Object.const_defined?(full_class_name)
-          full_class_name.constantize
-        else
-          Rails.logger.warn "MegaBar::AuthorizationConcern: Could not determine model class for #{controller_name}"
-          nil
+        possible_class_names.each do |full_class_name|
+          if Object.const_defined?(full_class_name)
+            return full_class_name.constantize
+          end
         end
+        
+        Rails.logger.warn "MegaBar::AuthorizationConcern: Could not determine model class for #{controller_name}. Tried: #{possible_class_names.join(', ')}"
+        nil
       rescue => e
         Rails.logger.warn "MegaBar::AuthorizationConcern: Error determining model class: #{e.message}"
         nil

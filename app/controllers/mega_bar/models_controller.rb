@@ -30,6 +30,12 @@ module MegaBar
         default_sort_field: Field.by_model(params[:id]).pluck("field, field"),
         make_page: Template.all.pluck("name, id")
             }
+      
+      # Add title_field_id options for edit forms
+      if params[:id].present?
+        existing_fields = Field.by_model(params[:id]).pluck("field, id")
+        @options[:mega_bar_models][:title_field_id] = existing_fields.unshift(['No Title Field', ''])
+      end
     end
   end
 end

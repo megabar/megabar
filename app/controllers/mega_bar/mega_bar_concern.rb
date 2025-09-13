@@ -10,6 +10,12 @@ module MegaBar
       end
     end
 
+    # Override CanCanCan's resource_params method to use MegaBar's _params
+    def resource_params
+      # Use MegaBar's dynamic parameter permitting
+      _params
+    end
+
     def index
       records = @mega_class.where(@conditions).where(@conditions_array).order(column_sorting)
       instance_variable_set("@" + @kontroller_inst.pluralize, records)
