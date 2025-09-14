@@ -174,10 +174,65 @@ copy_core_files() {
         done
     fi
     
+    # Copy modified MegaBar assets back to engine
+    copy_megabar_assets
+    
     if [ $files_copied -eq 0 ]; then
         print_warning "No new core MegaBar files found to copy"
     else
         print_success "Copied $files_copied new file(s)"
+    fi
+}
+
+# Function to copy modified MegaBar assets back to engine
+copy_megabar_assets() {
+    print_status "Checking for modified MegaBar assets..."
+    
+    local assets_copied=0
+    
+    # Copy JavaScript assets
+    if [ -d "app/assets/javascripts/mega_bar" ]; then
+        for js_file in "app/assets/javascripts/mega_bar"/*.js; do
+            if [ -f "$js_file" ]; then
+                local filename=$(basename "$js_file")
+                # Always copy - these might be modified in host app
+                cp "$js_file" "$MEGABAR_ENGINE_PATH/app/assets/javascripts/mega_bar/"
+                print_success "Copied JS asset: $filename"
+                ((assets_copied++))
+            fi
+        done
+    fi
+    
+    # Copy CSS assets
+    if [ -d "app/assets/stylesheets/mega_bar" ]; then
+        for css_file in "app/assets/stylesheets/mega_bar"/*.css; do
+            if [ -f "$css_file" ]; then
+                local filename=$(basename "$css_file")
+                # Always copy - these might be modified in host app
+                cp "$css_file" "$MEGABAR_ENGINE_PATH/app/assets/stylesheets/mega_bar/"
+                print_success "Copied CSS asset: $filename"
+                ((assets_copied++))
+            fi
+        done
+    fi
+    
+    # Copy image assets
+    if [ -d "app/assets/images/mega_bar" ]; then
+        for img_file in "app/assets/images/mega_bar"/*; do
+            if [ -f "$img_file" ]; then
+                local filename=$(basename "$img_file")
+                # Always copy - these might be modified in host app
+                cp "$img_file" "$MEGABAR_ENGINE_PATH/app/assets/images/mega_bar/"
+                print_success "Copied image asset: $filename"
+                ((assets_copied++))
+            fi
+        done
+    fi
+    
+    if [ $assets_copied -eq 0 ]; then
+        print_warning "No MegaBar assets found to copy"
+    else
+        print_success "Copied $assets_copied asset(s) back to engine"
     fi
 }
 
