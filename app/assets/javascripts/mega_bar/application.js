@@ -19,15 +19,3 @@
 //= require best_in_place.jquery-ui
 //= require tempus-dominus
 //= require_tree .
-
-// Import jQuery and its plugins
-import "jquery"
-import "jquery_ujs"
-import "jquery-ui"
-import "bootstrap/dist/js/bootstrap.bundle.min.js"
-
-// Import custom JavaScript files
-import "./layout"
-import "./tabs"
-import "./best_in_place"
-import "./date_picker"

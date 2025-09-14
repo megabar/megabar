@@ -14,7 +14,7 @@ module MegaBar
 
 
     after_save    :make_position_field
-    attr_accessor :make_page
+    attr_accessor :make_page, :title_field_name
     attr_writer   :model_id
     has_many      :fields, dependent: :destroy
     has_many      :model_displays, dependent: :destroy # or after_destroy delete_model_displays. see field model example
@@ -41,23 +41,14 @@ module MegaBar
     end
 
     def make_all_files
-      logger.info("🚀 STARTING make_all_files for #{self.classname} (ID: #{self.id})")
-      logger.info("📋 Model details: name=#{self.name}, tablename=#{self.tablename}, position_parent=#{self.position_parent}")
+      logger.info("Creating model files for #{self.classname}")
       
       # Step 1: Generate all files first (model, controller, migration)
-      logger.info("📁 STEP 1: Generating files for #{self.classname}")
-      logger.info("creating scaffold for " + self.classname + 'via: ' + 'rails g mega_bar:mega_bar ' + self.classname + ' ' + self.id.to_s)
       mod = self.modyule.nil? || self.modyule.empty?  ? 'no_mod' : self.modyule
-      logger.info("🔧 Module: #{mod}")
 
       # Generate model files and migrations using system call (most reliable for production)
-      logger.info("🔨 Invoking MegaBar generator for #{self.classname}...")
       generator_command = "rails g mega_bar:mega_bar_models #{mod} #{self.classname} #{self.id.to_s} #{pos}"
-      logger.info("📝 Generator command: #{generator_command}")
-      logger.info("📍 Position parameter: #{pos}")
-      
       generator_result = system(generator_command)
-      logger.info("🔄 Generator system call result: #{generator_result}")
       
       if generator_result
         logger.info("✅ Generator completed successfully for #{self.classname}")
@@ -77,21 +68,44 @@ module MegaBar
       end
       
       # Step 2: Create essential fields immediately (don't wait for migrations)
-      logger.info("🔧 STEP 2: Creating essential fields for #{self.classname}")
       create_essential_fields
-      
-      # Step 3: Run migrations last (with better error handling)
-      logger.info("🔄 STEP 3: Running migrations for #{self.classname}")
       run_migrations_safely
       
-      # Step 4: Handle CCCUX setup
-      logger.info("🔐 STEP 4: Setting up CCCUX for #{self.classname}")
-      logger.info("🔄 Reloading model for discovery...")
+      # Step 3: Create title field after migration (so table exists)
+      create_title_field_if_needed
+      
       reload_new_model_for_discovery
-      logger.info("🔄 Creating CCCUX permissions...")
       create_cccux_permissions_for_model
       
-      logger.info("🎉 COMPLETED make_all_files for #{self.classname}")
+      logger.info("✅ Model creation completed for #{self.classname}")
+    end
+
+    def create_title_field_if_needed
+      # Create title field if title_field_name was provided
+      if self.title_field_name.present?
+        field_name = self.title_field_name
+        logger.info("📝 Creating title field '#{field_name}' for #{self.classname}")
+        begin
+          # Use Field.create! to trigger all callbacks including make_migration
+          title_field = MegaBar::Field.create!(
+            model_id: self.id,
+            field: field_name,
+            data_type: 'string',
+            tablename: self.tablename,
+            default_data_format: 'textbox',
+            default_data_format_edit: 'textbox'
+          )
+          logger.info("✅ Created title field '#{field_name}' for #{self.classname} (ID: #{title_field.id})")
+
+          # Update the model with the ID of the newly created field
+          self.update_column(:title_field_id, title_field.id)
+          logger.info("✅ Updated model with title_field_id: #{title_field.id}")
+        rescue => e
+          logger.warn("⚠️  Could not create title field: #{e.message}")
+        end
+      else
+        logger.info("ℹ️  No title_field_name provided for #{self.classname}, skipping title field creation")
+      end
     end
 
     def pos
@@ -141,21 +155,12 @@ module MegaBar
     end
 
     def make_position_field
-      logger.info("🔍 make_position_field called for #{self.classname}")
-      logger.info("🔍 Position field exists: #{MegaBar::Field.by_model(self.id).where(field: 'position').exists?}")
-      logger.info("🔍 Position parent blank: #{self.position_parent.blank?}")
-      logger.info("🔍 Position parent: '#{self.position_parent}'")
-      
       unless MegaBar::Field.by_model(self.id).where(field: 'position').empty? && !self.position_parent.blank?
-        logger.info("⏭️  Skipping position field creation - conditions not met")
         return
       end
       
-      logger.info("📝 Creating position field for #{self.classname}")
-      
       begin
         mds = find_model_displays_for_position_fields
-        logger.info("🔍 Found model displays for position field: #{mds.inspect}")
         
         # Use Field.create! to trigger all callbacks including make_migration
         position_field = MegaBar::Field.create!(
@@ -167,21 +172,16 @@ module MegaBar
           default_data_format_edit: 'textbox', 
           model_display_ids: mds
         )
-        logger.info("✅ Created position field for #{self.classname} (ID: #{position_field.id})")
         
         parent_model = MegaBar::Model.find_by(
           modyule: self.position_parent.split("::")[0...-1].join("::"), 
           classname: self.position_parent.split("::").last
         )
-        logger.info("🔍 Parent model found: #{parent_model ? parent_model.classname : 'nil'}")
         
         populate_positions(parent_model) if parent_model
-        logger.info("✅ Position field setup completed for #{self.classname}")
         
       rescue => e
         logger.error("❌ Failed to create position field for #{self.classname}: #{e.message}")
-        logger.error("❌ Error class: #{e.class}")
-        logger.error("❌ Error backtrace: #{e.backtrace.first(5).join(', ')}")
       end
     end
 
@@ -210,19 +210,11 @@ module MegaBar
 
     # Public methods for testing and manual execution
     def create_essential_fields_after_migration
-      logger.info("🔧 create_essential_fields_after_migration called for #{self.classname}")
-      logger.info("🔧 Creating essential fields after migration for #{self.classname}...")
-      logger.info("📋 Current fields before post-migration creation: #{MegaBar::Field.by_model(self.id).pluck(:field).join(', ')}")
       
       # Always create id field if it doesn't exist
-      id_field_exists = MegaBar::Field.by_model(self.id).where(field: 'id').exists?
-      logger.info("🔍 ID field exists after migration: #{id_field_exists}")
-      
-      unless id_field_exists
-        logger.info("📝 Creating id field for #{self.classname}")
+      unless MegaBar::Field.by_model(self.id).where(field: 'id').exists?
         begin
-          # Use Field.create! to trigger all callbacks including make_migration
-          id_field = MegaBar::Field.create!(
+          MegaBar::Field.create!(
             model_id: self.id,
             field: 'id',
             data_type: 'integer',
@@ -230,50 +222,18 @@ module MegaBar
             default_data_format: 'off',
             default_data_format_edit: 'off'
           )
-          logger.info("✅ Created id field for #{self.classname} (ID: #{id_field.id})")
         rescue => e
           logger.error("❌ Failed to create id field: #{e.message}")
-          logger.error("❌ Error class: #{e.class}")
-          logger.error("❌ Error backtrace: #{e.backtrace.first(3).join(', ')}")
         end
-      else
-        logger.info("ℹ️  ID field already exists after migration for #{self.classname}")
       end
       
-      # Always create name field if it doesn't exist
-      name_field_exists = MegaBar::Field.by_model(self.id).where(field: 'name').exists?
-      logger.info("🔍 Name field exists after migration: #{name_field_exists}")
       
-      unless name_field_exists
-        logger.info("📝 Creating name field for #{self.classname}")
-        begin
-          name_field = MegaBar::Field.create!(
-            model_id: self.id,
-            field: 'name',
-            data_type: 'string',
-            tablename: self.tablename,
-            default_data_format: 'textbox',
-            default_data_format_edit: 'textbox'
-          )
-          logger.info("✅ Created name field for #{self.classname} (ID: #{name_field.id})")
-        rescue => e
-          logger.error("❌ Failed to create name field: #{e.message}")
-          logger.error("❌ Error class: #{e.class}")
-          logger.error("❌ Error backtrace: #{e.backtrace.first(3).join(', ')}")
-        end
-      else
-        logger.info("ℹ️  Name field already exists after migration for #{self.classname}")
-      end
-      
-      # Create position field if position_parent is set
-      logger.info("🔍 Calling make_position_field after migration...")
+      # Create position field if needed
       make_position_field
-      
-      logger.info("✅ Essential fields created after migration for #{self.classname}")
-      logger.info("📋 Final fields after post-migration creation: #{MegaBar::Field.by_model(self.id).pluck(:field).join(', ')}")
     end
 
     private
+
 
     def set_deterministic_id
       unless self.id
@@ -289,7 +249,6 @@ module MegaBar
       return if Rails.env.test?
       
       # Force Rails to reload the newly created model for CCCUX discovery
-      logger.info("🔄 Triggering model reload for CCCUX discovery...")
       
       begin
         # Get the full model class name
@@ -303,30 +262,21 @@ module MegaBar
         model_file_path = app_models_path.join(model_file_name)
         
         if File.exist?(model_file_path)
-          logger.info("📁 Found model file: #{model_file_path}")
-          
           # Force Rails to reload the file
           if Rails.autoloaders.respond_to?(:main)
             begin
               Rails.autoloaders.main.reload(model_file_path.to_s)
-              logger.info("🔄 Reloaded via autoloaders")
             rescue => e
-              logger.warn("⚠️  Autoloader reload failed: #{e.message}")
+              # Fallback: Manual constant removal and reload
+              begin
+                if Object.const_defined?(model_class_name)
+                  Object.send(:remove_const, model_class_name)
+                end
+                load model_file_path.to_s
+              rescue => e
+                logger.warn("⚠️  Could not reload model: #{e.message}")
+              end
             end
-          end
-          
-          # Also try to remove the constant and reload it
-          begin
-            if Object.const_defined?(model_class_name)
-              Object.send(:remove_const, model_class_name)
-              logger.info("🗑️  Removed existing constant: #{model_class_name}")
-            end
-            
-            # Load the file again
-            load model_file_path.to_s
-            logger.info("✅ Successfully reloaded model: #{model_class_name}")
-          rescue => e
-            logger.warn("⚠️  Could not reload model constant: #{e.message}")
           end
         else
           logger.warn("⚠️  Model file not found at expected path: #{model_file_path}")
@@ -425,33 +375,6 @@ module MegaBar
         end
       else
         logger.info("ℹ️  ID field already exists for #{self.classname}")
-      end
-      
-      # Create title field if title_field_id is provided
-      if self.title_field_id.present?
-        logger.info("📝 Creating title field '#{self.title_field_id}' for #{self.classname}")
-        begin
-          # Use Field.create! to trigger all callbacks including make_migration
-          title_field = MegaBar::Field.create!(
-            model_id: self.id,
-            field: self.title_field_id,
-            data_type: 'string',
-            tablename: self.tablename,
-            default_data_format: 'textbox',
-            default_data_format_edit: 'textbox'
-          )
-          logger.info("✅ Created title field '#{self.title_field_id}' for #{self.classname} (ID: #{title_field.id})")
-          
-          # Update the model with the ID of the newly created field
-          self.update_column(:title_field_id, title_field.id)
-          logger.info("✅ Updated model with title_field_id: #{title_field.id}")
-        rescue => e
-          logger.warn("⚠️  Could not create title field (table may not exist yet): #{e.message}")
-          logger.warn("⚠️  Error class: #{e.class}")
-          logger.warn("⚠️  Error backtrace: #{e.backtrace.first(3).join(', ')}")
-        end
-      else
-        logger.info("ℹ️  No title_field_id provided for #{self.classname}, skipping title field creation")
       end
       
       # Create position field if position_parent is set

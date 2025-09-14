@@ -1,5 +1,5 @@
 # REVOLUTIONARY DETERMINISTIC SEEDS
-# Generated: 2025-07-18 16:57:39 UTC
+# Generated: 2025-09-14 05:38:52 UTC
 # Same logical record = Same ID across all applications
 
 
@@ -196,6 +196,7 @@ MegaBar::Model.find_or_create_by({classname: "Model"}) do |record|
   record.mega_model = "mega"
   record.position_parent = nil
   record.default_sort_order = "asc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Field"}) do |record|
   record.id = 2
@@ -210,6 +211,7 @@ MegaBar::Model.find_or_create_by({classname: "Field"}) do |record|
   record.mega_model = "mega"
   record.position_parent = nil
   record.default_sort_order = "desc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "ModelDisplay"}) do |record|
   record.id = 3
@@ -224,6 +226,7 @@ MegaBar::Model.find_or_create_by({classname: "ModelDisplay"}) do |record|
   record.mega_model = "mega"
   record.position_parent = nil
   record.default_sort_order = "desc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "FieldDisplay"}) do |record|
   record.id = 4
@@ -238,6 +241,7 @@ MegaBar::Model.find_or_create_by({classname: "FieldDisplay"}) do |record|
   record.mega_model = "mega"
   record.position_parent = "MegaBar::ModelDisplay"
   record.default_sort_order = "asc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Textbox"}) do |record|
   record.id = 5
@@ -252,6 +256,7 @@ MegaBar::Model.find_or_create_by({classname: "Textbox"}) do |record|
   record.mega_model = "mega"
   record.position_parent = nil
   record.default_sort_order = "desc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Textread"}) do |record|
   record.id = 6
@@ -266,6 +271,7 @@ MegaBar::Model.find_or_create_by({classname: "Textread"}) do |record|
   record.mega_model = "mega"
   record.position_parent = nil
   record.default_sort_order = "desc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Select"}) do |record|
   record.id = 7
@@ -280,6 +286,7 @@ MegaBar::Model.find_or_create_by({classname: "Select"}) do |record|
   record.mega_model = "mega"
   record.position_parent = nil
   record.default_sort_order = "desc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "ModelDisplayFormat"}) do |record|
   record.id = 8
@@ -294,6 +301,7 @@ MegaBar::Model.find_or_create_by({classname: "ModelDisplayFormat"}) do |record|
   record.mega_model = "mega"
   record.position_parent = nil
   record.default_sort_order = "desc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Option"}) do |record|
   record.id = 9
@@ -308,6 +316,7 @@ MegaBar::Model.find_or_create_by({classname: "Option"}) do |record|
   record.mega_model = "mega"
   record.position_parent = nil
   record.default_sort_order = "desc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Page"}) do |record|
   record.id = 10
@@ -322,6 +331,7 @@ MegaBar::Model.find_or_create_by({classname: "Page"}) do |record|
   record.mega_model = "mega"
   record.position_parent = nil
   record.default_sort_order = "desc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Layout"}) do |record|
   record.id = 11
@@ -336,6 +346,7 @@ MegaBar::Model.find_or_create_by({classname: "Layout"}) do |record|
   record.mega_model = "mega"
   record.position_parent = "MegaBar::Page"
   record.default_sort_order = "asc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Block"}) do |record|
   record.id = 12
@@ -350,6 +361,7 @@ MegaBar::Model.find_or_create_by({classname: "Block"}) do |record|
   record.mega_model = "mega"
   record.position_parent = "MegaBar::LayoutSection"
   record.default_sort_order = "desc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Textarea"}) do |record|
   record.id = 13
@@ -364,6 +376,7 @@ MegaBar::Model.find_or_create_by({classname: "Textarea"}) do |record|
   record.mega_model = "mega"
   record.position_parent = nil
   record.default_sort_order = "desc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Checkbox"}) do |record|
   record.id = 14
@@ -378,6 +391,7 @@ MegaBar::Model.find_or_create_by({classname: "Checkbox"}) do |record|
   record.mega_model = "mega"
   record.position_parent = nil
   record.default_sort_order = "desc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Radio"}) do |record|
   record.id = 15
@@ -392,6 +406,7 @@ MegaBar::Model.find_or_create_by({classname: "Radio"}) do |record|
   record.mega_model = "mega"
   record.position_parent = nil
   record.default_sort_order = "desc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "ModelDisplayCollection"}) do |record|
   record.id = 16
@@ -406,6 +421,7 @@ MegaBar::Model.find_or_create_by({classname: "ModelDisplayCollection"}) do |reco
   record.mega_model = "mega"
   record.position_parent = nil
   record.default_sort_order = "desc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Theme"}) do |record|
   record.id = 17
@@ -420,6 +436,7 @@ MegaBar::Model.find_or_create_by({classname: "Theme"}) do |record|
   record.mega_model = "mega"
   record.position_parent = ""
   record.default_sort_order = "asc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Portfolio"}) do |record|
   record.id = 18
@@ -434,6 +451,7 @@ MegaBar::Model.find_or_create_by({classname: "Portfolio"}) do |record|
   record.mega_model = "mega"
   record.position_parent = ""
   record.default_sort_order = "asc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Site"}) do |record|
   record.id = 19
@@ -448,6 +466,7 @@ MegaBar::Model.find_or_create_by({classname: "Site"}) do |record|
   record.mega_model = "mega"
   record.position_parent = "MegaBar::Portfolio"
   record.default_sort_order = "asc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "ThemeJoin"}) do |record|
   record.id = 20
@@ -462,6 +481,7 @@ MegaBar::Model.find_or_create_by({classname: "ThemeJoin"}) do |record|
   record.mega_model = "mega"
   record.position_parent = ""
   record.default_sort_order = "asc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "SiteJoin"}) do |record|
   record.id = 21
@@ -476,6 +496,7 @@ MegaBar::Model.find_or_create_by({classname: "SiteJoin"}) do |record|
   record.mega_model = "mega"
   record.position_parent = ""
   record.default_sort_order = "asc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Template"}) do |record|
   record.id = 22
@@ -490,6 +511,7 @@ MegaBar::Model.find_or_create_by({classname: "Template"}) do |record|
   record.mega_model = "mega"
   record.position_parent = ""
   record.default_sort_order = "asc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "TemplateSection"}) do |record|
   record.id = 23
@@ -504,6 +526,7 @@ MegaBar::Model.find_or_create_by({classname: "TemplateSection"}) do |record|
   record.mega_model = "mega"
   record.position_parent = "MegaBar::Template"
   record.default_sort_order = "asc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "LayoutSection"}) do |record|
   record.id = 24
@@ -518,6 +541,7 @@ MegaBar::Model.find_or_create_by({classname: "LayoutSection"}) do |record|
   record.mega_model = "mega"
   record.position_parent = ""
   record.default_sort_order = "asc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Layable"}) do |record|
   record.id = 25
@@ -532,6 +556,7 @@ MegaBar::Model.find_or_create_by({classname: "Layable"}) do |record|
   record.mega_model = "mega"
   record.position_parent = ""
   record.default_sort_order = "asc"
+  record.title_field_id = nil
 end
 MegaBar::Model.find_or_create_by({classname: "Date"}) do |record|
   record.id = 9777
@@ -546,6 +571,7 @@ MegaBar::Model.find_or_create_by({classname: "Date"}) do |record|
   record.mega_model = "mega"
   record.position_parent = "pnp"
   record.default_sort_order = "asc"
+  record.title_field_id = nil
 end
 
 # MegaBar::Field records
@@ -3790,6 +3816,26 @@ MegaBar::Field.find_or_create_by({field: "format", data_type: "string", model_id
   record.tool_tip = ""
   record.instructions = ""
 end
+MegaBar::Field.find_or_create_by({field: "title_field_name", data_type: "string", model_id: 1}) do |record|
+  record.id = 1322
+  record.model_id = 1
+  record.schema = "sqlite"
+  record.tablename = "mega_bar_models"
+  record.field = "title_field_name"
+  record.data_type = "string"
+  record.accessor = "true"
+  record.default_value = ""
+  record.default_data_format = "textbox"
+  record.default_data_format_edit = "textbox"
+  record.default_index_wrapper = "div"
+  record.default_show_wrapper = "div"
+  record.created_at = Time.parse("2025-09-13 20:43:24 UTC")
+  record.updated_at = Time.parse("2025-09-13 20:43:24 UTC")
+  record.option_borrow = nil
+  record.filter_type = ""
+  record.tool_tip = "Enter the name of a field to hold the title of your records. Could be name, title, destination, whatevs. "
+  record.instructions = "Enter the name of a field to hold the title"
+end
 MegaBar::Field.find_or_create_by({field: "transformation", data_type: "string", model_id: 9777}) do |record|
   record.id = 1604
   record.model_id = 9777
@@ -3849,6 +3895,26 @@ MegaBar::Field.find_or_create_by({field: "field_display_id", data_type: "integer
   record.filter_type = "contains"
   record.tool_tip = ""
   record.instructions = ""
+end
+MegaBar::Field.find_or_create_by({field: "title_field_id", data_type: "integer", model_id: 1}) do |record|
+  record.id = 1909
+  record.model_id = 1
+  record.schema = ""
+  record.tablename = "mega_bar_models"
+  record.field = "title_field_id"
+  record.data_type = "integer"
+  record.accessor = nil
+  record.default_value = ""
+  record.default_data_format = "textread"
+  record.default_data_format_edit = "textbox"
+  record.default_index_wrapper = ""
+  record.default_show_wrapper = ""
+  record.created_at = Time.parse("2025-09-12 19:11:35 UTC")
+  record.updated_at = Time.parse("2025-09-12 19:11:35 UTC")
+  record.option_borrow = nil
+  record.filter_type = "exact"
+  record.tool_tip = "Pick the field that holds the title or name of the record"
+  record.instructions = "Enter title field of your model"
 end
 
 # MegaBar::Option records
@@ -9052,13 +9118,13 @@ MegaBar::Block.find_or_create_by({layout_section_id: 38, name: "Layables on Page
   record.nest_level_2 = 10
   record.path_base = "/mega-bar/pages/:page_id/layouts/:layout_id/layables"
   record.created_at = Time.parse("2016-09-22 01:36:21 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:33 UTC")
+  record.updated_at = Time.parse("2025-09-12 18:48:54 UTC")
   record.nest_level_3 = nil
   record.nest_level_4 = nil
   record.nest_level_5 = nil
   record.nest_level_6 = nil
   record.layout_section_id = 38
-  record.position = 176
+  record.position = 177
 end
 MegaBar::Block.find_or_create_by({layout_section_id: 94, name: "Layout section joins (layable) full top Block"}) do |record|
   record.id = 151
@@ -9261,13 +9327,13 @@ MegaBar::Block.find_or_create_by({layout_section_id: 105, name: "T2b main Block"
   record.nest_level_2 = nil
   record.path_base = ""
   record.created_at = Time.parse("2019-06-11 22:01:37 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:33 UTC")
+  record.updated_at = Time.parse("2025-09-12 18:48:54 UTC")
   record.nest_level_3 = nil
   record.nest_level_4 = nil
   record.nest_level_5 = nil
   record.nest_level_6 = nil
   record.layout_section_id = 105
-  record.position = 198
+  record.position = 199
 end
 MegaBar::Block.find_or_create_by({layout_section_id: 106, name: "T2b full end Block"}) do |record|
   record.id = 165
@@ -12461,8 +12527,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 1, field_id: 5}) do |
   record.link_type = "show"
   record.wrapper = ""
   record.created_at = Time.parse("2014-05-06 20:04:39 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 58
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 62
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 4}) do |record|
   record.id = 2
@@ -12474,8 +12540,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 4}) do |
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-05-09 19:38:36 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 201
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 211
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 1}) do |record|
   record.id = 3
@@ -12604,8 +12670,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 14}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2014-05-21 22:15:12 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 93
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 97
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 15}) do |record|
   record.id = 13
@@ -12617,8 +12683,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 15}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2014-05-21 22:15:29 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 101
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 105
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 16}) do |record|
   record.id = 14
@@ -12630,8 +12696,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 16}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-05-21 22:15:52 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 109
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 113
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 15, field_id: 13}) do |record|
   record.id = 15
@@ -12695,8 +12761,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 1, field_id: 21}) do 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-05-22 18:30:04 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 152
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 159
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 6, field_id: 21}) do |record|
   record.id = 20
@@ -12708,8 +12774,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 6, field_id: 21}) do 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-05-22 18:30:21 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 301
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 309
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 21}) do |record|
   record.id = 21
@@ -12721,8 +12787,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 21}) do 
   record.link_type = ""
   record.wrapper = nil
   record.created_at = Time.parse("2014-05-22 18:30:43 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 159
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 167
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 10, field_id: 5}) do |record|
   record.id = 22
@@ -12734,8 +12800,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 10, field_id: 5}) do 
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2014-05-22 20:47:03 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:34 UTC")
-  record.position = 64
+  record.updated_at = Time.parse("2025-09-12 18:48:55 UTC")
+  record.position = 67
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2, field_id: 6}) do |record|
   record.id = 23
@@ -13254,8 +13320,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 23, field_id: 25}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-05-24 21:07:18 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 53
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 55
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 23, field_id: 26}) do |record|
   record.id = 63
@@ -13267,8 +13333,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 23, field_id: 26}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-05-24 21:07:50 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 55
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 57
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 23, field_id: 27}) do |record|
   record.id = 64
@@ -13280,8 +13346,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 23, field_id: 27}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-05-24 21:08:48 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 57
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 59
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 23, field_id: 28}) do |record|
   record.id = 65
@@ -13293,8 +13359,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 23, field_id: 28}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-05-24 21:09:09 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 59
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 61
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 9, field_id: 18}) do |record|
   record.id = 66
@@ -13319,8 +13385,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 30}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2014-12-25 21:00:03 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 348
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 359
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 30}) do |record|
   record.id = 68
@@ -13332,8 +13398,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 30}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2014-12-25 21:00:08 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 430
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 440
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 31}) do |record|
   record.id = 69
@@ -13345,8 +13411,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 31}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2014-12-25 21:14:34 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 349
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 360
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 31}) do |record|
   record.id = 70
@@ -13358,8 +13424,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 31}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2014-12-25 21:14:34 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 436
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 446
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 13, field_id: 10}) do |record|
   record.id = 71
@@ -13397,8 +13463,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 32}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2014-12-25 23:16:16 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 350
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 361
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 32}) do |record|
   record.id = 74
@@ -13410,8 +13476,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 32}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2014-12-25 23:16:16 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 437
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 447
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 33}) do |record|
   record.id = 75
@@ -13423,8 +13489,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 33}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2014-12-25 23:16:44 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 351
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 362
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 33}) do |record|
   record.id = 76
@@ -13436,8 +13502,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 33}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2014-12-25 23:16:44 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 438
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 448
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 15, field_id: 34}) do |record|
   record.id = 77
@@ -13527,8 +13593,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 1, field_id: 2}) do |
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2014-12-26 07:52:00 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 66
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 70
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 10, field_id: 2}) do |record|
   record.id = 84
@@ -13553,8 +13619,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 6, field_id: 2}) do |
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-12-26 07:52:01 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 63
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 66
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 2}) do |record|
   record.id = 86
@@ -13566,8 +13632,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 2}) do |
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-12-26 07:52:01 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 88
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 94
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 3}) do |record|
   record.id = 87
@@ -13579,8 +13645,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 3}) do |
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-12-26 07:53:23 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 136
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 142
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 1, field_id: 4}) do |record|
   record.id = 88
@@ -13592,8 +13658,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 1, field_id: 4}) do |
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2014-12-26 07:53:34 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 74
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 78
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 10, field_id: 4}) do |record|
   record.id = 89
@@ -13644,8 +13710,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 37}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-12-26 08:02:07 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 119
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 123
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 36}) do |record|
   record.id = 93
@@ -13657,8 +13723,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 36}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-12-26 08:02:23 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 120
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 124
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 35}) do |record|
   record.id = 94
@@ -13670,8 +13736,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 35}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-12-26 08:02:34 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 121
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 125
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 34}) do |record|
   record.id = 95
@@ -13683,8 +13749,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 34}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2014-12-26 08:02:54 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 122
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 126
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2, field_id: 29}) do |record|
   record.id = 96
@@ -13839,8 +13905,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 1, field_id: 41}) do 
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2015-02-08 03:48:47 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 90
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 94
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 6, field_id: 41}) do |record|
   record.id = 108
@@ -13852,8 +13918,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 6, field_id: 41}) do 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-08 03:48:47 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 66
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 69
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 31, field_id: 42}) do |record|
   record.id = 109
@@ -14554,8 +14620,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 39, field_id: 55}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2015-02-14 18:29:33 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 49
+  record.updated_at = Time.parse("2025-09-12 18:48:55 UTC")
+  record.position = 51
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 40, field_id: 55}) do |record|
   record.id = 163
@@ -14567,8 +14633,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 40, field_id: 55}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-14 18:29:33 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 61
+  record.updated_at = Time.parse("2025-09-12 18:48:55 UTC")
+  record.position = 63
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 37, field_id: 55}) do |record|
   record.id = 164
@@ -14593,8 +14659,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 38, field_id: 55}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-14 18:29:33 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 149
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 155
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 39, field_id: 56}) do |record|
   record.id = 166
@@ -14606,8 +14672,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 39, field_id: 56}) do
   record.link_type = "link_field_value"
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-14 20:54:40 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 52
+  record.updated_at = Time.parse("2025-09-12 18:48:55 UTC")
+  record.position = 54
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 40, field_id: 56}) do |record|
   record.id = 167
@@ -14619,8 +14685,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 40, field_id: 56}) do
   record.link_type = "link_field_value"
   record.wrapper = ""
   record.created_at = Time.parse("2015-02-14 20:54:40 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 64
+  record.updated_at = Time.parse("2025-09-12 18:48:55 UTC")
+  record.position = 66
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 37, field_id: 56}) do |record|
   record.id = 168
@@ -14645,8 +14711,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 38, field_id: 56}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-14 20:54:40 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 163
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 169
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 43, field_id: 57}) do |record|
   record.id = 170
@@ -14658,8 +14724,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 43, field_id: 57}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2015-02-19 07:24:17 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 111
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 115
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 44, field_id: 57}) do |record|
   record.id = 171
@@ -14671,8 +14737,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 44, field_id: 57}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-19 07:24:17 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 165
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 171
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 41, field_id: 57}) do |record|
   record.id = 172
@@ -14697,8 +14763,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 42, field_id: 57}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2015-02-19 07:24:17 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 138
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 143
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 43, field_id: 58}) do |record|
   record.id = 174
@@ -14710,8 +14776,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 43, field_id: 58}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2015-02-19 07:24:53 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 79
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 82
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 44, field_id: 58}) do |record|
   record.id = 175
@@ -14723,8 +14789,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 44, field_id: 58}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-19 07:24:53 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 133
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 138
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 41, field_id: 58}) do |record|
   record.id = 176
@@ -14749,8 +14815,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 42, field_id: 58}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-19 07:24:53 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 103
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 107
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 47, field_id: 60}) do |record|
   record.id = 178
@@ -14762,8 +14828,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 47, field_id: 60}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-19 07:55:51 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 171
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 178
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 48, field_id: 60}) do |record|
   record.id = 179
@@ -14775,8 +14841,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 48, field_id: 60}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-19 07:55:51 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 187
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 193
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 60}) do |record|
   record.id = 180
@@ -14801,8 +14867,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 60}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-19 07:55:51 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 86
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 95
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 3, field_id: 61}) do |record|
   record.id = 182
@@ -14827,8 +14893,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 16, field_id: 61}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-21 04:34:34 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 98
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 102
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 61}) do |record|
   record.id = 184
@@ -14866,8 +14932,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 47, field_id: 62}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-21 04:47:17 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 223
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 230
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 48, field_id: 62}) do |record|
   record.id = 187
@@ -14879,8 +14945,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 48, field_id: 62}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-21 04:47:17 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 213
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 219
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 62}) do |record|
   record.id = 188
@@ -14892,8 +14958,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 62}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-21 04:47:17 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 42
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 43
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 62}) do |record|
   record.id = 189
@@ -14905,8 +14971,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 62}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-21 04:47:17 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 98
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 107
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 47, field_id: 63}) do |record|
   record.id = 190
@@ -15035,8 +15101,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 47, field_id: 66}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-22 21:51:21 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 155
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 160
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 48, field_id: 66}) do |record|
   record.id = 200
@@ -15048,8 +15114,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 48, field_id: 66}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-22 21:51:21 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 131
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 135
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 66}) do |record|
   record.id = 201
@@ -15061,8 +15127,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 66}) do
   record.link_type = ""
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-22 21:51:21 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 52
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 53
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 66}) do |record|
   record.id = 202
@@ -15074,8 +15140,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 66}) do
   record.link_type = ""
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-22 21:51:21 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 24
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 25
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2, field_id: 67}) do |record|
   record.id = 203
@@ -15191,8 +15257,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 37, field_id: 69}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2015-02-23 07:05:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 63
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 65
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2, field_id: 70}) do |record|
   record.id = 212
@@ -15256,8 +15322,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 37, field_id: 71}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-23 20:42:19 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 66
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 68
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 41, field_id: 72}) do |record|
   record.id = 217
@@ -15269,8 +15335,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 41, field_id: 72}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2015-02-23 21:06:22 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 87
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 90
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 41, field_id: 73}) do |record|
   record.id = 218
@@ -15282,8 +15348,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 41, field_id: 73}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-23 21:15:11 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 88
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 91
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 6, field_id: 75}) do |record|
   record.id = 219
@@ -15295,8 +15361,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 6, field_id: 75}) do 
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2015-02-23 21:56:18 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 69
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 72
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 77}) do |record|
   record.id = 220
@@ -15308,8 +15374,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 77}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-23 22:09:03 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 91
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 94
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 77}) do |record|
   record.id = 221
@@ -15321,8 +15387,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 77}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-23 22:09:03 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 68
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 71
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 1, field_id: 1}) do |record|
   record.id = 222
@@ -15347,8 +15413,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 49, field_id: 58}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2015-02-24 02:12:38 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:34 UTC")
-  record.position = 31
+  record.updated_at = Time.parse("2025-09-12 18:48:55 UTC")
+  record.position = 32
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 49, field_id: 65}) do |record|
   record.id = 224
@@ -15425,8 +15491,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 47, field_id: 79}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-24 09:14:06 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 82
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 85
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 48, field_id: 79}) do |record|
   record.id = 230
@@ -15438,8 +15504,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 48, field_id: 79}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-24 09:14:06 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 43
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 44
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 79}) do |record|
   record.id = 231
@@ -15451,8 +15517,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 79}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-24 09:14:06 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 98
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 102
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 79}) do |record|
   record.id = 232
@@ -15464,8 +15530,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 79}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-24 09:14:06 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 70
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 73
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 47, field_id: 80}) do |record|
   record.id = 233
@@ -15477,8 +15543,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 47, field_id: 80}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-24 09:30:08 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 84
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 87
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 48, field_id: 80}) do |record|
   record.id = 234
@@ -15490,8 +15556,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 48, field_id: 80}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-24 09:30:08 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 44
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 45
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 80}) do |record|
   record.id = 235
@@ -15503,8 +15569,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 80}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-24 09:30:08 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 128
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 132
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 80}) do |record|
   record.id = 236
@@ -15516,8 +15582,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 80}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-24 09:30:08 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 72
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 75
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 50, field_id: 6}) do |record|
   record.id = 237
@@ -15568,8 +15634,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 50, field_id: 29}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-24 22:03:54 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 130
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 136
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 50, field_id: 78}) do |record|
   record.id = 241
@@ -15997,8 +16063,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 16, field_id: 14}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-27 23:50:12 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 102
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 106
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 16, field_id: 15}) do |record|
   record.id = 274
@@ -16010,8 +16076,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 16, field_id: 15}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-27 23:51:03 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 106
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 110
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 16, field_id: 16}) do |record|
   record.id = 275
@@ -16023,8 +16089,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 16, field_id: 16}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-27 23:51:30 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 111
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 115
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 57, field_id: 55}) do |record|
   record.id = 276
@@ -16036,8 +16102,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 57, field_id: 55}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-28 00:07:17 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 119
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 121
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 57, field_id: 56}) do |record|
   record.id = 277
@@ -16049,8 +16115,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 57, field_id: 56}) do
   record.link_type = "link_field_value"
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-28 00:07:17 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 134
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 136
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 57, field_id: 64}) do |record|
   record.id = 278
@@ -16179,8 +16245,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 61, field_id: 57}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-28 00:08:40 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 160
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 165
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 61, field_id: 58}) do |record|
   record.id = 288
@@ -16192,8 +16258,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 61, field_id: 58}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-28 00:08:40 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 168
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 173
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 61, field_id: 65}) do |record|
   record.id = 289
@@ -16218,8 +16284,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 47, field_id: 82}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-28 20:17:48 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 48
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 50
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 48, field_id: 82}) do |record|
   record.id = 291
@@ -16231,8 +16297,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 48, field_id: 82}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-28 20:17:48 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 45
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 46
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 82}) do |record|
   record.id = 292
@@ -16244,8 +16310,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 82}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-28 20:17:48 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 64
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 65
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 82}) do |record|
   record.id = 293
@@ -16257,8 +16323,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 82}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-02-28 20:17:48 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 35
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 36
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 59, field_id: 57}) do |record|
   record.id = 294
@@ -16283,8 +16349,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 59, field_id: 58}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-03-03 05:01:48 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 257
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 264
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 59, field_id: 65}) do |record|
   record.id = 296
@@ -16309,8 +16375,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 59, field_id: 72}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-03-03 05:01:48 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 130
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 133
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 59, field_id: 73}) do |record|
   record.id = 298
@@ -16322,8 +16388,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 59, field_id: 73}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-03-03 05:01:48 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 172
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 176
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 59, field_id: 74}) do |record|
   record.id = 299
@@ -16335,8 +16401,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 59, field_id: 74}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-03-03 05:01:48 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 131
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 134
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 62, field_id: 55}) do |record|
   record.id = 300
@@ -16348,8 +16414,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 62, field_id: 55}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-04-24 19:28:47 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 52
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 54
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 62, field_id: 56}) do |record|
   record.id = 301
@@ -16361,8 +16427,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 62, field_id: 56}) do
   record.link_type = "link_field_value"
   record.wrapper = nil
   record.created_at = Time.parse("2015-04-24 19:28:47 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 85
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 87
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 62, field_id: 64}) do |record|
   record.id = 302
@@ -16387,8 +16453,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 50, field_id: 11}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-06-02 18:24:07 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 167
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 172
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 50, field_id: 70}) do |record|
   record.id = 304
@@ -16426,8 +16492,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 63, field_id: 2}) do 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-12-09 07:59:56 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 103
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 107
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 63, field_id: 3}) do |record|
   record.id = 307
@@ -16439,8 +16505,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 63, field_id: 3}) do 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-12-09 07:59:56 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 191
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 196
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 63, field_id: 4}) do |record|
   record.id = 308
@@ -16452,8 +16518,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 63, field_id: 4}) do 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-12-09 07:59:57 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 105
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 109
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 63, field_id: 5}) do |record|
   record.id = 309
@@ -16465,8 +16531,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 63, field_id: 5}) do 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-12-09 07:59:57 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:34 UTC")
-  record.position = 33
+  record.updated_at = Time.parse("2025-09-12 18:48:55 UTC")
+  record.position = 34
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 63, field_id: 21}) do |record|
   record.id = 310
@@ -16478,8 +16544,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 63, field_id: 21}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-12-09 07:59:58 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:34 UTC")
-  record.position = 56
+  record.updated_at = Time.parse("2025-09-12 18:48:55 UTC")
+  record.position = 57
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 63, field_id: 41}) do |record|
   record.id = 311
@@ -16504,8 +16570,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 37, field_id: 64}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-12-10 22:35:31 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 68
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 70
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 37, field_id: 76}) do |record|
   record.id = 313
@@ -16517,8 +16583,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 37, field_id: 76}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-12-10 22:35:31 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 69
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 71
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 38, field_id: 69}) do |record|
   record.id = 314
@@ -16530,8 +16596,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 38, field_id: 69}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2015-12-10 22:36:32 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 59
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 61
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 38, field_id: 71}) do |record|
   record.id = 315
@@ -16543,8 +16609,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 38, field_id: 71}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-12-10 22:36:32 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 61
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 63
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 38, field_id: 76}) do |record|
   record.id = 316
@@ -16556,8 +16622,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 38, field_id: 76}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-12-10 22:36:32 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 62
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 64
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 1, field_id: 3}) do |record|
   record.id = 317
@@ -16569,8 +16635,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 1, field_id: 3}) do |
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-12-11 00:26:19 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 51
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 53
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 5}) do |record|
   record.id = 318
@@ -16595,8 +16661,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 41}) do 
   record.link_type = ""
   record.wrapper = nil
   record.created_at = Time.parse("2015-12-11 00:27:26 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 72
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 75
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 6, field_id: 1}) do |record|
   record.id = 320
@@ -16608,8 +16674,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 6, field_id: 1}) do |
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2015-12-11 00:31:08 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 72
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 75
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 6, field_id: 4}) do |record|
   record.id = 321
@@ -16634,8 +16700,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 75}) do 
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2015-12-11 00:33:23 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 74
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 77
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 39, field_id: 88}) do |record|
   record.id = 323
@@ -16699,8 +16765,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 1, field_id: 89}) do 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-05-15 17:15:01 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 29
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 30
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 6, field_id: 89}) do |record|
   record.id = 328
@@ -16725,8 +16791,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 89}) do 
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2016-05-15 17:15:01 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 50
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 52
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 3, field_id: 90}) do |record|
   record.id = 330
@@ -16751,8 +16817,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 16, field_id: 90}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-05-24 03:22:53 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 116
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 120
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 90}) do |record|
   record.id = 332
@@ -16764,8 +16830,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 90}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-05-24 03:22:53 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 62
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 64
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 15, field_id: 90}) do |record|
   record.id = 333
@@ -16868,8 +16934,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 64, field_id: 1}) do 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-06-01 01:23:46 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 52
+  record.updated_at = Time.parse("2025-09-12 18:48:55 UTC")
+  record.position = 55
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 64, field_id: 2}) do |record|
   record.id = 341
@@ -16881,8 +16947,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 64, field_id: 2}) do 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-06-01 01:24:09 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 55
+  record.updated_at = Time.parse("2025-09-12 18:48:55 UTC")
+  record.position = 58
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 64, field_id: 4}) do |record|
   record.id = 342
@@ -16894,8 +16960,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 64, field_id: 4}) do 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-06-01 01:24:11 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 58
+  record.updated_at = Time.parse("2025-09-12 18:48:55 UTC")
+  record.position = 61
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 64, field_id: 5}) do |record|
   record.id = 343
@@ -18389,8 +18455,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 14, field_id: 98}) do
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-08-16 16:28:56 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 34
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 35
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 15, field_id: 98}) do |record|
   record.id = 458
@@ -19117,8 +19183,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 109}) do
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2016-09-05 21:50:36 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 28
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 29
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 43, field_id: 110}) do |record|
   record.id = 514
@@ -19130,8 +19196,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 43, field_id: 110}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-05 21:52:17 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 32
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 33
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 49, field_id: 110}) do |record|
   record.id = 515
@@ -20001,8 +20067,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 101, field_id: 17}) d
   record.link_type = ""
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-07 04:50:52 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 301
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 308
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 101, field_id: 18}) do |record|
   record.id = 582
@@ -20014,8 +20080,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 101, field_id: 18}) d
   record.link_type = ""
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-07 04:50:53 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 253
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 259
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 101, field_id: 19}) do |record|
   record.id = 583
@@ -20027,8 +20093,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 101, field_id: 19}) d
   record.link_type = ""
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-07 04:50:53 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 204
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 209
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 101, field_id: 20}) do |record|
   record.id = 584
@@ -20040,8 +20106,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 101, field_id: 20}) d
   record.link_type = ""
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-07 04:50:54 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 46
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 47
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 101, field_id: 39}) do |record|
   record.id = 585
@@ -20053,8 +20119,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 101, field_id: 39}) d
   record.link_type = ""
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-07 04:50:54 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 93
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 96
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 101, field_id: 81}) do |record|
   record.id = 586
@@ -20066,8 +20132,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 101, field_id: 81}) d
   record.link_type = ""
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-07 04:50:54 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 47
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 48
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 101, field_id: 112}) do |record|
   record.id = 587
@@ -20339,8 +20405,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 114, field_id: 116}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-10 18:41:21 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 173
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 177
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 111, field_id: 117}) do |record|
   record.id = 608
@@ -20833,8 +20899,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 41, field_id: 122}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-13 22:03:45 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 31
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 32
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 42, field_id: 122}) do |record|
   record.id = 646
@@ -20846,8 +20912,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 42, field_id: 122}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-13 22:03:45 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 32
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 33
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 58, field_id: 122}) do |record|
   record.id = 647
@@ -20872,8 +20938,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 59, field_id: 122}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-13 22:14:47 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 47
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 48
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 123}) do |record|
   record.id = 649
@@ -20885,8 +20951,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 123}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-14 02:23:04 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 90
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 91
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 123}) do |record|
   record.id = 650
@@ -20898,8 +20964,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 123}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-14 02:23:04 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 41
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 42
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 125, field_id: 124}) do |record|
   record.id = 651
@@ -21067,8 +21133,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 41, field_id: 127}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-14 15:24:55 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 32
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 33
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 42, field_id: 127}) do |record|
   record.id = 664
@@ -21080,8 +21146,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 42, field_id: 127}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-14 15:24:55 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 33
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 34
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 58, field_id: 127}) do |record|
   record.id = 665
@@ -21106,8 +21172,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 59, field_id: 127}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-14 15:24:55 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 49
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 50
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 128}) do |record|
   record.id = 667
@@ -21119,8 +21185,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 45, field_id: 128}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-14 15:56:43 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 97
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 98
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 128}) do |record|
   record.id = 668
@@ -21132,8 +21198,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 46, field_id: 128}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-14 15:56:43 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 88
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 89
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 103, field_id: 129}) do |record|
   record.id = 669
@@ -21587,8 +21653,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 133, field_id: 137}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-17 02:41:43 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 85
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 87
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 133, field_id: 138}) do |record|
   record.id = 704
@@ -21600,8 +21666,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 133, field_id: 138}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-17 02:41:43 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 86
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 88
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 133, field_id: 139}) do |record|
   record.id = 705
@@ -21613,8 +21679,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 133, field_id: 139}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-17 02:41:43 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 87
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 89
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 133, field_id: 140}) do |record|
   record.id = 706
@@ -21626,8 +21692,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 133, field_id: 140}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-17 02:56:09 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 43
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 44
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 134, field_id: 135}) do |record|
   record.id = 707
@@ -21665,8 +21731,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 135, field_id: 138}) 
   record.link_type = ""
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-17 03:04:10 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 43
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 44
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 135, field_id: 139}) do |record|
   record.id = 710
@@ -21678,8 +21744,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 135, field_id: 139}) 
   record.link_type = ""
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-17 03:04:10 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 44
+  record.updated_at = Time.parse("2025-09-12 18:48:56 UTC")
+  record.position = 45
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 135, field_id: 140}) do |record|
   record.id = 711
@@ -22224,8 +22290,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 141, field_id: 141}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-21 03:21:21 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 43
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 45
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 141, field_id: 147}) do |record|
   record.id = 753
@@ -22237,8 +22303,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 141, field_id: 147}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-21 03:21:21 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 45
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 47
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 141, field_id: 148}) do |record|
   record.id = 754
@@ -22250,8 +22316,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 141, field_id: 148}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-21 03:21:22 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 47
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 49
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 142, field_id: 141}) do |record|
   record.id = 755
@@ -22302,8 +22368,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 60}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-21 04:02:15 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 122
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 127
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 62}) do |record|
   record.id = 759
@@ -22315,8 +22381,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 62}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-21 04:02:16 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 125
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 131
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 63}) do |record|
   record.id = 760
@@ -22341,8 +22407,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 66}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-21 04:02:17 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 187
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 192
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 79}) do |record|
   record.id = 762
@@ -22354,8 +22420,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 79}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-21 04:02:18 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 260
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 265
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 80}) do |record|
   record.id = 763
@@ -22367,8 +22433,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 80}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-21 04:02:18 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 268
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 273
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 82}) do |record|
   record.id = 764
@@ -22380,8 +22446,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 82}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-21 04:02:18 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 75
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 77
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 83}) do |record|
   record.id = 765
@@ -22393,8 +22459,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 83}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-21 04:02:19 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 281
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 285
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 123}) do |record|
   record.id = 766
@@ -22406,8 +22472,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 123}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-21 04:02:20 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 124
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 126
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 128}) do |record|
   record.id = 767
@@ -22419,8 +22485,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 128}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-21 04:02:21 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 128
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 130
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 143, field_id: 149}) do |record|
   record.id = 768
@@ -22523,8 +22589,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 146, field_id: 144}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-22 02:39:56 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 81
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 83
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 146, field_id: 145}) do |record|
   record.id = 776
@@ -22536,8 +22602,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 146, field_id: 145}) 
   record.link_type = ""
   record.wrapper = nil
   record.created_at = Time.parse("2016-09-22 02:39:56 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:35 UTC")
-  record.position = 41
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 42
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 146, field_id: 146}) do |record|
   record.id = 777
@@ -23381,8 +23447,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 65, field_id: 155}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-07 18:09:00 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 33
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 34
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 66, field_id: 155}) do |record|
   record.id = 842
@@ -23888,8 +23954,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 30}) d
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 385
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 400
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 31}) do |record|
   record.id = 881
@@ -23901,8 +23967,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 31}) d
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 386
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 401
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 32}) do |record|
   record.id = 882
@@ -23914,8 +23980,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 32}) d
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 387
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 402
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 33}) do |record|
   record.id = 883
@@ -23927,8 +23993,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 33}) d
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 388
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 403
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 60}) do |record|
   record.id = 884
@@ -23940,8 +24006,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 60}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 203
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 216
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 62}) do |record|
   record.id = 885
@@ -23953,8 +24019,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 62}) d
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 297
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 310
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 63}) do |record|
   record.id = 886
@@ -23979,8 +24045,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 66}) d
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 164
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 172
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 77}) do |record|
   record.id = 888
@@ -23992,8 +24058,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 77}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 171
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 179
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 79}) do |record|
   record.id = 889
@@ -24005,8 +24071,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 79}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 178
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 186
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 80}) do |record|
   record.id = 890
@@ -24018,8 +24084,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 80}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 185
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 193
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 82}) do |record|
   record.id = 891
@@ -24031,8 +24097,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 82}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 27
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 28
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 83}) do |record|
   record.id = 892
@@ -24044,8 +24110,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 83}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 32
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 33
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 84}) do |record|
   record.id = 893
@@ -24057,8 +24123,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 84}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 33
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 34
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 85}) do |record|
   record.id = 894
@@ -24070,8 +24136,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 85}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 34
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 35
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 86}) do |record|
   record.id = 895
@@ -24083,8 +24149,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 86}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 35
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 36
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 123}) do |record|
   record.id = 896
@@ -24096,8 +24162,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 123}) 
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 36
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 37
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 128}) do |record|
   record.id = 897
@@ -24109,8 +24175,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 128}) 
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 37
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 38
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 156, field_id: 149}) do |record|
   record.id = 898
@@ -24135,8 +24201,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 60}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 165
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 174
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 62}) do |record|
   record.id = 900
@@ -24148,8 +24214,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 62}) d
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 193
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 203
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 63}) do |record|
   record.id = 901
@@ -24174,8 +24240,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 66}) d
   record.link_type = ""
   record.wrapper = ""
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 190
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 198
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 79}) do |record|
   record.id = 903
@@ -24187,8 +24253,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 79}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 226
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 234
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 80}) do |record|
   record.id = 904
@@ -24200,8 +24266,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 80}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:13 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 233
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 241
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 82}) do |record|
   record.id = 905
@@ -24213,8 +24279,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 82}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 26
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 27
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 83}) do |record|
   record.id = 906
@@ -24226,8 +24292,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 83}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 41
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 42
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 84}) do |record|
   record.id = 907
@@ -24239,8 +24305,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 84}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 42
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 43
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 85}) do |record|
   record.id = 908
@@ -24252,8 +24318,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 85}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 43
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 44
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 86}) do |record|
   record.id = 909
@@ -24265,8 +24331,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 86}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 44
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 45
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 123}) do |record|
   record.id = 910
@@ -24278,8 +24344,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 123}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 45
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 46
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 128}) do |record|
   record.id = 911
@@ -24291,8 +24357,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 128}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 46
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 47
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 157, field_id: 149}) do |record|
   record.id = 912
@@ -24317,8 +24383,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 60}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 237
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 246
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 62}) do |record|
   record.id = 914
@@ -24330,8 +24396,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 62}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 266
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 275
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 63}) do |record|
   record.id = 915
@@ -24356,8 +24422,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 66}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 57
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 59
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 79}) do |record|
   record.id = 917
@@ -24369,8 +24435,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 79}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 130
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 135
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 80}) do |record|
   record.id = 918
@@ -24382,8 +24448,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 80}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 133
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 138
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 82}) do |record|
   record.id = 919
@@ -24395,8 +24461,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 82}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 58
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 60
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 123}) do |record|
   record.id = 920
@@ -24408,8 +24474,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 123}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 62
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 64
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 128}) do |record|
   record.id = 921
@@ -24421,8 +24487,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 128}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 63
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 65
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 158, field_id: 149}) do |record|
   record.id = 922
@@ -24460,8 +24526,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 60}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 233
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 242
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 62}) do |record|
   record.id = 925
@@ -24473,8 +24539,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 62}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 263
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 272
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 63}) do |record|
   record.id = 926
@@ -24499,8 +24565,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 66}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 128
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 133
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 79}) do |record|
   record.id = 928
@@ -24512,8 +24578,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 79}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 131
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 136
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 80}) do |record|
   record.id = 929
@@ -24525,8 +24591,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 80}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 134
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 139
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 82}) do |record|
   record.id = 930
@@ -24538,8 +24604,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 82}) d
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 56
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 58
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 123}) do |record|
   record.id = 931
@@ -24551,8 +24617,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 123}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 60
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 62
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 128}) do |record|
   record.id = 932
@@ -24564,8 +24630,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 128}) 
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 61
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 63
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 159, field_id: 149}) do |record|
   record.id = 933
@@ -24681,8 +24747,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2598, field_id: 1670}
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2025-06-04 17:12:11 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 7
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 9
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2657, field_id: 1670}) do |record|
   record.id = 3256
@@ -24694,8 +24760,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2657, field_id: 1670}
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2025-06-04 17:12:12 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 9
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 12
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2534, field_id: 1824}) do |record|
   record.id = 3291
@@ -24707,8 +24773,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2534, field_id: 1824}
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2025-06-04 17:12:11 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 8
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 10
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2648, field_id: 1021}) do |record|
   record.id = 3296
@@ -24723,6 +24789,19 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2648, field_id: 1021}
   record.updated_at = Time.parse("2025-06-04 17:12:11 UTC")
   record.position = 1
 end
+MegaBar::FieldDisplay.find_or_create_by({model_display_id: 10, field_id: 1909}) do |record|
+  record.id = 3329
+  record.model_display_id = 10
+  record.field_id = 1909
+  record.format = "textread"
+  record.action = nil
+  record.header = "Title field"
+  record.link_type = nil
+  record.wrapper = "div"
+  record.created_at = Time.parse("2025-09-12 19:11:36 UTC")
+  record.updated_at = Time.parse("2025-09-12 19:11:36 UTC")
+  record.position = 68
+end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2598, field_id: 1824}) do |record|
   record.id = 3353
   record.model_display_id = 2598
@@ -24733,8 +24812,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2598, field_id: 1824}
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2025-06-04 17:12:11 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 8
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 10
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2528, field_id: 1604}) do |record|
   record.id = 3364
@@ -24746,8 +24825,21 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2528, field_id: 1604}
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2025-06-04 16:20:52 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 7
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 10
+end
+MegaBar::FieldDisplay.find_or_create_by({model_display_id: 5, field_id: 1909}) do |record|
+  record.id = 3365
+  record.model_display_id = 5
+  record.field_id = 1909
+  record.format = "select"
+  record.action = nil
+  record.header = "Title field"
+  record.link_type = ""
+  record.wrapper = ""
+  record.created_at = Time.parse("2025-09-12 19:11:36 UTC")
+  record.updated_at = Time.parse("2025-09-12 19:36:29 UTC")
+  record.position = 212
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2598, field_id: 1604}) do |record|
   record.id = 3460
@@ -24759,8 +24851,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2598, field_id: 1604}
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2025-06-04 17:12:11 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 4
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 5
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2534, field_id: 1604}) do |record|
   record.id = 3501
@@ -24814,6 +24906,19 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2528, field_id: 1021}
   record.updated_at = Time.parse("2025-06-04 16:20:52 UTC")
   record.position = 1
 end
+MegaBar::FieldDisplay.find_or_create_by({model_display_id: 6, field_id: 1322}) do |record|
+  record.id = 3656
+  record.model_display_id = 6
+  record.field_id = 1322
+  record.format = "textbox"
+  record.action = nil
+  record.header = "Title field name"
+  record.link_type = nil
+  record.wrapper = nil
+  record.created_at = Time.parse("2025-09-13 20:43:24 UTC")
+  record.updated_at = Time.parse("2025-09-13 21:10:32 UTC")
+  record.position = 310
+end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2528, field_id: 1824}) do |record|
   record.id = 3676
   record.model_display_id = 2528
@@ -24824,8 +24929,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2528, field_id: 1824}
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2025-06-04 16:20:52 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 6
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 7
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2657, field_id: 1604}) do |record|
   record.id = 3690
@@ -24837,8 +24942,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2657, field_id: 1604}
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2025-06-04 17:12:12 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 5
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 7
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2657, field_id: 1021}) do |record|
   record.id = 3700
@@ -24879,6 +24984,19 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2528, field_id: 1670}
   record.updated_at = Time.parse("2025-06-04 16:20:52 UTC")
   record.position = 3
 end
+MegaBar::FieldDisplay.find_or_create_by({model_display_id: 1, field_id: 1909}) do |record|
+  record.id = 3833
+  record.model_display_id = 1
+  record.field_id = 1909
+  record.format = "textread"
+  record.action = nil
+  record.header = "Title field"
+  record.link_type = nil
+  record.wrapper = "div"
+  record.created_at = Time.parse("2025-09-12 19:11:36 UTC")
+  record.updated_at = Time.parse("2025-09-12 19:11:36 UTC")
+  record.position = 160
+end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2657, field_id: 1824}) do |record|
   record.id = 3861
   record.model_display_id = 2657
@@ -24902,8 +25020,8 @@ MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2648, field_id: 1824}
   record.link_type = nil
   record.wrapper = nil
   record.created_at = Time.parse("2025-06-04 17:12:12 UTC")
-  record.updated_at = Time.parse("2025-07-17 19:48:36 UTC")
-  record.position = 6
+  record.updated_at = Time.parse("2025-09-12 18:48:57 UTC")
+  record.position = 7
 end
 MegaBar::FieldDisplay.find_or_create_by({model_display_id: 2648, field_id: 1670}) do |record|
   record.id = 3963
@@ -26327,180 +26445,12 @@ MegaBar::Select.find_or_create_by({field_display_id: 936}) do |record|
   record.multiple = nil
   record.excluder = nil
 end
-MegaBar::Select.find_or_create_by({field_display_id: 977}) do |record|
-  record.id = 150
-  record.field_display_id = 977
-  record.created_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 978}) do |record|
-  record.id = 151
-  record.field_display_id = 978
-  record.created_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 983}) do |record|
-  record.id = 152
-  record.field_display_id = 983
-  record.created_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 984}) do |record|
-  record.id = 153
-  record.field_display_id = 984
-  record.created_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 987}) do |record|
-  record.id = 154
-  record.field_display_id = 987
-  record.created_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 988}) do |record|
-  record.id = 155
-  record.field_display_id = 988
-  record.created_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 993}) do |record|
-  record.id = 156
-  record.field_display_id = 993
-  record.created_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 994}) do |record|
-  record.id = 157
-  record.field_display_id = 994
-  record.created_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 997}) do |record|
-  record.id = 158
-  record.field_display_id = 997
-  record.created_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 998}) do |record|
-  record.id = 159
-  record.field_display_id = 998
-  record.created_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 1003}) do |record|
-  record.id = 160
-  record.field_display_id = 1003
-  record.created_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 1004}) do |record|
-  record.id = 161
-  record.field_display_id = 1004
-  record.created_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 1007}) do |record|
-  record.id = 162
-  record.field_display_id = 1007
-  record.created_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 1008}) do |record|
-  record.id = 163
-  record.field_display_id = 1008
-  record.created_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 1013}) do |record|
-  record.id = 164
-  record.field_display_id = 1013
-  record.created_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 1014}) do |record|
-  record.id = 165
-  record.field_display_id = 1014
-  record.created_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 1017}) do |record|
-  record.id = 166
-  record.field_display_id = 1017
-  record.created_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.updated_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 1018}) do |record|
-  record.id = 167
-  record.field_display_id = 1018
-  record.created_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.updated_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 1023}) do |record|
-  record.id = 168
-  record.field_display_id = 1023
-  record.created_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.updated_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 1024}) do |record|
-  record.id = 169
-  record.field_display_id = 1024
-  record.created_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.updated_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 1028}) do |record|
-  record.id = 170
-  record.field_display_id = 1028
-  record.created_at = Time.parse("2021-12-10 20:52:52 UTC")
-  record.updated_at = Time.parse("2021-12-10 20:52:52 UTC")
-  record.multiple = nil
-  record.excluder = nil
-end
-MegaBar::Select.find_or_create_by({field_display_id: 1027}) do |record|
-  record.id = 171
-  record.field_display_id = 1027
-  record.created_at = Time.parse("2021-12-10 20:52:59 UTC")
-  record.updated_at = Time.parse("2021-12-10 20:52:59 UTC")
-  record.multiple = nil
+MegaBar::Select.find_or_create_by({field_display_id: 3365}) do |record|
+  record.id = 18307
+  record.field_display_id = 3365
+  record.created_at = Time.parse("2025-09-12 19:36:29 UTC")
+  record.updated_at = Time.parse("2025-09-12 19:36:29 UTC")
+  record.multiple = false
   record.excluder = nil
 end
 MegaBar::Select.find_or_create_by({field_display_id: 3639}) do |record|
@@ -27780,6 +27730,13 @@ MegaBar::Textbox.find_or_create_by({field_display_id: 905}) do |record|
   record.size = nil
   record.created_at = Time.parse("2019-06-13 17:15:14 UTC")
   record.updated_at = Time.parse("2019-06-13 17:15:14 UTC")
+end
+MegaBar::Textbox.find_or_create_by({field_display_id: 3656}) do |record|
+  record.id = 15204
+  record.field_display_id = 3656
+  record.size = 42
+  record.created_at = Time.parse("2025-09-13 20:43:24 UTC")
+  record.updated_at = Time.parse("2025-09-13 20:43:24 UTC")
 end
 MegaBar::Textbox.find_or_create_by({field_display_id: 3109}) do |record|
   record.id = 15242
@@ -34145,391 +34102,6 @@ MegaBar::Textread.find_or_create_by({field_display_id: 939}) do |record|
   record.truncation_separator = nil
   record.editable_in_place = nil
 end
-MegaBar::Textread.find_or_create_by({field_display_id: 979}) do |record|
-  record.id = 599
-  record.field_display_id = 979
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 980}) do |record|
-  record.id = 600
-  record.field_display_id = 980
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 981}) do |record|
-  record.id = 601
-  record.field_display_id = 981
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 982}) do |record|
-  record.id = 602
-  record.field_display_id = 982
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:58:37 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 985}) do |record|
-  record.id = 603
-  record.field_display_id = 985
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 21:58:38 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:58:38 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 986}) do |record|
-  record.id = 604
-  record.field_display_id = 986
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 21:58:38 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:58:38 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 989}) do |record|
-  record.id = 605
-  record.field_display_id = 989
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 990}) do |record|
-  record.id = 606
-  record.field_display_id = 990
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 991}) do |record|
-  record.id = 607
-  record.field_display_id = 991
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 992}) do |record|
-  record.id = 608
-  record.field_display_id = 992
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 995}) do |record|
-  record.id = 609
-  record.field_display_id = 995
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 996}) do |record|
-  record.id = 610
-  record.field_display_id = 996
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.updated_at = Time.parse("2021-12-06 21:59:10 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 999}) do |record|
-  record.id = 611
-  record.field_display_id = 999
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1000}) do |record|
-  record.id = 612
-  record.field_display_id = 1000
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1001}) do |record|
-  record.id = 613
-  record.field_display_id = 1001
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1002}) do |record|
-  record.id = 614
-  record.field_display_id = 1002
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1005}) do |record|
-  record.id = 615
-  record.field_display_id = 1005
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1006}) do |record|
-  record.id = 616
-  record.field_display_id = 1006
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:06 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1009}) do |record|
-  record.id = 617
-  record.field_display_id = 1009
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1010}) do |record|
-  record.id = 618
-  record.field_display_id = 1010
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1011}) do |record|
-  record.id = 619
-  record.field_display_id = 1011
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1012}) do |record|
-  record.id = 620
-  record.field_display_id = 1012
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1015}) do |record|
-  record.id = 621
-  record.field_display_id = 1015
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1016}) do |record|
-  record.id = 622
-  record.field_display_id = 1016
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.updated_at = Time.parse("2021-12-06 22:00:54 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1019}) do |record|
-  record.id = 623
-  record.field_display_id = 1019
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.updated_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1020}) do |record|
-  record.id = 624
-  record.field_display_id = 1020
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.updated_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1021}) do |record|
-  record.id = 625
-  record.field_display_id = 1021
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.updated_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1022}) do |record|
-  record.id = 626
-  record.field_display_id = 1022
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.updated_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1025}) do |record|
-  record.id = 627
-  record.field_display_id = 1025
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.updated_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1026}) do |record|
-  record.id = 628
-  record.field_display_id = 1026
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.updated_at = Time.parse("2021-12-07 22:19:58 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1029}) do |record|
-  record.id = 629
-  record.field_display_id = 1029
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-10 19:37:57 UTC")
-  record.updated_at = Time.parse("2021-12-10 19:37:57 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1030}) do |record|
-  record.id = 630
-  record.field_display_id = 1030
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-10 19:37:57 UTC")
-  record.updated_at = Time.parse("2021-12-10 19:37:57 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1031}) do |record|
-  record.id = 631
-  record.field_display_id = 1031
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-10 19:37:57 UTC")
-  record.updated_at = Time.parse("2021-12-10 19:37:57 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1032}) do |record|
-  record.id = 632
-  record.field_display_id = 1032
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-10 19:37:57 UTC")
-  record.updated_at = Time.parse("2021-12-10 19:37:57 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
-MegaBar::Textread.find_or_create_by({field_display_id: 1033}) do |record|
-  record.id = 633
-  record.field_display_id = 1033
-  record.truncation = nil
-  record.truncation_format = nil
-  record.transformation = nil
-  record.created_at = Time.parse("2021-12-10 19:37:57 UTC")
-  record.updated_at = Time.parse("2021-12-10 19:37:57 UTC")
-  record.truncation_separator = nil
-  record.editable_in_place = nil
-end
 MegaBar::Textread.find_or_create_by({field_display_id: 3690}) do |record|
   record.id = 24022
   record.field_display_id = 3690
@@ -34629,6 +34201,17 @@ MegaBar::Textread.find_or_create_by({field_display_id: 3963}) do |record|
   record.truncation_separator = " "
   record.editable_in_place = nil
 end
+MegaBar::Textread.find_or_create_by({field_display_id: 3329}) do |record|
+  record.id = 24697
+  record.field_display_id = 3329
+  record.truncation = nil
+  record.truncation_format = ""
+  record.transformation = ""
+  record.created_at = Time.parse("2025-09-12 19:11:36 UTC")
+  record.updated_at = Time.parse("2025-09-12 19:11:36 UTC")
+  record.truncation_separator = " "
+  record.editable_in_place = nil
+end
 MegaBar::Textread.find_or_create_by({field_display_id: 3901}) do |record|
   record.id = 24708
   record.field_display_id = 3901
@@ -34659,6 +34242,17 @@ MegaBar::Textread.find_or_create_by({field_display_id: 3256}) do |record|
   record.transformation = ""
   record.created_at = Time.parse("2025-06-04 17:12:12 UTC")
   record.updated_at = Time.parse("2025-06-04 17:12:12 UTC")
+  record.truncation_separator = " "
+  record.editable_in_place = nil
+end
+MegaBar::Textread.find_or_create_by({field_display_id: 3833}) do |record|
+  record.id = 24770
+  record.field_display_id = 3833
+  record.truncation = nil
+  record.truncation_format = ""
+  record.transformation = ""
+  record.created_at = Time.parse("2025-09-12 19:11:36 UTC")
+  record.updated_at = Time.parse("2025-09-12 19:11:36 UTC")
   record.truncation_separator = " "
   record.editable_in_place = nil
 end

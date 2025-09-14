@@ -22,12 +22,11 @@ module MegaBar
 
     def _params
       permits = []
-      permits << 'controller'
+      # Don't permit controller/action - these are routing parameters, not model attributes
       permits << 'page'
       permits << 'sort'
       permits << 'direction'
       permits << 'id'  # Always permit id parameter
-      permits << 'action'  # Always permit action parameter
       
       # Only query fields if we have a valid model ID
       if env[:mega_env] && env[:mega_env][:modle_id]
