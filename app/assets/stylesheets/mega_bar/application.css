@@ -1,33 +1,38 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any styles
- * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
- * file per style scope.
- *
- *= require bootstrap/dist/css/bootstrap.min.css
- *= require jquery-ui
- *= require best_in_place
- *= require mega_bar
- *= require mega_block_tabs
- *= require_tree .
+/* MegaBar Engine Application Styles - Rails 8 Compatible
+ * 
+ * This file contains global styles for the MegaBar engine.
+ * Individual stylesheets are loaded via Rails 8 asset pipeline.
  */
+
+/* MegaBar Engine CSS Test - Visible Indicator */
+h1 {
+  border-left: 5px solid #ff6b35 !important;
+  padding-left: 15px !important;
+  background: linear-gradient(90deg, #fff3f0, transparent) !important;
+}
+
+/* Add a distinctive badge to show engine CSS is active */
+h1::after {
+  content: "🔧 MegaBar CSS Active";
+  font-size: 0.4em;
+  color: #ff6b35;
+  margin-left: 10px;
+  background: #fff;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid #ff6b35;
+}
 
 /* Admin Links Styles */
 .admin-links,
 .admin-links a {
-    color: #aaa;
-    font-size: .6em;
-    clear: both;
-    text-decoration: none;
+  color: #aaa;
+  font-size: 0.6em;
+  clear: both;
+  text-decoration: none;
 }
 
 .admin-links a:hover {
-    color: #666;
-    text-decoration: underline;
+  color: #666;
+  text-decoration: underline;
 }

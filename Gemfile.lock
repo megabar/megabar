@@ -9,7 +9,7 @@ GIT
 PATH
   remote: .
   specs:
-    mega_bar (0.7.4)
+    mega_bar (0.8.0)
       acts_as_list
       bcrypt
       best_in_place

@@ -29,10 +29,10 @@
         <%
         @mega_display = mega_display
         @mf = @mega_display[:model_display_format]
-        @model_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/model_displays', action: 'show', id: @mega_display[:model_display].id, :only_path=> true)
+        @model_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/model_displays', action: 'update', id: @mega_display[:model_display].id, :only_path=> true)
       %>
-        <h1><%= best_in_place @mega_display[:model_display], :header, url: @model_display_path %></h1>
-        <div class="model_display_instructions"><%= best_in_place @mega_display[:model_display], :instructions, url: @model_display_path, as: :textarea %></div>
+        <h1><%= best_in_place @mega_display[:model_display], :header, url: @model_display_path, method: :patch %></h1>
+        <div class="model_display_instructions"><%= best_in_place @mega_display[:model_display], :instructions, url: @model_display_path, as: :textarea, method: :patch %></div>
         <<%=@mf.app_wrapper.html_safe%> class="<%=model_display_classnames%> banana">
           <%= render partial: "mega_bar_write" %>
         </<%=@mf.app_wrapper_end.html_safe%>>
