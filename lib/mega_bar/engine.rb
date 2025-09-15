@@ -37,35 +37,39 @@ module MegaBar
       )
     end
 
-    initializer "mega_bar.best_in_place" do |app|
-      # Configure best_in_place
-      app.config.after_initialize do
-        # BestInPlace is auto-configured by the gem
-        # No additional configuration needed for basic functionality
+    initializer "mega_bar.importmap", before: "importmap" do |app|
+      # Integrate MegaBar's importmap with host application
+      if defined?(Importmap::Map)
+        app.config.importmap.paths << root.join("config/importmap.rb")
+        app.config.importmap.cache_sweepers << root.join("app/javascript")
+        Rails.logger.info "MegaBar: Integrated engine importmap with host application"
       end
     end
 
-    initializer "mega_bar.rails8_importmap", after: "importmap" do |app|
-      # Configure importmap for Rails 8+ compatibility
-      if defined?(Importmap::Map)
-        # Set up JavaScript asset paths for the engine
-        app.config.assets.paths << root.join('app', 'javascript')
-        
-        # Auto-pin required JavaScript dependencies
-        Rails.application.config.after_initialize do
-          # Pin jQuery and dependencies
-          Rails.application.importmap.pin "jquery"
-          Rails.application.importmap.pin "autosize"
-          
-          # Pin MegaBar-specific modules from engine
-          Rails.application.importmap.pin "add_jquery", to: "mega_bar/add_jquery.js"
-          Rails.application.importmap.pin "best_in_place", to: "mega_bar/best_in_place.js"
-          
-          Rails.logger.info "MegaBar: Auto-pinned importmap dependencies to engine files (jquery, autosize, mega_bar/add_jquery, mega_bar/best_in_place)"
+    initializer "mega_bar.assets", after: "append_assets_path" do |app|
+      # Add engine's JavaScript path to asset paths for Propshaft
+      app.config.assets.paths << root.join("app/javascript")
+      
+      # Auto-generate engine files in host app when Rails starts
+      Rails.application.config.after_initialize do
+        # Auto-generate add_jquery.js if it doesn't exist
+        add_jquery_path = Rails.root.join('app', 'javascript', 'add_jquery.js')
+        unless File.exist?(add_jquery_path)
+          FileUtils.mkdir_p(File.dirname(add_jquery_path))
+          File.write(add_jquery_path, File.read(root.join('app', 'javascript', 'mega_bar', 'add_jquery.js')))
+          Rails.logger.info "MegaBar: Created add_jquery.js from engine"
         end
         
-        Rails.logger.info "MegaBar: Rails 8 importmap compatibility enabled"
+        # Auto-generate best_in_place.js if it doesn't exist
+        best_in_place_path = Rails.root.join('app', 'javascript', 'best_in_place.js')
+        unless File.exist?(best_in_place_path)
+          FileUtils.mkdir_p(File.dirname(best_in_place_path))
+          File.write(best_in_place_path, File.read(root.join('app', 'javascript', 'mega_bar', 'best_in_place.js')))
+          Rails.logger.info "MegaBar: Created best_in_place.js from engine"
+        end
       end
+      
+      Rails.logger.info "MegaBar: Added engine JavaScript assets to host application"
     end
 
     config.generators do |g|
