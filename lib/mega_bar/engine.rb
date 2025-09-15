@@ -24,8 +24,7 @@ module MegaBar
     initializer "mega_bar.assets", after: :append_assets_path do |app|
       # Add engine's asset paths to the host application's load path
       # This handles both Sprockets (pre-Rails 8) and Propshaft (Rails 8+)
-      app.config.assets.paths << root.join("app", "assets", "stylesheets")
-      app.config.assets.paths << root.join("app", "assets", "images")
+      app.config.assets.paths << root.join("app", "assets")
       app.config.assets.paths << root.join("app/javascript")
     end
 

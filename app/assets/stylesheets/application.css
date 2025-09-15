@@ -1,9 +1,0 @@
-/*
- * MegaBar Engine Stylesheets
- * 
- * This file imports all MegaBar stylesheets for Propshaft compatibility.
- */
-
-@import "mega_bar/application.css";
-@import "mega_bar/mega_bar.css";
-@import "mega_bar/mega_block_tabs.css";
