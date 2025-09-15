@@ -2,8 +2,9 @@ module MegaBar
   class Engine < ::Rails::Engine
     isolate_namespace MegaBar
     require 'seed_dump'
-    require 'best_in_place'
     require 'acts_as_list'
+    require "importmap-rails"
+
 
     config.autoload_paths << File.expand_path("../*", __FILE__)
 
@@ -20,41 +21,38 @@ module MegaBar
       end
     end
 
-    initializer "model_core.factories", :after => "factory_girl.set_factory_paths" do
-      FactoryBot.definition_file_paths << File.expand_path('../../../spec/factories', __FILE__) if defined?(FactoryBot)
+    initializer "mega_bar.assets", after: :append_assets_path do |app|
+      # Add engine's asset paths to the host application's load path
+      # This handles both Sprockets (pre-Rails 8) and Propshaft (Rails 8+)
+      app.config.assets.paths << root.join("app", "assets", "stylesheets")
+      app.config.assets.paths << root.join("app", "assets", "images")
+      app.config.assets.paths << root.join("app/javascript")
     end
 
-    initializer "mega_bar.assets" do |app|
-      # Rails 8+ uses Propshaft by default, not Sprockets
-      # Asset configuration for Propshaft compatibility
-      if defined?(Propshaft)
-        # Add MegaBar engine assets to Propshaft paths
-        app.config.assets.paths << root.join('app', 'assets')
-        
-        # Ensure MegaBar assets are precompiled in production
-        app.config.assets.precompile += %w( 
-          mega_bar/application.css
-          mega_bar/mega_bar.css 
-          mega_bar/mega_block_tabs.css 
-          mega_bar/tabs.js 
-          mega_bar/layout.js 
-          mega_bar/jquery.best_in_place.js 
-          mega_bar/best_in_place.js 
-        )
-      else
-        # Fallback for Sprockets if needed
-        app.config.assets.paths << root.join("app", "assets", "javascripts")
-        app.config.assets.paths << root.join("app", "assets", "stylesheets")
-        app.config.assets.paths << root.join("app", "assets", "images")
-        
-        # Precompile assets (Sprockets only)
-        app.config.assets.precompile += %w( mega_bar/mega_bar.css )
-        app.config.assets.precompile += %w( mega_bar/mega_block_tabs.css )
-        app.config.assets.precompile += %w( mega_bar/tabs.js )
-        app.config.assets.precompile += %w( mega_bar/layout.js )
-        app.config.assets.precompile += %w( mega_bar/jquery.best_in_place.js )
-        app.config.assets.precompile += %w( mega_bar/best_in_place.js )
-      end
+    # initializer "mega_bar.importmap", before: "importmap" do |app|
+    #   # Add the engine's importmap.rb to the host application's importmap paths
+    #   app.config.importmap.paths << root.join("config/importmap.rb")
+
+    #   # Tell the host application's asset pipeline where to find the JavaScript files
+    #   app.config.assets.paths << root.join("app/javascript")
+    # end
+
+    
+
+
+    # initializer "mega_bar.assets" do |app|
+    #   # For Sprockets/Propshaft, add the traditional asset paths
+    #   app.config.assets.paths << root.join("app", "assets")
+
+    #   # For Rails 8+ Importmap, add the modern javascript path.
+    #   # This allows the host app to find the engine's JS modules.
+    #   if defined?(Importmap)
+    #     app.config.assets.paths << root.join("app/javascript")
+    #   end
+    # end
+
+    initializer "model_core.factories", :after => "factory_girl.set_factory_paths" do
+      FactoryBot.definition_file_paths << File.expand_path('../../../spec/factories', __FILE__) if defined?(FactoryBot)
     end
 
     # initializer "mega_bar.best_in_place" do |app|

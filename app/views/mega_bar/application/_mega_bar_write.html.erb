@@ -5,11 +5,11 @@
     %>
     <th>
       <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_up(displayable_field, 'up')} if block_admin? %>
-      <%=  best_in_place displayable_field[:field_display], :header, url: "/mega-bar/field_displays/#{displayable_field[:field_display].id}" %>
+      <%= displayable_field[:field_display].header %>
       <%= render partial: "mega_bar_inline_help_links", :locals => {:links => reorder_down(displayable_field, 'down')} if block_admin? %>
       <% if displayable_field[:field].instructions.present? %>
         <% @field_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/fields', action: 'show', id: displayable_field[:field].id, :only_path=> true) %>
-        <div class='field_instructions'><%=  best_in_place displayable_field[:field], :instructions, url: @field_path %></div>
+        <div class='field_instructions'><%= displayable_field[:field].instructions %></div>
       <% end %>
       <br><%= render partial: "mega_bar_help_links", :locals => {:links => field_help_links(displayable_field)} if block_admin? %>
     </th>

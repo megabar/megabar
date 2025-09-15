@@ -1,5 +1,8 @@
-// Initialize layout functionality when DOM is ready
-document.addEventListener('DOMContentLoaded', function () {
+// MegaBar Layout Module
+
+export function initializeLayout() {
+  console.log('MEGA_BAR: Initializing layout');
+  
   // Handle layout section changes
   const layoutSelect = document.getElementById('layout_section_layout_ids');
   if (layoutSelect) {
@@ -21,6 +24,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // Initialize tooltips
   const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
   tooltips.forEach(tooltip => {
-    new bootstrap.Tooltip(tooltip);
+    // This assumes Bootstrap's JS is loaded and available globally as 'bootstrap'
+    if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+      new bootstrap.Tooltip(tooltip);
+    }
   });
-});
+}

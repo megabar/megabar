@@ -2,69 +2,18 @@
 <html lang='en'>
   <head>
     <title>MEGA BAR yo</title>
-    <%# Bootstrap CSS %>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
-    <%# Include MegaBar stylesheets dynamically %>
-    <% mega_bar_css_files = Dir.glob(Rails.root.join('public', 'assets', 'stylesheets', 'mega_bar', 'mega_bar-*.css')) %>
-    <% if mega_bar_css_files.any? %>
-      <% css_file = mega_bar_css_files.sort_by { |f| File.mtime(f) }.last %>
-      <% filename = File.basename(css_file) %>
-      <link rel="stylesheet" href="/assets/stylesheets/mega_bar/<%= filename %>" media="all" data-turbo-track="reload">
-    <% end %>
-    <% mega_block_tabs_css_files = Dir.glob(Rails.root.join('public', 'assets', 'stylesheets', 'mega_bar', 'mega_block_tabs-*.css')) %>
-    <% if mega_block_tabs_css_files.any? %>
-      <% css_file = mega_block_tabs_css_files.sort_by { |f| File.mtime(f) }.last %>
-      <% filename = File.basename(css_file) %>
-      <link rel="stylesheet" href="/assets/stylesheets/mega_bar/<%= filename %>" media="all" data-turbo-track="reload">
-    <% end %>
-    <%# Include CCCUX engine stylesheet %>
-    <% cccux_css_files = Dir.glob(Rails.root.join('public', 'assets', 'stylesheets', 'cccux', 'application-*.css')) %>
-    <% if cccux_css_files.any? %>
-      <% css_file = cccux_css_files.sort_by { |f| File.mtime(f) }.last %>
-      <% filename = File.basename(css_file) %>
-      <link rel="stylesheet" href="/assets/stylesheets/cccux/<%= filename %>" media="all" data-turbo-track="reload">
-    <% end %>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
     
-    <%# jQuery and its plugins - load these first %>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/2.0.1/jquery.pjax.min.js"></script>
+    <%# Rails 8 CSS - Load Bootstrap from CDN and application stylesheets %>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "stylesheets/mega_bar/mega_bar", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "stylesheets/mega_bar/mega_block_tabs", "data-turbo-track": "reload" %>
     
-    <%# Bootstrap JS Bundle with Popper %>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    
-    <%# Rails UJS for data-method links %>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/rails-ujs/5.2.8-1/rails-ujs.min.js"></script>
-    
-    <%# Application JS %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
-    
-    <%# Mega Bar JS %>
-    <% mega_bar_js_files = Dir.glob(Rails.root.join('public', 'assets', 'javascripts', 'mega_bar', 'tabs-*.js')) %>
-    <% if mega_bar_js_files.any? %>
-      <% js_file = mega_bar_js_files.sort_by { |f| File.mtime(f) }.last %>
-      <% filename = File.basename(js_file) %>
-      <script src="/assets/javascripts/mega_bar/<%= filename %>" data-turbo-track="reload"></script>
-    <% end %>
-    <% mega_bar_layout_js_files = Dir.glob(Rails.root.join('public', 'assets', 'javascripts', 'mega_bar', 'layout-*.js')) %>
-    <% if mega_bar_layout_js_files.any? %>
-      <% js_file = mega_bar_layout_js_files.sort_by { |f| File.mtime(f) }.last %>
-      <% filename = File.basename(js_file) %>
-      <script src="/assets/javascripts/mega_bar/<%= filename %>" data-turbo-track="reload"></script>
-    <% end %>
-    <% mega_bar_jquery_bip_js_files = Dir.glob(Rails.root.join('public', 'assets', 'javascripts', 'mega_bar', 'jquery.best_in_place-*.js')) %>
-    <% if mega_bar_jquery_bip_js_files.any? %>
-      <% js_file = mega_bar_jquery_bip_js_files.sort_by { |f| File.mtime(f) }.last %>
-      <% filename = File.basename(js_file) %>
-      <script src="/assets/javascripts/mega_bar/<%= filename %>" data-turbo-track="reload"></script>
-    <% end %>
-    <% mega_bar_bip_js_files = Dir.glob(Rails.root.join('public', 'assets', 'javascripts', 'mega_bar', 'best_in_place-*.js')) %>
-    <% if mega_bar_bip_js_files.any? %>
-      <% js_file = mega_bar_bip_js_files.sort_by { |f| File.mtime(f) }.last %>
-      <% filename = File.basename(js_file) %>
-      <script src="/assets/javascripts/mega_bar/<%= filename %>" data-turbo-track="reload"></script>
-    <% end %>
+    <%# Rails 8 JavaScript via importmap %>
+    <%= javascript_importmap_tags %>
   </head>
   <body class='<%= @page_classes %>'>
     <h1 class='site_name' style=" margin-left: 18px;"><%= @site_name %></h1>
