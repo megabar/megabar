@@ -108,7 +108,7 @@
         </div>
       <% end %>
   <% end %>
-</div>
+
   <% if might_filter? %>
     <tr class='filter-row'>
       <% @mega_display[:displayable_fields].each do | displayable_field | %>
@@ -138,3 +138,4 @@
   <%= paginate @mega_instance, :param_name => "#{@kontroller_inst}_page" %>
   <%= render partial: "mega_bar_help_links", :locals => {:links => model_display_collection_help_links} if block_admin? %>
 <% end %>
+</div>

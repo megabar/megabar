@@ -1,7 +1,6 @@
 <div class='block card <%= @block_classes.join(' ') %>'>
   <% puts params[:action] + 'was the action' %>
   <% unless ['edit', 'new', 'create'].include? params[:action]%>
-    <% # INDEX AND SHOW STUFF %>
     <% @mega_displays.each do |mega_display| %>
       <% next if mega_display[:collection_settings] && mega_display[:collection_settings][:display_if_empty] == false && @mega_instance.empty? %>
       <%
@@ -36,18 +35,20 @@
         <<%=@mf.app_wrapper.html_safe%> class="<%=model_display_classnames%> banana">
           <%= render partial: "mega_bar_write" %>
         </<%=@mf.app_wrapper_end.html_safe%>>
+
         <%= render partial: "mega_bar_help_links",:locals => {:links => model_display_help_links} if block_admin? %>
       <% end %>
-      <table>
-        <tr>
-          <th>Save</th>
-          <td><%= submit_tag %></td>
-          <th></tr>
-        </table>
-      <% end%>
-    <% end %>
-    <div class='card-footer'>
-    <%= render partial: "mega_bar_help_links", :locals => {:links => block_help_links} if block_admin? %>
-    <%= render partial: "mega_bar_block_links" %>
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex align-items-center">
+      <%= submit_tag "Save", class: "btn btn-primary" %>
     </div>
   </div>
+</div>
+    <% end%>
+  <% end %>
+  <div class='card-footer'>
+    <%= render partial: "mega_bar_help_links", :locals => {:links => block_help_links} if block_admin? %>
+    <%= render partial: "mega_bar_block_links" %>
+  </div>
+</div>
