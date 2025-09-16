@@ -1,4 +1,7 @@
-<h1><%= @mega_display[:model_display].header %> </h1>
+<div class='card-header'>
+  <h1><%= @mega_display[:model_display].header %> </h1>
+</div>
+<div class='card-body'>
 <div class='model_display_instructions'><%= @mega_display[:model_display].instructions %> </div>
 <%= form_tag @mega_display[:form_path] + '/filter' do  %>
   <<%=@mf.app_wrapper.html_safe%> class="<%=model_display_classnames%>">
@@ -105,6 +108,7 @@
         </div>
       <% end %>
   <% end %>
+</div>
   <% if might_filter? %>
     <tr class='filter-row'>
       <% @mega_display[:displayable_fields].each do | displayable_field | %>

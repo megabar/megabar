@@ -1,4 +1,4 @@
-<div class='block <%= @block_classes.join(' ') %>'>
+<div class='block card <%= @block_classes.join(' ') %>'>
   <% puts params[:action] + 'was the action' %>
   <% unless ['edit', 'new', 'create'].include? params[:action]%>
     <% # INDEX AND SHOW STUFF %>
@@ -46,6 +46,8 @@
         </table>
       <% end%>
     <% end %>
+    <div class='card-footer'>
     <%= render partial: "mega_bar_help_links", :locals => {:links => block_help_links} if block_admin? %>
     <%= render partial: "mega_bar_block_links" %>
+    </div>
   </div>
