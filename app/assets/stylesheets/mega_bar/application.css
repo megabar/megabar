@@ -21,13 +21,18 @@
 /* Admin Links Styles */
 .admin-links,
 .admin-links a {
-    color: #aaa;
-    font-size: .6em;
-    clear: both;
-    text-decoration: none;
+  color: #aaa;
+  font-size: 0.6em;
+  clear: both;
+  text-decoration: none;
 }
 
 .admin-links a:hover {
-    color: #666;
-    text-decoration: underline;
+  color: #666;
+  text-decoration: underline;
+}
+
+div.layouts_on_page_layouts_layout .card {
+  width: calc(100% - 40px);
+  margin: 0 auto;
 }
