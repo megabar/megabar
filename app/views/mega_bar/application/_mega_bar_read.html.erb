@@ -29,6 +29,23 @@
       </tr>
     <% end %>
     <% @mega_instance.each do |mega_record| %>
+      <% 
+        # Calculate Bootstrap column class based on cards_per_row setting
+        cards_per_row = @mega_display[:model_display].cards_per_row || 1
+        col_class = case cards_per_row
+                    when 1 then "col-12"
+                    when 2 then "col-md-6"
+                    when 3 then "col-md-4"
+                    when 4 then "col-md-3"
+                    when 6 then "col-md-2"
+                    when 12 then "col-1"
+                    else "col-md-#{12 / cards_per_row}"
+                    end
+      %>
+      <% if @mf.name == 'Card' %>
+        <div class="card <%= col_class %> mb-3">
+          <div class="card-body">
+      <% end %>
       <<%= @mf.record_wrapper.html_safe %> id="<%= record_id(mega_record) %>" class="<%= record_class(mega_record) %>">
         <% @mega_display[:displayable_fields].each do | displayable_field | %>
           <% @field_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/field_displays', action: 'show', id: displayable_field[:field_display].id, :only_path=> true) %>
@@ -83,6 +100,10 @@
         <% end %>
       <% end %>
     </<%= @mf.record_wrapper_end.html_safe%>>
+      <% if @mf.name == 'Card' %>
+          </div>
+        </div>
+      <% end %>
   <% end %>
   <% if might_filter? %>
     <tr class='filter-row'>
