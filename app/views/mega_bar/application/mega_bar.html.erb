@@ -30,21 +30,23 @@
         @mf = @mega_display[:model_display_format]
         @model_display_path = MegaBar::Engine.routes.url_for(controller: '/mega_bar/model_displays', action: 'show', id: @mega_display[:model_display].id, :only_path=> true)
       %>
-        <h1><%= @mega_display[:model_display].header %></h1>
-        <div class="model_display_instructions"><%= @mega_display[:model_display].instructions %></div>
-        <<%=@mf.app_wrapper.html_safe%> class="<%=model_display_classnames%> banana">
-          <%= render partial: "mega_bar_write" %>
-        </<%=@mf.app_wrapper_end.html_safe%>>
 
+        <div class="card-header"><h1><%= @mega_display[:model_display].header %></h1></div>
+        <div class="model_display_instructions"><%= @mega_display[:model_display].instructions %></div>
+        <div class="card-body">
+          <<%=@mf.app_wrapper.html_safe%> class="<%=model_display_classnames%> banana">
+            <%= render partial: "mega_bar_write" %>
+          </<%=@mf.app_wrapper_end.html_safe%>>
+        </div>
         <%= render partial: "mega_bar_help_links",:locals => {:links => model_display_help_links} if block_admin? %>
       <% end %>
-<div class="row">
-  <div class="col-12">
-    <div class="d-flex align-items-center">
-      <%= submit_tag "Save", class: "btn btn-primary" %>
-    </div>
-  </div>
-</div>
+      <div class="row">
+        <div class="col-12">
+          <div class="d-flex align-items-center card-body" style="margin-top: -20px;">
+            <%= submit_tag "Save", class: "btn btn-primary" %>
+          </div>
+        </div>
+      </div>
     <% end%>
   <% end %>
   <div class='card-footer'>
