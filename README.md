@@ -9,6 +9,10 @@ For applications requiring role-based authorization, you can integrate MegaBar w
 **Prerequisites**: Both `megabar` and `cccux` repositories must be checked out to the same directory.
 
 ```bash
+# 0. Clone both repositories side by side
+git clone https://github.com/megabar/megabar.git
+git clone https://github.com/bagus1/cccux.git
+
 # 1. Create a new MegaBar app
 ./megabar/create_megabar_app.sh myapp
 
